@@ -41,20 +41,20 @@ public class OptionsPanel extends MiraWidget {
     corColor = getStyleColor("RowPlots.Pvalue", "background-color");
     misColor = getStyleColor("RowPlots.MissingData", "background-color");
     
-    openBtn = new Button(10, 80, 110, 20, "Open Data"); 
-    uploadBtn = new Button(10, 110, 110, 20, "Upload Findings");
+    openBtn = new Button(10, 80, 100, 30, "Open Data"); 
+    uploadBtn = new Button(10, 115, 100, 30, "Upload Findings");
     
-    plotOpt = new Options(10, 150, 110, 80, "PlotOptions");
+    plotOpt = new Options(10, 165, 110, 80, "PlotOptions");
     plotOpt.title("Plot Type");
     plotOpt.add("Scatter", "Histogram", "Eikosogram");
     plotOpt.select(mira.getPlotType());
     
-    statOpt = new Options(10, 280, 110, 80, "StatsOptions");
+    statOpt = new Options(10, 295, 110, 80, "StatsOptions");
     statOpt.title("P-value", corColor);
     statOpt.add("99.9%", "99.5%", "99%", "95%", "90%", "Don't use");
     statOpt.select(mira.getPValue());    
     
-    mdatOpt = new Options(10, 480, 110, 80, "SessionOptions");
+    mdatOpt = new Options(10, 495, 110, 80, "SessionOptions");
     mdatOpt.title("Available\ndata", misColor);
     mdatOpt.add("90%", "80%", "60%", "20%", "Don't use");
     mdatOpt.select(mira.getMissingThreshold());    
@@ -130,8 +130,8 @@ public class OptionsPanel extends MiraWidget {
     }
     
     void draw() {
-      noStroke();
-      fill(color);
+      stroke(color, 220);
+      fill(color, 100);
       rect(x, y, w, h);
       
       float center = (h - pFont.getSize()) / 2;
