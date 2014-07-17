@@ -96,7 +96,7 @@ public class VariableBrowser extends MiraWidget {
   }
   
   public void update() {
-    if (MiraApp.SHOW_DEBUG_INFO && mira.frameCount % 180 == 0) {
+    if (Interface.SHOW_DEBUG_INFO && mira.frameCount % 180 == 0) {
       long count1 = taskPool1.getTaskCount() - taskPool1.getCompletedTaskCount();
       long count2 = taskPool2.getTaskCount() - taskPool2.getCompletedTaskCount();
       System.out.println("number of pending high-priority tasks: " + count1);

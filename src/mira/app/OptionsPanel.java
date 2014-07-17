@@ -98,7 +98,7 @@ public class OptionsPanel extends MiraWidget {
   
   public void mousePressed() {
     if (openBtn.select(mouseX, mouseY)) {
-      mira.openData();
+      mira.loadDataset();
     } else if (uploadBtn.select(mouseX, mouseY)) {
       mira.uploadSession();
     } else if (plotOpt.select(mouseX, mouseY)) {

@@ -463,7 +463,7 @@ public class Profile extends MiraWidget {
             scores.add(1.0f);
           }          
         }        
-        mira.exportData(vars);        
+        mira.exportProfile(vars);        
       }      
     }
   }

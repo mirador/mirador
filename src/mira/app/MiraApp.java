@@ -29,14 +29,13 @@ import processing.data.Table;
 
 @SuppressWarnings("serial")
 public class MiraApp extends PApplet {
-  static public boolean SHOW_DEBUG_INFO = false;
-  
   static public String RENDERER = P2D;
   static public int SMOOTH_LEVEL = 4;
   static public final String APP_NAME = "mirador";
   static public final String APP_VERSION = "1.1";
   
   static public String inputFile = "default.mira";
+  static protected Preferences prefs;
   
   // TODO: move these somewhere else, make into parameters?
   int optWidth = 120;  
@@ -58,10 +57,8 @@ public class MiraApp extends PApplet {
   public VariableBrowser browser;
   protected Profile profile;
   
-  protected Preferences prefs;
+  
   protected int plotType;
-//  protected int pValue;
-//  protected int missingThreshold; 
   
   protected boolean loaded;  
   protected LoadThread loadThread;
@@ -92,7 +89,9 @@ public class MiraApp extends PApplet {
   public void setup() {
     size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
     smooth(SMOOTH_LEVEL);
+    
     Log.init();
+    loadPreferences();
     
     intf = new Interface(this, g, "style.css");
     initPanel();
@@ -100,17 +99,16 @@ public class MiraApp extends PApplet {
     frame.setTitle(APP_NAME + " is loading...");
     frame.setAutoRequestFocus(true);
     
-    try {
-      prefs = new Preferences();
-    } catch (IOException e) {
-      e.printStackTrace();
-      exit();
-    }
-    
     loadSession();
     
     try {
       project = new Project(inputFile, prefs);
+      Path p = Paths.get(inputFile);
+      Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();
+      prefs.projectFolder = filePath.toString();
+      prefs.save();
+//      System.err.println(prefs.projectFolder);
+      
     } catch (IOException e) {
       e.printStackTrace();
       exit();
@@ -235,22 +233,12 @@ public class MiraApp extends PApplet {
     }    
   }
   
-  public void openData() {
-//    File file = new File(startFolder());
+  public void loadDataset() {
     selectInput("Select a csv or tsv file to save the selection to:", 
-                "outputSelected", startFolder(), new LoadHandler());    
+                "outputSelected", new File(prefs.projectFolder), new LoadHandler());    
   }
   
-  // TODO: make possible to load data after the application has been launched.
-//public void inputSelected(File selection) {
-//  if (selection == null) {
-//    println("Window was closed or the user hit cancel.");
-//  } else {
-//   println("User selected " + selection.getAbsolutePath());
-//  }    
-//}  
-  
-  public void exportData(ArrayList<Variable> vars) {    
+  public void exportProfile(ArrayList<Variable> vars) {    
     File file = new File(project.dataFolder, "profile-data.tsv");
     selectOutput("Select a csv or tsv file to save the selection to:", 
                  "outputSelected", file, new ProfileHandler(vars));
@@ -260,7 +248,7 @@ public class MiraApp extends PApplet {
     
   }
   
-//////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
   
   protected void drawLoadAnimation() {
     animAlpha.update();
@@ -291,8 +279,6 @@ public class MiraApp extends PApplet {
   
   protected void loadSession() {
     plotType = View.EIKOSOGRAM;
-//    pValue = P0_05;
-//    missingThreshold = MISS_80; 
     ranges = new DataRanges();    
   }  
 
@@ -302,9 +288,6 @@ public class MiraApp extends PApplet {
   }
   
   protected void initInterface() {
-//    options = new OptionsPanel(intf, 0, 0, optWidth, height);
-//    intf.add(options);
-    
     intf.remove(browser);
     intf.remove(profile);
     
@@ -326,33 +309,16 @@ public class MiraApp extends PApplet {
       frame.setTitle(project.dataTitle);
     }
   }  
-
-  static protected File startFolder() {
-    String path = Mirador.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-    // Path may have URL encoding, so remove it
-    String decodedPath = PApplet.urlDecode(path);
-    if (decodedPath.toLowerCase().contains("/mirador/bin")) {
-      // Running from Eclipse
-      File file = new File(path);
-      String filePath = file.getAbsolutePath();
-      return new File(filePath, "../examples/.");      
-    } else {
-      if (PApplet.platform == PApplet.MACOSX) {      
-        File file = new File(path);
-        String absolutePath = file.getAbsolutePath();
-        String filePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));      
-        return new File(filePath, "../Resources/examples/.");
-      } else {
-        return new File(System.getProperty("user.dir"), "examples/.");
-      }      
-    }
-  } 
   
   protected class LoadHandler {
     public void outputSelected(File selection) {
       if (selection != null) {
         try {
-          project = new Project(selection.toString(), prefs);
+          project = new Project(selection.toString(), prefs);          
+          Path p = Paths.get(selection.toString());
+          Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();          
+          prefs.projectFolder = filePath.toString();
+          prefs.save();
           
           loaded = false;
           animating = true;
@@ -416,6 +382,38 @@ public class MiraApp extends PApplet {
       proj.save(projFile.toString());
     }
   }
+
+  //////////////////////////////////////////////////////////////////////////////  
+  
+  static public void loadPreferences() {
+    try {
+      prefs = new Preferences(defaultFolder().toString());
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }        
+  }
+  
+  static public File defaultFolder() {
+    String path = Mirador.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    // Path may have URL encoding, so remove it
+    String decodedPath = PApplet.urlDecode(path);
+    if (decodedPath.toLowerCase().contains("/mirador/bin")) {
+      // Running from Eclipse
+      File file = new File(path);
+      String filePath = file.getAbsolutePath();
+      return new File(filePath, "../examples/.");      
+    } else {
+      if (PApplet.platform == PApplet.MACOSX) {      
+        File file = new File(path);
+        String absolutePath = file.getAbsolutePath();
+        String filePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));      
+        return new File(filePath, "../Resources/examples/.");
+      } else {
+        return new File(System.getProperty("user.dir"), "examples/.");
+      }      
+    }
+  }   
   
   public static void main(String args[]) {
     if (0 < args.length) inputFile = args[0];

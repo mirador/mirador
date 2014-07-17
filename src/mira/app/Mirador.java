@@ -84,36 +84,37 @@ public class Mirador {
     }
     new Thread(new Runnable() {
       public void run() {
-        MiraApp.inputFile = selectedFile.getAbsolutePath();
+        MiraApp.inputFile = selectedFile.getAbsolutePath();        
         PApplet.main(MiraApp.class.getName());  
       }
     }).start();
   }
 
-  static protected File startFolder() {
-    String path = Mirador.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-    // Path may have URL encoding, so remove it
-    String decodedPath = PApplet.urlDecode(path);
-    if (decodedPath.toLowerCase().contains("/mirador/bin")) {
-      // Running from Eclipse
-      File file = new File(path);
-      String filePath = file.getAbsolutePath();
-      return new File(filePath, "../examples/.");      
-    } else {
-      if (PApplet.platform == PApplet.MACOSX) {      
-        File file = new File(path);
-        String absolutePath = file.getAbsolutePath();
-        String filePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));      
-        return new File(filePath, "../Resources/examples/.");
-      } else {
-        return new File(System.getProperty("user.dir"), "examples/.");
-      }      
-    }
-  }
+//  static protected File startFolder() {
+//    String path = Mirador.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+//    // Path may have URL encoding, so remove it
+//    String decodedPath = PApplet.urlDecode(path);
+//    if (decodedPath.toLowerCase().contains("/mirador/bin")) {
+//      // Running from Eclipse
+//      File file = new File(path);
+//      String filePath = file.getAbsolutePath();
+//      return new File(filePath, "../examples/.");      
+//    } else {
+//      if (PApplet.platform == PApplet.MACOSX) {      
+//        File file = new File(path);
+//        String absolutePath = file.getAbsolutePath();
+//        String filePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));      
+//        return new File(filePath, "../Resources/examples/.");
+//      } else {
+//        return new File(System.getProperty("user.dir"), "examples/.");
+//      }      
+//    }
+//  }
     
   static public void main(String[] args) {
     Frame frame = new Frame();
     frame.pack();  // make it legit
-    selectPrompt("Select data for analysis:", startFolder(), frame, FileDialog.LOAD);
+    MiraApp.loadPreferences();
+    selectPrompt("Select data for analysis:", new File(MiraApp.prefs.projectFolder), frame, FileDialog.LOAD);
   }
 }
