@@ -1,0 +1,343 @@
+<!-- COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. -->
+
+<project default="build">
+  <property name="app.name" value="Mirador" />
+  <property name="dist.name" value="mirador" />
+  <property name="jar.name" value="${dist.name}.jar" />
+  <property name="class.name" value="mira.app.Mirador" />
+
+  <property name="version" value="1.0" />
+  <property name="revision" value="140530" />
+
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+  <property file="local.properties" />
+
+  <condition property="props.present">
+    <available file="local.properties" />
+  </condition>
+
+  <fail unless="props.present" 
+        message="To make the build work, create a file named local.properties, 
+(inside the dist folder), and put two lines, one that read reads 
+processing.dir=/path/to/processing-git
+with the path to where you have the code for processing checked out.
+inside that folder, it will expect to find 'core' and 'pdf', and the second
+miralib.dir=/path/to/miralib-git
+with the path to where you have the code for miralib checked out." />
+
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<!--
+  <target name="run">
+    <java classname="mira.app.Mirador" fork="true"/>
+  </target>
+-->
+
+  <target name="build">
+    <mkdir dir="../bin" />
+
+    <javac target="1.7" 
+           encoding="UTF-8"
+           includeAntRuntime="false"
+           classpath="${processing.dir}/core/bin:${miralib.dir}/bin:${miralib.dir}/lib/cssparser-0.9.13.jar:${miralib.dir}/lib/commons-math3-3.2.jar:${miralib.dir}/lib/sac.jar"
+           srcdir="../src" 
+           destdir="../bin" />
+  </target>
+
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+  <target name="jar" depends="build">
+    <delete file="${jar.name}" />
+
+    <jar destfile="${jar.name}" filesetmanifest="mergewithoutmain">
+      <manifest>
+        <attribute name="Main-Class" value="${class.name}"/>
+      </manifest>
+
+      <fileset dir="../bin" />
+      <fileset dir=".." includes="data/**" />
+      <fileset dir="${processing.dir}/core/bin"/>      
+      <fileset dir="${miralib.dir}/bin"/>
+    </jar>   
+  </target>
+
+  
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+  <target name="dist" depends="build,macosx,windows,jar" />
+
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+  <!-- call this explicitly to create new icons -->
+  <target name="icons">
+    <exec executable="cp" dir="macosx">
+      <arg line="../icon_16x16.png app.iconset/icon_16x16.png" />
+    </exec>
+<!--
+    <exec executable="convert" dir="macosx">
+      <arg line="-sample 16x -interpolate nearest ../icon_16x16.png app.iconset/../icon_16x16.png" />
+    </exec>
+-->
+    <exec executable="convert" dir="macosx">
+      <arg line="-sample 32x -interpolate nearest ../icon_16x16.png app.iconset/icon_16x16@2x.png" />
+    </exec>
+
+    <exec executable="convert" dir="macosx">
+      <arg line="-sample 32x -interpolate nearest ../icon_16x16.png app.iconset/icon_32x32.png" />
+    </exec>
+
+    <exec executable="convert" dir="macosx">
+      <arg line="-sample 64x -interpolate nearest ../icon_16x16.png app.iconset/icon_32x32@2x.png" />
+    </exec>
+
+    <exec executable="convert" dir="macosx">
+      <arg line="-sample 128x -interpolate nearest ../icon_16x16.png app.iconset/icon_128x128.png" />
+    </exec>
+
+    <exec executable="convert" dir="macosx">
+      <arg line="-sample 256x -interpolate nearest ../icon_16x16.png app.iconset/icon_128x128@2x.png" />
+    </exec>
+
+    <exec executable="convert" dir="macosx">
+      <arg line="-sample 256x -interpolate nearest ../icon_16x16.png app.iconset/icon_256x256.png" />
+    </exec>
+
+    <exec executable="convert" dir="macosx">
+      <arg line="-sample 512x -interpolate nearest ../icon_16x16.png app.iconset/icon_256x256@2x.png" />
+    </exec>
+
+    <exec executable="convert" dir="macosx">
+      <arg line="-sample 512x -interpolate nearest ../icon_16x16.png app.iconset/icon_512x512.png" />
+    </exec>
+
+    <exec executable="convert" dir="macosx">
+      <arg line="-interpolate integer -sample 1024x ../icon_16x16.png app.iconset/icon_512x512@2x.png" />
+    </exec>
+
+    <exec executable="iconutil">
+      <arg line="-c icns -o macosx/app.icns macosx/app.iconset" />
+    </exec>
+
+<!-- http://www.imagemagick.org/Usage/thumbnails/#favicon 
+
+convert image.png  -bordercolor white -border 0 \
+          \( -clone 0 -resize 16x16 \) \
+          \( -clone 0 -resize 32x32 \) \
+          \( -clone 0 -resize 48x48 \) \
+          \( -clone 0 -resize 64x64 \) \
+          -delete 0 -alpha off -colors 256 favicon.ico
+-->
+
+  </target>
+
+  
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+  <target name="macosx" depends="jar">
+    <!-- Set the version of Java that must be present to build. -->
+    <property name="jdk.update.macosx" value="60" />
+    <property name="jdk.path.macosx" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_${jdk.update.macosx}.jdk" />
+    
+    <fail if="macosx" unless="macosx_jdk_found"
+          message="JDK 7u${jdk.update.macosx} required.${line.separator}To build on OS X, you must install Oracle's JDK 7u${jdk.update.macosx} from${line.separator}http://www.oracle.com/technetwork/java/javase/downloads${line.separator}Note that only 7u${jdk.update.macosx} (not a later or earlier version) will work. ${line.separator}And it must be the JDK, not the JRE. And do not try to defy me again." />
+
+<!--
+    <copy todir="macosx/mira.app/Contents/Resources/Java">
+      <fileset dir="${processing.dir}/core/library">
+        <include name="**/jogl-all.jar" />
+        <include name="**/gluegen-rt.jar" />
+        <include name="**/jogl-all-natives-macosx-universal.jar" />
+        <include name="**/gluegen-rt-natives-macosx-universal.jar" />          
+      </fileset>
+    </copy>    
+    
+    <exec executable="chmod" dir="macosx">
+      <arg line="+x mira.app/Contents/MacOS/JavaApplicationStub" />
+    </exec>    
+-->
+    
+    <!-- Should do this to remove the DS_Store files 
+    find . -name '*.DS_Store' -type f -delete
+    --> 
+
+    <property name="core.dir" value="${processing.dir}/core/library" />
+
+    <taskdef name="bundleapp"
+             classname="com.oracle.appbundler.AppBundlerTask"   
+             classpath="macosx/appbundler.jar" />
+
+    <bundleapp outputDirectory="macosx"
+               name="Mirador"
+               displayName="Mirador"
+               executableName="Mirador"
+               identifier="mira.app"
+               signature="mira"
+               icon="macosx/app.icns"
+               copyright="© Broad Institute 2014"
+               getInfo="${version}, Copyright © The Broad Institute"
+               shortVersion="${version}"
+               version="${revision}"
+               mainClassName="${class.name}">
+
+      <!-- The appbundler task needs a couple files (the Info.plist and
+           anything else outside /jre) from the full JDK, even though 
+           it's primarily copying over the JRE folder. -->
+      <runtime dir="${jdk.path.macosx}/Contents/Home" />
+      <!-- Eventually we'll want to load the JRE directly from 
+           the .tgz on the Oracle site, though it's in a folder called 
+           jre1.7.0_40.jre, so we'll need to strip that out. -->
+
+      <classpath file="${jar.name}" />
+
+      <classpath file="${miralib.dir}/lib/commons-math3-3.2.jar" />
+      <classpath file="${miralib.dir}/lib/cssparser-0.9.13.jar" />
+      <classpath file="${miralib.dir}/lib/sac.jar" />
+
+      <classpath file="${core.dir}/core.jar" />
+      <classpath file="${core.dir}/jogl-all.jar" />
+      <classpath file="${core.dir}/jogl-all-natives-macosx-universal.jar" />
+      <classpath file="${core.dir}/gluegen-rt.jar" />
+      <classpath file="${core.dir}/gluegen-rt-natives-macosx-universal.jar" />
+
+      <arch name="x86_64"/>
+
+<!--
+      <bundledocument extensions="mira"
+                      icon="macosx/mira.icns"
+                      name="Mirador Project File"
+                      role="Editor">
+      </bundledocument>
+-->
+
+      <!-- Sets dock icon when debugging (not launched via launch svcs) -->
+      <option value="-Xdock:icon=Contents/Resources/app.icns" />
+      <!-- Don't think these actually make any difference. -->
+      <!--
+      <option value="-Xdock:name=Processing" />
+      -->
+
+      <option value="-Dapple.awt.application.name=${app.name}" />
+
+      <option value="-Dapple.laf.useScreenMenuBar=true" />
+      <option value="-Dcom.apple.macos.use-file-dialog-packages=true" />
+      <option value="-Dcom.apple.macos.useScreenMenuBar=true" />
+      <option value="-Dcom.apple.smallTabs=true" />
+    </bundleapp>
+
+    <!-- copy the examples -->
+    <copy todir="macosx/Mirador.app/Contents/Resources">
+      <fileset dir=".." includes="examples/**" />
+    </copy>
+
+<!--
+    <copy todir="macosx/work/Processing.app/Contents/Java">
+      <fileset dir=".." includes="core/library/**" />
+      <fileset dir="shared" includes="launch4j/**" />
+      <fileset dir="shared" includes="lib/**" />
+      <fileset file="shared/revisions.txt" />
+    </copy>
+-->
+
+<!--
+    <copy todir="browderchorder.app/Contents/Resources/Java">
+      <fileset file="../../../processing/pdf/library/itext.jar" />
+    </copy>
+-->
+
+   <!-- anybody can do this one -->
+<!--
+   <property name="signer" value="-" />
+-->
+   <!-- this requires an Apple Developer certificate -->
+   <property name="signer" value="'Developer ID Application'" />
+
+    <!-- first sign the JDK -->
+    <exec executable="codesign" dir="macosx">
+      <arg line="--force --sign ${signer} ${app.name}.app/Contents/PlugIns/jdk1.7.0_${jdk.update.macosx}.jdk" />
+    </exec>
+
+    <!-- then sign the actual app -->
+    <exec executable="codesign" dir="macosx">
+      <arg line="--force --sign ${signer} ${app.name}.app" />
+    </exec>
+
+    <exec executable="ditto" dir="macosx">
+      <arg line="-c -k --keepParent -rsrc ${app.name}.app ../${dist.name}-macosx.zip" />
+    </exec>
+  </target>
+
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+  <target name="windows" depends="jar">
+    <property name="work.dir" value="windows/${dist.name}" />
+    <delete dir="${work.dir}" />
+    <mkdir dir="${work.dir}/examples" />
+    <mkdir dir="${work.dir}/lib" />
+
+    <!-- copy the examples -->
+    <copy todir="${work.dir}">
+      <fileset dir=".." includes="examples/**" />
+    </copy>        
+          
+    <copy todir="${work.dir}/lib">
+      <fileset dir="${processing.dir}/core/library">
+        <include name="**/jogl-all.jar" />
+        <include name="**/gluegen-rt.jar" />
+        <include name="**/jogl-all-natives-windows-*.jar" />
+        <include name="**/gluegen-rt-natives-windows-*.jar" />          
+      </fileset>
+
+      <fileset dir="${miralib.dir}/lib">
+        <include name="*.jar" />
+      </fileset>
+    </copy>  
+
+    <!-- find . -name *.[oa] -exec svn add {} ';' -->
+    <property name="l4j.dir" value="./windows/launch4j" />
+    <taskdef name="launch4j"
+             classname="net.sf.launch4j.ant.Launch4jTask"
+             classpath="${l4j.dir}/launch4j.jar:${l4j.dir}/lib/xstream.jar" />
+
+    <launch4j>
+      <config headerType="gui" 
+              outfile="${work.dir}/${dist.name}.exe"
+              dontWrapJar="false"
+              jar="${jar.name}">
+        <classPath mainClass="${class.name}">
+          <cp>./lib/*.jar</cp>
+        </classPath>
+        <jre minVersion="1.7.0" path="java">
+          <opt>-Xmx512M</opt>
+        </jre>
+      </config>
+    </launch4j>
+
+    <!-- causes jre.tgz to be placed in windows/mirador, but that's ok
+	 because we're only explicitly including things in the .zip -->
+    <exec executable="python" dir="${work.dir}">
+      <arg value="../../jre.py" />
+    </exec>
+
+    <zip destfile="${dist.name}-windows.zip" filesonly="no">
+      <fileset dir="${work.dir}">
+        <include name="${dist.name}.exe" />
+        <include name="lib/**" />
+        <include name="java/**" />
+        <include name="examples/**" />
+      </fileset>
+    </zip>
+  </target>
+
+</project>

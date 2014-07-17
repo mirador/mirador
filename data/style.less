@@ -1,0 +1,437 @@
+// COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved.
+
+@warmer: rgb(15, 10, 0);
+@blue: rgb(39, 141, 210);
+@MissingData: rgb(255, 0, 255);
+@Pvalue: rgb(140, 199, 64);
+@textDark: fade(black, 65%);
+@textLight: fade(white, 90%);
+@selected: rgb(255, 145, 0);
+
+@searchResult: rgb(51, 51, 51);
+
+@font-face {
+	font-family: serifBold; src: url('fonts/Merriweather-Bold.ttf');
+}
+@font-face {
+	font-family: serifReg; src: url('fonts/Merriweather-Regular.ttf');
+}
+@font-face {
+	font-family: sansBold; src: url('fonts/Roboto-Bold.ttf');
+}
+@font-face {
+	font-family: sansMed; src: url('fonts/Roboto-Medium.ttf');
+}
+@font-face {
+	font-family: sansReg; src: url('fonts/Roboto-Regular.ttf');
+}
+
+// Basic fonts set up
+
+h1, h2, h3, p {
+	color: fade(black, 70%);
+}
+
+h1 {
+	font-family: serifBold;
+	font-size: 14px;
+}
+
+p {
+	font-family: sansReg;
+	font-size: 12px;
+}
+
+h2 {
+	font-family: sansMed;
+	font-size: 14px;
+}
+
+h3 {
+	font-family: sansBold;
+	font-size: 13px;
+}
+
+#OptionsPanel {
+	background: rgb(111, 108, 102);
+
+	// This is for the "Options" title
+	h1 {
+		font-size: 22px;
+		font-family: serifReg;
+	}
+
+	p, h1 {
+		color: @textLight;
+	}
+
+	#Button {
+		color: rgb(83, 81, 76);    
+	}
+
+	// Give each option the same rules
+	#PlotOptions, #SessionOptions, #StatsOptions {
+		border-top-width: 1px;
+  		border-top-style: solid;
+  		border-top-color: fade(@warmer, 25%);
+		#SelectBox {
+			width: 110px;
+			height: 24px;
+			right: 0;
+			background: rgb(83, 81, 76); 
+		}
+		h1 {
+			// "P-value, Missing Data"
+			font-size: 16px;
+			font-family: serifBold;
+		}
+		p {
+			// Give each option a p tag
+		}
+	}
+}
+
+// These will have the same rules for col, row and covariates. 
+// Adjustments will come later for col and covariates.
+
+#CheckBoxList {
+	#Check {
+		height: 15px;
+		width: 15px;
+		border-width: 1px;
+		border-style: solid;
+		border-color: @textDark;
+		&#Selected {
+			background-image: url('data/fonts/check.svg');
+			color: @textDark;
+		} 
+	}
+	p {
+		// text goes in a p tag
+		color: fade(black, 50%);
+	}
+}
+
+#NumRangeSelector {
+	#Box {
+		height: 25px;
+		width: 240px;
+		background-color: white;
+		border-color: fade(@warmer, 25%);
+		border-width: 1px;
+		border-style: solid;
+		p {
+			// all text will go in p tags,
+			// however when a varable is adjusted we need to turn some text blue
+			font-size: 14px;
+			color: fade(black, 50%);
+		}
+	}
+	#Selector {
+		selected-color: @blue;
+		unselected-color: rgb(155, 154, 153);
+		height: 25px;
+		width: 22px;
+	}
+}
+
+#CatRangeSelector {
+	#Box {
+		height: 25px;
+		width: 280px;
+		border-color: fade(black, 20%);
+		border-width: 1px;
+	}
+	#CheckBoxList {
+	  #Check {	    
+		height: 18px;
+		width: 18px;
+		selected-color: @blue;
+		unselected-color: rgb(155, 154, 153);
+		border-width: 1px;
+      }
+      p {
+		// text goes in a p tag
+		color: @textDark;
+      }	
+	}
+}
+
+#DirOptions {
+	#CheckBoxList {
+	  #Check {	    
+		height: 18px;
+		width: 18px;
+		all-selected-color: rgb(155, 154, 153);
+		some-selected-color: rgb(215, 214, 213);
+		none-selected-color: rgb(195, 194, 193);
+		border-width: 1px;
+      }
+      p {
+		// text goes in a p tag
+		color: @textDark;
+      }	
+	}
+}
+
+// The first folder e.g. "Demographics"
+#SubjDir {
+	h1 {
+		font-family: sansMed;
+		color: fade(black, 50%);
+		font-size: 14px;
+		line-height: 16px;
+	}
+	width: 200px;
+	background-color: rgb(210, 208, 204);
+	// I added this hover to help know where you are going next
+	&:hover {
+		background-color: rgb(187, 185, 179);
+	}
+}
+
+// The second folder e.g. "Demographic variables"
+#TypeDir {
+	h1 {
+		font-family: sansMed;
+		color: fade(black, 50%);
+		font-size: 14px;
+		line-height: 16px;
+	}
+	width: 380px;
+	background-color: rgb(210, 208, 204);
+	// I added this hover to help know where you are going next
+	&:hover {
+		background-color: rgb(187, 185, 179);
+	}
+}
+
+// This is the row variable box
+#RowVarBox {
+	background-color: rgb(210, 208, 204);
+	h2 {
+		// the variable name should go in an h2 tag
+		font-family: sansMed;
+		font-size: 14px;
+		color: fade(black, 50%);
+		line-height: 16px;
+	}
+	#Sorted {
+		background-color: fade(@blue, 40%);
+		p {
+			// "Columns have been sorted by correlation to this variable"
+		}
+		#DeselectButton {
+			height: 25px;
+			width: 100px;
+			border-color: @selected;
+			p {
+				// toggle between "Deselect all" and "Select all"
+				text-align: center;
+			} 
+		}
+		#ProfileButton, #NetworkButton {
+			// I'd like the icons for these to be done to ellipse() and line()
+			// Could they animate? Or have a little randomness each time they appear?
+			h2 {
+				color: @textLight;
+				font-size: 16px;
+			}
+			&:hover {
+				// This is the first hover I added, hope to add it in other places.
+				background-color: fade(white, 10%);
+			}
+		}
+	}
+}
+
+#RowPlots {
+	p {
+		// font for labels
+		font-family: sansMed;
+		font-size: 14px;
+		color: fade(black, 50%);
+	}
+}
+
+#Profile {
+	h1 {
+		font-family: sansReg;
+		font-size: 14px;
+		color: white;
+	}
+	
+	p {
+		font-family: sansReg;
+		font-size: 12px;
+		color: fade(white, 50%);
+	}		
+	  
+	#Point {
+		fill-color: rgb(98, 91, 77);
+		border-color: rgb(254, 143, 29);
+		p {
+			font-family: sansReg;
+			font-size: 12px;
+			color: white;
+		}	  
+	} 
+	  
+	#Export {
+	    background-color: fade(black, 20%);
+		h2 {
+			font-family: sansReg;
+			font-size: 12px;
+			color: white;
+		}
+	}
+	
+	#Selector {
+		selection-color: fade(black, 20%);
+		handle-color: fade(white, 50%);
+	}
+}
+
+// This is the col variable box
+#ColVarBox {
+	h2 {
+		font-family: sansMed;
+		font-size: 12px;
+		color: @textDark;
+		line-height: 14px;
+	}
+	background-color: rgb(210, 208, 204);
+}
+
+#CovVarBox {
+	h2 {
+		// variable name
+		font-family: sansMed;
+		font-size: 14px;
+		color: @textLight;
+	}
+	p {
+		// list of the varibles when colapsed
+		color: @textLight;
+		font-family: sansReg;
+		font-size: 12px;
+	}
+	#Dismiss {
+		color: @textLight;
+	}
+	#open {
+	  background-color: rgb(233, 232, 230);
+	}
+	background-color: rgb(143, 137, 128);
+}
+
+// The square plots, aka "big data visualizations"
+#RowPlots {
+	background-color: @blue;
+	width: 196px;
+	height: 196px;
+	#MissingData {
+		top: 0;
+		right: 0;
+		background-color: @MissingData;
+	}
+	#Pvalue {
+		top: 0;
+		left: 0;
+		background-color: @Pvalue;
+	}
+	&:hover {
+		#ColVarBox {
+			background-color: fade(@warmer, 30%);
+			h2 {
+				color: @textLight;
+				text-align: center;
+			}
+		}
+		#RowVarBox {
+			background-color: fade(@warmer, 30%);
+			h2 {
+				color: @textLight;
+				text-align: right;
+			}
+		}
+	}
+}
+
+// Information bar at the top
+#InfoBar {
+	background-color: rgb(210, 208, 204);
+	height: 98px;
+	#BackgroundImg {
+		background-image: url('data/shapes/shdw-options.png');
+		right: 0px;
+		height: 100%;
+	}
+	#SearchAdd {
+		height: 75px;
+		width: 205px;
+		#SearchTab {
+			height: 55px;
+			background-color: rgb(199, 196, 191);
+			p {
+				text-align: center;
+				color: @textDark;
+			}
+			&#Selected {
+				background-color: white;
+			}
+		}
+		#SearchBar {
+			height: 25px;
+			background-color: white;
+			p {
+				// "Search for a variable" text shows up until you click the box
+				color: fade(black, 35%);
+			}
+			#SearchResult {
+				// I want each result to be in it's own box.
+				height: 35px;
+				width: 280px;
+				margin-bottom: 0px;
+				&:hover {
+					background-color: rgb(35, 35, 35);
+					// the width of the box should change if the variable needs more space to be seen (see comps)
+					width: auto;
+				}
+				p {
+					color: @textLight;
+					background-color: rgb(58, 58, 58);
+					&#seachedText {
+						// The text I've typed in should be blue in the searches below
+						color: @blue;
+					}
+				}
+			}
+		}
+	}
+	#ResetData {
+	    background-color: rgb(199, 196, 192); 
+	    icon-image: url('data/shapes/reload.svg');	    
+		p {
+			color: fade(black, 50%);
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

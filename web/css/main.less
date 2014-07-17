@@ -1,0 +1,312 @@
+@warm: rgb(30, 20, 0);
+@blue: rgb(39, 141, 210);
+
+.anti-aliased() {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+.text-select-off() {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.shadow( @horizontalOffset:0px, @verticalOffset:0px, @blur:5px, @spread:3px, @color:fade(@warm, 10%)) {
+    -webkit-box-shadow: @horizontalOffset @verticalOffset @blur @spread @color;
+       -moz-box-shadow: @horizontalOffset @verticalOffset @blur @spread @color;
+            box-shadow: @horizontalOffset @verticalOffset @blur @spread @color;
+}
+
+.ease(@speed: .2s) {
+    webkit-transition: all @speed ease-in-out;
+    -moz-transition: all @speed ease-in-out;
+    -o-transition: all @speed ease-in-out;
+    transition: all @speed ease-in-out;
+}
+
+@font-face {
+	font-family: MerriReg;
+    src: url('fonts/Merriweather-Regular.ttf');
+    font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: MerriLight;
+    src: url('fonts/Merriweather-Light.ttf');
+    font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: RoboBold;
+    src: url('fonts/Roboto-Bold.ttf');
+    font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: RoboReg;
+    src: url('fonts/Roboto-Regular.ttf');
+    font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	margin: 0;
+	width:100%;
+	height:100%;
+}
+
+p, h1, h2, h3, span, a, li {
+	.anti-aliased();
+	margin: 0;
+	padding: 0;
+	font-style: normal;
+	font-weight: normal;
+}
+
+h1 {
+	font-family: MerriReg;
+	color: fade(@warm, 75%);
+	font-size: 18px;
+	line-height: 55px;
+}
+
+h2 {
+	font-family: MerriLight;
+	font-size: 24px;
+	color: fade(@warm, 70%);
+	line-height: 40px;
+}
+
+h3 {
+	font-family: RoboBold;
+	color: fade(@warm, 70%);
+	font-size: 12px;
+}
+
+p, li {
+	font-family: RoboReg;
+	color: fade(@warm, 70%);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+a {
+	text-decoration: none;
+	width: auto;
+	color: inherit;
+}
+
+b {
+	font-family: RoboBold;
+	font-style: normal;
+	font-weight: normal;
+}
+
+ul, ol {
+	padding-left: 25px;
+}
+
+html {
+	background: fade(@warm, 5%);
+	height: 100%;
+}
+
+.basic {
+	margin: 0 10%;
+}
+
+body {
+	height: 100%;
+	#main-con {
+		min-width: 600px;
+		#header-con {
+			position: fixed;
+			width: 80%;
+			height: 50px;
+			background: fade(white, 95%);
+			z-index: 9999;
+			.shadow();
+			padding: 0 10%;
+			#img {
+				background: transparent url('images/plot.png') no-repeat;
+				height: 50px;
+				width: 50px;
+				background-size: 100%;
+				float: left;
+			}
+			h1 {
+				padding-left: 70px;
+			}
+		}
+		#intro {
+			padding: 95px 0 40px 0;
+			&.manual {
+				padding: 95px 0 0px 0;
+				h2 {
+					font-size: 28px;
+				}
+			}
+		}
+		#body-con {
+			position: relative;
+			#download-info {
+				width: 50%;
+				#download-it {
+					margin: 0px 0 10px 0;
+					p {
+						// color: fade(@warm, 50%);
+						span {
+							font-family: roboBold;
+						}
+					}
+				}
+				#download-links {
+					height: 25px;
+					margin-bottom: 20px;
+					.links {
+						float: left;
+						width: 100px;
+						h1 {
+							color: fade(@warm, 65%);
+							line-height: 25px;
+							a {
+								.ease();
+								&:hover {
+									color: @blue;
+								}
+							}
+						}
+					}
+				}
+				img {
+					width: 100%;
+					margin-left: -4%;
+				}
+				#image {
+					background: transparent url('images/screenshot.png') no-repeat;
+					width: 48%;
+					height: auto;
+					background-size: 100%;
+				}
+			}
+
+			.topic {
+				margin-bottom: 30px;
+				h3, p {
+					margin: 5px 0;
+				}
+			}
+
+			#manual-contents {
+				h1, h2, h3, p {
+					width: 70%;
+				}
+				h1 {
+					font-size: 18px;
+					line-height: 26px;
+					margin-top: 45px;
+				}
+				p {
+					margin: 10px 0;
+				}
+
+				h3{
+					margin: 20px 0 10px 0;
+				}
+				img {
+					width: auto;
+					max-width: 70%;
+					height: auto;
+				}
+			}
+
+			#instructions {
+				width: 48%;
+				position: absolute;
+				right: 0;
+				top: 92px;
+				a {
+					color: @blue;
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+			}
+
+			#more-info {
+				margin-top: 20px;
+				position: relative;
+				.topic {
+					h3 {
+						margin-top: 0;
+					}
+				}
+				#about {
+					width: 48%;
+					a {
+						color: @blue;
+						&:hover {
+							text-decoration: underline;
+						}
+					}
+				}
+				#reading {
+					position: absolute;
+					width: 48%;
+					right: 0;
+					top: 0;
+					a {
+						color: @blue;
+						&:hover {
+							text-decoration: underline;
+						}
+					}
+				}
+			}
+		}
+
+		#footer {
+			border-top: 1px solid fade(@warm, 25%);
+			height: 50px;
+			margin-top: 30px;
+			p {
+				line-height: 50px;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

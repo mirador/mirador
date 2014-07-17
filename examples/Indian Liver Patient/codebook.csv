@@ -1,0 +1,35 @@
+Age,int
+alias,Age of the patient 
+,
+Gender,category
+alias,Gender of the patient
+,
+TB,float
+alias,Total Bilirubin 
+,
+DB,float
+alias,Direct Bilirubin
+,
+Alkphos,int
+alias,Alkaline Phosphotase 
+,
+Sgpt,int
+alias,Alamine Aminotransferase 
+,
+Sgot,int
+alias,Aspartate Aminotransferase
+,
+TP,float
+alias,Total Protein
+,
+ALB,float
+alias,Albumin
+,
+A/G,float
+alias,Albumin and Globulin Ratio
+,
+Sick,category
+alias,Liver patient or not (labeled by the experts) 
+code,description
+1,yes
+2,no

@@ -1,0 +1,245 @@
+@font-face {
+  font-family: MerriReg;
+  src: url('fonts/Merriweather-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: MerriLight;
+  src: url('fonts/Merriweather-Light.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: RoboBold;
+  src: url('fonts/Roboto-Bold.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: RoboReg;
+  src: url('fonts/Roboto-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+p,
+h1,
+h2,
+h3,
+span,
+a,
+li {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  margin: 0;
+  padding: 0;
+  font-style: normal;
+  font-weight: normal;
+}
+h1 {
+  font-family: MerriReg;
+  color: rgba(30, 20, 0, 0.75);
+  font-size: 18px;
+  line-height: 55px;
+}
+h2 {
+  font-family: MerriLight;
+  font-size: 24px;
+  color: rgba(30, 20, 0, 0.7);
+  line-height: 40px;
+}
+h3 {
+  font-family: RoboBold;
+  color: rgba(30, 20, 0, 0.7);
+  font-size: 12px;
+}
+p,
+li {
+  font-family: RoboReg;
+  color: rgba(30, 20, 0, 0.7);
+  font-size: 12px;
+  line-height: 18px;
+}
+a {
+  text-decoration: none;
+  width: auto;
+  color: inherit;
+}
+b {
+  font-family: RoboBold;
+  font-style: normal;
+  font-weight: normal;
+}
+ul,
+ol {
+  padding-left: 25px;
+}
+html {
+  background: rgba(30, 20, 0, 0.05);
+  height: 100%;
+}
+.basic {
+  margin: 0 10%;
+}
+body {
+  height: 100%;
+}
+body #main-con {
+  min-width: 600px;
+}
+body #main-con #header-con {
+  position: fixed;
+  width: 80%;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 9999;
+  -webkit-box-shadow: 0px 0px 5px 3px rgba(30, 20, 0, 0.1);
+  -moz-box-shadow: 0px 0px 5px 3px rgba(30, 20, 0, 0.1);
+  box-shadow: 0px 0px 5px 3px rgba(30, 20, 0, 0.1);
+  padding: 0 10%;
+}
+body #main-con #header-con #img {
+  background: transparent url('images/plot.png') no-repeat;
+  height: 50px;
+  width: 50px;
+  background-size: 100%;
+  float: left;
+}
+body #main-con #header-con h1 {
+  padding-left: 70px;
+}
+body #main-con #intro {
+  padding: 95px 0 40px 0;
+}
+body #main-con #intro.manual {
+  padding: 95px 0 0px 0;
+}
+body #main-con #intro.manual h2 {
+  font-size: 28px;
+}
+body #main-con #body-con {
+  position: relative;
+}
+body #main-con #body-con #download-info {
+  width: 50%;
+}
+body #main-con #body-con #download-info #download-it {
+  margin: 0px 0 10px 0;
+}
+body #main-con #body-con #download-info #download-it p span {
+  font-family: roboBold;
+}
+body #main-con #body-con #download-info #download-links {
+  height: 25px;
+  margin-bottom: 20px;
+}
+body #main-con #body-con #download-info #download-links .links {
+  float: left;
+  width: 100px;
+}
+body #main-con #body-con #download-info #download-links .links h1 {
+  color: rgba(30, 20, 0, 0.65);
+  line-height: 25px;
+}
+body #main-con #body-con #download-info #download-links .links h1 a {
+  webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+body #main-con #body-con #download-info #download-links .links h1 a:hover {
+  color: #278dd2;
+}
+body #main-con #body-con #download-info img {
+  width: 100%;
+  margin-left: -4%;
+}
+body #main-con #body-con #download-info #image {
+  background: transparent url('images/screenshot.png') no-repeat;
+  width: 48%;
+  height: auto;
+  background-size: 100%;
+}
+body #main-con #body-con .topic {
+  margin-bottom: 30px;
+}
+body #main-con #body-con .topic h3,
+body #main-con #body-con .topic p {
+  margin: 5px 0;
+}
+body #main-con #body-con #manual-contents h1,
+body #main-con #body-con #manual-contents h2,
+body #main-con #body-con #manual-contents h3,
+body #main-con #body-con #manual-contents p {
+  width: 70%;
+}
+body #main-con #body-con #manual-contents h1 {
+  font-size: 18px;
+  line-height: 26px;
+  margin-top: 45px;
+}
+body #main-con #body-con #manual-contents p {
+  margin: 10px 0;
+}
+body #main-con #body-con #manual-contents h3 {
+  margin: 20px 0 10px 0;
+}
+body #main-con #body-con #manual-contents img {
+  width: auto;
+  max-width: 70%;
+  height: auto;
+}
+body #main-con #body-con #instructions {
+  width: 48%;
+  position: absolute;
+  right: 0;
+  top: 92px;
+}
+body #main-con #body-con #instructions a {
+  color: #278dd2;
+}
+body #main-con #body-con #instructions a:hover {
+  text-decoration: underline;
+}
+body #main-con #body-con #more-info {
+  margin-top: 20px;
+  position: relative;
+}
+body #main-con #body-con #more-info .topic h3 {
+  margin-top: 0;
+}
+body #main-con #body-con #more-info #about {
+  width: 48%;
+}
+body #main-con #body-con #more-info #about a {
+  color: #278dd2;
+}
+body #main-con #body-con #more-info #about a:hover {
+  text-decoration: underline;
+}
+body #main-con #body-con #more-info #reading {
+  position: absolute;
+  width: 48%;
+  right: 0;
+  top: 0;
+}
+body #main-con #body-con #more-info #reading a {
+  color: #278dd2;
+}
+body #main-con #body-con #more-info #reading a:hover {
+  text-decoration: underline;
+}
+body #main-con #footer {
+  border-top: 1px solid rgba(30, 20, 0, 0.25);
+  height: 50px;
+  margin-top: 30px;
+}
+body #main-con #footer p {
+  line-height: 50px;
+}

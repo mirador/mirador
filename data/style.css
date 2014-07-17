@@ -1,0 +1,338 @@
+@font-face {
+  font-family: serifBold;
+  src: url('fonts/Merriweather-Bold.ttf');
+}
+@font-face {
+  font-family: serifReg;
+  src: url('fonts/Merriweather-Regular.ttf');
+}
+@font-face {
+  font-family: sansBold;
+  src: url('fonts/Roboto-Bold.ttf');
+}
+@font-face {
+  font-family: sansMed;
+  src: url('fonts/Roboto-Medium.ttf');
+}
+@font-face {
+  font-family: sansReg;
+  src: url('fonts/Roboto-Regular.ttf');
+}
+h1,
+h2,
+h3,
+p {
+  color: rgba(0, 0, 0, 0.7);
+}
+h1 {
+  font-family: serifBold;
+  font-size: 14px;
+}
+p {
+  font-family: sansReg;
+  font-size: 12px;
+}
+h2 {
+  font-family: sansMed;
+  font-size: 14px;
+}
+h3 {
+  font-family: sansBold;
+  font-size: 13px;
+}
+#OptionsPanel {
+  background: #6f6c66;
+}
+#OptionsPanel h1 {
+  font-size: 22px;
+  font-family: serifReg;
+}
+#OptionsPanel p,
+#OptionsPanel h1 {
+  color: rgba(255, 255, 255, 0.9);
+}
+#OptionsPanel #Button {
+  color: #53514c;
+}
+#OptionsPanel #PlotOptions,
+#OptionsPanel #SessionOptions,
+#OptionsPanel #StatsOptions {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: rgba(15, 10, 0, 0.25);
+}
+#OptionsPanel #PlotOptions #SelectBox,
+#OptionsPanel #SessionOptions #SelectBox,
+#OptionsPanel #StatsOptions #SelectBox {
+  width: 110px;
+  height: 24px;
+  right: 0;
+  background: #53514c;
+}
+#OptionsPanel #PlotOptions h1,
+#OptionsPanel #SessionOptions h1,
+#OptionsPanel #StatsOptions h1 {
+  font-size: 16px;
+  font-family: serifBold;
+}
+#CheckBoxList #Check {
+  height: 15px;
+  width: 15px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.65);
+}
+#CheckBoxList #Check#Selected {
+  background-image: url('data/fonts/check.svg');
+  color: rgba(0, 0, 0, 0.65);
+}
+#CheckBoxList p {
+  color: rgba(0, 0, 0, 0.5);
+}
+#NumRangeSelector #Box {
+  height: 25px;
+  width: 240px;
+  background-color: white;
+  border-color: rgba(15, 10, 0, 0.25);
+  border-width: 1px;
+  border-style: solid;
+}
+#NumRangeSelector #Box p {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
+}
+#NumRangeSelector #Selector {
+  selected-color: #278dd2;
+  unselected-color: #9b9a99;
+  height: 25px;
+  width: 22px;
+}
+#CatRangeSelector #Box {
+  height: 25px;
+  width: 280px;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-width: 1px;
+}
+#CatRangeSelector #CheckBoxList #Check {
+  height: 18px;
+  width: 18px;
+  selected-color: #278dd2;
+  unselected-color: #9b9a99;
+  border-width: 1px;
+}
+#CatRangeSelector #CheckBoxList p {
+  color: rgba(0, 0, 0, 0.65);
+}
+#DirOptions #CheckBoxList #Check {
+  height: 18px;
+  width: 18px;
+  all-selected-color: #9b9a99;
+  some-selected-color: #d7d6d5;
+  none-selected-color: #c3c2c1;
+  border-width: 1px;
+}
+#DirOptions #CheckBoxList p {
+  color: rgba(0, 0, 0, 0.65);
+}
+#SubjDir {
+  width: 200px;
+  background-color: #d2d0cc;
+}
+#SubjDir h1 {
+  font-family: sansMed;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  line-height: 16px;
+}
+#SubjDir:hover {
+  background-color: #bbb9b3;
+}
+#TypeDir {
+  width: 380px;
+  background-color: #d2d0cc;
+}
+#TypeDir h1 {
+  font-family: sansMed;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  line-height: 16px;
+}
+#TypeDir:hover {
+  background-color: #bbb9b3;
+}
+#RowVarBox {
+  background-color: #d2d0cc;
+}
+#RowVarBox h2 {
+  font-family: sansMed;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
+  line-height: 16px;
+}
+#RowVarBox #Sorted {
+  background-color: rgba(39, 141, 210, 0.4);
+}
+#RowVarBox #Sorted #DeselectButton {
+  height: 25px;
+  width: 100px;
+  border-color: #ff9100;
+}
+#RowVarBox #Sorted #DeselectButton p {
+  text-align: center;
+}
+#RowVarBox #Sorted #ProfileButton h2,
+#RowVarBox #Sorted #NetworkButton h2 {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+}
+#RowVarBox #Sorted #ProfileButton:hover,
+#RowVarBox #Sorted #NetworkButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+#RowPlots p {
+  font-family: sansMed;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
+}
+#Profile h1 {
+  font-family: sansReg;
+  font-size: 14px;
+  color: white;
+}
+#Profile p {
+  font-family: sansReg;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+#Profile #Point {
+  fill-color: #625b4d;
+  border-color: #fe8f1d;
+}
+#Profile #Point p {
+  font-family: sansReg;
+  font-size: 12px;
+  color: white;
+}
+#Profile #Export {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+#Profile #Export h2 {
+  font-family: sansReg;
+  font-size: 12px;
+  color: white;
+}
+#Profile #Selector {
+  selection-color: rgba(0, 0, 0, 0.2);
+  handle-color: rgba(255, 255, 255, 0.5);
+}
+#ColVarBox {
+  background-color: #d2d0cc;
+}
+#ColVarBox h2 {
+  font-family: sansMed;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.65);
+  line-height: 14px;
+}
+#CovVarBox {
+  background-color: #8f8980;
+}
+#CovVarBox h2 {
+  font-family: sansMed;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+#CovVarBox p {
+  color: rgba(255, 255, 255, 0.9);
+  font-family: sansReg;
+  font-size: 12px;
+}
+#CovVarBox #Dismiss {
+  color: rgba(255, 255, 255, 0.9);
+}
+#CovVarBox #open {
+  background-color: #e9e8e6;
+}
+#RowPlots {
+  background-color: #278dd2;
+  width: 196px;
+  height: 196px;
+}
+#RowPlots #MissingData {
+  top: 0;
+  right: 0;
+  background-color: #ff00ff;
+}
+#RowPlots #Pvalue {
+  top: 0;
+  left: 0;
+  background-color: #8cc740;
+}
+#RowPlots:hover #ColVarBox {
+  background-color: rgba(15, 10, 0, 0.3);
+}
+#RowPlots:hover #ColVarBox h2 {
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+#RowPlots:hover #RowVarBox {
+  background-color: rgba(15, 10, 0, 0.3);
+}
+#RowPlots:hover #RowVarBox h2 {
+  color: rgba(255, 255, 255, 0.9);
+  text-align: right;
+}
+#InfoBar {
+  background-color: #d2d0cc;
+  height: 98px;
+}
+#InfoBar #BackgroundImg {
+  background-image: url('data/shapes/shdw-options.png');
+  right: 0px;
+  height: 100%;
+}
+#InfoBar #SearchAdd {
+  height: 75px;
+  width: 205px;
+}
+#InfoBar #SearchAdd #SearchTab {
+  height: 55px;
+  background-color: #c7c4bf;
+}
+#InfoBar #SearchAdd #SearchTab p {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.65);
+}
+#InfoBar #SearchAdd #SearchTab#Selected {
+  background-color: white;
+}
+#InfoBar #SearchAdd #SearchBar {
+  height: 25px;
+  background-color: white;
+}
+#InfoBar #SearchAdd #SearchBar p {
+  color: rgba(0, 0, 0, 0.35);
+}
+#InfoBar #SearchAdd #SearchBar #SearchResult {
+  height: 35px;
+  width: 280px;
+  margin-bottom: 0px;
+}
+#InfoBar #SearchAdd #SearchBar #SearchResult:hover {
+  background-color: #232323;
+  width: auto;
+}
+#InfoBar #SearchAdd #SearchBar #SearchResult p {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: #3a3a3a;
+}
+#InfoBar #SearchAdd #SearchBar #SearchResult p#seachedText {
+  color: #278dd2;
+}
+#InfoBar #ResetData {
+  background-color: #c7c4c0;
+  icon-image: url('data/shapes/reload.svg');
+}
+#InfoBar #ResetData p {
+  color: rgba(0, 0, 0, 0.5);
+}

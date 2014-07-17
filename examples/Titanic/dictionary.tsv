@@ -1,0 +1,4 @@
+CLASS	category	0:crew;1:first;2:second;3:third
+AGE	category	0:child;1:adult
+SEX	category	0:male;1:female
+SURVIVE	category	0:no;1:yes

@@ -1,0 +1,12 @@
+project.title=NHANES cycle 2009-2010
+project.url=http://wwwn.cdc.gov/nchs/nhanes/search/nhanes09_10.aspx
+data.source=data.tsv
+data.dictionary=dictionary.tsv
+data.groups=groups.xml
+data.binary=data.bin
+missing.string=\N
+missing.threshold=MISS_80
+correlation.pvalue=P0_05
+correlation.algorithm=SURROGATE_GAUSS
+correlation.surrogates=100
+correlation.threshold=0.001
