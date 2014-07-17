@@ -185,17 +185,8 @@ public class MiraApp extends PApplet {
       project.pValue = val;
       project.save();
       browser.pvalueChanged();
-      dataset.resort(pvalue(), missingThreshold());
+      dataset.resort(project.pvalue(), project.missingThreshold());
     }    
-  }
-  
-  public float pvalue() {
-    if (project.pValue == Project.P0_001) return 0.001f;
-    else if (project.pValue == Project.P0_005) return 0.005f;
-    else if (project.pValue == Project.P0_01) return 0.01f;
-    else if (project.pValue == Project.P0_05) return 0.05f;
-    else if (project.pValue == Project.P0_1) return 0.1f;
-    else return 1;
   }
   
   public int getMissingThreshold() {
@@ -206,16 +197,8 @@ public class MiraApp extends PApplet {
     if (project.missingThreshold != threshold) {
       project.missingThreshold = threshold;
       project.save();
-      dataset.resort(pvalue(), missingThreshold());      
+      dataset.resort(project.pvalue(), project.missingThreshold());      
     }
-  }
-  
-  public float missingThreshold() {
-    if (project.missingThreshold == Project.MISS_10) return 0.1f;
-    else if (project.missingThreshold == Project.MISS_20) return 0.2f;
-    else if (project.missingThreshold == Project.MISS_40) return 0.4f;
-    else if (project.missingThreshold == Project.MISS_80) return 0.8f;
-    else return 1;    
   }
   
   public void updateRanges(RangeSelector selector, boolean resort) {

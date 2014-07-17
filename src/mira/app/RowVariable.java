@@ -242,7 +242,7 @@ public class RowVariable extends RowWidget {
       sortMode = SORTING;
       for (CheckBox chkbx: chkBoxes) chkbx.hide();
       sortOpt.show();
-      data.sort(rowVar, mira.ranges, mira.pvalue(), mira.missingThreshold());
+      data.sort(rowVar, mira.ranges, mira.project.pvalue(), mira.project.missingThreshold());
       mira.profile.clear();
     } else if (sortMode == UNSORTED && !chkPressed) {
       ((MiraWidget)parent).mouseReleased(this);

@@ -211,7 +211,7 @@ public class RowPlots extends ColumnScroller {
           indepTask = mira.browser.submitTask(new Runnable() {
             public void run() {                  
               DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges);                
-              indep = 0 < Similarity.calculate(slice, mira.pvalue(), mira.project);              
+              indep = 0 < Similarity.calculate(slice, mira.project.pvalue(), mira.project);              
             }
           }, false);            
         }          
@@ -272,7 +272,7 @@ public class RowPlots extends ColumnScroller {
           triangle(x0, y0, x0 + 13, y0, x0, y0 + 13);
         }
         
-        if (mira.missingThreshold() <= missing) {
+        if (mira.project.missingThreshold() <= missing) {
           float x1 = x0 + w0;
           noStroke();
           fill(misColor);
