@@ -18,7 +18,6 @@ import mira.data.Variable;
  * items. The contents of the list are updated dynamicall depending on what is
  * visible to the user.
  *
- * @author Andres Colubri
  */
 
 abstract public class ColumnScroller extends MiraWidget {  

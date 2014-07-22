@@ -15,7 +15,6 @@ import mira.data.Variable;
  * Selector for numerical variables. It uses a slider to define the min-max 
  * range of the variable.
  *
- * @author Andres Colubri
  */
 
 public class NumericalRangeSelector extends RangeSelector {

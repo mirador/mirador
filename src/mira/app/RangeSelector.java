@@ -10,7 +10,6 @@ import mira.data.Variable;
 /**
  * Base abstract class to define range selectors.
  *
- * @author Andres Colubri
  */
 
 abstract public class RangeSelector extends MiraWidget {

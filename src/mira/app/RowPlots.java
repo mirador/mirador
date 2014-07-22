@@ -18,7 +18,6 @@ import mira.views.View;
  * Widget that contains all the plots of a row variable. It is a subclass of
  * ColumnScroller to allow for arbitrary large number of plots.
  *
- * @author Andres Colubri
  */
 
 public class RowPlots extends ColumnScroller {

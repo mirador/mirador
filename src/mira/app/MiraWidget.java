@@ -13,7 +13,6 @@ import mira.data.DataSet;
  * mainly indexing and timeout, in addition to references to the data and main
  * app object.
  *
- * @author Andres Colubri
  */
 
 public class MiraWidget extends Widget {

@@ -12,7 +12,6 @@ import mira.utils.Log;
  * Sublcass of ColumnScoller specialized to handle an horizontal scroll of 
  * covariate boxes.
  *
- * @author Andres Colubri
  */
 
 public class InformationBar extends MiraWidget {

@@ -12,7 +12,6 @@ import mira.data.Variable;
  * Sublcass of ColumnScoller specialized to handle an horizontal scroll of 
  * column labels.
  *
- * @author Andres Colubri
  */
 
 public class ColumnLabels extends ColumnScroller {

@@ -17,7 +17,6 @@ import processing.core.PApplet;
 /**
  * The main visualization area containing the row, columns and covariates.
  *
- * @author Andres Colubri
  */
 
 public class VariableBrowser extends MiraWidget {

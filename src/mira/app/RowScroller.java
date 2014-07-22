@@ -16,7 +16,6 @@ import mira.data.DataTree.Item;
  * Vertical scroller for group, tables, and variables. It updates dynamically 
  * depending on the visible items.
  *
- * @author Andres Colubri
  */
 
 public class RowScroller extends MiraWidget {

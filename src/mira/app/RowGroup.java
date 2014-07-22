@@ -10,7 +10,6 @@ import mira.data.VariableContainer;
 /**
  * Widget that represents a variable group.
  *
- * @author Andres Colubri
  */
 
 public class RowGroup extends RowWidget {

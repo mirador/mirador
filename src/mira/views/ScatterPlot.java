@@ -13,7 +13,6 @@ import processing.core.PGraphics;
 /**
  * Scatter plot.
  *
- * @author Andres Colubri
  */
 
 public class ScatterPlot extends View {

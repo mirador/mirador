@@ -17,7 +17,6 @@ import mira.data.Variable;
  * Selector for categorical variables. It uses checkboxes to define the 
  * categories included in the range.
  *
- * @author Andres Colubri
  */
 
 public class CategoricalRangeSelector extends RangeSelector { 

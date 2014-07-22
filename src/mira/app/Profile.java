@@ -17,7 +17,6 @@ import mira.utils.Log;
 /**
  * Widget containing the profile view in Mirador.
  *
- * @author Andres Colubri
  */
 
 public class Profile extends MiraWidget {

@@ -12,7 +12,6 @@ import processing.core.PGraphics;
 /**
  * Base class for plots in Mirador.
  *
- * @author Andres Colubri
  */
 
 abstract public class View {

@@ -13,7 +13,6 @@ import processing.core.PGraphics;
 /**
  * Eikosogram plot.
  *
- * @author Andres Colubri
  */
 
 public class Eikosogram extends View {

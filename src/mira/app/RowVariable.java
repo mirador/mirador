@@ -12,7 +12,6 @@ import mira.data.Variable;
 /**
  * Widget that represents a row variable, and contains all its plots.
  *
- * @author Andres Colubri
  */
 
 public class RowVariable extends RowWidget {

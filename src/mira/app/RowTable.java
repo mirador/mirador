@@ -10,7 +10,6 @@ import mira.data.VariableContainer;
 /**
  * Widget that represents a variable table.
  *
- * @author Andres Colubri
  */
 
 public class RowTable extends RowWidget {

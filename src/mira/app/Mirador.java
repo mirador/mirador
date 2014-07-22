@@ -14,7 +14,6 @@ import processing.core.PConstants;
 /**
  * Mirador launcher class. 
  * 
- * @author Ben Fry
  */
 
 public class Mirador {

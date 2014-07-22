@@ -16,7 +16,6 @@ import mira.data.Variable;
 /**
  * Widget containing the search bar.
  *
- * @author Andres Colubri
  */
 
 public class SearchBar extends MiraWidget {

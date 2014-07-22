@@ -24,7 +24,6 @@ import processing.data.Table;
 /**
  * Mirador main class. 
  * 
- * @author Andres Colubri
  */
 
 @SuppressWarnings("serial")

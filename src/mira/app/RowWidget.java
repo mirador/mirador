@@ -11,7 +11,6 @@ import lib.ui.Interface;
 /**
  * Base row widget used to define RowGroup, RowTable and RowVariable.
  *
- * @author Andres Colubri
  */
 
 public class RowWidget extends MiraWidget {

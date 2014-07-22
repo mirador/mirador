@@ -12,7 +12,6 @@ import processing.core.PFont;
  * Panel with main options in Mirador (load data, plot type, P-Value selection, 
  * etc.)
  *
- * @author Andres Colubri
  */
 
 public class OptionsPanel extends MiraWidget {

@@ -11,7 +11,6 @@ import processing.core.PGraphics;
 /**
  * Joint histogram.
  *
- * @author Andres Colubri
  */
 
 public class JointHistogram extends View {  
