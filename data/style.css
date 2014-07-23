@@ -189,11 +189,6 @@ h3 {
 #RowVarBox #Sorted #NetworkButton:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
-#RowPlots p {
-  font-family: sansMed;
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.5);
-}
 #Profile h1 {
   font-family: sansReg;
   font-size: 14px;
@@ -255,8 +250,14 @@ h3 {
 }
 #RowPlots {
   background-color: #278dd2;
+  selection-color: #fe8f1d;
   width: 196px;
   height: 196px;
+}
+#RowPlots p {
+  font-family: sansMed;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
 }
 #RowPlots #MissingData {
   top: 0;

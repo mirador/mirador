@@ -107,7 +107,7 @@ public class OptionsPanel extends MiraWidget {
     } else if (uploadBtn.select(mouseX, mouseY)) {
       mira.uploadSession();
     } else if (pdfBtn.select(mouseX, mouseY)) {
-//      mira.uploadSession();      
+      mira.savePDF();      
     } else if (plotOpt.select(mouseX, mouseY)) {
       mira.setPlotType(plotOpt.selected);
     } else if (statOpt.select(mouseX, mouseY)) {
