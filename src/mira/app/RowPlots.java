@@ -59,7 +59,7 @@ public class RowPlots extends ColumnScroller {
     } else {
       for (Item item: visItems.values()) {
         item.mouseReleased();
-      }    
+      }
     }    
   }
   
@@ -282,6 +282,14 @@ public class RowPlots extends ColumnScroller {
         fill(color(255));
         rect(x0, y0, w0, h0);         
       }
+      boolean selected = mira.browser.getSelectedRow() == rowVar &&
+                         mira.browser.getSelectedCol() == var;
+      if (selected) {
+        stroke(color(240, 155, 70));
+        strokeWeight(3);
+        noFill();
+        rect(x0, y0, w0, h0);        
+      }
     }
     
     void drawSelection(View.Selection sel, 
@@ -356,6 +364,26 @@ public class RowPlots extends ColumnScroller {
         return view.getLabelY(valx, valy);  
       }
       return "";
-    }    
+    }   
+    
+    void mouseReleased() { 
+      float x0 = x.get() - visX0.get() + padding;
+      float y0 = y.get() + padding;
+      float w0 = w - 2 * padding;
+      float h0 = h.get() - 2 * padding;
+      if (x0 <= mouseX && mouseX <= x0 + w0 &&
+          y0 <= mouseY && mouseY <= y0 + h0) {
+        boolean selected = mira.browser.getSelectedRow() == rowVar &&
+                           mira.browser.getSelectedCol() == var;
+        if (!selected) {
+          mira.browser.setSelectedRow(rowVar);
+          mira.browser.setSelectedCol(var);          
+        } else {
+          mira.browser.setSelectedRow(null);
+          mira.browser.setSelectedCol(null);
+        }
+      }
+    }
+    
   }
 }
