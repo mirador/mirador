@@ -31,10 +31,12 @@ public class VariableBrowser extends MiraWidget {
   protected CovariatesBar covBar;
   
   protected Variable rowAxis, colAxis;
+  protected Variable selRow, selCol;
   
   VariableBrowser(Interface intf, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
     rowAxis = colAxis = null;
+    selRow = selCol = null;
   }
   
   public void setup() {
@@ -254,6 +256,22 @@ public class VariableBrowser extends MiraWidget {
     }
     return "";
   }
+
+  public void setSelectedRow(Variable var) {
+    selRow = var;
+  }
+
+  public void setSelectedCol(Variable var) {
+    selCol = var;
+  } 
+  
+  public Variable getSelectedRow() {
+    return selRow;
+  }
+
+  public Variable getSelectedCol() {
+    return selCol;
+  } 
   
   protected boolean rowsReady() {
     boolean ready = true;

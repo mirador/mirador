@@ -22,7 +22,7 @@ public class OptionsPanel extends MiraWidget {
   int pColor;    
   int corColor;
   int misColor;
-  Button loadBtn, uploadBtn, pdfBtn;
+  Button loadBtn, exportBtn, uploadBtn, pdfBtn;
   Options plotOpt, statOpt, mdatOpt;
 
   public OptionsPanel(Interface intf, float x, float y, float w, float h) {
@@ -40,9 +40,10 @@ public class OptionsPanel extends MiraWidget {
     corColor = getStyleColor("RowPlots.Pvalue", "background-color");
     misColor = getStyleColor("RowPlots.MissingData", "background-color");
     
-    loadBtn = new Button(10, 80, 100, 30, "Load Data"); 
-    uploadBtn = new Button(10, 115, 100, 30, "Upload Findings");
-    pdfBtn = new Button(10, 150, 100, 30, "Save PDF");
+    loadBtn = new Button(10, 60, 100, 25, "Load Data");
+    exportBtn = new Button(10, 90, 100, 25, "Export selection");
+    uploadBtn = new Button(10, 120, 100, 25, "Upload Findings");
+    pdfBtn = new Button(10, 150, 100, 25, "Save PDF");
     
     plotOpt = new Options(10, 195, 110, 80, "PlotOptions");
     plotOpt.title("Plot Type");
@@ -73,13 +74,14 @@ public class OptionsPanel extends MiraWidget {
 
     fill(h1Color);
     textFont(h1Font);
-    text(MiraApp.APP_NAME, 10, 50); 
+    text(MiraApp.APP_NAME, 10, 25); 
     
     fill(color(0), 150);
     textFont(pFont);
-    text(MiraApp.APP_VERSION, 10, 70); 
+    text(MiraApp.APP_VERSION, 10, 45); 
     
     loadBtn.draw();
+    exportBtn.draw();
     uploadBtn.draw();
     pdfBtn.draw();
     plotOpt.draw();
@@ -100,6 +102,8 @@ public class OptionsPanel extends MiraWidget {
   public void mousePressed() {
     if (loadBtn.select(mouseX, mouseY)) {
       mira.loadDataset();
+    } else if (exportBtn.select(mouseX, mouseY)) {
+      mira.exportSelection();
     } else if (uploadBtn.select(mouseX, mouseY)) {
       mira.uploadSession();
     } else if (pdfBtn.select(mouseX, mouseY)) {
