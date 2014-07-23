@@ -267,7 +267,7 @@ public class RowPlots extends ColumnScroller {
           drawSelection(view.getSelection(valx, valy), x0, y0, w0, h0);
         }
         
-        if (depend) {
+        if (depend && mira.project.pvalue() < 1) {
           // TODO: show some kind of animation while 
           noStroke();
           fill(corColor);

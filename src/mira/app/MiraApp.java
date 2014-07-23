@@ -77,6 +77,9 @@ public class MiraApp extends PApplet {
   protected float animTime;
   protected SoftFloat animAlpha;  
  
+  public boolean savingToPdf = false;
+  protected String pdfFilename;
+  
   protected String username;
   protected String password;
   protected boolean user_authenticated = false;
@@ -141,9 +144,26 @@ public class MiraApp extends PApplet {
   
   public void draw() {        
     if (loaded) {
+      boolean beginPdf = false;
+      if (savingToPdf) {
+        beginPdf = true;
+        System.out.println("begin record to pdf " + pdfFilename);
+        beginRecord(PDF, pdfFilename);
+      }
       background(247);
+//      if (!savingToPdf) {
       intf.update();
       intf.draw();
+//      } else {
+//        stroke(255, 255, 0);
+//        fill(255, 0, 0);
+//        rect(100, 100, 500, 400);
+//      }
+      if (savingToPdf && beginPdf) {
+        endRecord();
+        savingToPdf = false;
+        System.out.println("end pdf recording.");
+      }
     }
     if (animating) {
       drawLoadAnimation();
@@ -261,11 +281,12 @@ public class MiraApp extends PApplet {
     placeComponents(panel);
 
     frame.setVisible(true);    
-    
-    
   }
   
   public void savePDF() {
+    File file = new File(project.dataFolder, "capture.pdf");
+    selectOutput("Enter the name of the PDF file to save the screen to", 
+                 "outputSelected", file, new PDFHandler());
     
   }
   
@@ -505,6 +526,17 @@ public class MiraApp extends PApplet {
         saveTable(dict, dictFile.getAbsolutePath());          
       }
     }
+  }
+  
+  protected class PDFHandler {
+    public void outputSelected(File selection) {
+      pdfFilename = selection.getAbsolutePath();    
+      String ext = PApplet.checkExtension(pdfFilename);
+      if (ext == null || !ext.equals("pdf")) {
+        pdfFilename += ".pdf";
+      }
+      savingToPdf = true;
+    }   
   }
 
   //////////////////////////////////////////////////////////////////////////////  
