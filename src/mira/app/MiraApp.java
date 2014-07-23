@@ -67,8 +67,7 @@ public class MiraApp extends PApplet {
   protected OptionsPanel options;  
   public VariableBrowser browser;
   protected Profile profile;
-  
-  
+    
   protected int plotType;
   
   protected boolean loaded;  
@@ -112,6 +111,7 @@ public class MiraApp extends PApplet {
     loadPreferences();
     
     intf = new Interface(this, "style.css");
+    intf.setBackground(color(247));
     initPanel();
     
     frame.setTitle(APP_NAME + " is loading...");
@@ -144,26 +144,8 @@ public class MiraApp extends PApplet {
   
   public void draw() {        
     if (loaded) {
-      boolean beginPdf = false;
-      if (savingToPdf) {
-        beginPdf = true;
-        System.out.println("begin record to pdf " + pdfFilename);
-        beginRecord(PDF, pdfFilename);
-      }
-      background(247);
-//      if (!savingToPdf) {
       intf.update();
       intf.draw();
-//      } else {
-//        stroke(255, 255, 0);
-//        fill(255, 0, 0);
-//        rect(100, 100, 500, 400);
-//      }
-      if (savingToPdf && beginPdf) {
-        endRecord();
-        savingToPdf = false;
-        System.out.println("end pdf recording.");
-      }
     }
     if (animating) {
       drawLoadAnimation();
@@ -535,6 +517,7 @@ public class MiraApp extends PApplet {
       if (ext == null || !ext.equals("pdf")) {
         pdfFilename += ".pdf";
       }
+      intf.record(pdfFilename);
       savingToPdf = true;
     }   
   }
