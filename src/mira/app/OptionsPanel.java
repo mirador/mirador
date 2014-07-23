@@ -22,7 +22,7 @@ public class OptionsPanel extends MiraWidget {
   int pColor;    
   int corColor;
   int misColor;
-  Button openBtn, uploadBtn;
+  Button loadBtn, uploadBtn, pdfBtn;
   Options plotOpt, statOpt, mdatOpt;
 
   public OptionsPanel(Interface intf, float x, float y, float w, float h) {
@@ -40,20 +40,21 @@ public class OptionsPanel extends MiraWidget {
     corColor = getStyleColor("RowPlots.Pvalue", "background-color");
     misColor = getStyleColor("RowPlots.MissingData", "background-color");
     
-    openBtn = new Button(10, 80, 100, 30, "Open Data"); 
+    loadBtn = new Button(10, 80, 100, 30, "Load Data"); 
     uploadBtn = new Button(10, 115, 100, 30, "Upload Findings");
+    pdfBtn = new Button(10, 150, 100, 30, "Save PDF");
     
-    plotOpt = new Options(10, 165, 110, 80, "PlotOptions");
+    plotOpt = new Options(10, 195, 110, 80, "PlotOptions");
     plotOpt.title("Plot Type");
     plotOpt.add("Scatter", "Histogram", "Eikosogram");
     plotOpt.select(mira.getPlotType());
     
-    statOpt = new Options(10, 295, 110, 80, "StatsOptions");
+    statOpt = new Options(10, 325, 110, 80, "StatsOptions");
     statOpt.title("P-value", corColor);
     statOpt.add("99.9%", "99.5%", "99%", "95%", "90%", "Don't use");
     statOpt.select(mira.getPValue());    
     
-    mdatOpt = new Options(10, 495, 110, 80, "SessionOptions");
+    mdatOpt = new Options(10, 525, 110, 80, "SessionOptions");
     mdatOpt.title("Available\ndata", misColor);
     mdatOpt.add("90%", "80%", "60%", "20%", "Don't use");
     mdatOpt.select(mira.getMissingThreshold());    
@@ -78,8 +79,9 @@ public class OptionsPanel extends MiraWidget {
     textFont(pFont);
     text(MiraApp.APP_VERSION, 10, 70); 
     
-    openBtn.draw();
+    loadBtn.draw();
     uploadBtn.draw();
+    pdfBtn.draw();
     plotOpt.draw();
     statOpt.draw();
     mdatOpt.draw();
@@ -96,10 +98,12 @@ public class OptionsPanel extends MiraWidget {
   }
   
   public void mousePressed() {
-    if (openBtn.select(mouseX, mouseY)) {
+    if (loadBtn.select(mouseX, mouseY)) {
       mira.loadDataset();
     } else if (uploadBtn.select(mouseX, mouseY)) {
       mira.uploadSession();
+    } else if (pdfBtn.select(mouseX, mouseY)) {
+//      mira.uploadSession();      
     } else if (plotOpt.select(mouseX, mouseY)) {
       mira.setPlotType(plotOpt.selected);
     } else if (statOpt.select(mouseX, mouseY)) {
