@@ -111,7 +111,7 @@ public class MiraApp extends PApplet {
     Log.init();
     loadPreferences();
     
-    intf = new Interface(this, g, "style.css");
+    intf = new Interface(this, "style.css");
     initPanel();
     
     frame.setTitle(APP_NAME + " is loading...");
