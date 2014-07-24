@@ -16,9 +16,10 @@ import processing.core.PGraphics;
  */
 
 public class Eikosogram extends View {
-  protected double[][] binCounts;
-  protected double[] marginalBinCounts;
+  protected double[][] weightSum;
+  protected double[] marginalWeights;
   protected float[][] density;
+  protected float[][] logDensity;
   protected float[] marginalDensity;
   protected double[] averageY;
   protected double[] stddevY;
@@ -29,6 +30,7 @@ public class Eikosogram extends View {
   protected float binSizeY;
   protected int binCountX;
   protected int binCountY; 
+  protected boolean logY;
   
   public Eikosogram(DataSlice2D slice) {
     super(slice.varx, slice.vary, slice.ranges);
@@ -109,7 +111,8 @@ public class Eikosogram extends View {
       float dx = pg.width * marginalDensity[bx];
       float y0 = pg.height;
       for (int by = 0; by < binCountY; by++) {
-        float dy = pg.width * pg.height * density[bx][by] / dx;    
+        float pxy = logY ? logDensity[bx][by] : density[bx][by];
+        float dy = pg.width * pg.height * pxy / dx;    
         float f = PApplet.map(by, 0, binCountY - 1, 1, 0);
         pg.fill(mixColors(WHITE, BLUE, f));
         pg.rect(x0, y0, dx, -dy);
@@ -149,14 +152,17 @@ public class Eikosogram extends View {
       float dx = marginalDensity[bx];
       float y0 = 1;
       for (int by = 0; by < binCountY; by++) {
-        float dy = density[bx][by] / dx;
+        float pxy = logY ? logDensity[bx][by] : density[bx][by];
+        float dy = pxy / dx;
         float x1 = x0 + dx; 
         float y1 = y0 - dy;        
         if (x0 <= valx && valx <= x1 && y1 <= valy && valy <= y0) {
           Selection sel = new Selection(x0, y1, dx, dy);
           float f = PApplet.map(by, 0, binCountY - 1, 1, 0);
           sel.setColor(mixColors(WHITE, BLUE, f));
-          sel.setLabel(PApplet.nfc(100 * dy, 2) + "%");
+          // For the percentage label we use the original density, not the logarithm
+          float perc = 100 * density[bx][by] / dx;
+          sel.setLabel(PApplet.nfc(perc, 2) + "%");
           return sel;
         }        
         y0 -= dy;
@@ -212,13 +218,13 @@ public class Eikosogram extends View {
     }
     
     // Initializing arrays -----------------------------------------------------    
-    binCounts = new double[binCountX][binCountY];
+    weightSum = new double[binCountX][binCountY];
     density = new float[binCountX][binCountY];
     marginalDensity = new float[binCountX];
     
     for (int bx = 0; bx < binCountX; bx++) {
       for (int by = 0; by < binCountY; by++) {
-        binCounts[bx][by] = 0;
+        weightSum[bx][by] = 0;
       }
     }
     
@@ -226,20 +232,52 @@ public class Eikosogram extends View {
     
     if (0 < binCountX && 0 < binCountY) {
       // Updating counts -------------------------------------------------------
-      double totCount = 0;
+      double totWeight = 0;
       for (Value2D value: slice.values) {
         int bx = PApplet.constrain((int)(value.x / binSizeX), 0, binCountX - 1);  
         int by = PApplet.constrain((int)(value.y / binSizeY), 0, binCountY - 1);
-        binCounts[bx][by] += value.w;
-        totCount += value.w;
+        weightSum[bx][by] += value.w;
+        totWeight += value.w;
       }    
 
       // Calculating density ---------------------------------------------------      
       for (int bx = 0; bx < binCountX; bx++) {
         for (int by = 0; by < binCountY; by++) {
-          float p = (float)binCounts[bx][by] / (float)totCount;
+          float p = (float)weightSum[bx][by] / (float)totWeight;
           density[bx][by] = p;
           marginalDensity[bx] += p;  
+        }
+      }
+      
+      // Determine if need logarithmic scaling for Y
+      logY = true;
+      for (int bx = 0; bx < binCountX; bx++) {        
+        float px = marginalDensity[bx];
+        if (0 < px) {
+          boolean found = false;          
+          for (int by = 0; by < binCountY; by++) {
+            if (density[bx][by] / px > 0.9) {
+              found = true;
+              break;
+            }
+          }
+          if (!found) logY = false;
+        }
+      }
+      if (logY) {
+        logDensity = new float[binCountX][binCountY];
+        for (int bx = 0; bx < binCountX; bx++) {
+          float px = marginalDensity[bx];
+          if (0 < px) {
+            double toty = 0;
+            for (int by = 0; by < binCountY; by++) {
+              double lpy1 = Math.log(1 + 100 *  density[bx][by] / px);
+              toty += lpy1;
+            }
+            for (int by = 0; by < binCountY; by++) {
+              logDensity[bx][by] = (float)(px * Math.log(1 + 100 * density[bx][by] / px) / toty);
+            }            
+          }
         }
       }
     } 
@@ -250,7 +288,7 @@ public class Eikosogram extends View {
       onestdFrac = new double[binCountX];
       twostdGFrac = new double[binCountX];
       twostdSFrac = new double[binCountX]; 
-      marginalBinCounts = new double[binCountX];
+      marginalWeights = new double[binCountX];
       
       for (Value2D value: slice.values) {
         int bx = PApplet.constrain((int)(value.x / binSizeX), 0, binCountX - 1);
@@ -261,9 +299,9 @@ public class Eikosogram extends View {
       for (int bx = 0; bx < binCountX; bx++) {
         double tot = 0;
         for (int by = 0; by < binCountY; by++) {
-          tot += binCounts[bx][by];
+          tot += weightSum[bx][by];
         }
-        marginalBinCounts[bx] = tot;
+        marginalWeights[bx] = tot;
         if (0 < tot) { 
           double mean = averageY[bx] /= tot;
           double meansq = stddevY[bx] /= tot;
@@ -293,7 +331,7 @@ public class Eikosogram extends View {
       }
       
       for (int bx = 0; bx < binCountX; bx++) {
-        double tot = marginalBinCounts[bx];
+        double tot = marginalWeights[bx];
         onestdFrac[bx] /= tot;
         twostdGFrac[bx] /= tot;
         twostdSFrac[bx] /= tot;

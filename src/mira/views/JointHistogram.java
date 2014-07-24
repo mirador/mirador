@@ -14,7 +14,7 @@ import processing.core.PGraphics;
  */
 
 public class JointHistogram extends View {  
-  protected double[][] binCounts;
+  protected double[][] weightSum;
   protected float[][] density;
   protected boolean[][] selected;
   protected float binSizeX;
@@ -81,31 +81,31 @@ public class JointHistogram extends View {
     }
     
     // Initializing arrays -----------------------------------------------------    
-    binCounts = new double[binCountX][binCountY];
+    weightSum = new double[binCountX][binCountY];
     density = new float[binCountX][binCountY];
     selected = new boolean[binCountX][binCountY];
     for (int bx = 0; bx < binCountX; bx++) {
       for (int by = 0; by < binCountY; by++) {
-        binCounts[bx][by] = 0;
+        weightSum[bx][by] = 0;
         selected[bx][by] = false;
       }
     }   
     
     if (0 < binCountX && 0 < binCountY) {
       // Updating counts -------------------------------------------------------
-      double totCount = 0;
+      double totWeight = 0;
       for (Value2D value: slice.values) {
         int bx = PApplet.constrain((int)(value.x / binSizeX), 0, binCountX - 1);  
         int by = PApplet.constrain((int)(value.y / binSizeY), 0, binCountY - 1);  
-        binCounts[bx][by] += value.w;
-        totCount += value.w;
+        weightSum[bx][by] += value.w;
+        totWeight += value.w;
       }
         
       maxProb = 0;
       // Calculating density ---------------------------------------------------      
       for (int bx = 0; bx < binCountX; bx++) {
         for (int by = 0; by < binCountY; by++) {
-          float p = (float)binCounts[bx][by] / (float)totCount;
+          float p = (float)weightSum[bx][by] / (float)totWeight;
           density[bx][by] = p;
           if (maxProb < p) maxProb = p;
         }
