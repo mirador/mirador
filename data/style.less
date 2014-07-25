@@ -245,15 +245,6 @@ h3 {
 	}
 }
 
-#RowPlots {
-	p {
-		// font for labels
-		font-family: sansMed;
-		font-size: 14px;
-		color: fade(black, 50%);
-	}
-}
-
 #Profile {
 	h1 {
 		font-family: sansReg;
@@ -328,8 +319,15 @@ h3 {
 // The square plots, aka "big data visualizations"
 #RowPlots {
 	background-color: @blue;
+	selection-color: #fe8f1d;
 	width: 196px;
 	height: 196px;
+	p {
+		// font for labels
+		font-family: sansMed;
+		font-size: 14px;
+		color: fade(black, 50%);
+	}
 	#MissingData {
 		top: 0;
 		right: 0;

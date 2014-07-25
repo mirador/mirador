@@ -69,8 +69,7 @@ public class MiraApp extends PApplet {
   protected OptionsPanel options;  
   public VariableBrowser browser;
   protected Profile profile;
-  
-  
+    
   protected int plotType;
   
   protected boolean loaded;  
@@ -79,6 +78,9 @@ public class MiraApp extends PApplet {
   protected float animTime;
   protected SoftFloat animAlpha;  
  
+  public boolean savingToPdf = false;
+  protected String pdfFilename;
+  
   protected String username;
   protected String password;
   protected boolean user_authenticated = false;
@@ -113,7 +115,8 @@ public class MiraApp extends PApplet {
     Log.init();
     loadPreferences();
     
-    intf = new Interface(this, g, "style.css");
+    intf = new Interface(this, "style.css");
+    intf.setBackground(color(247));
     initPanel();
     
     frame.setTitle(APP_NAME + " is loading...");
@@ -146,7 +149,6 @@ public class MiraApp extends PApplet {
   
   public void draw() {        
     if (loaded) {
-      background(247);
       intf.update();
       intf.draw();
     }
@@ -248,7 +250,12 @@ public class MiraApp extends PApplet {
   }
   
   public void exportSelection() {
-    
+    if (browser.getSelectedRow() != null && browser.getSelectedCol() != null) {
+      File file = new File(project.dataFolder, "selected-data.tsv");
+      selectOutput("Select a csv or tsv file to save the selection to:", 
+                   "outputSelected", file, new SelectionHandler(browser.getSelectedCol(), 
+                                                                browser.getSelectedRow()));      
+    }
   }
   
   public void uploadSession() throws Exception {
@@ -291,9 +298,14 @@ public class MiraApp extends PApplet {
 			  System.out.println("authenticated but no box selected");
 		  }
 	  }
-    
   }
   
+  public void savePDF() {
+    File file = new File(project.dataFolder, "capture.pdf");
+    selectOutput("Enter the name of the PDF file to save the screen to", 
+                 "outputSelected", file, new PDFHandler());
+    
+  }
   
   protected void placeComponents(JPanel panel) {
     panel.setLayout(null);
@@ -548,6 +560,50 @@ public class MiraApp extends PApplet {
       
       proj.save(projFile.toString());
     }
+  }
+  
+  protected class SelectionHandler {
+    ArrayList<Variable> variables;
+    
+    SelectionHandler(Variable varx, Variable vary) {
+      variables = new ArrayList<Variable>();
+      variables.add(varx);
+      variables.add(vary);
+    }
+    
+    public void outputSelected(File selection) {
+      String filename = selection.getAbsolutePath();    
+      String ext = PApplet.checkExtension(filename);
+      if (ext == null || (!ext.equals("csv") && !ext.equals("tsv"))) {
+        filename += ".tsv";
+      }
+      Path dataPath = Paths.get(filename);
+      String filePath = dataPath.getParent().toAbsolutePath().toString(); 
+      File dictFile = new File(filePath, "selected-dictionary.tsv");
+
+      Table[] tabdict = dataset.getTable(variables, ranges);
+      Table data = tabdict[0];
+      if (data != null) {
+        saveTable(data, filename);
+      }
+      
+      Table dict = tabdict[1];
+      if (dict != null) {      
+        saveTable(dict, dictFile.getAbsolutePath());          
+      }
+    }
+  }
+  
+  protected class PDFHandler {
+    public void outputSelected(File selection) {
+      pdfFilename = selection.getAbsolutePath();    
+      String ext = PApplet.checkExtension(pdfFilename);
+      if (ext == null || !ext.equals("pdf")) {
+        pdfFilename += ".pdf";
+      }
+      intf.record(pdfFilename);
+      savingToPdf = true;
+    }   
   }
 
   //////////////////////////////////////////////////////////////////////////////  

@@ -24,6 +24,7 @@ public class RowPlots extends ColumnScroller {
   protected Variable rowVar;
   protected PFont pFont;
   protected int pColor;
+  protected int sColor;
   
   public RowPlots(Interface intf, float x, float y, float w, float h, 
                   float iw, float ih, ColumnScroller init) {
@@ -34,6 +35,7 @@ public class RowPlots extends ColumnScroller {
     super.setup();
     pFont = getStyleFont("RowPlots.p", "font-family", "font-size");
     pColor = getStyleColor("RowPlots.p", "color");
+    sColor = getStyleColor("RowPlots", "selection-color");
   }
   
   public void setRowVar(Variable rvar) {
@@ -145,7 +147,7 @@ public class RowPlots extends ColumnScroller {
     boolean dirty;
     boolean pdirty;
     boolean update;
-    boolean indep;
+    boolean depend;
     float missing;
     SoftFloat blendf;
     int corColor, misColor;
@@ -162,7 +164,7 @@ public class RowPlots extends ColumnScroller {
       dirty = true;
       pdirty = true;
       update = false;
-      indep = false;
+      depend = false;
       blendf = new SoftFloat();
     }
     
@@ -210,7 +212,7 @@ public class RowPlots extends ColumnScroller {
           indepTask = mira.browser.submitTask(new Runnable() {
             public void run() {                  
               DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges);                
-              indep = 0 < Similarity.calculate(slice, mira.project.pvalue(), mira.project);              
+              depend = 0 < Similarity.calculate(slice, mira.project.pvalue(), mira.project);              
             }
           }, false);            
         }          
@@ -265,7 +267,8 @@ public class RowPlots extends ColumnScroller {
           drawSelection(view.getSelection(valx, valy), x0, y0, w0, h0);
         }
         
-        if (indep) {
+        if (depend && mira.project.pvalue() < 1) {
+          // TODO: show some kind of animation while 
           noStroke();
           fill(corColor);
           triangle(x0, y0, x0 + 13, y0, x0, y0 + 13);
@@ -285,7 +288,7 @@ public class RowPlots extends ColumnScroller {
       boolean selected = mira.browser.getSelectedRow() == rowVar &&
                          mira.browser.getSelectedCol() == var;
       if (selected) {
-        stroke(color(240, 155, 70));
+        stroke(sColor);
         strokeWeight(3);
         noFill();
         rect(x0, y0, w0, h0);        
