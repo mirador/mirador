@@ -81,13 +81,18 @@ public class ScatterPlot extends View {
           py = pg.height - (dy/2 + dy * j);          
         } else {
           py = pg.height - (float)(pg.height * pt.y);  
-        }
-                
+        }      
         pw = pg.width * rad;
         ph = pg.height * rad;        
       }        
       if (USE_ELLIPSES) pg.ellipse(px, py, pw, ph);
       else pg.rect(px - pw/2, py - ph/2, pw, ph);
+      
+      // Only when hovering...
+//      if (pt.label != null) {
+//        pg.fill(0);
+//        pg.text(pt.label, px + pw, py);  
+//      }        
     }              
     pg.endDraw();
   }
