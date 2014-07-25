@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import lib.math.Numbers;
 import mira.data.DataSlice2D;
 import mira.data.Value2D;
+import mira.views.View.Selection;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -38,7 +39,8 @@ public class ScatterPlot extends View {
     } else {
       nx = 0;
       ny = 0;
-      rad = PApplet.map((float)count, 0, pg.width * pg.height, 0.05f, 0.01f);
+//      rad = PApplet.map((float)count, 0, pg.width * pg.height, 0.05f, 0.01f);
+      rad = 0.05f;
       a = (int)PApplet.map((float)count, 0, pg.width * pg.height, 70, 10);
     }
     
@@ -98,9 +100,51 @@ public class ScatterPlot extends View {
   }
   
   public Selection getSelection(double valx, double valy) {
-    // TODO: needs some kind of tree representation of the data to search 
-    // efficiently when there are many data points.
-    return null;
+    if (points.size() < 500 && !(varx.categorical() && vary.categorical())) {
+      long nx = varx.getCount(ranges);
+      long ny = vary.getCount(ranges);
+//      /float rad = PApplet.map((float)count, 0, 1, 0.05f, 0.01f);
+      float rad = 0.05f;
+      
+      for (Value2D pt: points) {
+        if (!varx.categorical() || !vary.categorical()) {
+          float px, py;
+          
+          if (varx.categorical()) {
+            long i = (long)(pt.x * (nx - 1));
+            float dx = 1.0f / nx;
+            px = dx/2 + dx * i;
+          } else {
+            px = (float)pt.x;  
+          }
+          
+          if (vary.categorical()) {
+            long j = (long)(pt.y * (ny-1));
+            float dy = 1.0f / ny;
+            py = 1 - (dy/2 + dy * j);          
+          } else {
+            py = 1 - (float)(pt.y);  
+          }
+          
+//          System.out.println(px + " " + py + " " + rad);
+          if (PApplet.dist((float)valx, (float)valy, px, py) < rad) {
+//            System.err.println("found!");
+            Selection sel = new Selection(px, py, rad, rad);
+            sel.isEllipse = true;
+            sel.setLabel(pt.label);
+            return sel;            
+          }
+          
+        }        
+      }
+      
+      return null;
+      
+    } else {
+      // TODO: needs some kind of tree representation of the data to search 
+      // efficiently when there are many data points.      
+      return null;      
+    }    
   }  
   
   protected void initPoints(DataSlice2D slice) {

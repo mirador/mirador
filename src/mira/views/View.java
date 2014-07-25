@@ -77,16 +77,12 @@ abstract public class View {
     public boolean isEllipse;
     
     Selection(float x, float y, float w, float h) {
-      this(x, y, w, h, false); 
-    }
-    
-    Selection(float x, float y, float w, float h, boolean isEllipse) {
       this.x = x; 
       this.y = y; 
       this.w = w;
       this.h = h;
       this.hasLabel = false;
-      this.isEllipse = isEllipse;      
+      this.isEllipse = false;      
     }
     
     public void setLabel(String label) {

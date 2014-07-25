@@ -162,7 +162,8 @@ public class Eikosogram extends View {
           sel.setColor(mixColors(WHITE, BLUE, f));
           // For the percentage label we use the original density, not the logarithm
           float perc = 100 * density[bx][by] / dx;
-          sel.setLabel(PApplet.nfc(perc, 2) + "%");
+          if (logY) sel.setLabel("log(" + PApplet.nfc(perc, 2) + "%)");
+          else sel.setLabel(PApplet.nfc(perc, 2) + "%");
           return sel;
         }        
         y0 -= dy;

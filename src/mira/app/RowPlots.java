@@ -303,31 +303,34 @@ public class RowPlots extends ColumnScroller {
       
       if (sel.isEllipse) {
         // TODO: implement
+        noStroke();
+        fill(color(0, 0, 0), 50);
+        ellipse(sel.x, sel.y, sel.w, sel.h);
       } else {
         noStroke();
         fill(color(0, 0, 0), 50);
         rect(sel.x, sel.y, sel.w, sel.h);
-        
-        if (sel.hasLabel) {
-          textFont(pFont);
-          fill(pColor);
-          float tw = textWidth(sel.label);          
-          float tx = sel.x + sel.w/2 - tw/2;
-          if (tx < x0) tx = x0;
-          if (x0 + w0 < tx + tw) tx = x0 + w0 - tw;
-          
-          float ty = 0;
-          if (pFont.getSize() < sel.h) { 
-            float yc = (sel.h - pFont.getSize()) / 2;
-            ty = sel.y + sel.h - yc;      
-          } else {
-            ty = sel.y - 5;
-            if (ty - 5 - pFont.getSize() < y0) ty = sel.y + sel.h + 5 + pFont.getSize();
-          }
-          
-          text(sel.label, tx, ty);
-        }
       }
+      
+      if (sel.hasLabel) {
+        textFont(pFont);
+        fill(pColor);
+        float tw = textWidth(sel.label);          
+        float tx = sel.x + sel.w/2 - tw/2;
+        if (tx < x0) tx = x0;
+        if (x0 + w0 < tx + tw) tx = x0 + w0 - tw;
+        
+        float ty = 0;
+        if (pFont.getSize() < sel.h) { 
+          float yc = (sel.h - pFont.getSize()) / 2;
+          ty = sel.y + sel.h - yc;      
+        } else {
+          ty = sel.y - 5;
+          if (ty - 5 - pFont.getSize() < y0) ty = sel.y + sel.h + 5 + pFont.getSize();
+        }
+        
+        text(sel.label, tx, ty);
+      }      
     }
     
     void dataChanged() {
