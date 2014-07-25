@@ -86,8 +86,12 @@ abstract public class View {
     }
     
     public void setLabel(String label) {
-      this.label = label;
-      hasLabel = true;      
+      if (label == null || label.equals("")) {
+        hasLabel = false;
+      } else {
+        this.label = label;
+        hasLabel = true;
+      }      
     }
     
     public void setColor(int color) {
