@@ -3,16 +3,19 @@ package mira.app;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
@@ -39,7 +42,7 @@ public class HttpClientExample {
   }
   
 
-	public static void upload(String username, String password, String url,String db, String var1, String var2, String ranges) throws Exception{
+	public static void upload(String username, String password, String url,String db, String var1, String var2, String ranges) throws ConnectException, Exception{
 		CookieHandler.setDefault(new CookieManager());
 		 
 		HttpClientExample http = new HttpClientExample();
@@ -59,7 +62,8 @@ public class HttpClientExample {
 		
 	}
 
-	public static boolean authenticate(String username, String password) throws Exception{
+	public static boolean authenticate(String username, String password) throws Exception, ConnectException{
+
 		String url = "http://localhost/classes/access_user/login.php";
 		CookieHandler.setDefault(new CookieManager());
 		HttpClientExample http = new HttpClientExample();
@@ -77,7 +81,8 @@ public class HttpClientExample {
 
  
   private boolean sendPost(String url, List<NameValuePair> postParams) 
-        throws Exception {
+        throws Exception, HttpHostConnectException{
+
  
 	HttpPost post = new HttpPost(url);
  
