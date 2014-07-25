@@ -105,7 +105,12 @@ public class OptionsPanel extends MiraWidget {
     } else if (exportBtn.select(mouseX, mouseY)) {
       mira.exportSelection();
     } else if (uploadBtn.select(mouseX, mouseY)) {
-      mira.uploadSession();
+      try {
+		mira.uploadSession();
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     } else if (pdfBtn.select(mouseX, mouseY)) {
       mira.savePDF();      
     } else if (plotOpt.select(mouseX, mouseY)) {
