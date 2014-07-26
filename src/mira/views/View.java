@@ -61,6 +61,10 @@ abstract public class View {
   
   abstract public Selection getSelection(double valx, double valy);
   
+  protected void drawHistogram(PGraphics pg) {
+    
+  }
+  
   protected int mixColors(int col0, int col1, float f) {
     int a = (int)PApplet.map(f, 0, 1, col0 >> 24 & 0xFF, col1 >> 24 & 0xFF);
     int r = (int)PApplet.map(f, 0, 1, col0 >> 16 & 0xFF, col1 >> 16 & 0xFF);

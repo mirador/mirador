@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import lib.math.Numbers;
 import mira.data.DataSlice2D;
 import mira.data.Value2D;
-import mira.views.View.Selection;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -20,7 +19,7 @@ public class ScatterPlot extends View {
   final static public boolean USE_ELLIPSES = true; 
   
   protected ArrayList<Value2D> points; 
-  protected double count;
+  protected double weightSum;
   
   public ScatterPlot(DataSlice2D slice) {
     super(slice.varx, slice.vary, slice.ranges);
@@ -39,9 +38,9 @@ public class ScatterPlot extends View {
     } else {
       nx = 0;
       ny = 0;
-//      rad = PApplet.map((float)count, 0, pg.width * pg.height, 0.05f, 0.01f);
-      rad = 0.05f;
-      a = (int)PApplet.map((float)count, 0, pg.width * pg.height, 70, 10);
+      int count = PApplet.min(500, points.size());
+      rad = PApplet.map(count, 0, 500, 0.05f, 0.01f);
+      a = (int)PApplet.map(count, 0, 500, 70, 10);
     }
     
     nx = varx.getCount(ranges);
@@ -63,7 +62,7 @@ public class ScatterPlot extends View {
         float dy = (float)pg.height / ny;
         py = pg.height - (dy/2 + dy * j);
         
-        rad = PApplet.map(PApplet.sqrt((float)(pt.w / count)), 0, 1, 0.05f, 0.5f); 
+        rad = PApplet.map(PApplet.sqrt((float)(pt.w / weightSum)), 0, 1, 0.05f, 0.5f); 
                        // PApplet.min((float)pg.width / (float)nx, 
                        //             (float)pg.height / (float)ny));
         pw = pg.width * rad;
@@ -104,7 +103,8 @@ public class ScatterPlot extends View {
       long nx = varx.getCount(ranges);
       long ny = vary.getCount(ranges);
 //      /float rad = PApplet.map((float)count, 0, 1, 0.05f, 0.01f);
-      float rad = 0.05f;
+      int count = PApplet.min(500, points.size());
+      float rad = PApplet.map(count, 0, 500, 0.05f, 0.01f);
       
       for (Value2D pt: points) {
         if (!varx.categorical() || !vary.categorical()) {
@@ -161,8 +161,8 @@ public class ScatterPlot extends View {
     } else {
       points.addAll(slice.values);  
     }
-    count = 0;
-    for (Value2D val: slice.values) count += val.w;    
+    weightSum = 0;
+    for (Value2D val: slice.values) weightSum += val.w;    
   }
   
   protected Value2D search(Value2D val) {

@@ -284,14 +284,14 @@ public class MiraApp extends PApplet {
 			  rangelist = ranges.toString();
 		  }
 			  HttpClientExample.upload(username, password, url, db, var1, var2, rangelist);
-			  JOptionPane JOptionPane = new JOptionPane();
-			  JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
+//			  JOptionPane JOptionPane = new JOptionPane();
+			  javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
 		  }
 		  catch (ConnectException e){
 			connected = false;
-			  JOptionPane JOptionPane = new JOptionPane();
-           	JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
-           System.out.println("authenticated but not connected");	
+			  //JOptionPane JOptionPane = new JOptionPane();
+        javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+        System.out.println("authenticated but not connected");	
 		  }
 		  catch (NullPointerException e){
 			  JOptionPane.showMessageDialog(frame, "Please select a variable pair by clicking on a box.", "Error",-1,null);
@@ -340,7 +340,9 @@ public class MiraApp extends PApplet {
           
         	connected = true; //assume true in case it's changed
           username = userText.getText();
-          password = passwordText.getText();
+//          password = passwordText.getText();
+          password = new String(passwordText.getPassword());
+          
           
 //          HttpClientExample client;
           
@@ -351,8 +353,8 @@ public class MiraApp extends PApplet {
         } 
           
           catch (ConnectException e){
-        	  JOptionPane JOptionPane = new JOptionPane();
-          	JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+//        	  JOptionPane JOptionPane = new JOptionPane();
+          	javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
           	connected = false;
           	
           }
@@ -373,12 +375,12 @@ public class MiraApp extends PApplet {
 		  }
 		 
 			  HttpClientExample.upload(username, password, url, db, var1, var2, rangelist);
-			  JOptionPane JOptionPane = new JOptionPane();
-			  JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
+//			  JOptionPane JOptionPane = new JOptionPane();
+			  javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
 		  }
         	 catch (ConnectException e){
-           	  JOptionPane JOptionPane = new JOptionPane();
-             	JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+//           	  JOptionPane JOptionPane = new JOptionPane();
+             	javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
              	exit();
              }
 		  catch (NullPointerException e){
@@ -390,8 +392,8 @@ public class MiraApp extends PApplet {
         	
         }
         else if (connected){
-        	JOptionPane JOptionPane = new JOptionPane();
-        	JOptionPane.showMessageDialog(frame, "Those user credentials were not recognized. Please try again.", "Error",-1,null);
+//        	JOptionPane JOptionPane = new JOptionPane();
+        	javax.swing.JOptionPane.showMessageDialog(frame, "Those user credentials were not recognized. Please try again.", "Error",-1,null);
         	
         }
           }
