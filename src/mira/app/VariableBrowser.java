@@ -10,8 +10,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import lib.ui.Interface;
 import lib.ui.Widget;
-import mira.data.Variable;
-import mira.data.VariableContainer;
+import miralib.data.Variable;
+import miralib.data.VariableContainer;
 import processing.core.PApplet;
 
 /**

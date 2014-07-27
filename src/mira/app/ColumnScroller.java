@@ -7,11 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import processing.core.PApplet;
-import lib.math.Geometry;
 import lib.ui.SoftFloat;
-import lib.math.Geometry.IntersectPoint;
 import lib.ui.Interface;
-import mira.data.Variable;
+import miralib.data.Variable;
+import miralib.math.Geometry;
+import miralib.math.Geometry.IntersectPoint;
 
 /**
  * Class used to implement horizontal scrollers of large number of general.

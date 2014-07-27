@@ -8,10 +8,10 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import lib.ui.SoftFloat;
 import lib.ui.Interface;
-import mira.data.CategoricalRange;
-import mira.data.CategoricalVariable;
-import mira.data.Range;
-import mira.data.Variable;
+import miralib.data.CategoricalRange;
+import miralib.data.CategoricalVariable;
+import miralib.data.Range;
+import miralib.data.Variable;
 
 /**
  * Selector for categorical variables. It uses checkboxes to define the 

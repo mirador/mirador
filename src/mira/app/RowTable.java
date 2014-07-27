@@ -4,8 +4,8 @@ package mira.app;
 
 import processing.core.PFont;
 import lib.ui.Interface;
-import mira.data.DataTree;
-import mira.data.VariableContainer;
+import miralib.data.DataTree;
+import miralib.data.VariableContainer;
 
 /**
  * Widget that represents a variable table.

@@ -2,10 +2,10 @@
 
 package mira.views;
 
-import mira.data.DataRanges;
-import mira.data.DataSlice2D;
-import mira.data.Variable;
-import mira.utils.Log;
+import miralib.data.DataRanges;
+import miralib.data.DataSlice2D;
+import miralib.data.Variable;
+import miralib.utils.Log;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 

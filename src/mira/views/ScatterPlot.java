@@ -4,9 +4,9 @@ package mira.views;
 
 import java.util.ArrayList;
 
-import lib.math.Numbers;
-import mira.data.DataSlice2D;
-import mira.data.Value2D;
+import miralib.data.DataSlice2D;
+import miralib.data.Value2D;
+import miralib.math.Numbers;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 

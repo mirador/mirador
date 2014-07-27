@@ -6,7 +6,7 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import lib.ui.Interface;
 import lib.ui.Widget;
-import mira.data.DataSet;
+import miralib.data.DataSet;
 
 /**
  * Mirador widget, which add some extra functionality specific to Mirador, 

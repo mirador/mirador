@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 import lib.ui.Interface;
 import lib.ui.Widget;
-import mira.data.DataTree;
-import mira.data.Variable;
-import mira.data.VariableContainer;
-import mira.data.DataTree.Item;
+import miralib.data.DataTree;
+import miralib.data.Variable;
+import miralib.data.VariableContainer;
+import miralib.data.DataTree.Item;
 
 /**
  * Vertical scroller for group, tables, and variables. It updates dynamically 

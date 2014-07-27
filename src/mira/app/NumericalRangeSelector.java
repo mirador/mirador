@@ -6,10 +6,10 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import lib.ui.SoftFloat;
 import lib.ui.Interface;
-import mira.data.NumericalRange;
-import mira.data.NumericalVariable;
-import mira.data.Range;
-import mira.data.Variable;
+import miralib.data.NumericalRange;
+import miralib.data.NumericalVariable;
+import miralib.data.Range;
+import miralib.data.Variable;
 
 /**
  * Selector for numerical variables. It uses a slider to define the min-max 

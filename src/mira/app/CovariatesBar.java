@@ -6,7 +6,7 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import lib.ui.SoftFloat;
 import lib.ui.Interface;
-import mira.data.Variable;
+import miralib.data.Variable;
 
 /**
  * Sublcass of ColumnScoller specialized to handle an horizontal scroll of 

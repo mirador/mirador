@@ -4,8 +4,8 @@ package mira.app;
 
 import lib.ui.SoftFloat;
 import lib.ui.Interface;
-import mira.data.Range;
-import mira.data.Variable;
+import miralib.data.Range;
+import miralib.data.Variable;
 
 /**
  * Base abstract class to define range selectors.

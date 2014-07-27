@@ -11,8 +11,8 @@ import processing.core.PFont;
 import lib.ui.SoftFloat;
 import lib.ui.Interface;
 import lib.ui.Widget;
-import mira.data.Variable;
-import mira.utils.Log;
+import miralib.data.Variable;
+import miralib.utils.Log;
 
 /**
  * Widget containing the profile view in Mirador.

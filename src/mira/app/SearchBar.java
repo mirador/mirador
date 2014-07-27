@@ -11,7 +11,7 @@ import processing.core.PConstants;
 import processing.core.PFont;
 import lib.ui.SoftFloat;
 import lib.ui.Interface;
-import mira.data.Variable;
+import miralib.data.Variable;
 
 /**
  * Widget containing the search bar.

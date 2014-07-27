@@ -7,7 +7,7 @@ import processing.core.PFont;
 import lib.ui.SoftFloat;
 import lib.ui.Interface;
 import lib.ui.Widget;
-import mira.data.Variable;
+import miralib.data.Variable;
 
 /**
  * Widget that represents a row variable, and contains all its plots.

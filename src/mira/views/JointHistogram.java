@@ -2,9 +2,9 @@
 
 package mira.views;
 
-import mira.data.DataSlice2D;
-import mira.data.Value2D;
-import mira.shannon.Histogram;
+import miralib.data.DataSlice2D;
+import miralib.data.Value2D;
+import miralib.shannon.Histogram;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 

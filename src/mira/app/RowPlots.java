@@ -9,10 +9,10 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import lib.ui.SoftFloat;
 import lib.ui.Interface;
-import mira.data.DataSlice2D;
-import mira.data.Variable;
-import mira.shannon.Similarity;
 import mira.views.View;
+import miralib.data.DataSlice2D;
+import miralib.data.Variable;
+import miralib.shannon.Similarity;
 
 /**
  * Widget that contains all the plots of a row variable. It is a subclass of
