@@ -37,331 +37,6 @@ Education Level - Children/Youth 6-19	category	0:Never Attended / Kindergarten O
 Six month time period	category	1:November 1 through April 30;2:May 1 through October 31	WTINT2YR
 Age in Months at Exam - Recode	int	0,959	WTINT2YR
 Total number of people in the Family	int	1,7	WTINT2YR
-T.gondii antibodies (IU/ml)	int	0,332	WTMEC2YR
-Apolipoprotein (B) (mg/dL)	int	16,229	WTSAF2YR.APOB_F
-Blood lead (ug/dL)	float	0.18,43.52	WTMEC2YR
-Mercury, total (ug/L)	float	0.23,85.7	WTMEC2YR
-Blood cadmium (ug/L)	float	0.14,8.67	WTMEC2YR
-Mercury, inorganic (ug/L)	float	0.35,42;0.25:First Below Detection Limit Fill Value;0.28:Second Below Detection Limit Fill Value	WTMEC2YR
-White blood cell count (1000 cells/uL)	float	1.4,99.9	WTMEC2YR
-Lymphocyte percent (%)	float	2.9,76.4	WTMEC2YR
-Mean cell hemoglobin (pg)	float	17.1,56.2	WTMEC2YR
-Monocyte percent (%)	float	0.8,40.4	WTMEC2YR
-Hematocrit (%)	float	20.5,55.8	WTMEC2YR
-Segmented neutrophils percent (%)	float	5.9,93.6	WTMEC2YR
-Red blood cell count (million cells/uL)	float	2.38,7.15	WTMEC2YR
-Eosinophils number (1000 cells/uL)	float	0,8.4	WTMEC2YR
-Hemoglobin (g/dL)	float	6.1,19.5	WTMEC2YR
-Eosinophils percent (%)	float	0,34.1	WTMEC2YR
-Platelet count (1000 cells/uL)	int	11,1000	WTMEC2YR
-Segmented neutrophils num (1000 cell/uL)	float	0.2,83.1	WTMEC2YR
-Monocyte number (1000 cells/uL)	float	0.1,3.8	WTMEC2YR
-Lymphocyte number (1000 cells/uL)	float	0.4,20.1	WTMEC2YR
-Red cell distribution width (%)	float	9.7,31.8	WTMEC2YR
-Basophils percent (%)	float	0,19.7	WTMEC2YR
-Mean platelet volume (fL)	float	4.7,13.2	WTMEC2YR
-Basophils number (1000 cells/uL)	float	0,4.7	WTMEC2YR
-Mean cell volume (fL)	float	56.1,116.5	WTMEC2YR
-MCHC (g/dL)	float	29.5,43.8	WTMEC2YR
-C-reactive protein(mg/dL)	float	0.01,18.01	WTMEC2YR
-O-Phenyl phenol (ug/L) result	float	0.14,7.4	WTSB2YR.PP_F
-Urinary creatinine (mg/dL)	int	4,749	WTSB2YR.PP_F
-2,5-dichlorophenol (ug/L) result	float	0.14,12700	WTSB2YR.PP_F
-2,4,5-trichlorophenol (ug/L) result	float	0.07,25.7	WTSB2YR.PP_F
-2,4-dichlorophenol (ug/L) result	float	0.14,429	WTSB2YR.PP_F
-2,4,6-trichlorophenol (ug/L) result	float	0.35,21.3	WTSB2YR.PP_F
-Propyl paraben (ng/ml)	float	0.14,4490	WTSB2YR.EPH_F
-Urinary 4-tert-octylphenol (ng/mL)	float	0.14,14.9	WTSB2YR.EPH_F
-Urinary Bisphenol A (ng/mL)	float	0.28,965	WTSB2YR.EPH_F
-Ethyl paraben  (ng/ml)	float	0.71,2100	WTSB2YR.EPH_F
-Butyl paraben (ng/ml)	float	0.14,860	WTSB2YR.EPH_F
-Urinary Benzophenone-3 (ng/mL)	float	0.28,88200	WTSB2YR.EPH_F
-Urinary Triclosan (ng/mL)	float	1.6,3000	WTSB2YR.EPH_F
-Methyl paraben (ng/ml)	float	0.71,13200	WTSB2YR.EPH_F
-Epstein Barr Virus result	category	1:Positive;2:Negative;3:Equivocal;4:Quantity not sufficient	WTMEC2YR
-Epstein Barr Virus index	float	0,7.98	WTMEC2YR
-Alcohol fast time (minutes)	int	10,56	WTMEC2YR
-Session in which SP was examined	category	0:morning;1:afternoon;2:evening	WTMEC2YR
-Dietary supplements?	category	1:Yes;2:No	WTMEC2YR
-Antacids, laxatives fast time (hours)	int	1,9	WTMEC2YR
-Coffee/tea fast time (hours)	int	1,19	WTMEC2YR
-"Total length of ""food fast,"" hours"	int	0,39	WTMEC2YR
-Alcohol fast time (hours)	int	1,15	WTMEC2YR
-Alcohol, such as beer, wine, or liquor?	category	1:Yes;2:No	WTMEC2YR
-Gum, mints, cough fast time (minutes)	int	0,59	WTMEC2YR
-Antacids, laxatives fast time (minutes)	int	0,54	WTMEC2YR
-"Total length of  ""food fast,"" minutes"	int	0,59	WTMEC2YR
-Dietary supplements fast time (hours)	int	0,24	WTMEC2YR
-Gum, mints, lozenges or cough drops	category	1:Yes;2:No	WTMEC2YR
-Coffee/tea fast time (minutes)	int	1,54	WTMEC2YR
-Gum, mints cough drops fast time (hours)	int	0,16	WTMEC2YR
-Antacids, laxatives, or anti-diarrheals?	category	1:Yes;2:No	WTMEC2YR
-Dietary supplements fast time (minutes)	int	4,58	WTMEC2YR
-Coffee or tea with cream or sugar?	category	1:Yes;2:No	WTMEC2YR
-Ferritin (ng/mL)	int	2,1090	WTMEC2YR
-Glycohemoglobin (%)	float	4,16.4	WTMEC2YR
-Direct HDL-Cholesterol (mg/dL)	int	11,179	WTMEC2YR
-Hepatitis A Antibody	category	1:Positive;2:Negative;3:Indeterminate	WTMEC2YR
-Hepatitis B surface antibody	category	1:Positive;2:Negative	WTMEC2YR
-Hepatitis D (anti-HDV)	category	1:Positive;2:Negative	WTMEC2YR
-Hepatitis B core antibody	category	1:Positive;2:Negative	WTMEC2YR
-Hepatitis B surface antigen	category	1:Positive;2:Negative	WTMEC2YR
-Hepatitis HCV genotype	category	1:Genotype 1;2:Genotype other than 1;3:Undetermined	WTMEC2YR
-Hepatitis C RNA (HCV-RNA)	category	1:Positive;2:Negative	WTMEC2YR
-Hepatitis C antibody (confirmed)	category	1:Positive;2:Negative;5:Indeterminate	WTMEC2YR
-Herpes Simplex Virus II	category	1:Positive;2:Negative;3:Indeterminate	WTMEC2YR
-Herpes Simplex Virus I	category	1:Positive;2:Negative;3:Indeterminate	WTMEC2YR
-HIV antibody test result	category	1:Positive;2:Negative;3:Indeterminate	WTMEC2YR
-HPV type 64	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-Roche LA low positive globin control	category	1:Positive;2:Negative	WTMEC2YR
-HPV type 67	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 61	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 62	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 89	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 84	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 68	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 66	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 81	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 6	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 26	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 42	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 40	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 35	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-Roche LA high positive globin control	category	1:Positive;2:Negative	WTMEC2YR
-HPV type 45	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 33	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 18	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type IS39	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 73	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 72	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 71	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 70	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 82	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 69	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 59	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 58	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 16	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 11	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 39	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 51	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 53	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 52	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 55	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 54	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 31	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV type 56	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-Digene HPV Swab High Risk RLU/CB	float	0,1895.7	WTMEC2YR
-HPV type 83	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-Roche HPV linear array summary result	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
-HPV Type 70	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 54	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type IS39	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 35	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 31	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 33	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV CP 6108	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 39	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 56	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Low Globulin Band result	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 18	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 55	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 52	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 53	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 51	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 11	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 16	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 58	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 59	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-Oral HPV Result	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV High Globulin Band result	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 68	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 81	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 83	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 82	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 84	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 71	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 73	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 26	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 72	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 45	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 40	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 69	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 42	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 67	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 66	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 64	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 62	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 61	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV Type 6	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
-HPV 18 result	category	1:Positive;2:Negative	WTMEC2YR
-HPV 06 result	category	1:Positive;2:Negative	WTMEC2YR
-HPV 16 result	category	1:Positive;2:Negative	WTMEC2YR
-HPV 11 result	category	1:Positive;2:Negative	WTMEC2YR
-Varicella antibody, confirmed	category	1:Positive;2:Negative	WTMEC2YR
-Measles antibody (IgG)	float	0.028,9.71	WTMEC2YR
-Rubella antibody (IgG)	float	0.007,6.82	WTMEC2YR
-Mumps antibody (IgG)	float	0.09,8.091	WTMEC2YR
-Oral HPV Cell Number	int	911,3355392	WTMEC2YR
-Oral HPV type	int	16,82	WTMEC2YR
-Oral HPV normal viral load	int	0,1842092	WTMEC2YR
-Oral HPV viral load	int	0,2539716	WTMEC2YR
-Insulin (uU/mL)	float	0.88,320.22	WTSAF2YR.GLU_F
-Fasting Glucose (mg/dL)	int	36,375	WTSAF2YR.GLU_F
-2-(N-methyl-PFOSA) acetate	float	0.06,11.5	WTSC2YR.PFC_F
-Perfluorodecanoic acid	float	0.07,20.7	WTSC2YR.PFC_F
-Perfluorooctane sulfonamide	float	0.07,0.2	WTSC2YR.PFC_F
-Perfluorobutane sulfonic acid	float	0.07,1.4	WTSC2YR.PFC_F
-Perfluorooctanoic acid	float	0.07,24	WTSC2YR.PFC_F
-Perfluorododecanoic acid	float	0.07,2.8	WTSC2YR.PFC_F
-2-(N-ethyl-PFOSA) acetate	float	0.07,1	WTSC2YR.PFC_F
-Perfluorohexane sulfonic acid	float	0.07,44.8	WTSC2YR.PFC_F
-Perfluoroheptanoic acid	float	0.07,1	WTSC2YR.PFC_F
-Perfluorooctane sulfonic acid	float	0.14,281	WTSC2YR.PFC_F
-Perfluorononanoic acid	float	0.058,19.352	WTSC2YR.PFC_F
-Perfluoroundecanoic acid	float	0.07,28.5	WTSC2YR.PFC_F
-Prostate specific antigen ratio (%)	int	4,84	WTMEC2YR
-Rectal exam in the last 7 days	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
-prostate biopsy or surgery in last 4 wks	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
-Complex prostate specific antigen(ng/mL)	float	0.04,44.38	WTMEC2YR
-Cystoscopy in the last 4 weeks	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
-Taken medicines for prostate cancer	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
-Radiation treatment for prostate cancer	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
-Total prostate specific antigen (ng/mL)	float	0.07,73.97	WTMEC2YR
-Diagnosed with prostate cancer	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
-Age at diagnosis of prostate cancer	int	8,85;777:Refused;999:Don't know	WTMEC2YR
-Free prostate specific antigen (ng/mL)	float	0.04,20.08	WTMEC2YR
-Ever had prostate surgery	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
-Willing to have blood tested for PSA	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
-Surgery for prostate cancer?	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
-Infection or inflammation of prostate	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
-Serum folate (ng/mL)	float	1.9,253.9	WTMEC2YR
-RBC folate (ng/mL)	float	87.4,3125.8	WTMEC2YR
-Cotinine (ng/mL)	float	0.011,1160	WTMEC2YR
-Urinary Total NNAL (ng/mL)	float	0.0004,28.3	WTMEC2YR
-Alanine aminotransferase ALT (U/L)	int	6,343	WTMEC2YR
-Gamma glutamyl transferase (U/L)	int	4,1116	WTMEC2YR
-Albumin (g/dL)	float	2.5,5.3	WTMEC2YR
-Osmolality (mmol/Kg)	int	246,306	WTMEC2YR
-Blood urea nitrogen (mg/dL)	int	1,90	WTMEC2YR
-Triglycerides (mg/dL)	int	9,2693	WTMEC2YR
-Total protein (g/dL)	float	5.3,11.3	WTMEC2YR
-Aspartate aminotransferase AST (U/L)	int	8,733	WTMEC2YR
-Lactate dehydrogenase (U/L)	int	4,1539	WTMEC2YR
-Chloride (mmol/L)	int	86,114	WTMEC2YR
-Total bilirubin (mg/dL)	float	0.2,7.3	WTMEC2YR
-Alkaline phosphotase (U/L)	int	10,721	WTMEC2YR
-Cholesterol (mg/dL)	int	66,557	WTMEC2YR
-Total calcium (mg/dL)	float	7.3,12.1	WTMEC2YR
-Globulin (g/dL)	float	1.3,7.5	WTMEC2YR
-Glucose, serum (mg/dL)	int	34,777	WTMEC2YR
-Bicarbonate (mmol/L)	int	15,38	WTMEC2YR
-Sodium (mmol/L)	int	124,148	WTMEC2YR
-Creatinine (mg/dL)	float	0.14,15.66	WTMEC2YR
-Potassium (mmol/L)	float	2.8,5.9	WTMEC2YR
-Uric acid (mg/dL)	float	0.4,13.3	WTMEC2YR
-Phosphorus (mg/dL)	float	1.7,8.1	WTMEC2YR
-Iron, refigerated (ug/dL)	int	6,363	WTMEC2YR
-Thyroid perioxidase antibodies (IU/mL)	float	0.18,948.9	WTSA2YR.THYROD_F
-Triiodothyronine (T3), free (pg/mL)	float	1.9,28.84	WTSA2YR.THYROD_F
-Triiodothyronine (T3), total (ng/dL)	int	45,297	WTSA2YR.THYROD_F
-Thyroxine, total (T4) (ug/mL)	float	0.4,16.8	WTSA2YR.THYROD_F
-Thyroglobulin (ng/mL)	float	0.07,416.13	WTSA2YR.THYROD_F
-Thyroglobulin antibodies (IU/mL)	float	0.6,1671.9	WTSA2YR.THYROD_F
-Thyroid stimulating hormone (uIU/mL)	float	0.035,99.564	WTSA2YR.THYROD_F
-Thyroxine, free (ng/dL)	float	0.18,2.54	WTSA2YR.THYROD_F
-Endomyseal antibody (IgA EMA)	category	1:Positive;2:Negative;3:Weakly positive	WTMEC2YR
-Tissue transglutaminase(IgA-TTG)	category	1:Positive;2:Negative;3:Weakly positive	WTMEC2YR
-Total Cholesterol (mg/dL)	int	66,528	WTMEC2YR
-Transferrin receptor (mg/L)	float	0.9,54.5	WTMEC2YR
-LDL-cholesterol (mg/dL)	int	13,266	WTSAF2YR.TRIGLY_F
-Triglyceride (mg/dL)	int	18,2742	WTSAF2YR.TRIGLY_F
-Glucose challenge Administer Time in min	int	0,10	WTSOG2YR.OGTT_F
-Time from fasting glucose and OGTT (min)	int	75,206	WTSOG2YR.OGTT_F
-Two Hour Glucose(OGTT) (mg/dL)	int	30,559	WTSOG2YR.OGTT_F
-Time from fast glucose and challenge(min)	int	0,102	WTSOG2YR.OGTT_F
-Amount of glucose challenge drank	category	1:All;2:Some;3:None	WTSOG2YR.OGTT_F
-Time from glucose challenge and OGTT(min)	int	71,141	WTSOG2YR.OGTT_F
-First albumin creatinine ratio (mg/g)	float	0.08,13787.88	WTMEC2YR
-Creatinine, urine (umol/L)	float	265.2,66211.6	WTMEC2YR
-Second albumin (ug/mL)	float	0.21,3730	WTMEC2YR
-Albumin, urine (ug/mL)	float	0.21,5440	WTMEC2YR
-Second albumin creatinine ratio (mg/g)	float	0.33,8817.39	WTMEC2YR
-Second creatinine (mg/dL)	int	4,685	WTMEC2YR
-Second creatinine, urine (umol/L)	float	353.6,60554	WTMEC2YR
-Second albumin, urine (mg/L)	float	0.21,3730	WTMEC2YR
-3,7-dimethylxanthine(theobromine)umol/L	float	0.04,482	WTSC2YR.CAFE_F
-1,3,7-trimethylxanthine(caffeine)umol/L	float	0.07,152	WTSC2YR.CAFE_F
-1,3-dimethylxanthine(theophylline)umol/L	float	0.04,338	WTSC2YR.CAFE_F
-1,7-dimethylxanthine(paraxanthine)umol/L	float	0.07,418	WTSC2YR.CAFE_F
-3-methylxanthine (umol/L)	float	0.04,830	WTSC2YR.CAFE_F
-7-methylxanthine (umol/L)	float	0.04,1610	WTSC2YR.CAFE_F
-1-methylxanthine (umol/L)	float	0.04,1400	WTSC2YR.CAFE_F
-AAMU Caffeine result (umol/L)	float	0.07,1730	WTSC2YR.CAFE_F
-1-methyluric acid (umol/L)	float	0.41,2200	WTSC2YR.CAFE_F
-7-methyluric acid (umol/L)	float	0.07,678	WTSC2YR.CAFE_F
-3-methyluric acid (umol/L)	float	0.07,38.4	WTSC2YR.CAFE_F
-1,7-dimethyluric acid (umol/L)	float	0.04,1230	WTSC2YR.CAFE_F
-1,3-dimethyluric acid (umol/L)	float	0.04,2020	WTSC2YR.CAFE_F
-1,3,7-trimethyluric acid (umol/L)	float	0.04,70.7	WTSC2YR.CAFE_F
-3,7-dimethyluric acid (umol/L)	float	0.04,44.5	WTSC2YR.CAFE_F
-Urinary Chlamydia	category	1:Positive;2:Negative;3:Indeterminate	WTMEC2YR
-Iodine, urine (ug/L)	float	7.7,13926	WTMEC2YR
-Mercury, urine (ug/L)	float	0.06,19.33	WTMEC2YR
-Urinary thiocyanate (ng/mL)	float	14.1421,204000	WTSA2YR.PERNT_F
-Urinary perchlorate (ng/mL)	float	0.082,152	WTSA2YR.PERNT_F
-Urinary nitrate (ng/mL)	float	494.9747,1540000	WTSA2YR.PERNT_F
-Mono-n-butyl phthalate (ng/mL)	float	0.28,25863	WTSB2YR.PHTHTE_F
-Mono-2ethyl5carboxypentyl phthalate cmt	category	0:At or above the detection limit;1:Below lower detection limit	WTSB2YR.PHTHTE_F
-Mono-(3-carboxypropyl) phthalate cmt	category	0:At or above the detection limit;1:Below lower detection limit	WTSB2YR.PHTHTE_F
-Mono-(2-ethyl-5-oxohexyl) phthalate cmt	category	0:At or above the detection limit;1:Below lower detection limit	WTSB2YR.PHTHTE_F
-Mono-(2-ethyl-5-hydroxyhexyl) phthalate	float	0.14,9326.1	WTSB2YR.PHTHTE_F
-Mono-benzyl phthalate (ng/mL)	float	0.15,617.18	WTSB2YR.PHTHTE_F
-Mono(carboxyoctyl) Phthalate (ng/mL)	float	0.14,1126.3	WTSB2YR.PHTHTE_F
-Mono(carboxynonyl) Phthalate (ng/mL)	float	0.14,730.25	WTSB2YR.PHTHTE_F
-Mono(2ethyl5hydroxyhexyl) phthalate cmt	category	0:At or above the detection limit;1:Below lower detection limit	WTSB2YR.PHTHTE_F
-Mono-isononyl phthalate (ng/mL)	float	0.54,435.82	WTSB2YR.PHTHTE_F
-Mono-(3-carboxypropyl) phthalate	float	0.14,1588.7	WTSB2YR.PHTHTE_F
-Mono-cyclohexyl phthalate (ng/mL)	float	0.28,12.92	WTSB2YR.PHTHTE_F
-Mono-n-methyl phthalate	float	0.35,2447.3	WTSB2YR.PHTHTE_F
-Mono-(2-ethyl-5-oxohexyl) phthalate	float	0.14,6079.9	WTSB2YR.PHTHTE_F
-Mono-(2-ethyl)-hexyl phthalate (ng/mL)	float	0.35,807.5	WTSB2YR.PHTHTE_F
-Mono-2-ethyl-5-carboxypentyl phthalate	float	0.14,15828	WTSB2YR.PHTHTE_F
-Mono-n-octyl phthalate (ng/mL)	float	0.59,8.69	WTSB2YR.PHTHTE_F
-Mono-isobutyl phthalate	float	0.14,1163.3	WTSB2YR.PHTHTE_F
-Mono-ethyl phthalate (ng/mL)	float	0.92,31660	WTSB2YR.PHTHTE_F
-Daidzein (ng/mL)	float	0.3,33800	WTSB2YR.PHYTO_F
-O-Desmethylangolensin (O-DMA) (ng/mL)	float	0.1,18500	WTSB2YR.PHYTO_F
-Enterodiol (ng/mL)	float	0.03,23500	WTSB2YR.PHYTO_F
-Equol (ng/mL)	float	0.04,17400	WTSB2YR.PHYTO_F
-Enterolactone (ng/mL)	float	0.2,36200	WTSB2YR.PHYTO_F
-Genistein (ng/mL)	float	0.4,16000	WTSB2YR.PHYTO_F
-Urinary Dimethylarsonic acid (ug/L)	float	1.2,251	WTSA2YR.UAS_F
-Urinary Arsenocholine (ug/L)	float	0.42,107	WTSA2YR.UAS_F
-Urinary Arsenobetaine (ug/L)	float	0.28,732	WTSA2YR.UAS_F
-Urinary Monomethylacrsonic acid (ug/L)	float	0.64,177	WTSA2YR.UAS_F
-Urinary Arsenic acid (ug/L)	float	0.71,21.8	WTSA2YR.UAS_F
-Urinary Trimethylarsine Oxide (ug/L)	float	0.71,40.1	WTSA2YR.UAS_F
-Urinary Arsenous acid (ug/L)	float	0.85,27.5	WTSA2YR.UAS_F
-Urinary total arsenic (ug/L)	float	0.52,1237	WTSA2YR.UAS_F
-Urine #1 Flow Rate	float	0,39.8	WTMEC2YR
-Urine #3 Flow Rate	float	0,7.938	WTMEC2YR
-Urine #2 Flow Rate	float	0,13.692	WTMEC2YR
-The volume of urine collection #1	int	0,524	WTMEC2YR
-The volume of urine collection #3	int	0,388	WTMEC2YR
-The volume of urine collection #2	int	0,420	WTMEC2YR
-Cesium, urine (ug/L)	float	0.205,27.2	WTSA2YR.UHM_F
-Antimony, urine (ug/L)	float	0.023,4.05	WTSA2YR.UHM_F
-Uranium, urinary (ug/L)	float	0.0012,1.824	WTSA2YR.UHM_F
-Barium, urine (ug/L)	float	0.08,419	WTSA2YR.UHM_F
-Platinum, urine (ug/L)	float	0.006,621	WTSA2YR.UHM_F
-Thallium, urine (ug/L)	float	0.011,2.35	WTSA2YR.UHM_F
-Cadmium, urine (ug/L)	float	0.03,8.35	WTSA2YR.UHM_F
-Molybdenum, urine (ug/L)	float	1.41,649	WTSA2YR.UHM_F
-Tungsten, urine (ug/L)	float	0.015,5.248	WTSA2YR.UHM_F
-Cobalt, urine (ug/L)	float	0.029,37.4	WTSA2YR.UHM_F
-Lead, urine (ug/L)	float	0.07,49.6	WTSA2YR.UHM_F
-Urine osmolality (mOsm/kg)	int	45,1339	WTMEC2YR
-Pregnancy test result	category	1:Positive;2:Negative;3:Not done;4:Invalid	WTMEC2YR
 Chest circumference, exhalation (cm)	float	62.6,144.8	WTMEC2YR
 Lumbar flexion test length (cm)	float	0,11	WTMEC2YR
 Xiphoid notch distance (cm)	float	0,7.3	WTMEC2YR
@@ -1628,6 +1303,331 @@ Baseline Effort Quality Attribute	category	A:All 6 spirometry quality curve attr
 2nd Test FEF 25-75% (mL/s)	int	203,4988	WTMEC2YR
 Eye surgery in the last 3 months?	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
 Baseline PEF (mL/s)	int	1315,17695	WTMEC2YR
+T.gondii antibodies (IU/ml)	int	0,332	WTMEC2YR
+Apolipoprotein (B) (mg/dL)	int	16,229	WTSAF2YR.APOB_F
+Blood lead (ug/dL)	float	0.18,43.52	WTMEC2YR
+Mercury, total (ug/L)	float	0.23,85.7	WTMEC2YR
+Blood cadmium (ug/L)	float	0.14,8.67	WTMEC2YR
+Mercury, inorganic (ug/L)	float	0.35,42;0.25:First Below Detection Limit Fill Value;0.28:Second Below Detection Limit Fill Value	WTMEC2YR
+White blood cell count (1000 cells/uL)	float	1.4,99.9	WTMEC2YR
+Lymphocyte percent (%)	float	2.9,76.4	WTMEC2YR
+Mean cell hemoglobin (pg)	float	17.1,56.2	WTMEC2YR
+Monocyte percent (%)	float	0.8,40.4	WTMEC2YR
+Hematocrit (%)	float	20.5,55.8	WTMEC2YR
+Segmented neutrophils percent (%)	float	5.9,93.6	WTMEC2YR
+Red blood cell count (million cells/uL)	float	2.38,7.15	WTMEC2YR
+Eosinophils number (1000 cells/uL)	float	0,8.4	WTMEC2YR
+Hemoglobin (g/dL)	float	6.1,19.5	WTMEC2YR
+Eosinophils percent (%)	float	0,34.1	WTMEC2YR
+Platelet count (1000 cells/uL)	int	11,1000	WTMEC2YR
+Segmented neutrophils num (1000 cell/uL)	float	0.2,83.1	WTMEC2YR
+Monocyte number (1000 cells/uL)	float	0.1,3.8	WTMEC2YR
+Lymphocyte number (1000 cells/uL)	float	0.4,20.1	WTMEC2YR
+Red cell distribution width (%)	float	9.7,31.8	WTMEC2YR
+Basophils percent (%)	float	0,19.7	WTMEC2YR
+Mean platelet volume (fL)	float	4.7,13.2	WTMEC2YR
+Basophils number (1000 cells/uL)	float	0,4.7	WTMEC2YR
+Mean cell volume (fL)	float	56.1,116.5	WTMEC2YR
+MCHC (g/dL)	float	29.5,43.8	WTMEC2YR
+C-reactive protein(mg/dL)	float	0.01,18.01	WTMEC2YR
+O-Phenyl phenol (ug/L) result	float	0.14,7.4	WTSB2YR.PP_F
+Urinary creatinine (mg/dL)	int	4,749	WTSB2YR.PP_F
+2,5-dichlorophenol (ug/L) result	float	0.14,12700	WTSB2YR.PP_F
+2,4,5-trichlorophenol (ug/L) result	float	0.07,25.7	WTSB2YR.PP_F
+2,4-dichlorophenol (ug/L) result	float	0.14,429	WTSB2YR.PP_F
+2,4,6-trichlorophenol (ug/L) result	float	0.35,21.3	WTSB2YR.PP_F
+Propyl paraben (ng/ml)	float	0.14,4490	WTSB2YR.EPH_F
+Urinary 4-tert-octylphenol (ng/mL)	float	0.14,14.9	WTSB2YR.EPH_F
+Urinary Bisphenol A (ng/mL)	float	0.28,965	WTSB2YR.EPH_F
+Ethyl paraben  (ng/ml)	float	0.71,2100	WTSB2YR.EPH_F
+Butyl paraben (ng/ml)	float	0.14,860	WTSB2YR.EPH_F
+Urinary Benzophenone-3 (ng/mL)	float	0.28,88200	WTSB2YR.EPH_F
+Urinary Triclosan (ng/mL)	float	1.6,3000	WTSB2YR.EPH_F
+Methyl paraben (ng/ml)	float	0.71,13200	WTSB2YR.EPH_F
+Epstein Barr Virus result	category	1:Positive;2:Negative;3:Equivocal;4:Quantity not sufficient	WTMEC2YR
+Epstein Barr Virus index	float	0,7.98	WTMEC2YR
+Alcohol fast time (minutes)	int	10,56	WTMEC2YR
+Session in which SP was examined	category	0:morning;1:afternoon;2:evening	WTMEC2YR
+Dietary supplements?	category	1:Yes;2:No	WTMEC2YR
+Antacids, laxatives fast time (hours)	int	1,9	WTMEC2YR
+Coffee/tea fast time (hours)	int	1,19	WTMEC2YR
+"Total length of ""food fast,"" hours"	int	0,39	WTMEC2YR
+Alcohol fast time (hours)	int	1,15	WTMEC2YR
+Alcohol, such as beer, wine, or liquor?	category	1:Yes;2:No	WTMEC2YR
+Gum, mints, cough fast time (minutes)	int	0,59	WTMEC2YR
+Antacids, laxatives fast time (minutes)	int	0,54	WTMEC2YR
+"Total length of  ""food fast,"" minutes"	int	0,59	WTMEC2YR
+Dietary supplements fast time (hours)	int	0,24	WTMEC2YR
+Gum, mints, lozenges or cough drops	category	1:Yes;2:No	WTMEC2YR
+Coffee/tea fast time (minutes)	int	1,54	WTMEC2YR
+Gum, mints cough drops fast time (hours)	int	0,16	WTMEC2YR
+Antacids, laxatives, or anti-diarrheals?	category	1:Yes;2:No	WTMEC2YR
+Dietary supplements fast time (minutes)	int	4,58	WTMEC2YR
+Coffee or tea with cream or sugar?	category	1:Yes;2:No	WTMEC2YR
+Ferritin (ng/mL)	int	2,1090	WTMEC2YR
+Glycohemoglobin (%)	float	4,16.4	WTMEC2YR
+Direct HDL-Cholesterol (mg/dL)	int	11,179	WTMEC2YR
+Hepatitis A Antibody	category	1:Positive;2:Negative;3:Indeterminate	WTMEC2YR
+Hepatitis B surface antibody	category	1:Positive;2:Negative	WTMEC2YR
+Hepatitis D (anti-HDV)	category	1:Positive;2:Negative	WTMEC2YR
+Hepatitis B core antibody	category	1:Positive;2:Negative	WTMEC2YR
+Hepatitis B surface antigen	category	1:Positive;2:Negative	WTMEC2YR
+Hepatitis HCV genotype	category	1:Genotype 1;2:Genotype other than 1;3:Undetermined	WTMEC2YR
+Hepatitis C RNA (HCV-RNA)	category	1:Positive;2:Negative	WTMEC2YR
+Hepatitis C antibody (confirmed)	category	1:Positive;2:Negative;5:Indeterminate	WTMEC2YR
+Herpes Simplex Virus II	category	1:Positive;2:Negative;3:Indeterminate	WTMEC2YR
+Herpes Simplex Virus I	category	1:Positive;2:Negative;3:Indeterminate	WTMEC2YR
+HIV antibody test result	category	1:Positive;2:Negative;3:Indeterminate	WTMEC2YR
+HPV type 64	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+Roche LA low positive globin control	category	1:Positive;2:Negative	WTMEC2YR
+HPV type 67	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 61	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 62	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 89	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 84	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 68	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 66	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 81	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 6	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 26	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 42	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 40	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 35	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+Roche LA high positive globin control	category	1:Positive;2:Negative	WTMEC2YR
+HPV type 45	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 33	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 18	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type IS39	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 73	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 72	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 71	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 70	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 82	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 69	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 59	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 58	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 16	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 11	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 39	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 51	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 53	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 52	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 55	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 54	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 31	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV type 56	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+Digene HPV Swab High Risk RLU/CB	float	0,1895.7	WTMEC2YR
+HPV type 83	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+Roche HPV linear array summary result	category	1:Positive;2:Negative;3:Inadequate	WTMEC2YR
+HPV Type 70	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 54	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type IS39	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 35	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 31	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 33	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV CP 6108	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 39	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 56	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Low Globulin Band result	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 18	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 55	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 52	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 53	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 51	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 11	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 16	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 58	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 59	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+Oral HPV Result	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV High Globulin Band result	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 68	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 81	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 83	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 82	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 84	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 71	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 73	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 26	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 72	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 45	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 40	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 69	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 42	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 67	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 66	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 64	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 62	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 61	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV Type 6	category	1:Positive;2:Negative;3:Not evaluated	WTMEC2YR
+HPV 18 result	category	1:Positive;2:Negative	WTMEC2YR
+HPV 06 result	category	1:Positive;2:Negative	WTMEC2YR
+HPV 16 result	category	1:Positive;2:Negative	WTMEC2YR
+HPV 11 result	category	1:Positive;2:Negative	WTMEC2YR
+Varicella antibody, confirmed	category	1:Positive;2:Negative	WTMEC2YR
+Measles antibody (IgG)	float	0.028,9.71	WTMEC2YR
+Rubella antibody (IgG)	float	0.007,6.82	WTMEC2YR
+Mumps antibody (IgG)	float	0.09,8.091	WTMEC2YR
+Oral HPV Cell Number	int	911,3355392	WTMEC2YR
+Oral HPV type	int	16,82	WTMEC2YR
+Oral HPV normal viral load	int	0,1842092	WTMEC2YR
+Oral HPV viral load	int	0,2539716	WTMEC2YR
+Insulin (uU/mL)	float	0.88,320.22	WTSAF2YR.GLU_F
+Fasting Glucose (mg/dL)	int	36,375	WTSAF2YR.GLU_F
+2-(N-methyl-PFOSA) acetate	float	0.06,11.5	WTSC2YR.PFC_F
+Perfluorodecanoic acid	float	0.07,20.7	WTSC2YR.PFC_F
+Perfluorooctane sulfonamide	float	0.07,0.2	WTSC2YR.PFC_F
+Perfluorobutane sulfonic acid	float	0.07,1.4	WTSC2YR.PFC_F
+Perfluorooctanoic acid	float	0.07,24	WTSC2YR.PFC_F
+Perfluorododecanoic acid	float	0.07,2.8	WTSC2YR.PFC_F
+2-(N-ethyl-PFOSA) acetate	float	0.07,1	WTSC2YR.PFC_F
+Perfluorohexane sulfonic acid	float	0.07,44.8	WTSC2YR.PFC_F
+Perfluoroheptanoic acid	float	0.07,1	WTSC2YR.PFC_F
+Perfluorooctane sulfonic acid	float	0.14,281	WTSC2YR.PFC_F
+Perfluorononanoic acid	float	0.058,19.352	WTSC2YR.PFC_F
+Perfluoroundecanoic acid	float	0.07,28.5	WTSC2YR.PFC_F
+Prostate specific antigen ratio (%)	int	4,84	WTMEC2YR
+Rectal exam in the last 7 days	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
+prostate biopsy or surgery in last 4 wks	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
+Complex prostate specific antigen(ng/mL)	float	0.04,44.38	WTMEC2YR
+Cystoscopy in the last 4 weeks	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
+Taken medicines for prostate cancer	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
+Radiation treatment for prostate cancer	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
+Total prostate specific antigen (ng/mL)	float	0.07,73.97	WTMEC2YR
+Diagnosed with prostate cancer	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
+Age at diagnosis of prostate cancer	int	8,85;777:Refused;999:Don't know	WTMEC2YR
+Free prostate specific antigen (ng/mL)	float	0.04,20.08	WTMEC2YR
+Ever had prostate surgery	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
+Willing to have blood tested for PSA	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
+Surgery for prostate cancer?	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
+Infection or inflammation of prostate	category	1:Yes;2:No;7:Refused;9:Don't know	WTMEC2YR
+Serum folate (ng/mL)	float	1.9,253.9	WTMEC2YR
+RBC folate (ng/mL)	float	87.4,3125.8	WTMEC2YR
+Cotinine (ng/mL)	float	0.011,1160	WTMEC2YR
+Urinary Total NNAL (ng/mL)	float	0.0004,28.3	WTMEC2YR
+Alanine aminotransferase ALT (U/L)	int	6,343	WTMEC2YR
+Gamma glutamyl transferase (U/L)	int	4,1116	WTMEC2YR
+Albumin (g/dL)	float	2.5,5.3	WTMEC2YR
+Osmolality (mmol/Kg)	int	246,306	WTMEC2YR
+Blood urea nitrogen (mg/dL)	int	1,90	WTMEC2YR
+Triglycerides (mg/dL)	int	9,2693	WTMEC2YR
+Total protein (g/dL)	float	5.3,11.3	WTMEC2YR
+Aspartate aminotransferase AST (U/L)	int	8,733	WTMEC2YR
+Lactate dehydrogenase (U/L)	int	4,1539	WTMEC2YR
+Chloride (mmol/L)	int	86,114	WTMEC2YR
+Total bilirubin (mg/dL)	float	0.2,7.3	WTMEC2YR
+Alkaline phosphotase (U/L)	int	10,721	WTMEC2YR
+Cholesterol (mg/dL)	int	66,557	WTMEC2YR
+Total calcium (mg/dL)	float	7.3,12.1	WTMEC2YR
+Globulin (g/dL)	float	1.3,7.5	WTMEC2YR
+Glucose, serum (mg/dL)	int	34,777	WTMEC2YR
+Bicarbonate (mmol/L)	int	15,38	WTMEC2YR
+Sodium (mmol/L)	int	124,148	WTMEC2YR
+Creatinine (mg/dL)	float	0.14,15.66	WTMEC2YR
+Potassium (mmol/L)	float	2.8,5.9	WTMEC2YR
+Uric acid (mg/dL)	float	0.4,13.3	WTMEC2YR
+Phosphorus (mg/dL)	float	1.7,8.1	WTMEC2YR
+Iron, refigerated (ug/dL)	int	6,363	WTMEC2YR
+Thyroid perioxidase antibodies (IU/mL)	float	0.18,948.9	WTSA2YR.THYROD_F
+Triiodothyronine (T3), free (pg/mL)	float	1.9,28.84	WTSA2YR.THYROD_F
+Triiodothyronine (T3), total (ng/dL)	int	45,297	WTSA2YR.THYROD_F
+Thyroxine, total (T4) (ug/mL)	float	0.4,16.8	WTSA2YR.THYROD_F
+Thyroglobulin (ng/mL)	float	0.07,416.13	WTSA2YR.THYROD_F
+Thyroglobulin antibodies (IU/mL)	float	0.6,1671.9	WTSA2YR.THYROD_F
+Thyroid stimulating hormone (uIU/mL)	float	0.035,99.564	WTSA2YR.THYROD_F
+Thyroxine, free (ng/dL)	float	0.18,2.54	WTSA2YR.THYROD_F
+Endomyseal antibody (IgA EMA)	category	1:Positive;2:Negative;3:Weakly positive	WTMEC2YR
+Tissue transglutaminase(IgA-TTG)	category	1:Positive;2:Negative;3:Weakly positive	WTMEC2YR
+Total Cholesterol (mg/dL)	int	66,528	WTMEC2YR
+Transferrin receptor (mg/L)	float	0.9,54.5	WTMEC2YR
+LDL-cholesterol (mg/dL)	int	13,266	WTSAF2YR.TRIGLY_F
+Triglyceride (mg/dL)	int	18,2742	WTSAF2YR.TRIGLY_F
+Glucose challenge Administer Time in min	int	0,10	WTSOG2YR.OGTT_F
+Time from fasting glucose and OGTT (min)	int	75,206	WTSOG2YR.OGTT_F
+Two Hour Glucose(OGTT) (mg/dL)	int	30,559	WTSOG2YR.OGTT_F
+Time from fast glucose and challenge(min)	int	0,102	WTSOG2YR.OGTT_F
+Amount of glucose challenge drank	category	1:All;2:Some;3:None	WTSOG2YR.OGTT_F
+Time from glucose challenge and OGTT(min)	int	71,141	WTSOG2YR.OGTT_F
+First albumin creatinine ratio (mg/g)	float	0.08,13787.88	WTMEC2YR
+Creatinine, urine (umol/L)	float	265.2,66211.6	WTMEC2YR
+Second albumin (ug/mL)	float	0.21,3730	WTMEC2YR
+Albumin, urine (ug/mL)	float	0.21,5440	WTMEC2YR
+Second albumin creatinine ratio (mg/g)	float	0.33,8817.39	WTMEC2YR
+Second creatinine (mg/dL)	int	4,685	WTMEC2YR
+Second creatinine, urine (umol/L)	float	353.6,60554	WTMEC2YR
+Second albumin, urine (mg/L)	float	0.21,3730	WTMEC2YR
+3,7-dimethylxanthine(theobromine)umol/L	float	0.04,482	WTSC2YR.CAFE_F
+1,3,7-trimethylxanthine(caffeine)umol/L	float	0.07,152	WTSC2YR.CAFE_F
+1,3-dimethylxanthine(theophylline)umol/L	float	0.04,338	WTSC2YR.CAFE_F
+1,7-dimethylxanthine(paraxanthine)umol/L	float	0.07,418	WTSC2YR.CAFE_F
+3-methylxanthine (umol/L)	float	0.04,830	WTSC2YR.CAFE_F
+7-methylxanthine (umol/L)	float	0.04,1610	WTSC2YR.CAFE_F
+1-methylxanthine (umol/L)	float	0.04,1400	WTSC2YR.CAFE_F
+AAMU Caffeine result (umol/L)	float	0.07,1730	WTSC2YR.CAFE_F
+1-methyluric acid (umol/L)	float	0.41,2200	WTSC2YR.CAFE_F
+7-methyluric acid (umol/L)	float	0.07,678	WTSC2YR.CAFE_F
+3-methyluric acid (umol/L)	float	0.07,38.4	WTSC2YR.CAFE_F
+1,7-dimethyluric acid (umol/L)	float	0.04,1230	WTSC2YR.CAFE_F
+1,3-dimethyluric acid (umol/L)	float	0.04,2020	WTSC2YR.CAFE_F
+1,3,7-trimethyluric acid (umol/L)	float	0.04,70.7	WTSC2YR.CAFE_F
+3,7-dimethyluric acid (umol/L)	float	0.04,44.5	WTSC2YR.CAFE_F
+Urinary Chlamydia	category	1:Positive;2:Negative;3:Indeterminate	WTMEC2YR
+Iodine, urine (ug/L)	float	7.7,13926	WTMEC2YR
+Mercury, urine (ug/L)	float	0.06,19.33	WTMEC2YR
+Urinary thiocyanate (ng/mL)	float	14.1421,204000	WTSA2YR.PERNT_F
+Urinary perchlorate (ng/mL)	float	0.082,152	WTSA2YR.PERNT_F
+Urinary nitrate (ng/mL)	float	494.9747,1540000	WTSA2YR.PERNT_F
+Mono-n-butyl phthalate (ng/mL)	float	0.28,25863	WTSB2YR.PHTHTE_F
+Mono-2ethyl5carboxypentyl phthalate cmt	category	0:At or above the detection limit;1:Below lower detection limit	WTSB2YR.PHTHTE_F
+Mono-(3-carboxypropyl) phthalate cmt	category	0:At or above the detection limit;1:Below lower detection limit	WTSB2YR.PHTHTE_F
+Mono-(2-ethyl-5-oxohexyl) phthalate cmt	category	0:At or above the detection limit;1:Below lower detection limit	WTSB2YR.PHTHTE_F
+Mono-(2-ethyl-5-hydroxyhexyl) phthalate	float	0.14,9326.1	WTSB2YR.PHTHTE_F
+Mono-benzyl phthalate (ng/mL)	float	0.15,617.18	WTSB2YR.PHTHTE_F
+Mono(carboxyoctyl) Phthalate (ng/mL)	float	0.14,1126.3	WTSB2YR.PHTHTE_F
+Mono(carboxynonyl) Phthalate (ng/mL)	float	0.14,730.25	WTSB2YR.PHTHTE_F
+Mono(2ethyl5hydroxyhexyl) phthalate cmt	category	0:At or above the detection limit;1:Below lower detection limit	WTSB2YR.PHTHTE_F
+Mono-isononyl phthalate (ng/mL)	float	0.54,435.82	WTSB2YR.PHTHTE_F
+Mono-(3-carboxypropyl) phthalate	float	0.14,1588.7	WTSB2YR.PHTHTE_F
+Mono-cyclohexyl phthalate (ng/mL)	float	0.28,12.92	WTSB2YR.PHTHTE_F
+Mono-n-methyl phthalate	float	0.35,2447.3	WTSB2YR.PHTHTE_F
+Mono-(2-ethyl-5-oxohexyl) phthalate	float	0.14,6079.9	WTSB2YR.PHTHTE_F
+Mono-(2-ethyl)-hexyl phthalate (ng/mL)	float	0.35,807.5	WTSB2YR.PHTHTE_F
+Mono-2-ethyl-5-carboxypentyl phthalate	float	0.14,15828	WTSB2YR.PHTHTE_F
+Mono-n-octyl phthalate (ng/mL)	float	0.59,8.69	WTSB2YR.PHTHTE_F
+Mono-isobutyl phthalate	float	0.14,1163.3	WTSB2YR.PHTHTE_F
+Mono-ethyl phthalate (ng/mL)	float	0.92,31660	WTSB2YR.PHTHTE_F
+Daidzein (ng/mL)	float	0.3,33800	WTSB2YR.PHYTO_F
+O-Desmethylangolensin (O-DMA) (ng/mL)	float	0.1,18500	WTSB2YR.PHYTO_F
+Enterodiol (ng/mL)	float	0.03,23500	WTSB2YR.PHYTO_F
+Equol (ng/mL)	float	0.04,17400	WTSB2YR.PHYTO_F
+Enterolactone (ng/mL)	float	0.2,36200	WTSB2YR.PHYTO_F
+Genistein (ng/mL)	float	0.4,16000	WTSB2YR.PHYTO_F
+Urinary Dimethylarsonic acid (ug/L)	float	1.2,251	WTSA2YR.UAS_F
+Urinary Arsenocholine (ug/L)	float	0.42,107	WTSA2YR.UAS_F
+Urinary Arsenobetaine (ug/L)	float	0.28,732	WTSA2YR.UAS_F
+Urinary Monomethylacrsonic acid (ug/L)	float	0.64,177	WTSA2YR.UAS_F
+Urinary Arsenic acid (ug/L)	float	0.71,21.8	WTSA2YR.UAS_F
+Urinary Trimethylarsine Oxide (ug/L)	float	0.71,40.1	WTSA2YR.UAS_F
+Urinary Arsenous acid (ug/L)	float	0.85,27.5	WTSA2YR.UAS_F
+Urinary total arsenic (ug/L)	float	0.52,1237	WTSA2YR.UAS_F
+Urine #1 Flow Rate	float	0,39.8	WTMEC2YR
+Urine #3 Flow Rate	float	0,7.938	WTMEC2YR
+Urine #2 Flow Rate	float	0,13.692	WTMEC2YR
+The volume of urine collection #1	int	0,524	WTMEC2YR
+The volume of urine collection #3	int	0,388	WTMEC2YR
+The volume of urine collection #2	int	0,420	WTMEC2YR
+Cesium, urine (ug/L)	float	0.205,27.2	WTSA2YR.UHM_F
+Antimony, urine (ug/L)	float	0.023,4.05	WTSA2YR.UHM_F
+Uranium, urinary (ug/L)	float	0.0012,1.824	WTSA2YR.UHM_F
+Barium, urine (ug/L)	float	0.08,419	WTSA2YR.UHM_F
+Platinum, urine (ug/L)	float	0.006,621	WTSA2YR.UHM_F
+Thallium, urine (ug/L)	float	0.011,2.35	WTSA2YR.UHM_F
+Cadmium, urine (ug/L)	float	0.03,8.35	WTSA2YR.UHM_F
+Molybdenum, urine (ug/L)	float	1.41,649	WTSA2YR.UHM_F
+Tungsten, urine (ug/L)	float	0.015,5.248	WTSA2YR.UHM_F
+Cobalt, urine (ug/L)	float	0.029,37.4	WTSA2YR.UHM_F
+Lead, urine (ug/L)	float	0.07,49.6	WTSA2YR.UHM_F
+Urine osmolality (mOsm/kg)	int	45,1339	WTMEC2YR
+Pregnancy test result	category	1:Positive;2:Negative;3:Not done;4:Invalid	WTMEC2YR
 English usually spoken at home	category	1:English;77:Refused;99:Don't know	WTINT2YR
 Language(s) usually spoken at home	category	1:Only Spanish;2:More Spanish than English;3:Both equally;4:More English than Spanish;5:Only English;7:Refused;9:Don't know	WTINT2YR
 Bad air quality change activities	category	1:Yes;2:No;3:SP never thought/not informed bad air quality;7:Refused;9:Don't know	WTINT2YR
