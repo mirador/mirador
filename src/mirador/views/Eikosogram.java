@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import miralib.data.DataSlice2D;
 import miralib.data.Value2D;
-import miralib.shannon.Histogram;
+import miralib.shannon.BinOptimizer;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -210,7 +210,7 @@ public class Eikosogram extends View {
   
   protected void calcDensity(DataSlice2D slice) {
     // Calculating number of bins ----------------------------------------------
-    int[] res = Histogram.optBinCount(slice);
+    int[] res = BinOptimizer.calculate(slice);
     binCountX = res[0];
     binCountY = res[1];
     if (0 < binCountX && 0 < binCountY) {
