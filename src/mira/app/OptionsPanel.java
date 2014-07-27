@@ -3,8 +3,7 @@
 package mira.app;
 
 import java.util.ArrayList;
-
-import lib.math.SoftFloat;
+import lib.ui.SoftFloat;
 import lib.ui.Interface;
 import processing.core.PFont;
 

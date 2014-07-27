@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 import processing.core.PFont;
-import lib.math.SoftFloat;
+import lib.ui.SoftFloat;
 import lib.ui.Interface;
 import mira.data.CategoricalRange;
 import mira.data.CategoricalVariable;

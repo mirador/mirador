@@ -4,7 +4,7 @@ package mira.app;
 
 import processing.core.PApplet;
 import processing.core.PFont;
-import lib.math.SoftFloat;
+import lib.ui.SoftFloat;
 import lib.ui.Interface;
 import mira.data.Variable;
 

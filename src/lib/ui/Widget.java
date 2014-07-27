@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import lib.math.Geometry;
 import lib.math.Numbers;
-import lib.math.SoftFloat;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;

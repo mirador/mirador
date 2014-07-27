@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import lib.math.SoftFloat;
+import lib.ui.SoftFloat;
 import lib.ui.Interface;
 import mira.data.DataRanges;
 import mira.data.DataSet;

@@ -8,7 +8,7 @@ import java.util.Set;
 
 import processing.core.PApplet;
 import lib.math.Geometry;
-import lib.math.SoftFloat;
+import lib.ui.SoftFloat;
 import lib.math.Geometry.IntersectPoint;
 import lib.ui.Interface;
 import mira.data.Variable;

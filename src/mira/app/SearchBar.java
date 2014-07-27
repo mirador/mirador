@@ -9,7 +9,7 @@ import java.util.HashSet;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;
-import lib.math.SoftFloat;
+import lib.ui.SoftFloat;
 import lib.ui.Interface;
 import mira.data.Variable;
 

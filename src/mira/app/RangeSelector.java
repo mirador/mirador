@@ -2,7 +2,7 @@
 
 package mira.app;
 
-import lib.math.SoftFloat;
+import lib.ui.SoftFloat;
 import lib.ui.Interface;
 import mira.data.Range;
 import mira.data.Variable;

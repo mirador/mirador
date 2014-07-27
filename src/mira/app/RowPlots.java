@@ -7,7 +7,7 @@ import java.util.concurrent.FutureTask;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
-import lib.math.SoftFloat;
+import lib.ui.SoftFloat;
 import lib.ui.Interface;
 import mira.data.DataSlice2D;
 import mira.data.Variable;
