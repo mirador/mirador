@@ -69,6 +69,8 @@ public class MiraApp extends PApplet {
   protected OptionsPanel options;  
   public VariableBrowser browser;
   protected Profile profile;
+  
+  public History history;
     
   protected int plotType;
   
@@ -123,6 +125,8 @@ public class MiraApp extends PApplet {
     frame.setAutoRequestFocus(true);
     
     loadSession();
+    
+    history = new History();
     
     try {
       project = new Project(inputFile, prefs);
@@ -427,8 +431,8 @@ public class MiraApp extends PApplet {
       });
     
     
-  } 
-  
+  }   
+    
   //////////////////////////////////////////////////////////////////////////////
   
   protected void drawLoadAnimation() {

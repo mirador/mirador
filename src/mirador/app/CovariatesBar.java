@@ -9,7 +9,7 @@ import mirador.ui.SoftFloat;
 import miralib.data.Variable;
 
 /**
- * Sublcass of ColumnScoller specialized to handle an horizontal scroll of 
+ * Subclass of ColumnScoller specialized to handle an horizontal scroll of 
  * covariate boxes.
  *
  */

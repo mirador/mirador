@@ -166,6 +166,8 @@ public class RowPlots extends ColumnScroller {
       update = false;
       depend = false;
       blendf = new SoftFloat();
+      
+      mira.history.addPair(var, rowVar);
     }
     
     void dispose() {
@@ -187,6 +189,8 @@ public class RowPlots extends ColumnScroller {
         canvas.dispose();
         canvas = null;       
       }
+      
+      mira.history.removePair(var, rowVar);
     }
 
     void update() {
