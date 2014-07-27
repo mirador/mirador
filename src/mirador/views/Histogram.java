@@ -29,6 +29,11 @@ public class Histogram extends View {
   }
   
   public void draw(PGraphics pg) {
+    if (varx == vary) {
+      drawHistogram(pg);
+      return;
+    }
+    
     pg.beginDraw();
     pg.background(WHITE);
     if (1 < binCountX && 1 < binCountY) { 
