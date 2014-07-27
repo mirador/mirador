@@ -15,13 +15,13 @@ import processing.core.PGraphics;
  *
  */
 
-public class ScatterPlot extends View {
+public class Scatter extends View {
   final static public boolean USE_ELLIPSES = true; 
   
   protected ArrayList<Value2D> points; 
   protected double weightSum;
   
-  public ScatterPlot(DataSlice2D slice) {
+  public Scatter(DataSlice2D slice) {
     super(slice.varx, slice.vary, slice.ranges);
     initPoints(slice);
   }

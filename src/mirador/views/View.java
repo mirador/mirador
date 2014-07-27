@@ -37,9 +37,9 @@ abstract public class View {
   static public View create(DataSlice2D slice, int type) {
     View view = null;
     if (type == SCATTER) {
-      view = new ScatterPlot(slice);
+      view = new Scatter(slice);
     } else if (type == HISTOGRAM) {
-      view = new JointHistogram(slice);  
+      view = new Histogram(slice);  
     } else if (type == EIKOSOGRAM) {
       view = new Eikosogram(slice);
     } else {
