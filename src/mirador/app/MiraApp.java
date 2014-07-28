@@ -65,13 +65,12 @@ public class MiraApp extends PApplet {
   public Project project;
   public DataSet dataset;
   public DataRanges ranges;
+  public History history;
   
   protected Interface intf;  
   protected OptionsPanel options;  
   public VariableBrowser browser;
   protected Profile profile;
-  
-  public History history;
     
   protected int plotType;
   
@@ -80,9 +79,6 @@ public class MiraApp extends PApplet {
   protected boolean animating;
   protected float animTime;
   protected SoftFloat animAlpha;  
- 
-  public boolean savingToPdf = false;
-  protected String pdfFilename;
   
   protected String username;
   protected String password;
@@ -127,14 +123,13 @@ public class MiraApp extends PApplet {
     
     loadSession();
     
-    history = new History(this);
-    
     try {
       project = new Project(inputFile, prefs);
       Path p = Paths.get(inputFile);
-      Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();
+      Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();      
       prefs.projectFolder = filePath.toString();
       prefs.save();
+      history = new History(this, project, plotType);
 //      System.err.println(prefs.projectFolder);
       
     } catch (IOException e) {
@@ -154,6 +149,7 @@ public class MiraApp extends PApplet {
   
   public void draw() {        
     if (loaded) {
+      history.update();
       intf.update();
       intf.draw();
     }
@@ -179,6 +175,7 @@ public class MiraApp extends PApplet {
   }
   
   public void keyPressed() {
+    history.read();
     if (loaded) intf.keyPressed();   
   }
     
@@ -200,6 +197,7 @@ public class MiraApp extends PApplet {
     if (plotType != type) {
       plotType = type; 
       browser.dataChanged();
+      history.setPlotType(type);
     }      
   }  
   
@@ -213,6 +211,7 @@ public class MiraApp extends PApplet {
       project.save();
       browser.pvalueChanged();
       dataset.resort(project.pvalue(), project.missingThreshold());
+      history.setPValue(project.pvalue());
     }    
   }
   
@@ -224,7 +223,8 @@ public class MiraApp extends PApplet {
     if (project.missingThreshold != threshold) {
       project.missingThreshold = threshold;
       project.save();
-      dataset.resort(project.pvalue(), project.missingThreshold());      
+      dataset.resort(project.pvalue(), project.missingThreshold());
+      history.setMissingThreshold(project.missingThreshold());
     }
   }
   
@@ -232,16 +232,15 @@ public class MiraApp extends PApplet {
     Variable var = selector.getVariable();
     Range range = selector.getRange();
     int result = ranges.update(var, range);
-    System.out.println("update result: " + result);
     if (resort) dataset.resort(ranges);
     if (result != DataRanges.NO_CHANGE) {      
       browser.dataChanged();
       if (result == DataRanges.ADDED_RANGE) {
-        history.addRange(var, range);   
-      } else if (result == DataRanges.REMOVED_RANGE) {
-        history.removeRange(var, range);
+        history.addRange(var, range);
       } else if (result == DataRanges.MODIFIED_RANGE) {
         history.replaceRange(var, range);
+      } else if (result == DataRanges.REMOVED_RANGE) {
+        history.removeRange(var);
       }      
     }
   }
@@ -520,6 +519,8 @@ public class MiraApp extends PApplet {
           Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();          
           prefs.projectFolder = filePath.toString();
           prefs.save();
+          if (history != null) history.dispose();
+          history = new History(MiraApp.this, project, plotType);          
           
           loaded = false;
           animating = true;
@@ -618,16 +619,15 @@ public class MiraApp extends PApplet {
   
   protected class PDFHandler {
     public void outputSelected(File selection) {
-      pdfFilename = selection.getAbsolutePath();    
+      String pdfFilename = selection.getAbsolutePath();    
       String ext = PApplet.checkExtension(pdfFilename);
       if (ext == null || !ext.equals("pdf")) {
         pdfFilename += ".pdf";
       }
       intf.record(pdfFilename);
-      savingToPdf = true;
     }   
   }
-
+  
   //////////////////////////////////////////////////////////////////////////////  
   
   static public void loadPreferences() {

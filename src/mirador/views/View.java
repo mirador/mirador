@@ -121,4 +121,11 @@ abstract public class View {
       if (y0 + h0 < y + h) h = y0 + h0 - y;      
     }
   }
+  
+  static public String typeToString(int type) {
+    if (type == SCATTER) return "SCATTER";
+    else if (type == HISTOGRAM) return "HISTOGRAM";
+    else if (type == EIKOSOGRAM) return "EIKOSOGRAM";
+    else return "UNKNOWN";
+  }
 }

@@ -104,6 +104,7 @@ public class Profile extends MiraWidget {
   public void open() {
     requestedUpdateSelection = true;
     show(true);
+    mira.history.openProfile();
   }
   
   public void clear() {
@@ -192,6 +193,7 @@ public class Profile extends MiraWidget {
   public void mouseReleased() {
     if (insideDismiss(mouseX, mouseY)) {
       hide(true);
+      mira.history.closeProfile();
     } else {
       if (hoverVar != null) {
         hide(true);
@@ -446,6 +448,7 @@ public class Profile extends MiraWidget {
     }    
     
     public void handle() {
+      System.out.println("export button: " + visible());
       if (!data.sorting()) {
         ArrayList<Variable> vars = new ArrayList<Variable>();
         ArrayList<Float> scores = new ArrayList<Float>();

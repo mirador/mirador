@@ -243,6 +243,7 @@ public class RowVariable extends RowWidget {
       sortOpt.show();
       data.sort(rowVar, mira.ranges, mira.project.pvalue(), mira.project.missingThreshold());
       mira.profile.clear();
+      mira.history.sort(rowVar);
     } else if (sortMode == UNSORTED && !chkPressed) {
       ((MiraWidget)parent).mouseReleased(this);
     }
@@ -439,6 +440,7 @@ public class RowVariable extends RowWidget {
       } else if (labelMode == UNSORT_ACTION) {
         data.unsort();
         mira.profile.clear();
+        mira.history.unsort();
       }          
     }
     

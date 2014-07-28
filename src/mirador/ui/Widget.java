@@ -836,6 +836,9 @@ public class Widget implements PConstants {
       child.xfactor = xfactor;
       child.yfactor = yfactor;      
       child.inner |= child.insideParent();
+      if (isTransparent()) {
+        child.opacity.set(0);
+      }
     }
   }  
   
