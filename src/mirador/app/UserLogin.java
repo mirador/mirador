@@ -63,9 +63,12 @@ public class UserLogin extends JFrame {
         app.uploader.setConnected(true);
         app.uploader.setUsername(userText.getText());
         app.uploader.setPassword(new String(passwordText.getPassword()));
-        app.uploader.authenticate();
+        app.uploader.authenticate();        
         app.uploader.upload();
-        }
+        if (app.uploader.isAuthenticated()) {
+          setVisible(false);          
+        }        
+      }
     });
     
     registerButton.addActionListener(new ActionListener() {

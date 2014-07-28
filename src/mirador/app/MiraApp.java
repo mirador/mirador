@@ -8,7 +8,6 @@ import java.net.ConnectException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import mirador.ui.Interface;
 import mirador.ui.SoftFloat;
@@ -73,7 +72,7 @@ public class MiraApp extends PApplet {
   
   
   
-  static protected JFrame loginFrame;
+//  static protected JFrame loginFrame;
   
 //  protected String username;
 //  protected String password;
@@ -687,7 +686,7 @@ public class MiraApp extends PApplet {
       try {
         authenticated = HttpConnector.authenticate(username, password);
         System.out.println(authenticated);
-        loginFrame.setVisible(false);
+//        loginFrame.setVisible(false);
       } catch (ConnectException e){
 //      JOptionPane JOptionPane = new JOptionPane();
         javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
