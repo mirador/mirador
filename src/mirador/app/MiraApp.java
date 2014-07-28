@@ -2,26 +2,14 @@
 
 package mirador.app;
 
-import java.awt.Desktop;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
 import mirador.ui.Interface;
 import mirador.ui.SoftFloat;
 import mirador.views.View;
@@ -61,16 +49,18 @@ public class MiraApp extends PApplet {
   int covarHeightMax = 300;
   int plotWidth = 200;
   int plotHeight = 200;
+  /////////////////////////////////////////////////////////////////////////////
 
   public Project project;
   public DataSet dataset;
   public DataRanges ranges;
   public History history;
+  public UploadHandler uploader;
   
-  protected Interface intf;  
-  protected OptionsPanel options;  
+  public Interface intf;  
+  public OptionsPanel options;  
   public VariableBrowser browser;
-  protected Profile profile;
+  public Profile profile;
     
   protected int plotType;
   
@@ -80,12 +70,17 @@ public class MiraApp extends PApplet {
   protected float animTime;
   protected SoftFloat animAlpha;  
   
-  protected String username;
-  protected String password;
-  protected boolean user_authenticated = false;
+  
+  
   
   static protected JFrame loginFrame;
-  static protected boolean connected = true; //assume the user is connected unless proven otherwise
+  
+//  protected String username;
+//  protected String password;
+//  protected boolean user_authenticated = false;    
+//  static protected boolean connected = true; 
+  
+  
   
   public int sketchQuality() {
     return SMOOTH_LEVEL;
@@ -117,6 +112,8 @@ public class MiraApp extends PApplet {
     intf = new Interface(this, "style.css");
     intf.setBackground(color(247));
     initPanel();
+    
+    uploader = new UploadHandler();
     
     frame.setTitle(APP_NAME + " is loading...");
     frame.setAutoRequestFocus(true);
@@ -275,180 +272,197 @@ public class MiraApp extends PApplet {
     }
   }
   
-  public void uploadSession() throws Exception {
-	  connected = true; //assume true in case it's changed
+  public void uploadSession() throws Exception {    
+    if (!uploader.isAuthenticated()) {
+      UserLogin login = new UserLogin("SEErador - Login", this);
+      login.setVisible(true);
+    } else {
+      uploader.upload();
+    }
+//    UploadHandler uploader = new UploadHandler();
+    
+    
+
+    
+    
+//	  connected = true; //assume true in case it's changed
+//	  
+//	  if (!user_authenticated){
+//	    
+//	    loginFrame = new JFrame("SEErador - Login");
+//	    loginFrame.setSize(300, 150);
+//	    //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//	
+//	    JPanel panel = new JPanel();
+//	    loginFrame.add(panel);
+//	    placeComponents(panel);
+//	
+//	    loginFrame.setVisible(true);
+//	    
+//	  } else{
+//		  
+//	    
+//	    
+//      try {
+//        
+//      String url = "http://localhost/classes/access_user/add_submission.php";
+//      String db = project.dataTitle;
+//      String var1 = browser.getSelectedCol().getName();
+//      String var2 = browser.getSelectedRow().getName();
+//      String rangelist = "";
+//      String historystring = history.read();
+//      if (ranges != null){
+//        rangelist = ranges.toString();
+//      }     
+//      
+//      
+//        HttpConnector.upload(username, password, url, db, var1, var2, rangelist,historystring);
+////        JOptionPane JOptionPane = new JOptionPane();
+//        javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
+//      }
+//      catch (ConnectException e){
+//      connected = false;
+//        //JOptionPane JOptionPane = new JOptionPane();
+//        javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+//        System.out.println("authenticated but not connected");  
+//      }
+//      catch (NullPointerException e){
+//        JOptionPane.showMessageDialog(frame, "Please select a variable pair by clicking on a box.", "Error",-1,null);
+//        System.out.println("authenticated but no box selected");
+//      }
+//      
+//      
+//	  }
 	  
-	  if (!user_authenticated){
-	    loginFrame = new JFrame("SEErador - Login");
-	    loginFrame.setSize(300, 150);
-	    //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
-	    JPanel panel = new JPanel();
-	    loginFrame.add(panel);
-	    placeComponents(panel);
-	
-	    loginFrame.setVisible(true);    
-	  }
-	  else{
-		  
-		  try{
-		  String url = "http://localhost/classes/access_user/add_submission.php";
-		  String db = project.dataTitle;
-		  String var1 = browser.getSelectedCol().getName();
-		  String var2 = browser.getSelectedRow().getName();
-		  String rangelist = "";
-		  String historystring = history.read();
-		  if (ranges != null){
-			  rangelist = ranges.toString();
-		  }		  
-		  String historyString = history.read();
-		  
-			  HttpClientExample.upload(username, password, url, db, var1, var2, rangelist,historystring);
-//			  JOptionPane JOptionPane = new JOptionPane();
-			  javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
-		  }
-		  catch (ConnectException e){
-			connected = false;
-			  //JOptionPane JOptionPane = new JOptionPane();
-        javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
-        System.out.println("authenticated but not connected");	
-		  }
-		  catch (NullPointerException e){
-			  JOptionPane.showMessageDialog(frame, "Please select a variable pair by clicking on a box.", "Error",-1,null);
-			  System.out.println("authenticated but no box selected");
-		  }
-	  }
+	  
   }
   
   public void savePDF() {
     File file = new File(project.dataFolder, "capture.pdf");
     selectOutput("Enter the name of the PDF file to save the screen to", 
-                 "outputSelected", file, new PDFHandler());
-    
+                 "outputSelected", file, new PDFHandler());    
   }
   
-  protected void placeComponents(JPanel panel) {
-    panel.setLayout(null);
-
-    JLabel userLabel = new JLabel("User");
-    userLabel.setBounds(10, 10, 80, 25);
-    panel.add(userLabel);
-
-    final JTextField userText = new JTextField(20);
-    userText.setBounds(100, 10, 160, 25);
-    panel.add(userText);
-
-    JLabel passwordLabel = new JLabel("Password");
-    passwordLabel.setBounds(10, 40, 80, 25);
-    panel.add(passwordLabel);
-
-    final JPasswordField passwordText = new JPasswordField(20);
-    passwordText.setBounds(100, 40, 160, 25);
-    panel.add(passwordText);
-
-    JButton loginButton = new JButton("Login");
-    loginButton.setBounds(5, 80, 80, 25);
-    panel.add(loginButton);
-    
-    JButton registerButton = new JButton("What's this?");
-    registerButton.setBounds(160, 80, 100, 25);
-    panel.add(registerButton);
-    
-    loginButton.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent event){
-          
-        	connected = true; //assume true in case it's changed
-          username = userText.getText();
-//          password = passwordText.getText();
-          password = new String(passwordText.getPassword());
-          
-          
-//          HttpClientExample client;
-          
-          try {
-          user_authenticated = HttpClientExample.authenticate(username,password);
-          System.out.println(user_authenticated);
-          loginFrame.setVisible(false);
-        } 
-          
-          catch (ConnectException e){
-//        	  JOptionPane JOptionPane = new JOptionPane();
-          	javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
-          	connected = false;
-          	
-          }
-          catch (Exception e) {
-          e.printStackTrace();
-        }
-        
-        if (user_authenticated){
-        
-        	 try{
-        		 String url = "http://localhost/classes/access_user/add_submission.php";
-		  String db = project.dataTitle;
-		  String var1 = browser.getSelectedCol().getName();
-		  String var2 = browser.getSelectedRow().getName();
-		  String rangelist = "";
-		  String historystring = history.read();
-		  if (ranges != null){
-			  rangelist = ranges.toString();
-		  }
-		 
-			  HttpClientExample.upload(username, password, url, db, var1, var2, rangelist,historystring);
-//			  JOptionPane JOptionPane = new JOptionPane();
-			  javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
-		  }
-        	 catch (ConnectException e){
-//           	  JOptionPane JOptionPane = new JOptionPane();
-             	javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
-             	exit();
-             }
-		  catch (NullPointerException e){
-			  JOptionPane.showMessageDialog(frame, "Please select a variable pair by clicking on a box.", "Error",-1,null);
-		  }
-        	 catch (Exception e){
-        		 e.printStackTrace();
-        	 }
-        	
-        }
-        else if (connected){
-//        	JOptionPane JOptionPane = new JOptionPane();
-        	javax.swing.JOptionPane.showMessageDialog(frame, "Those user credentials were not recognized. Please try again.", "Error",-1,null);
-        	
-        }
-          }
-         
-          
-          
-          //(new Thread(mirac)).start();
-        
-        
-        
-      });
-    registerButton.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent event){
-          
-          try {
-
-             String url ="http://localhost/classes/access_user/register.php";
-
-             Desktop dt = Desktop.getDesktop();
-             URI uri = new URI(url);
-             dt.browse(uri.resolve(uri));
-
-
-         } catch (URISyntaxException ex) {
-         } catch (IOException ex) {
-         }
-        
-        }
-        
-      });
-    
-    
-  }   
+//  protected void placeComponents(JPanel panel) {
+//    panel.setLayout(null);
+//
+//    JLabel userLabel = new JLabel("User");
+//    userLabel.setBounds(10, 10, 80, 25);
+//    panel.add(userLabel);
+//
+//    final JTextField userText = new JTextField(20);
+//    userText.setBounds(100, 10, 160, 25);
+//    panel.add(userText);
+//
+//    JLabel passwordLabel = new JLabel("Password");
+//    passwordLabel.setBounds(10, 40, 80, 25);
+//    panel.add(passwordLabel);
+//
+//    final JPasswordField passwordText = new JPasswordField(20);
+//    passwordText.setBounds(100, 40, 160, 25);
+//    panel.add(passwordText);
+//
+//    JButton loginButton = new JButton("Login");
+//    loginButton.setBounds(5, 80, 80, 25);
+//    panel.add(loginButton);
+//    
+//    JButton registerButton = new JButton("What's this?");
+//    registerButton.setBounds(160, 80, 100, 25);
+//    panel.add(registerButton);
+//    
+//    loginButton.addActionListener(new ActionListener() {
+//        public void actionPerformed(ActionEvent event){
+//          
+//        	connected = true;
+//          username = userText.getText();
+//          password = new String(passwordText.getPassword());
+//          
+////          HttpClientExample client;
+//          
+//          try {
+//            user_authenticated = HttpConnector.authenticate(username,password);
+//            System.out.println(user_authenticated);
+//            loginFrame.setVisible(false);
+//          } 
+//          
+//          catch (ConnectException e){
+////        	  JOptionPane JOptionPane = new JOptionPane();
+//          	javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+//          	connected = false;
+//          	
+//          }
+//          catch (Exception e) {
+//          e.printStackTrace();
+//        }
+//        
+//        if (user_authenticated) {
+//        
+//          
+//          
+//        	 try{
+//        		 String url = "http://localhost/classes/access_user/add_submission.php";
+//		  String db = project.dataTitle;
+//		  String var1 = browser.getSelectedCol().getName();
+//		  String var2 = browser.getSelectedRow().getName();
+//		  String rangelist = "";
+//		  String historystring = history.read();
+//		  if (ranges != null){
+//			  rangelist = ranges.toString();
+//		  }
+//		 
+//			  HttpConnector.upload(username, password, url, db, var1, var2, rangelist,historystring);
+////			  JOptionPane JOptionPane = new JOptionPane();
+//			  javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
+//		  }
+//        	 catch (ConnectException e){
+////           	  JOptionPane JOptionPane = new JOptionPane();
+//             	javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+//             	exit();
+//             }
+//		  catch (NullPointerException e){
+//			  JOptionPane.showMessageDialog(frame, "Please select a variable pair by clicking on a box.", "Error",-1,null);
+//		  }
+//        	 catch (Exception e){
+//        		 e.printStackTrace();
+//        	 }
+//        	
+//        } else if (connected){
+////        	JOptionPane JOptionPane = new JOptionPane();
+//        	javax.swing.JOptionPane.showMessageDialog(frame, "Those user credentials were not recognized. Please try again.", "Error",-1,null);
+//        	
+//        }
+//        }
+//         
+//          
+//          
+//          //(new Thread(mirac)).start();
+//        
+//        
+//        
+//      });
+//    registerButton.addActionListener(new ActionListener()
+//      {
+//        public void actionPerformed(ActionEvent event){
+//          
+//          try {
+//
+//             String url ="http://localhost/classes/access_user/register.php";
+//
+//             Desktop dt = Desktop.getDesktop();
+//             URI uri = new URI(url);
+//             dt.browse(uri.resolve(uri));
+//
+//
+//         } catch (URISyntaxException ex) {
+//         } catch (IOException ex) {
+//         }
+//        
+//        }
+//        
+//      });
+//    
+//    
+//  }   
     
   //////////////////////////////////////////////////////////////////////////////
   
@@ -511,6 +525,8 @@ public class MiraApp extends PApplet {
       frame.setTitle(project.dataTitle);
     }
   }  
+  
+  
   
   protected class LoadHandler {
     public void outputSelected(File selection) {
@@ -628,6 +644,94 @@ public class MiraApp extends PApplet {
       }
       intf.record(pdfFilename);
     }   
+  }
+  
+  protected class UploadHandler {
+    protected String username;
+    protected String password;
+    protected boolean authenticated;
+    protected boolean connected; //assume the user is connected unless proven otherwise
+    
+    UploadHandler() {
+      username = "";
+      password = "";
+      authenticated = false;
+      connected = true;
+    }
+    
+    public void setUsername(String username) {
+      this.username = username;
+    }
+
+    public void setPassword(String password) {
+      this.password = password;
+    } 
+    
+    public void setAuthenticated(boolean value) {
+      authenticated = value;
+    }
+    
+    public boolean isAuthenticated() {
+      return authenticated;
+    }
+    
+    public void setConnected(boolean value) {
+      connected = value;
+    }
+    
+    public boolean isConnected() {
+      return connected;
+    }
+    
+    public void authenticate() {
+      try {
+        authenticated = HttpConnector.authenticate(username, password);
+        System.out.println(authenticated);
+        loginFrame.setVisible(false);
+      } catch (ConnectException e){
+//      JOptionPane JOptionPane = new JOptionPane();
+        javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+        connected = false;        
+      } catch (Exception e) {
+        e.printStackTrace();
+      }      
+    }
+    
+    public void upload() {
+      if (authenticated) {
+        try {
+          String url = "http://localhost/classes/access_user/add_submission.php";
+          String db = project.dataTitle;
+          String var1 = browser.getSelectedCol().getName();
+          String var2 = browser.getSelectedRow().getName();
+          String rangelist = "";
+          String historystring = history.read();
+          if (ranges != null){
+            rangelist = ranges.toString();
+          }     
+        
+          HttpConnector.upload(username, password, url, db, var1, var2, rangelist, historystring);
+          
+//          JOptionPane JOptionPane = new JOptionPane();
+          javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
+        } catch (ConnectException e) {
+          connected = false;
+          //JOptionPane JOptionPane = new JOptionPane();
+          javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+          System.out.println("authenticated but not connected");  
+        } catch (NullPointerException e){
+          JOptionPane.showMessageDialog(frame, "Please select a variable pair by clicking on a box.", "Error",-1,null);
+          System.out.println("authenticated but no box selected");
+        } catch (Exception e) {
+          // TODO Auto-generated catch block
+//          e.printStackTrace();
+          System.out.println("some other error");
+        }         
+      } else if (connected){
+//      JOptionPane JOptionPane = new JOptionPane();
+        javax.swing.JOptionPane.showMessageDialog(frame, "Those user credentials were not recognized. Please try again.", "Error",-1,null);      
+      }
+    }
   }
   
   //////////////////////////////////////////////////////////////////////////////  

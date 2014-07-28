@@ -23,7 +23,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
  
-public class HttpClientExample {
+public class HttpConnector {
  
   private String cookies;
   static private HttpClient client = HttpClientBuilder.create().build();
@@ -37,7 +37,7 @@ public class HttpClientExample {
  
   
   
-  public HttpClientExample(){
+  public HttpConnector(){
 	  
   }
   
@@ -45,7 +45,7 @@ public class HttpClientExample {
 	public static void upload(String username, String password, String url,String db, String var1, String var2, String ranges, String historystring) throws ConnectException, Exception{
 		CookieHandler.setDefault(new CookieManager());
 		 
-		HttpClientExample http = new HttpClientExample();
+		HttpConnector http = new HttpConnector();
 		
 	 
 		String result = http.GetPageContent(url);
@@ -66,7 +66,7 @@ public class HttpClientExample {
 
 		String url = "http://localhost/classes/access_user/login.php";
 		CookieHandler.setDefault(new CookieManager());
-		HttpClientExample http = new HttpClientExample();
+		HttpConnector http = new HttpConnector();
 		String page = http.GetPageContent(url);
 		List<NameValuePair> postParams = 
 	               http.getFormParams(page, username, password);
