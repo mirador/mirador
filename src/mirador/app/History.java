@@ -2,8 +2,11 @@
 
 package mirador.app;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.HashSet;
 
+import processing.core.PApplet;
 import mirador.views.View;
 import miralib.data.Range;
 import miralib.data.Variable;
@@ -18,6 +21,8 @@ import miralib.utils.Project;
  */
 
 public class History {
+  static protected int FLUSH_INTERVAL = 10000; // in millis
+  
   protected MiraApp app;
   protected Project prj;
   protected HashSet<VariablePair> pairs;
@@ -31,9 +36,17 @@ public class History {
   protected Variable sortVar;
   protected boolean openProfile;
     
+  protected File file;
+  protected PrintWriter writer;
+  protected int lastFlush = 0;
+  protected boolean changed = false; 
+  
   public History(MiraApp app, Project prj, int ptype) {
     this.app = app;
     this.prj = prj;
+    
+    file = new File(prj.dataFolder, ".history");
+    writer = PApplet.createWriter(file);
     
     pairs = new HashSet<VariablePair>();
     ranges = new HashSet<VariableRange>();
@@ -54,21 +67,21 @@ public class History {
   public void addPair(Variable varx, Variable vary) {
     VariablePair pair = new VariablePair(varx, vary);
     if (pairs.add(pair)) {
-      System.err.println("+PAIR\t" + app.millis() + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+      write("+PAIR\t" + app.millis() + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());      
     }    
   }
   
   public void removePair(Variable varx, Variable vary) {
     VariablePair pair = new VariablePair(varx, vary);
     if (pairs.remove(pair)) {
-      System.err.println("-PAIR\t" + app.millis() + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+      write("-PAIR\t" + app.millis() + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
     }
   }
   
   public void addRange(Variable var, Range range) {
     VariableRange vrange = new VariableRange(var, range);
     if (ranges.add(vrange)) {
-      System.err.println("+RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));      
+      write("+RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
     }
   }
   
@@ -83,7 +96,7 @@ public class History {
     if (vrange != null) {
       Range range = vrange.range;
       ranges.remove(vrange);
-      System.err.println("-RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
+      write("-RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
     }
   }
   
@@ -99,7 +112,7 @@ public class History {
       ranges.remove(vrange);
       vrange = new VariableRange(var, range);
       if (ranges.add(vrange)) {
-        System.err.println("~RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));        
+        write("~RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
       }      
     }
   }
@@ -111,7 +124,7 @@ public class History {
         VariableRange vrange = (VariableRange)obj;
         Variable var = vrange.var;
         Range range = vrange.range;
-        System.err.println("-RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
+        write("-RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
       }
     }
   }
@@ -119,21 +132,21 @@ public class History {
   public void setPValue(float pvalue) {
     if (Numbers.different(this.pvalue, pvalue)) {
       this.pvalue = pvalue;
-      System.err.println("PVALUE\t" + app.millis() + "\t" + pvalue);
+      write("PVALUE\t" + app.millis() + "\t" + pvalue);
     }
   }
   
   public void setMissingThreshold(float misst) {
     if (Numbers.different(this.misst, misst)) {
       this.misst = misst;
-      System.err.println("MISSING\t" + app.millis() + "\t" + misst);
+      write("MISSING\t" + app.millis() + "\t" + misst);
     }    
   }
   
   public void setPlotType(int plotType) {
     if (this.plotType != plotType) {
       this.plotType = plotType;
-      System.err.println("PLOT\t" + app.millis() + "\t" + View.typeToString(plotType));
+      write("PLOT\t" + app.millis() + "\t" + View.typeToString(plotType));
     }
   }
   
@@ -142,44 +155,69 @@ public class History {
       VariablePair pair = new VariablePair(varx, vary);
       if (!pair.equals(selPair)) {
         selPair = pair;
-        System.err.println("SELECT\t" + app.millis() + "\t" + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+        write("SELECT\t" + app.millis() + "\t" + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
       }      
     } else if (selPair != null) {
       selPair = null;
-      System.err.println("SELECT\t" + app.millis() + "\tNONE");
+      write("SELECT\t" + app.millis() + "\tNONE");
     }
   }
   
   public void sort(Variable var) {
     if (sortVar != var) {
       sortVar = var;
-      System.err.println("SORT\t" + app.millis() + "\t" + var.getName() + ":" + var.getAlias());
+      write("SORT\t" + app.millis() + "\t" + var.getName() + ":" + var.getAlias());
     }
   }
   
   public void unsort() {
     if (sortVar != null) {
       sortVar = null;
-      System.err.println("SORT\t" + app.millis() + "\tNONE");
+      write("SORT\t" + app.millis() + "\tNONE");
     }
   }
   
   public void openProfile() {
     if (!openProfile) {
       openProfile = true;
-      System.err.println("+PROFILE\t" + app.millis());
+      write("+PROFILE\t" + app.millis());
     }
   }
   
   public void closeProfile() {
     if (openProfile) {
       openProfile = false;
-      System.err.println("-PROFILE\t" + app.millis());
+      write("-PROFILE\t" + app.millis());
     }    
   }  
   
+  public void update() {
+    int t = app.millis();
+    if (FLUSH_INTERVAL < t - lastFlush && changed) {
+      writer.flush();
+      lastFlush = t;      
+      changed = false;
+    }
+  }
+  
+  public void dispose() {
+    writer.flush();
+    writer.close();
+  }
+  
   public String read() {
-    return "";
+    writer.flush();
+    String[] lines = PApplet.loadStrings(file);
+    String concat = "";
+    for (String line: lines) {
+      concat += line + "\n";
+    }
+    return concat;
+  }
+  
+  protected void write(String line) {
+    writer.println(line);
+    changed = true;
   }
   
   class VariablePair {

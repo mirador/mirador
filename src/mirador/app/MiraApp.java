@@ -149,6 +149,7 @@ public class MiraApp extends PApplet {
   
   public void draw() {        
     if (loaded) {
+      history.update();
       intf.update();
       intf.draw();
     }
@@ -174,6 +175,7 @@ public class MiraApp extends PApplet {
   }
   
   public void keyPressed() {
+    history.read();
     if (loaded) intf.keyPressed();   
   }
     
@@ -517,6 +519,7 @@ public class MiraApp extends PApplet {
           Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();          
           prefs.projectFolder = filePath.toString();
           prefs.save();
+          if (history != null) history.dispose();
           history = new History(MiraApp.this, project, plotType);          
           
           loaded = false;
