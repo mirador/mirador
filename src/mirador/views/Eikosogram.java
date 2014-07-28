@@ -105,11 +105,6 @@ public class Eikosogram extends View {
   }
   
   protected void drawEikosogram(PGraphics pg) {
-    if (varx == vary) {
-      drawHistogram(pg);
-      return;
-    }
-    
     pg.noStroke();
     float x0 = 0;
     for (int bx = 0; bx < binCountX; bx++) {

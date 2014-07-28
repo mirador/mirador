@@ -39,9 +39,17 @@ abstract public class View {
     if (type == SCATTER) {
       view = new Scatter(slice);
     } else if (type == HISTOGRAM) {
-      view = new Histogram(slice);  
+      if (slice.varx == slice.vary) {
+        view = new Histogram1D(slice);
+      } else {
+        view = new Histogram(slice);  
+      }        
     } else if (type == EIKOSOGRAM) {
-      view = new Eikosogram(slice);
+      if (slice.varx == slice.vary) {
+        view = new Histogram1D(slice);
+      } else {      
+        view = new Eikosogram(slice);
+      }
     } else {
       String err = "Unsupported view type: " + type;
       Log.error(err, new RuntimeException(err));
@@ -60,10 +68,6 @@ abstract public class View {
   abstract public void draw(PGraphics pg);
   
   abstract public Selection getSelection(double valx, double valy);
-  
-  protected void drawHistogram(PGraphics pg) {
-    
-  }
   
   protected int mixColors(int col0, int col1, float f) {
     int a = (int)PApplet.map(f, 0, 1, col0 >> 24 & 0xFF, col1 >> 24 & 0xFF);
