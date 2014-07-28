@@ -27,6 +27,7 @@ import mirador.ui.SoftFloat;
 import mirador.views.View;
 import miralib.data.DataRanges;
 import miralib.data.DataSet;
+import miralib.data.Range;
 import miralib.data.Variable;
 import miralib.utils.Log;
 import miralib.utils.Preferences;
@@ -126,7 +127,7 @@ public class MiraApp extends PApplet {
     
     loadSession();
     
-    history = new History();
+    history = new History(this);
     
     try {
       project = new Project(inputFile, prefs);
@@ -228,9 +229,21 @@ public class MiraApp extends PApplet {
   }
   
   public void updateRanges(RangeSelector selector, boolean resort) {
-    boolean change = ranges.update(selector.getVariable(), selector.getRange());
+    Variable var = selector.getVariable();
+    Range range = selector.getRange();
+    int result = ranges.update(var, range);
+    System.out.println("update result: " + result);
     if (resort) dataset.resort(ranges);
-    if (change) browser.dataChanged();
+    if (result != DataRanges.NO_CHANGE) {      
+      browser.dataChanged();
+      if (result == DataRanges.ADDED_RANGE) {
+        history.addRange(var, range);   
+      } else if (result == DataRanges.REMOVED_RANGE) {
+        history.removeRange(var, range);
+      } else if (result == DataRanges.MODIFIED_RANGE) {
+        history.replaceRange(var, range);
+      }      
+    }
   }
   
   public void resetRanges() {
@@ -239,6 +252,7 @@ public class MiraApp extends PApplet {
       ranges.clear();
       dataset.resort(ranges);
       browser.dataChanged();
+      history.clearRanges();
     }    
   }
   
