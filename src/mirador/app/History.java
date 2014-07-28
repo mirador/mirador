@@ -95,6 +95,10 @@ public class History {
     }
   }
   
+  public String read() {
+    return "";
+  }
+  
   class VariablePair {
     Variable varx, vary;
     

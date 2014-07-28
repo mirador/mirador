@@ -300,7 +300,9 @@ public class MiraApp extends PApplet {
 		  String rangelist = "";
 		  if (ranges != null){
 			  rangelist = ranges.toString();
-		  }
+		  }		  
+		  String historyString = history.read();
+		  
 			  HttpClientExample.upload(username, password, url, db, var1, var2, rangelist);
 //			  JOptionPane JOptionPane = new JOptionPane();
 			  javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
