@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import mirador.ui.Interface;
 import mirador.ui.SoftFloat;
+import mirador.ui.Widget;
 import processing.core.PFont;
 
 /**
@@ -22,7 +23,7 @@ public class OptionsPanel extends MiraWidget {
   int pColor;    
   int corColor;
   int misColor;
-  Button loadBtn, exportBtn, uploadBtn, pdfBtn;
+  MenuButton loadBtn, exportBtn, uploadBtn, pdfBtn;
   Options plotOpt, statOpt, mdatOpt;
 
   public OptionsPanel(Interface intf, float x, float y, float w, float h) {
@@ -40,10 +41,34 @@ public class OptionsPanel extends MiraWidget {
     corColor = getStyleColor("RowPlots.Pvalue", "background-color");
     misColor = getStyleColor("RowPlots.MissingData", "background-color");
     
-    loadBtn = new Button(10, 60, 100, 25, "Load Data");
-    exportBtn = new Button(10, 90, 100, 25, "Export selection");
-    uploadBtn = new Button(10, 120, 100, 25, "Upload Findings");
-    pdfBtn = new Button(10, 150, 100, 25, "Save PDF");
+    loadBtn = new MenuButton(intf, 10, 60, 100, 25, "Load Data") {
+      public void handle() {
+        mira.loadDataset();
+      }
+    };
+    addChild(loadBtn, TOP_LEFT_CORNER);
+    
+    exportBtn = new MenuButton(intf, 10, 90, 100, 25, "Export selection") {
+      public void handle() {
+        mira.exportSelection();
+      }
+    };
+    addChild(exportBtn, TOP_LEFT_CORNER);
+    
+    uploadBtn = new MenuButton(intf, 10, 120, 100, 25, "Upload Findings") {
+      public void handle() {
+        mira.uploadSession();
+      }
+    };
+    addChild(uploadBtn, TOP_LEFT_CORNER);
+    
+    pdfBtn = new MenuButton(intf, 10, 150, 100, 25, "Save PDF") {
+      public void handle() {
+        mira.savePDF();
+      }
+    };
+    addChild(pdfBtn, TOP_LEFT_CORNER);
+    
     
     plotOpt = new Options(10, 195, 110, 80, "PlotOptions");
     plotOpt.title("Plot Type");
@@ -80,14 +105,12 @@ public class OptionsPanel extends MiraWidget {
     textFont(pFont);
     text(MiraApp.APP_VERSION, 10, 45); 
     
-    loadBtn.draw();
-    exportBtn.draw();
-    uploadBtn.draw();
-    pdfBtn.draw();
     plotOpt.draw();
     statOpt.draw();
     mdatOpt.draw();
-    
+  }
+  
+  public void postDraw() { 
     // shadows
     beginShape(QUAD);
     fill(color(0), 50);
@@ -96,23 +119,11 @@ public class OptionsPanel extends MiraWidget {
     fill(color(0), 0);
     vertex(width - 15, height);
     vertex(width - 15, 0);      
-    endShape(); 
+    endShape();
   }
   
   public void mousePressed() {
-    if (loadBtn.select(mouseX, mouseY)) {
-      mira.loadDataset();
-    } else if (exportBtn.select(mouseX, mouseY)) {
-      mira.exportSelection();
-    } else if (uploadBtn.select(mouseX, mouseY)) {
-      try {
-        mira.uploadSession();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    } else if (pdfBtn.select(mouseX, mouseY)) {
-      mira.savePDF();      
-    } else if (plotOpt.select(mouseX, mouseY)) {
+    if (plotOpt.select(mouseX, mouseY)) {
       mira.setPlotType(plotOpt.selected);
     } else if (statOpt.select(mouseX, mouseY)) {
       mira.setPValue(statOpt.selected);
@@ -124,38 +135,6 @@ public class OptionsPanel extends MiraWidget {
   protected void handleResize(int newWidth, int newHeight) {
     bounds.h.set(newHeight);
   }  
-  
-  class Button {
-    String label;
-    int x, y, w, h;
-    int color;
-    
-    Button(int x, int y, int w, int h, String label) {
-      this.x = x;
-      this.y = y;
-      this.w = w;
-      this.h = h;
-      this.label = label;
-      
-      color = getStyleColor("OptionsPanel.Button", "color");
-    }
-    
-    void draw() {
-      stroke(color, 220);
-      fill(color, 100);
-      rect(x, y, w, h);
-      
-      float center = (h - pFont.getSize()) / 2;
-      
-      fill(pColor);
-      textFont(pFont);
-      text(label, x + 5, y + h - center);
-    }
-    
-    boolean select(int mx, int my) {
-      return x <= mx && mx <= x + w && y <= my && my <= y + h;
-    }
-  }
   
   class Options {
     ArrayList<String> list;
@@ -279,5 +258,43 @@ public class OptionsPanel extends MiraWidget {
         text(opt, x1, y1 - center);        
       }
     }
-  } 
+  }
+  
+  protected class MenuButton extends Widget {
+    String label;    
+    int color;    
+    SoftFloat hoverAlpha;
+    
+    public MenuButton(Interface intf, float x, float y, float w, float h, 
+                      String label) {
+      super(intf, x, y, w, h);
+      this.label = label;
+      color = getStyleColor("OptionsPanel.Button", "color");
+      hoverAlpha = new SoftFloat(90);
+    }
+    
+    public void update() {
+      hoverAlpha.update();
+    }
+    
+    public void draw() {
+      fill(color, hoverAlpha.getFloor());
+      rect(0, 0, width, height);
+      
+      float center = (height - pFont.getSize()) / 2;
+      
+      fill(pColor);
+      textFont(pFont);
+      text(label, 5, height - center);      
+    }  
+    
+    public void hoverIn() {
+      hoverAlpha.set(0);
+      hoverAlpha.setTarget(255);
+    }    
+
+    public void hoverOut() {
+      hoverAlpha.set(90);
+    }
+  }
 }
