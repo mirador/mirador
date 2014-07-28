@@ -13,7 +13,7 @@ import processing.core.PGraphics;
  *
  */
 
-public class Histogram extends View {  
+public class Histogram2D extends View {  
   protected double[][] weightSum;
   protected float[][] density;
   protected boolean[][] selected;
@@ -23,7 +23,7 @@ public class Histogram extends View {
   protected int binCountY;
   protected float maxProb; 
   
-  public Histogram(DataSlice2D slice) {
+  public Histogram2D(DataSlice2D slice) {
     super(slice.varx, slice.vary, slice.ranges);
     calcDensity(slice); 
   }

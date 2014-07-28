@@ -42,7 +42,7 @@ abstract public class View {
       if (slice.varx == slice.vary) {
         view = new Histogram1D(slice);
       } else {
-        view = new Histogram(slice);  
+        view = new Histogram2D(slice);  
       }        
     } else if (type == EIKOSOGRAM) {
       if (slice.varx == slice.vary) {
