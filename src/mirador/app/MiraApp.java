@@ -65,13 +65,12 @@ public class MiraApp extends PApplet {
   public Project project;
   public DataSet dataset;
   public DataRanges ranges;
+  public History history;
   
   protected Interface intf;  
   protected OptionsPanel options;  
   public VariableBrowser browser;
   protected Profile profile;
-  
-  public History history;
     
   protected int plotType;
   
@@ -80,9 +79,6 @@ public class MiraApp extends PApplet {
   protected boolean animating;
   protected float animTime;
   protected SoftFloat animAlpha;  
- 
-  public boolean savingToPdf = false;
-  protected String pdfFilename;
   
   protected String username;
   protected String password;
@@ -127,12 +123,11 @@ public class MiraApp extends PApplet {
     
     loadSession();
     
-    history = new History(this);
-    
     try {
       project = new Project(inputFile, prefs);
       Path p = Paths.get(inputFile);
       Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();
+      history = new History(this, project);
       prefs.projectFolder = filePath.toString();
       prefs.save();
 //      System.err.println(prefs.projectFolder);
@@ -232,16 +227,15 @@ public class MiraApp extends PApplet {
     Variable var = selector.getVariable();
     Range range = selector.getRange();
     int result = ranges.update(var, range);
-    System.out.println("update result: " + result);
     if (resort) dataset.resort(ranges);
     if (result != DataRanges.NO_CHANGE) {      
       browser.dataChanged();
       if (result == DataRanges.ADDED_RANGE) {
-        history.addRange(var, range);   
-      } else if (result == DataRanges.REMOVED_RANGE) {
-        history.removeRange(var, range);
+        history.addRange(var, range);
       } else if (result == DataRanges.MODIFIED_RANGE) {
         history.replaceRange(var, range);
+      } else if (result == DataRanges.REMOVED_RANGE) {
+        history.removeRange(var);
       }      
     }
   }
@@ -519,7 +513,8 @@ public class MiraApp extends PApplet {
           Path p = Paths.get(selection.toString());
           Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();          
           prefs.projectFolder = filePath.toString();
-          prefs.save();
+          prefs.save();          
+          history = new History(MiraApp.this, project);
           
           loaded = false;
           animating = true;
@@ -618,13 +613,12 @@ public class MiraApp extends PApplet {
   
   protected class PDFHandler {
     public void outputSelected(File selection) {
-      pdfFilename = selection.getAbsolutePath();    
+      String pdfFilename = selection.getAbsolutePath();    
       String ext = PApplet.checkExtension(pdfFilename);
       if (ext == null || !ext.equals("pdf")) {
         pdfFilename += ".pdf";
       }
       intf.record(pdfFilename);
-      savingToPdf = true;
     }   
   }
 

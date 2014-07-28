@@ -2,11 +2,11 @@
 
 package mirador.app;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import miralib.data.Range;
 import miralib.data.Variable;
+import miralib.utils.Project;
 
 /**
  * Stores the visualization history: set of visible plots, current ranges,  
@@ -17,6 +17,7 @@ import miralib.data.Variable;
 
 public class History {
   protected MiraApp app;
+  protected Project prj;
   protected HashSet<VariablePair> pairs;
   protected HashSet<VariableRange> ranges;
   protected VariablePair selPair;
@@ -25,8 +26,9 @@ public class History {
   protected float misst;
   protected int plotType;
     
-  public History(MiraApp app) {
+  public History(MiraApp app, Project prj) {
     this.app = app;
+    this.prj = prj;
     
     pairs = new HashSet<VariablePair>();
     ranges = new HashSet<VariableRange>();
@@ -58,9 +60,17 @@ public class History {
     }
   }
   
-  public void removeRange(Variable var, Range range) {
-    VariableRange vrange = new VariableRange(var, range);
-    if (ranges.remove(vrange)) {
+  public void removeRange(Variable var) {
+    VariableRange vrange = null;
+    for (VariableRange r: ranges) {
+      if (r.var == var) {
+        vrange = r;
+        break;
+      }
+    }
+    if (vrange != null) {
+      Range range = vrange.range;
+      ranges.remove(vrange);
       System.err.println("-RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
     }
   }
@@ -69,7 +79,6 @@ public class History {
     VariableRange vrange = null;
     for (VariableRange r: ranges) {
       if (r.var == var) {
-        System.out.println("Found range for " + var.getName() + r.range.toString());
         vrange = r;
         break;
       }
