@@ -1,0 +1,174 @@
+PVALUE	2685	0.05
+MISSING	2685	0.8
+PLOT	2685	EIKOSOGRAM
++PAIR	3646 Age:Age of the patient 	Age:Age of the patient 
++PAIR	3647 Gender:Gender of the patient	Age:Age of the patient 
++PAIR	3648 TB:Total Bilirubin 	Age:Age of the patient 
++PAIR	3648 DB:Direct Bilirubin	Age:Age of the patient 
++PAIR	3648 Alkphos:Alkaline Phosphotase 	Age:Age of the patient 
++PAIR	3657 Age:Age of the patient 	Gender:Gender of the patient
++PAIR	3657 Gender:Gender of the patient	Gender:Gender of the patient
++PAIR	3657 TB:Total Bilirubin 	Gender:Gender of the patient
++PAIR	3657 DB:Direct Bilirubin	Gender:Gender of the patient
++PAIR	3657 Alkphos:Alkaline Phosphotase 	Gender:Gender of the patient
++PAIR	3660 Age:Age of the patient 	TB:Total Bilirubin 
++PAIR	3661 Gender:Gender of the patient	TB:Total Bilirubin 
++PAIR	3661 TB:Total Bilirubin 	TB:Total Bilirubin 
++PAIR	3661 DB:Direct Bilirubin	TB:Total Bilirubin 
++PAIR	3661 Alkphos:Alkaline Phosphotase 	TB:Total Bilirubin 
+SELECT	7548	Age:Age of the patient 	Age:Age of the patient 
++PAIR	9658 Age:Age of the patient 	DB:Direct Bilirubin
++PAIR	9658 Gender:Gender of the patient	DB:Direct Bilirubin
++PAIR	9658 TB:Total Bilirubin 	DB:Direct Bilirubin
++PAIR	9658 DB:Direct Bilirubin	DB:Direct Bilirubin
++PAIR	9658 Alkphos:Alkaline Phosphotase 	DB:Direct Bilirubin
++PAIR	10092 Age:Age of the patient 	Alkphos:Alkaline Phosphotase 
++PAIR	10092 Gender:Gender of the patient	Alkphos:Alkaline Phosphotase 
++PAIR	10092 TB:Total Bilirubin 	Alkphos:Alkaline Phosphotase 
++PAIR	10095 DB:Direct Bilirubin	Alkphos:Alkaline Phosphotase 
++PAIR	10096 Alkphos:Alkaline Phosphotase 	Alkphos:Alkaline Phosphotase 
++PAIR	10990 Age:Age of the patient 	Sgpt:Alamine Aminotransferase 
++PAIR	10990 Gender:Gender of the patient	Sgpt:Alamine Aminotransferase 
++PAIR	10990 TB:Total Bilirubin 	Sgpt:Alamine Aminotransferase 
++PAIR	10990 DB:Direct Bilirubin	Sgpt:Alamine Aminotransferase 
++PAIR	10990 Alkphos:Alkaline Phosphotase 	Sgpt:Alamine Aminotransferase 
+-PAIR	15103 Alkphos:Alkaline Phosphotase 	Age:Age of the patient 
+-PAIR	15104 Age:Age of the patient 	Age:Age of the patient 
+-PAIR	15104 DB:Direct Bilirubin	Age:Age of the patient 
+-PAIR	15105 TB:Total Bilirubin 	Age:Age of the patient 
+-PAIR	15106 Gender:Gender of the patient	Age:Age of the patient 
+-PAIR	15978 Alkphos:Alkaline Phosphotase 	Gender:Gender of the patient
+-PAIR	15978 Age:Age of the patient 	Gender:Gender of the patient
+-PAIR	15979 DB:Direct Bilirubin	Gender:Gender of the patient
+-PAIR	15979 TB:Total Bilirubin 	Gender:Gender of the patient
+-PAIR	15979 Gender:Gender of the patient	Gender:Gender of the patient
++PAIR	16523 Age:Age of the patient 	Sgot:Aspartate Aminotransferase
++PAIR	16523 Gender:Gender of the patient	Sgot:Aspartate Aminotransferase
++PAIR	16523 TB:Total Bilirubin 	Sgot:Aspartate Aminotransferase
++PAIR	16523 DB:Direct Bilirubin	Sgot:Aspartate Aminotransferase
++PAIR	16523 Alkphos:Alkaline Phosphotase 	Sgot:Aspartate Aminotransferase
++PAIR	16790 Age:Age of the patient 	TP:Total Protein
++PAIR	16790 Gender:Gender of the patient	TP:Total Protein
++PAIR	16790 TB:Total Bilirubin 	TP:Total Protein
++PAIR	16790 DB:Direct Bilirubin	TP:Total Protein
++PAIR	16790 Alkphos:Alkaline Phosphotase 	TP:Total Protein
++PAIR	16957 Age:Age of the patient 	ALB:Albumin
++PAIR	16957 Gender:Gender of the patient	ALB:Albumin
++PAIR	16957 TB:Total Bilirubin 	ALB:Albumin
++PAIR	16957 DB:Direct Bilirubin	ALB:Albumin
++PAIR	16957 Alkphos:Alkaline Phosphotase 	ALB:Albumin
+-PAIR	17424 Alkphos:Alkaline Phosphotase 	TB:Total Bilirubin 
+-PAIR	17425 Age:Age of the patient 	TB:Total Bilirubin 
+-PAIR	17425 DB:Direct Bilirubin	TB:Total Bilirubin 
+-PAIR	17425 TB:Total Bilirubin 	TB:Total Bilirubin 
+-PAIR	17426 Gender:Gender of the patient	TB:Total Bilirubin 
++PAIR	18442 Age:Age of the patient 	TB:Total Bilirubin 
++PAIR	18442 Gender:Gender of the patient	TB:Total Bilirubin 
++PAIR	18442 TB:Total Bilirubin 	TB:Total Bilirubin 
++PAIR	18442 DB:Direct Bilirubin	TB:Total Bilirubin 
++PAIR	18442 Alkphos:Alkaline Phosphotase 	TB:Total Bilirubin 
++PAIR	19876 Age:Age of the patient 	Gender:Gender of the patient
++PAIR	19876 Gender:Gender of the patient	Gender:Gender of the patient
++PAIR	19876 TB:Total Bilirubin 	Gender:Gender of the patient
++PAIR	19876 DB:Direct Bilirubin	Gender:Gender of the patient
++PAIR	19876 Alkphos:Alkaline Phosphotase 	Gender:Gender of the patient
++PAIR	20124 Age:Age of the patient 	Age:Age of the patient 
++PAIR	20124 Gender:Gender of the patient	Age:Age of the patient 
++PAIR	20124 TB:Total Bilirubin 	Age:Age of the patient 
++PAIR	20124 DB:Direct Bilirubin	Age:Age of the patient 
++PAIR	20124 Alkphos:Alkaline Phosphotase 	Age:Age of the patient 
+-PAIR	23197 Alkphos:Alkaline Phosphotase 	ALB:Albumin
+-PAIR	23198 Age:Age of the patient 	ALB:Albumin
+-PAIR	23198 DB:Direct Bilirubin	ALB:Albumin
+-PAIR	23199 TB:Total Bilirubin 	ALB:Albumin
+-PAIR	23199 Gender:Gender of the patient	ALB:Albumin
+-PAIR	23308 Alkphos:Alkaline Phosphotase 	TP:Total Protein
+-PAIR	23308 Age:Age of the patient 	TP:Total Protein
+-PAIR	23309 DB:Direct Bilirubin	TP:Total Protein
+-PAIR	23310 TB:Total Bilirubin 	TP:Total Protein
+-PAIR	23310 Gender:Gender of the patient	TP:Total Protein
+-PAIR	23441 Alkphos:Alkaline Phosphotase 	Sgot:Aspartate Aminotransferase
+-PAIR	23442 Age:Age of the patient 	Sgot:Aspartate Aminotransferase
+-PAIR	23442 DB:Direct Bilirubin	Sgot:Aspartate Aminotransferase
+-PAIR	23443 TB:Total Bilirubin 	Sgot:Aspartate Aminotransferase
+-PAIR	23443 Gender:Gender of the patient	Sgot:Aspartate Aminotransferase
+-PAIR	24875 Alkphos:Alkaline Phosphotase 	Sgpt:Alamine Aminotransferase 
+-PAIR	24875 Age:Age of the patient 	Sgpt:Alamine Aminotransferase 
+-PAIR	24876 DB:Direct Bilirubin	Sgpt:Alamine Aminotransferase 
+-PAIR	24876 TB:Total Bilirubin 	Sgpt:Alamine Aminotransferase 
+-PAIR	24877 Gender:Gender of the patient	Sgpt:Alamine Aminotransferase 
+-PAIR	25108 Alkphos:Alkaline Phosphotase 	Alkphos:Alkaline Phosphotase 
+-PAIR	25108 Age:Age of the patient 	Alkphos:Alkaline Phosphotase 
+-PAIR	25109 DB:Direct Bilirubin	Alkphos:Alkaline Phosphotase 
+-PAIR	25110 TB:Total Bilirubin 	Alkphos:Alkaline Phosphotase 
+-PAIR	25111 Gender:Gender of the patient	Alkphos:Alkaline Phosphotase 
++RANGE	27811 TB:Total Bilirubin 	0.67,75
+~RANGE	27843 TB:Total Bilirubin 	0.93,75
+~RANGE	27859 TB:Total Bilirubin 	1.47,75
+~RANGE	27897 TB:Total Bilirubin 	3.06,75
+~RANGE	27950 TB:Total Bilirubin 	4.13,75
+~RANGE	28067 TB:Total Bilirubin 	5.2,75
+~RANGE	28094 TB:Total Bilirubin 	8.93,75
+~RANGE	28112 TB:Total Bilirubin 	9.99,75
+~RANGE	28163 TB:Total Bilirubin 	10.26,75
+~RANGE	28193 TB:Total Bilirubin 	11.06,75
+~RANGE	28225 TB:Total Bilirubin 	13.19,75
+~RANGE	28244 TB:Total Bilirubin 	13.99,75
+~RANGE	28576 TB:Total Bilirubin 	13.45,75
+~RANGE	28593 TB:Total Bilirubin 	13.19,75
+~RANGE	28609 TB:Total Bilirubin 	12.92,75
+~RANGE	28626 TB:Total Bilirubin 	12.39,75
+~RANGE	28642 TB:Total Bilirubin 	12.12,75
+~RANGE	28658 TB:Total Bilirubin 	11.59,75
+~RANGE	28675 TB:Total Bilirubin 	11.32,75
+~RANGE	28711 TB:Total Bilirubin 	11.06,75
+~RANGE	28742 TB:Total Bilirubin 	10.79,75
+~RANGE	28759 TB:Total Bilirubin 	9.99,75
+~RANGE	28776 TB:Total Bilirubin 	9.73,75
+~RANGE	28809 TB:Total Bilirubin 	9.46,75
+~RANGE	28826 TB:Total Bilirubin 	8.93,75
+~RANGE	28851 TB:Total Bilirubin 	8.66,75
+~RANGE	28893 TB:Total Bilirubin 	8.39,75
+~RANGE	28925 TB:Total Bilirubin 	8.13,75
+~RANGE	28942 TB:Total Bilirubin 	7.33,75
+~RANGE	28960 TB:Total Bilirubin 	7.06,75
+~RANGE	28976 TB:Total Bilirubin 	6.79,75
+~RANGE	28992 TB:Total Bilirubin 	6.53,75
+~RANGE	29009 TB:Total Bilirubin 	6.26,75
+~RANGE	29045 TB:Total Bilirubin 	6,75
+~RANGE	29125 TB:Total Bilirubin 	5.46,75
+~RANGE	29143 TB:Total Bilirubin 	5.2,75
+~RANGE	29160 TB:Total Bilirubin 	4.93,75
+~RANGE	29194 TB:Total Bilirubin 	4.66,75
+~RANGE	29226 TB:Total Bilirubin 	4.4,75
+~RANGE	29242 TB:Total Bilirubin 	3.6,75
+~RANGE	29323 TB:Total Bilirubin 	3.33,75
+~RANGE	29360 TB:Total Bilirubin 	2,75
+~RANGE	29392 TB:Total Bilirubin 	1.73,75
+~RANGE	29409 TB:Total Bilirubin 	0.93,75
+~RANGE	29426 TB:Total Bilirubin 	0.67,75
+-RANGE	29442 TB:Total Bilirubin 	0.67,75
++RANGE	29945 TB:Total Bilirubin 	1.47,75
+~RANGE	29992 TB:Total Bilirubin 	2.27,75
+~RANGE	30009 TB:Total Bilirubin 	2.8,75
+~RANGE	30028 TB:Total Bilirubin 	3.06,75
+~RANGE	30044 TB:Total Bilirubin 	3.33,75
+~RANGE	30242 TB:Total Bilirubin 	3.6,75
+~RANGE	30376 TB:Total Bilirubin 	3.86,75
+~RANGE	30393 TB:Total Bilirubin 	4.4,75
+~RANGE	30413 TB:Total Bilirubin 	4.93,75
+~RANGE	30470 TB:Total Bilirubin 	5.73,75
+~RANGE	30561 TB:Total Bilirubin 	7.33,75
+~RANGE	30594 TB:Total Bilirubin 	7.59,75
+~RANGE	30628 TB:Total Bilirubin 	8.13,75
+~RANGE	30677 TB:Total Bilirubin 	8.39,75
+~RANGE	30693 TB:Total Bilirubin 	8.66,75
+~RANGE	30710 TB:Total Bilirubin 	8.93,75
+~RANGE	30761 TB:Total Bilirubin 	9.19,75
+~RANGE	30795 TB:Total Bilirubin 	9.46,75
+~RANGE	30825 TB:Total Bilirubin 	9.73,75
+-PAIR	102771 Alkphos:Alkaline Phosphotase 	DB:Direct Bilirubin
+-PAIR	102773 Age:Age of the patient 	DB:Direct Bilirubin
+-PAIR	102773 DB:Direct Bilirubin	DB:Direct Bilirubin
+-PAIR	102774 TB:Total Bilirubin 	DB:Direct Bilirubin
+-PAIR	102774 Gender:Gender of the patient	DB:Direct Bilirubin

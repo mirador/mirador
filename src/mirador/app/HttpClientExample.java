@@ -42,7 +42,7 @@ public class HttpClientExample {
   }
   
 
-	public static void upload(String username, String password, String url,String db, String var1, String var2, String ranges) throws ConnectException, Exception{
+	public static void upload(String username, String password, String url,String db, String var1, String var2, String ranges, String historystring) throws ConnectException, Exception{
 		CookieHandler.setDefault(new CookieManager());
 		 
 		HttpClientExample http = new HttpClientExample();
@@ -56,7 +56,7 @@ public class HttpClientExample {
 		client = HttpClientBuilder.create().build();
 		
 		List<NameValuePair> submissionParams = 
-	            http.getFormParams(result,username,password, db, var1, var2, ranges);
+	            http.getFormParams(result,username,password, db, var1, var2, ranges,historystring);
 		http.sendPost(url, submissionParams);
 		
 		
@@ -192,7 +192,7 @@ public class HttpClientExample {
   }
   
   public List<NameValuePair> getFormParams(
-          String html, String username, String password, String db, String var1, String var2, String ranges)
+          String html, String username, String password, String db, String var1, String var2, String ranges,String history)
 			throws UnsupportedEncodingException {
 
 	System.out.println("Extracting form's data...");
@@ -222,6 +222,8 @@ public class HttpClientExample {
 			value = var2;
 		else if (key.equals("ranges"))
 			value = ranges;
+		else if (key.equals("history"))
+		  value = history;
 
 		paramList.add(new BasicNameValuePair(key, value));
 

@@ -297,12 +297,13 @@ public class MiraApp extends PApplet {
 		  String var1 = browser.getSelectedCol().getName();
 		  String var2 = browser.getSelectedRow().getName();
 		  String rangelist = "";
+		  String historystring = history.read();
 		  if (ranges != null){
 			  rangelist = ranges.toString();
 		  }		  
 		  String historyString = history.read();
 		  
-			  HttpClientExample.upload(username, password, url, db, var1, var2, rangelist);
+			  HttpClientExample.upload(username, password, url, db, var1, var2, rangelist,historystring);
 //			  JOptionPane JOptionPane = new JOptionPane();
 			  javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
 		  }
@@ -389,11 +390,12 @@ public class MiraApp extends PApplet {
 		  String var1 = browser.getSelectedCol().getName();
 		  String var2 = browser.getSelectedRow().getName();
 		  String rangelist = "";
+		  String historystring = history.read();
 		  if (ranges != null){
 			  rangelist = ranges.toString();
 		  }
 		 
-			  HttpClientExample.upload(username, password, url, db, var1, var2, rangelist);
+			  HttpClientExample.upload(username, password, url, db, var1, var2, rangelist,historystring);
 //			  JOptionPane JOptionPane = new JOptionPane();
 			  javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
 		  }
