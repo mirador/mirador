@@ -257,13 +257,19 @@ public class VariableBrowser extends MiraWidget {
     return "";
   }
 
-  public void setSelectedRow(Variable var) {
-    selRow = var;
+  public void setSelectedPair(Variable col, Variable row) {
+    selCol = col;
+    selRow = row;
+    mira.history.setSelectedPair(col, row);
   }
-
-  public void setSelectedCol(Variable var) {
-    selCol = var;
-  } 
+  
+//  public void setSelectedRow(Variable var) {
+//    selRow = var;
+//  }
+//
+//  public void setSelectedCol(Variable var) {
+//    selCol = var;
+//  } 
   
   public Variable getSelectedRow() {
     return selRow;

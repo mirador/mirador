@@ -126,10 +126,10 @@ public class MiraApp extends PApplet {
     try {
       project = new Project(inputFile, prefs);
       Path p = Paths.get(inputFile);
-      Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();
-      history = new History(this, project);
+      Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();      
       prefs.projectFolder = filePath.toString();
       prefs.save();
+      history = new History(this, project, plotType);
 //      System.err.println(prefs.projectFolder);
       
     } catch (IOException e) {
@@ -195,6 +195,7 @@ public class MiraApp extends PApplet {
     if (plotType != type) {
       plotType = type; 
       browser.dataChanged();
+      history.setPlotType(type);
     }      
   }  
   
@@ -208,6 +209,7 @@ public class MiraApp extends PApplet {
       project.save();
       browser.pvalueChanged();
       dataset.resort(project.pvalue(), project.missingThreshold());
+      history.setPValue(project.pvalue());
     }    
   }
   
@@ -219,7 +221,8 @@ public class MiraApp extends PApplet {
     if (project.missingThreshold != threshold) {
       project.missingThreshold = threshold;
       project.save();
-      dataset.resort(project.pvalue(), project.missingThreshold());      
+      dataset.resort(project.pvalue(), project.missingThreshold());
+      history.setMissingThreshold(project.missingThreshold());
     }
   }
   
@@ -513,8 +516,8 @@ public class MiraApp extends PApplet {
           Path p = Paths.get(selection.toString());
           Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();          
           prefs.projectFolder = filePath.toString();
-          prefs.save();          
-          history = new History(MiraApp.this, project);
+          prefs.save();
+          history = new History(MiraApp.this, project, plotType);          
           
           loaded = false;
           animating = true;
@@ -621,7 +624,7 @@ public class MiraApp extends PApplet {
       intf.record(pdfFilename);
     }   
   }
-
+  
   //////////////////////////////////////////////////////////////////////////////  
   
   static public void loadPreferences() {

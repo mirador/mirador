@@ -4,8 +4,10 @@ package mirador.app;
 
 import java.util.HashSet;
 
+import mirador.views.View;
 import miralib.data.Range;
 import miralib.data.Variable;
+import miralib.math.Numbers;
 import miralib.utils.Project;
 
 /**
@@ -20,23 +22,33 @@ public class History {
   protected Project prj;
   protected HashSet<VariablePair> pairs;
   protected HashSet<VariableRange> ranges;
-  protected VariablePair selPair;
-  protected Variable sortVar;
+
   protected float pvalue;
   protected float misst;
   protected int plotType;
+
+  protected VariablePair selPair;
+  protected Variable sortVar;
+  protected boolean openProfile;
     
-  public History(MiraApp app, Project prj) {
+  public History(MiraApp app, Project prj, int ptype) {
     this.app = app;
     this.prj = prj;
     
     pairs = new HashSet<VariablePair>();
     ranges = new HashSet<VariableRange>();
-    selPair = null;
-    sortVar = null;
+    
     pvalue = -1;
     misst = -1;
     plotType = -1;
+    
+    selPair = null;
+    sortVar = null;
+    openProfile = false;
+    
+    setPValue(prj.pvalue());
+    setMissingThreshold(prj.missingThreshold());
+    setPlotType(ptype);
   }
   
   public void addPair(Variable varx, Variable vary) {
@@ -103,6 +115,68 @@ public class History {
       }
     }
   }
+  
+  public void setPValue(float pvalue) {
+    if (Numbers.different(this.pvalue, pvalue)) {
+      this.pvalue = pvalue;
+      System.err.println("PVALUE\t" + app.millis() + "\t" + pvalue);
+    }
+  }
+  
+  public void setMissingThreshold(float misst) {
+    if (Numbers.different(this.misst, misst)) {
+      this.misst = misst;
+      System.err.println("MISSING\t" + app.millis() + "\t" + misst);
+    }    
+  }
+  
+  public void setPlotType(int plotType) {
+    if (this.plotType != plotType) {
+      this.plotType = plotType;
+      System.err.println("PLOT\t" + app.millis() + "\t" + View.typeToString(plotType));
+    }
+  }
+  
+  public void setSelectedPair(Variable varx, Variable vary) {
+    if (varx != null && vary != null) {
+      VariablePair pair = new VariablePair(varx, vary);
+      if (!pair.equals(selPair)) {
+        selPair = pair;
+        System.err.println("SELECT\t" + app.millis() + "\t" + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+      }      
+    } else if (selPair != null) {
+      selPair = null;
+      System.err.println("SELECT\t" + app.millis() + "\tNONE");
+    }
+  }
+  
+  public void sort(Variable var) {
+    if (sortVar != var) {
+      sortVar = var;
+      System.err.println("SORT\t" + app.millis() + "\t" + var.getName() + ":" + var.getAlias());
+    }
+  }
+  
+  public void unsort() {
+    if (sortVar != null) {
+      sortVar = null;
+      System.err.println("SORT\t" + app.millis() + "\tNONE");
+    }
+  }
+  
+  public void openProfile() {
+    if (!openProfile) {
+      openProfile = true;
+      System.err.println("+PROFILE\t" + app.millis());
+    }
+  }
+  
+  public void closeProfile() {
+    if (openProfile) {
+      openProfile = false;
+      System.err.println("-PROFILE\t" + app.millis());
+    }    
+  }  
   
   public String read() {
     return "";
