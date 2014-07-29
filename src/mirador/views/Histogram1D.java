@@ -25,11 +25,12 @@ public class Histogram1D extends View {
     if (1 < binCount) { 
       float binw = (float)pg.width / binCount;    
       pg.noStroke();
-      for (int bx = 0; bx < binCount; bx++) {        
-//        float p = PApplet.map(density[bx], 0, maxProb, 0, 1);
+      for (int bx = 0; bx < binCount; bx++) {
         float p = density[bx];
+        float h = PApplet.map(p, 0, maxProb, 0, 0.5f);
+//        float p = density[bx];
         pg.fill(BLUE);
-        pg.rect(binw * bx, pg.height * (1 - p), binw, pg.height * p);        
+        pg.rect(binw * bx, pg.height * (1 - h), binw, pg.height * h);        
       }
     }        
     pg.endDraw();
@@ -44,10 +45,11 @@ public class Histogram1D extends View {
       float binw = 1.0f / binCount;          
       for (int bx = 0; bx < binCount; bx++) {        
         float p = density[bx];
+        float h = PApplet.map(p, 0, maxProb, 0, 0.5f);
         float x0 = binw * bx;
         float x1 = binw * bx + binw;
         if (x0 < valx && valx < x1) {
-          Selection sel = new Selection(x0, (1 - p), binw, p);
+          Selection sel = new Selection(x0, (1 - h), binw, h);
           sel.setLabel(PApplet.nfc(100 * p, 2) + "%");
           return sel;
         }        
