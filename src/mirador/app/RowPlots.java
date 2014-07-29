@@ -10,6 +10,7 @@ import processing.core.PGraphics;
 import mirador.ui.Interface;
 import mirador.ui.SoftFloat;
 import mirador.views.View;
+import miralib.data.DataSlice1D;
 import miralib.data.DataSlice2D;
 import miralib.data.Variable;
 import miralib.shannon.Similarity;
@@ -203,9 +204,15 @@ public class RowPlots extends ColumnScroller {
           if (viewTask != null && !viewTask.isDone()) viewTask.cancel(true);        
           viewTask = mira.browser.submitTask(new Runnable() {
             public void run() {
-              DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges);
-              missing = slice.missing;
-              view = View.create(slice, mira.getPlotType());
+              if (var == rowVar) {
+                DataSlice1D slice = data.getSlice(rowVar, mira.ranges);
+                missing = slice.missing;
+                view = View.create(slice);
+              } else {
+                DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges);
+                missing = slice.missing;
+                view = View.create(slice, mira.getPlotType());
+              }
               update = true;
             }
           }, true);

@@ -3,6 +3,7 @@
 package mirador.views;
 
 import miralib.data.DataRanges;
+import miralib.data.DataSlice1D;
 import miralib.data.DataSlice2D;
 import miralib.data.Variable;
 import miralib.utils.Log;
@@ -34,22 +35,18 @@ abstract public class View {
     this.ranges = ranges;    
   }
   
+  static public View create(DataSlice1D slice) {
+    return new Histogram1D(slice);
+  }
+  
   static public View create(DataSlice2D slice, int type) {
     View view = null;
     if (type == SCATTER) {
       view = new Scatter(slice);
     } else if (type == HISTOGRAM) {
-      if (slice.varx == slice.vary) {
-        view = new Histogram1D(slice);
-      } else {
-        view = new Histogram2D(slice);  
-      }        
+      view = new Histogram2D(slice);  
     } else if (type == EIKOSOGRAM) {
-      if (slice.varx == slice.vary) {
-        view = new Histogram1D(slice);
-      } else {      
-        view = new Eikosogram(slice);
-      }
+      view = new Eikosogram(slice);
     } else {
       String err = "Unsupported view type: " + type;
       Log.error(err, new RuntimeException(err));
