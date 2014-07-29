@@ -222,8 +222,12 @@ public class RowPlots extends ColumnScroller {
           if (indepTask != null && !indepTask.isDone()) indepTask.cancel(true);
           indepTask = mira.browser.submitTask(new Runnable() {
             public void run() {                  
-              DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges);                
-              depend = 0 < Similarity.calculate(slice, mira.project.pvalue(), mira.project);              
+              DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges);
+              float score = 0;
+              if (slice.missing < mira.project.missingThreshold()) {
+                score = Similarity.calculate(slice, mira.project.pvalue(), mira.project);
+              }                  
+              depend = 0 < score;              
             }
           }, false);            
         }          
@@ -393,16 +397,11 @@ public class RowPlots extends ColumnScroller {
         boolean selected = mira.browser.getSelectedRow() == rowVar &&
                            mira.browser.getSelectedCol() == var;
         if (!selected) {
-//          mira.browser.setSelectedRow(rowVar);
-//          mira.browser.setSelectedCol(var);
           mira.browser.setSelectedPair(var, rowVar);
         } else {
-//          mira.browser.setSelectedRow(null);
-//          mira.browser.setSelectedCol(null);
           mira.browser.setSelectedPair(null, null);
         }
       }
     }
-    
   }
 }

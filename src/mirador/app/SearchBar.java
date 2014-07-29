@@ -247,7 +247,6 @@ public class SearchBar extends MiraWidget {
       searchStr.setFocused(false);
       searchStr.set("Search for a variable");
       searchRes.clear();
-      
     }
     
     void mousePressed(float mx, float my) {
