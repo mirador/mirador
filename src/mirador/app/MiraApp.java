@@ -4,11 +4,15 @@ package mirador.app;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+
+import mirador.handlers.LoadHandler;
+import mirador.handlers.PDFHandler;
+import mirador.handlers.ProfileHandler;
+import mirador.handlers.SelectionHandler;
+import mirador.handlers.UploadHandler;
 import mirador.ui.Interface;
 import mirador.ui.SoftFloat;
 import mirador.views.View;
@@ -21,7 +25,6 @@ import miralib.utils.Preferences;
 import miralib.utils.Project;
 import processing.core.PApplet;
 import processing.core.PConstants;
-import processing.data.Table;
 
 /**
  * Mirador main class. 
@@ -100,35 +103,13 @@ public class MiraApp extends PApplet {
     intf.setBackground(color(247));
     initPanel();
     
-    uploader = new UploadHandler();
+    uploader = new UploadHandler(this);
     
     frame.setTitle(APP_NAME + " is loading...");
     frame.setAutoRequestFocus(true);
     
-    loadSession();
-    
-    try {
-      project = new Project(inputFile, prefs);
-      Path p = Paths.get(inputFile);
-      Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();      
-      prefs.projectFolder = filePath.toString();
-      prefs.save();
-      history = new History(this, project, plotType);
-//      System.err.println(prefs.projectFolder);
-      
-    } catch (IOException e) {
-      e.printStackTrace();
-      exit();
-    }
-     
-    if (project != null) {
-      loaded = false;
-      animating = true;
-      animTime = 0;
-      animAlpha = new SoftFloat(255);
-      loadThread = new LoadThread();
-      loadThread.start();
-    }
+    loadSession();    
+    loadProject(inputFile);
   }
   
   public void draw() {        
@@ -239,23 +220,47 @@ public class MiraApp extends PApplet {
     }    
   }
   
+  public void loadProject(String filename) {
+    try {
+      project = new Project(filename, prefs);
+      Path p = Paths.get(filename);
+      Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();      
+      prefs.projectFolder = filePath.toString();
+      prefs.save();
+      if (history != null) history.dispose();
+      history = new History(this, project, plotType);      
+    } catch (IOException e) {
+      e.printStackTrace();
+      exit();
+    }
+    
+    if (project != null) {
+      loaded = false;
+      animating = true;
+      animTime = 0;
+      animAlpha = new SoftFloat(255);
+      loadThread = new LoadThread();
+      loadThread.start();
+    }    
+  }
+  
   public void loadDataset() {
     selectInput("Select a csv or tsv file to save the selection to:", 
-                "outputSelected", new File(prefs.projectFolder), new LoadHandler());    
+                "outputSelected", new File(prefs.projectFolder), new LoadHandler(this));    
   }
   
   public void exportProfile(ArrayList<Variable> vars) {    
     File file = new File(project.dataFolder, "profile-data.tsv");
     selectOutput("Select a csv or tsv file to save the selection to:", 
-                 "outputSelected", file, new ProfileHandler(vars));
+                 "outputSelected", file, new ProfileHandler(this, vars));
   }
   
   public void exportSelection() {
     if (browser.getSelectedRow() != null && browser.getSelectedCol() != null) {
       File file = new File(project.dataFolder, "selected-data.tsv");
       selectOutput("Select a csv or tsv file to save the selection to:", 
-                   "outputSelected", file, new SelectionHandler(browser.getSelectedCol(), 
-                                                                browser.getSelectedRow()));      
+                   "outputSelected", file, new SelectionHandler(this, browser.getSelectedCol(), 
+                                                                      browser.getSelectedRow()));      
     }
   }
   
@@ -271,7 +276,7 @@ public class MiraApp extends PApplet {
   public void savePDF() {
     File file = new File(project.dataFolder, "capture.pdf");
     selectOutput("Enter the name of the PDF file to save the screen to", 
-                 "outputSelected", file, new PDFHandler());    
+                 "outputSelected", file, new PDFHandler(this));    
   }
       
   //////////////////////////////////////////////////////////////////////////////
@@ -335,216 +340,6 @@ public class MiraApp extends PApplet {
       frame.setTitle(project.dataTitle);
     }
   }  
-  
-  protected class LoadHandler {
-    public void outputSelected(File selection) {
-      if (selection != null) {
-        try {
-          project = new Project(selection.toString(), prefs);          
-          Path p = Paths.get(selection.toString());
-          Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();          
-          prefs.projectFolder = filePath.toString();
-          prefs.save();
-          if (history != null) history.dispose();
-          history = new History(MiraApp.this, project, plotType);          
-          
-          loaded = false;
-          animating = true;
-          animTime = 0;
-          animAlpha = new SoftFloat(255);
-          loadThread = new LoadThread();
-          loadThread.start();
-        } catch (IOException e) {
-          e.printStackTrace();
-          exit();
-        }        
-      }
-    }    
-  }
-  
-  protected class ProfileHandler {
-    ArrayList<Variable> variables;
-    
-    ProfileHandler(ArrayList<Variable> vars) {
-      variables = vars;
-    }
-    
-    public void outputSelected(File selection) {
-      if (selection == null) return;
-      String filename = selection.getAbsolutePath();    
-      String ext = PApplet.checkExtension(filename);
-      if (ext == null || (!ext.equals("csv") && !ext.equals("tsv"))) {
-        filename += ".tsv";
-      }
-      Path dataPath = Paths.get(filename);
-      String filePath = dataPath.getParent().toAbsolutePath().toString(); 
-      File dictFile = new File(filePath, "profile-dictionary.tsv");
-      File varsFile = new File(filePath, "profile-variables.tsv");
-      File projFile = new File(filePath, "profile-config.mira");
-      
-      Table[] tabdict = dataset.getTable(variables, ranges);
-      Table data = tabdict[0];
-      if (data != null) {
-        saveTable(data, filename);
-      }
-      
-      Table dict = tabdict[1];
-      if (dict != null) {      
-        saveTable(dict, dictFile.getAbsolutePath());          
-      }
-      
-      Table vars = dataset.getProfile(variables);      
-      if (vars != null) {
-        saveTable(vars, varsFile.getAbsolutePath());  
-      }
-      
-      Project proj = new Project(project);
-      proj.dataTitle = "Profile";
-      proj.dataURL = "";
-      proj.dataFile = dataPath.getFileName().toString();
-      proj.dictFile = dictFile.getName();     
-      proj.grpsFile = "";
-      proj.binFile = "";
-      proj.codeFile = "";
-      
-      proj.save(projFile.toString());
-    }
-  }
-  
-  protected class SelectionHandler {
-    ArrayList<Variable> variables;
-    
-    SelectionHandler(Variable varx, Variable vary) {
-      variables = new ArrayList<Variable>();
-      variables.add(varx);
-      variables.add(vary);
-    }
-    
-    public void outputSelected(File selection) {
-      if (selection == null) return;
-      
-      String filename = selection.getAbsolutePath();    
-      String ext = PApplet.checkExtension(filename);
-      if (ext == null || (!ext.equals("csv") && !ext.equals("tsv"))) {
-        filename += ".tsv";
-      }
-      Path dataPath = Paths.get(filename);
-      String filePath = dataPath.getParent().toAbsolutePath().toString(); 
-      File dictFile = new File(filePath, "selected-dictionary.tsv");
-
-      Table[] tabdict = dataset.getTable(variables, ranges);
-      Table data = tabdict[0];
-      if (data != null) {
-        saveTable(data, filename);
-      }
-      
-      Table dict = tabdict[1];
-      if (dict != null) {      
-        saveTable(dict, dictFile.getAbsolutePath());          
-      }
-    }
-  }
-  
-  protected class PDFHandler {
-    public void outputSelected(File selection) {
-      if (selection == null) return;
-      
-      String pdfFilename = selection.getAbsolutePath();    
-      String ext = PApplet.checkExtension(pdfFilename);
-      if (ext == null || !ext.equals("pdf")) {
-        pdfFilename += ".pdf";
-      }
-      intf.record(pdfFilename);
-    }   
-  }
-  
-  protected class UploadHandler {
-    protected String username;
-    protected String password;
-    protected boolean authenticated;
-    protected boolean connected; //assume the user is connected unless proven otherwise
-    
-    UploadHandler() {
-      username = "";
-      password = "";
-      authenticated = false;
-      connected = true;
-    }
-    
-    public void setUsername(String username) {
-      this.username = username;
-    }
-
-    public void setPassword(String password) {
-      this.password = password;
-    } 
-    
-    public void setAuthenticated(boolean value) {
-      authenticated = value;
-    }
-    
-    public boolean isAuthenticated() {
-      return authenticated;
-    }
-    
-    public void setConnected(boolean value) {
-      connected = value;
-    }
-    
-    public boolean isConnected() {
-      return connected;
-    }
-    
-    public void authenticate() {
-      try {
-        authenticated = HttpConnector.authenticate(username, password);
-        System.out.println(authenticated);
-//        loginFrame.setVisible(false);
-      } catch (ConnectException e){
-//      JOptionPane JOptionPane = new JOptionPane();
-        javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
-        connected = false;        
-      } catch (Exception e) {
-        e.printStackTrace();
-      }      
-    }
-    
-    public void upload() {
-      if (authenticated) {
-        try {
-          String url = "http://localhost/classes/access_user/add_submission.php";
-          String db = project.dataTitle;
-          String var1 = browser.getSelectedCol().getName();
-          String var2 = browser.getSelectedRow().getName();
-          String rangelist = "";
-          String historystring = history.read();
-          if (ranges != null){
-            rangelist = ranges.toString();
-          }     
-        
-          HttpConnector.upload(username, password, url, db, var1, var2, rangelist, historystring);
-          
-//          JOptionPane JOptionPane = new JOptionPane();
-          javax.swing.JOptionPane.showMessageDialog(frame, "Upload successful.", "Success!",-1,null);
-        } catch (ConnectException e) {
-          connected = false;
-          //JOptionPane JOptionPane = new JOptionPane();
-          javax.swing.JOptionPane.showMessageDialog(frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
-          System.out.println("authenticated but not connected");  
-        } catch (NullPointerException e){
-          JOptionPane.showMessageDialog(frame, "Please select a variable pair by clicking on a box.", "Error",-1,null);
-          System.out.println("authenticated but no box selected");
-        } catch (Exception e) {
-          // TODO Auto-generated catch block
-//          e.printStackTrace();
-          System.out.println("some other error");
-        }         
-      } else if (connected){
-//      JOptionPane JOptionPane = new JOptionPane();
-        javax.swing.JOptionPane.showMessageDialog(frame, "Those user credentials were not recognized. Please try again.", "Error",-1,null);      
-      }
-    }
-  }
   
   //////////////////////////////////////////////////////////////////////////////  
   

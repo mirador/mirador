@@ -1,4 +1,6 @@
-package mirador.app;
+/* COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. */
+
+package mirador.handlers;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,6 +10,10 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import mirador.app.MiraApp;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -23,25 +29,115 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class HttpConnector {
+/**
+ * Handler for submissions upload. 
+ * 
+ */
+
+public class UploadHandler {
+  private MiraApp app;
   private String cookies;
-  static private HttpClient client = HttpClientBuilder.create().build();
+  private HttpClient client = HttpClientBuilder.create().build();
   //HttpClient client = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
   //private DefaultHttpClient client = new DefaultHttpClient();
   //client.setRedirectStrategy(new LaxRedirectStrategy());
 
   private final String USER_AGENT = "Mozilla/5.0";
 
-  public HttpConnector(){
-
+  
+  protected String username;
+  protected String password;
+  protected boolean authenticated;
+  protected boolean connected; //assume the user is connected unless proven otherwise
+  
+  public UploadHandler(MiraApp app) {
+    this.app = app;
+    username = "";
+    password = "";
+    authenticated = false;
+    connected = true;
+  }
+  
+  public void setUsername(String username) {
+    this.username = username;
   }
 
-  public static void upload(String username, String password, String url,String db, String var1, String var2, String ranges, String historystring) throws ConnectException, Exception{
+  public void setPassword(String password) {
+    this.password = password;
+  } 
+  
+  public void setAuthenticated(boolean value) {
+    authenticated = value;
+  }
+  
+  public boolean isAuthenticated() {
+    return authenticated;
+  }
+  
+  public void setConnected(boolean value) {
+    connected = value;
+  }
+  
+  public boolean isConnected() {
+    return connected;
+  }
+  
+  public void authenticate() {
+    try {
+      authenticated = authenticate(username, password);
+      System.out.println(authenticated);
+//      loginFrame.setVisible(false);
+    } catch (ConnectException e){
+//    JOptionPane JOptionPane = new JOptionPane();
+      javax.swing.JOptionPane.showMessageDialog(app.frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+      connected = false;        
+    } catch (Exception e) {
+      e.printStackTrace();
+    }      
+  }
+  
+  public void upload() {
+    if (authenticated) {
+      try {
+        String url = "http://localhost/classes/access_user/add_submission.php";
+        String db = app.project.dataTitle;
+        String var1 = app.browser.getSelectedCol().getName();
+        String var2 = app.browser.getSelectedRow().getName();
+        String rangelist = "";
+        String historystring = app.history.read();
+        if (app.ranges != null){
+          rangelist = app.ranges.toString();
+        }     
+      
+        upload(username, password, url, db, var1, var2, rangelist, historystring);
+        
+//        JOptionPane JOptionPane = new JOptionPane();
+        javax.swing.JOptionPane.showMessageDialog(app.frame, "Upload successful.", "Success!",-1,null);
+      } catch (ConnectException e) {
+        connected = false;
+        //JOptionPane JOptionPane = new JOptionPane();
+        javax.swing.JOptionPane.showMessageDialog(app.frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+        System.out.println("authenticated but not connected");  
+      } catch (NullPointerException e){
+        JOptionPane.showMessageDialog(app.frame, "Please select a variable pair by clicking on a box.", "Error",-1,null);
+        System.out.println("authenticated but no box selected");
+      } catch (Exception e) {
+        // TODO Auto-generated catch block
+//        e.printStackTrace();
+        System.out.println("some other error");
+      }         
+    } else if (connected){
+//    JOptionPane JOptionPane = new JOptionPane();
+      javax.swing.JOptionPane.showMessageDialog(app.frame, "Those user credentials were not recognized. Please try again.", "Error",-1,null);      
+    }
+  }
+  
+  private void upload(String username, String password, String url,String db, String var1, String var2, String ranges, String historystring) throws ConnectException, Exception{
     CookieHandler.setDefault(new CookieManager());
 
-    HttpConnector http = new HttpConnector();
+//    HttpConnector http = new HttpConnector();
 
-    String result = http.GetPageContent(url);
+    String result = GetPageContent(url);
     System.out.println(result);
 
     System.out.println("Got the add submission page. Let's parse.");
@@ -49,19 +145,19 @@ public class HttpConnector {
     client = HttpClientBuilder.create().build();
 
     List<NameValuePair> submissionParams = 
-        http.getFormParams(result,username,password, db, var1, var2, ranges,historystring);
-    http.sendPost(url, submissionParams);
+        getFormParams(result,username,password, db, var1, var2, ranges,historystring);
+    sendPost(url, submissionParams);
   }
 
-  public static boolean authenticate(String username, String password) throws Exception, ConnectException{
+  private boolean authenticate(String username, String password) throws Exception, ConnectException{
     String url = "http://localhost/classes/access_user/login.php";
     CookieHandler.setDefault(new CookieManager());
-    HttpConnector http = new HttpConnector();
-    String page = http.GetPageContent(url);
+//    HttpConnector http = new HttpConnector();
+    String page = GetPageContent(url);
     List<NameValuePair> postParams = 
-        http.getFormParams(page, username, password);
+        getFormParams(page, username, password);
 
-    boolean authenticated = http.sendPost(url, postParams);
+    boolean authenticated = sendPost(url, postParams);
 
     //System.out.println(authenticated);
     return authenticated;
@@ -216,5 +312,6 @@ public class HttpConnector {
 
   public void setCookies(String cookies) {
     this.cookies = cookies;
-  }
+  }    
 }
+
