@@ -54,15 +54,16 @@ public class OptionsPanel extends MiraWidget {
       }
     };
     addChild(exportBtn, TOP_LEFT_CORNER);
+
+    // Disable for 1.1beta
+//    uploadBtn = new MenuButton(intf, 10, 120, 100, 25, "Upload Findings") {
+//      public void handle() {
+//        mira.uploadSession();
+//      }
+//    };
+//    addChild(uploadBtn, TOP_LEFT_CORNER);
     
-    uploadBtn = new MenuButton(intf, 10, 120, 100, 25, "Upload Findings") {
-      public void handle() {
-        mira.uploadSession();
-      }
-    };
-    addChild(uploadBtn, TOP_LEFT_CORNER);
-    
-    pdfBtn = new MenuButton(intf, 10, 150, 100, 25, "Save PDF") {
+    pdfBtn = new MenuButton(intf, 10, 120/*150*/, 100, 25, "Save PDF") {
       public void handle() {
         mira.savePDF();
       }
