@@ -4,10 +4,10 @@
   <property name="app.name" value="Mirador" />
   <property name="dist.name" value="mirador" />
   <property name="jar.name" value="${dist.name}.jar" />
-  <property name="class.name" value="mira.app.Mirador" />
+  <property name="class.name" value="mirador.app.Mirador" />
 
-  <property name="version" value="1.0" />
-  <property name="revision" value="140530" />
+  <property name="version" value="1.1" />
+  <property name="revision" value="140630" />
 
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -33,7 +33,7 @@ with the path to where you have the code for miralib checked out." />
 
 <!--
   <target name="run">
-    <java classname="mira.app.Mirador" fork="true"/>
+    <java classname="mirador.app.Mirador" fork="true"/>
   </target>
 -->
 
@@ -43,7 +43,7 @@ with the path to where you have the code for miralib checked out." />
     <javac target="1.7" 
            encoding="UTF-8"
            includeAntRuntime="false"
-           classpath="${processing.dir}/core/bin:${miralib.dir}/bin:${miralib.dir}/lib/cssparser-0.9.13.jar:${miralib.dir}/lib/commons-math3-3.2.jar:${miralib.dir}/lib/sac.jar"
+           classpath="${processing.dir}/core/bin:${miralib.dir}/lib/commons-math3-3.2.jar"
            srcdir="../src" 
            destdir="../bin" />
   </target>
@@ -150,21 +150,6 @@ convert image.png  -bordercolor white -border 0 \
     
     <fail if="macosx" unless="macosx_jdk_found"
           message="JDK 7u${jdk.update.macosx} required.${line.separator}To build on OS X, you must install Oracle's JDK 7u${jdk.update.macosx} from${line.separator}http://www.oracle.com/technetwork/java/javase/downloads${line.separator}Note that only 7u${jdk.update.macosx} (not a later or earlier version) will work. ${line.separator}And it must be the JDK, not the JRE. And do not try to defy me again." />
-
-<!--
-    <copy todir="macosx/mira.app/Contents/Resources/Java">
-      <fileset dir="${processing.dir}/core/library">
-        <include name="**/jogl-all.jar" />
-        <include name="**/gluegen-rt.jar" />
-        <include name="**/jogl-all-natives-macosx-universal.jar" />
-        <include name="**/gluegen-rt-natives-macosx-universal.jar" />          
-      </fileset>
-    </copy>    
-    
-    <exec executable="chmod" dir="macosx">
-      <arg line="+x mira.app/Contents/MacOS/JavaApplicationStub" />
-    </exec>    
--->
     
     <!-- Should do this to remove the DS_Store files 
     find . -name '*.DS_Store' -type f -delete
@@ -199,9 +184,9 @@ convert image.png  -bordercolor white -border 0 \
 
       <classpath file="${jar.name}" />
 
+      <classpath file="../lib/*.jar" />
+      
       <classpath file="${miralib.dir}/lib/commons-math3-3.2.jar" />
-      <classpath file="${miralib.dir}/lib/cssparser-0.9.13.jar" />
-      <classpath file="${miralib.dir}/lib/sac.jar" />
 
       <classpath file="${core.dir}/core.jar" />
       <classpath file="${core.dir}/jogl-all.jar" />
@@ -299,6 +284,10 @@ convert image.png  -bordercolor white -border 0 \
         <include name="**/gluegen-rt-natives-windows-*.jar" />          
       </fileset>
 
+      <fileset dir="../lib">
+        <include name="*.jar" />
+      </fileset>
+      
       <fileset dir="${miralib.dir}/lib">
         <include name="*.jar" />
       </fileset>
