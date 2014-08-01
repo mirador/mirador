@@ -34,11 +34,16 @@ public class ProfileHandler {
     if (ext == null || (!ext.equals("csv") && !ext.equals("tsv"))) {
       filename += ".tsv";
     }
+    String prefix = "";
+    if (-1 < filename.indexOf("profile-")) {
+      prefix = "profile-";
+    }
+    
     Path dataPath = Paths.get(filename);
     String filePath = dataPath.getParent().toAbsolutePath().toString(); 
-    File dictFile = new File(filePath, "profile-dictionary.tsv");
-    File varsFile = new File(filePath, "profile-variables.tsv");
-    File projFile = new File(filePath, "profile-config.mira");
+    File dictFile = new File(filePath, prefix + "dictionary.tsv");
+    File varsFile = new File(filePath, prefix + "variables.tsv");
+    File projFile = new File(filePath, prefix + "config.mira");
     
     Table[] tabdict = app.dataset.getTable(variables, app.ranges);
     Table data = tabdict[0];
