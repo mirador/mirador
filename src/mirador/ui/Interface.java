@@ -396,6 +396,9 @@ public class Interface implements PConstants {
   }
   
   public void mouseMoved() {
+    for (Widget wt: drawnWidgets) {
+      wt.updateMouse(app.mouseX, app.mouseY, app.pmouseX, app.pmouseY);
+    }    
     handleHover(true);
   }
   
