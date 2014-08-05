@@ -266,7 +266,11 @@ public class SearchBar extends MiraWidget {
       searchStr.setFocused(true);
       searchStr.keyPressed(key, code);
       String query = searchStr.get();
-      searchRes.search(query); // TODO: should search also look for groups/tables?
+      if (1 < query.length()) {
+        searchRes.search(query); // TODO: should search also look for groups/tables?
+      } else {
+        searchRes.clear();
+      }
     }
   }
   
