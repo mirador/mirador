@@ -76,12 +76,13 @@ if not os.path.exists('jre.tgz'):
       shutil.rmtree('java')
 
 if not os.path.exists('java'):
-   os.system('tar xvfz jre.tgz')
+   #os.system('tar xvfz jre.tgz')
+   os.system('tar xfz jre.tgz')
    os.rename(folder, 'java')
 
    for filename in jre_optional_windows + javafx_basics + javafx_windows:
       path = 'java/' + filename
-      print 'removing ' + path
+      #print 'removing ' + path
       if os.path.isdir(path):
          shutil.rmtree(path)
       else:
