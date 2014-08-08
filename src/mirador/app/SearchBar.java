@@ -262,15 +262,19 @@ public class SearchBar extends MiraWidget {
       }
     }
     
+    String lastQuery = "";
     void keyPressed(char key, int code) {
       searchStr.setFocused(true);
       searchStr.keyPressed(key, code);
       String query = searchStr.get();
-      if (1 < query.length()) {
-        searchRes.search(query); // TODO: should search also look for groups/tables?
-      } else {
-        searchRes.clear();
+      if (!lastQuery.equals(query)) {
+        if (0 < query.length()) {
+          searchRes.search(query); // TODO: should search also look for groups/tables?
+        } else {
+          searchRes.clear();
+        }        
       }
+      lastQuery = query;
     }
   }
   
@@ -279,6 +283,7 @@ public class SearchBar extends MiraWidget {
     float rw, rh;
     float sep;
     int max;
+    SearchTask searchTask;
 
     HashMap<Variable, SearchResult> results;
     ArrayList<SearchResult> ordered;
@@ -293,6 +298,8 @@ public class SearchBar extends MiraWidget {
       rw = getStyleSize("InfoBar.SearchAdd.SearchBar.SearchResult", "width");
       rh = getStyleSize("InfoBar.SearchAdd.SearchBar.SearchResult", "height");     
       sep = getStyleSize("InfoBar.SearchAdd.SearchBar.SearchResult", "margin-bottom");
+      
+      searchTask = null;
     }
     
     void update() {
@@ -304,30 +311,15 @@ public class SearchBar extends MiraWidget {
     }    
     
     void search(String query) {
-      HashSet<Variable> old = new HashSet<Variable>(results.keySet());     
-      
-      ordered.clear();
-      Variable[] matches = data.getVariables(query);
-      for (int i = 0; i < PApplet.min(max, matches.length); i++) {
-        float ry = i * (rh + sep);
-        Variable var = matches[i];
-        SearchResult res;
-        if (results.keySet().contains(var)) {
-          old.remove(var);
-          res = results.get(var);
-          res.setQuery(query);
-          res.targetY(y0 +ry);
-        } else {
-          res = new SearchResult(x0, y0, y0 + ry, rw, rh, var, query);
-          results.put(var, res);
+      if (searchTask != null && searchTask.isAlive()) {
+        searchTask.interrupt();
+        while (searchTask.isAlive()) {
+          Thread.yield();
         }
-        ordered.add(res);
-        res.selected = false;
       }
-      if (0 < ordered.size()) ordered.get(0).selected = true;
-      for (Variable var: old) {
-        results.remove(var);
-      }
+      
+      searchTask = new SearchTask(query);
+      searchTask.start();
     }
     
     void clear() {
@@ -415,7 +407,43 @@ public class SearchBar extends MiraWidget {
       for (SearchResult res: results.values()) { 
         res.select(mx, my);
       }      
-    }    
+    }
+    
+    protected class SearchTask extends Thread {
+      String query;
+      
+      SearchTask(String query) {
+        this.query = query;
+      }
+      
+      @Override
+      public void run() {
+        HashSet<Variable> old = new HashSet<Variable>(results.keySet());     
+        
+        ordered.clear();
+        Variable[] matches = data.getVariables(query);
+        for (int i = 0; i < PApplet.min(max, matches.length); i++) {
+          float ry = i * (rh + sep);
+          Variable var = matches[i];
+          SearchResult res;
+          if (results.keySet().contains(var)) {
+            old.remove(var);
+            res = results.get(var);
+            res.setQuery(query);
+            res.targetY(y0 +ry);
+          } else {
+            res = new SearchResult(x0, y0, y0 + ry, rw, rh, var, query);
+            results.put(var, res);
+          }
+          ordered.add(res);
+          res.selected = false;
+        }
+        if (0 < ordered.size()) ordered.get(0).selected = true;
+        for (Variable var: old) {
+          results.remove(var);
+        }
+      }
+    } 
   }
   
   class SearchResult {
