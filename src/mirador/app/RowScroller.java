@@ -59,13 +59,13 @@ public class RowScroller extends MiraWidget {
   }
   
   public void showVariables() {
-    while (next() != varScroller);    
+    while (next(false) != varScroller);    
   }
   
   public void openRow(Variable var) {
     int idx = data.getVariableIndex(var);
     if (-1 < idx) {
-      while (next() != varScroller);
+      while (next(false) != varScroller);
       varScroller.jumpTo(idx);      
     }
   }
@@ -83,6 +83,15 @@ public class RowScroller extends MiraWidget {
   }  
   
   protected SingleScroller prev() {
+    return prev(true);
+  }
+  
+  protected SingleScroller prev(boolean dragCol) {    
+    if (dragCol && 0 < mira.browser.getFirstColumn()) {
+      mira.browser.dragColumns(-mira.plotWidth);
+      return (SingleScroller)children.get(current);
+    }
+    
     if (0 < current) {
       SingleScroller scroller0 = (SingleScroller)children.get(current);
       SingleScroller scroller1 = (SingleScroller)children.get(current - 1);
@@ -97,7 +106,7 @@ public class RowScroller extends MiraWidget {
       }
       current--;
       return scroller1;
-    } else {
+    } else {      
       return (SingleScroller)children.get(0);
     }    
   } 
@@ -119,12 +128,16 @@ public class RowScroller extends MiraWidget {
       }
       current++;
       return scroller1;
-    } else {
+    } else {            
       return (SingleScroller)children.get(children.size() - 1);
     }
   }
   
   protected SingleScroller next() {
+    return next(true);
+  } 
+  
+  protected SingleScroller next(boolean dragCol) {
     if (current < children.size() - 1) {
       SingleScroller scroller0 = (SingleScroller)children.get(current);
       SingleScroller scroller1 = (SingleScroller)children.get(current + 1);
@@ -140,6 +153,7 @@ public class RowScroller extends MiraWidget {
       current++;
       return scroller1;
     } else {
+      if (dragCol) mira.browser.dragColumns(mira.plotWidth);
       return (SingleScroller)children.get(children.size() - 1);
     }
   }  

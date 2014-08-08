@@ -167,6 +167,14 @@ public class VariableBrowser extends MiraWidget {
     covBar.close(var);    
   }
   
+  public int getFirstColumn() {
+    return (int)(colLabels.visX0.getTarget() / mira.plotWidth);
+  }
+
+  public int getLastColumn() {
+    return (int)(colLabels.visX1.getTarget() / mira.plotWidth);
+  } 
+  
   public void dragColumns(float dx) {
     if (rowsReady()) {
       for (Widget child: children) {
