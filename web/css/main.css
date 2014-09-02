@@ -114,6 +114,30 @@ body #main-con #header-con #img {
 body #main-con #header-con h1 {
   padding-left: 70px;
 }
+
+body #main-con #header-comp {
+  position: fixed;
+  width: 80%;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 9999;
+  -webkit-box-shadow: 0px 0px 5px 3px rgba(30, 20, 0, 0.1);
+  -moz-box-shadow: 0px 0px 5px 3px rgba(30, 20, 0, 0.1);
+  box-shadow: 0px 0px 5px 3px rgba(30, 20, 0, 0.1);
+  padding: 0 10%;
+}
+body #main-con #header-comp #img {
+  background: transparent url('images/plot.png') no-repeat;
+  height: 50px;
+  width: 50px;
+  background-size: 100%;
+  float: left;
+}
+body #main-con #header-comp h1 {
+  display: inline;
+  padding-left: 70px;
+}
+
 body #main-con #intro {
   padding: 95px 0 40px 0;
 }
