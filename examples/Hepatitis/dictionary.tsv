@@ -1,20 +1,20 @@
 OUTCOME	category	1:DIE;2:LIVE
 AGE	int	1,80
 SEX	category	1:male;2:female
-STEROID	category	1:no;2:yes
-ANTIVIRALS	category	1:no;2:yes
-FATIGUE	category	1:no;2:yes
-MALAISE	category	1:no;2:yes
-ANOREXIA	category	1:no;2:yes
-LIVER BIG	category	1:no;2:yes
-LIVER FIRM	category	1:no;2:yes
-SPLEEN PALPABLE	category	1:no;2:yes
-SPIDERS	category	1:no;2:yes
-ASCITES	category	1:no;2:yes
-VARICES	category	1:no;2:yes
+STEROID	category	1:yes;2:no
+ANTIVIRALS	category	1:yes;2:no
+FATIGUE	category	1:yes;2:no
+MALAISE	category	1:yes;2:no
+ANOREXIA	category	1:yes;2:no
+LIVER BIG	category	1:yes;2:no
+LIVER FIRM	category	1:yes;2:no
+SPLEEN PALPABLE	category	1:yes;2:no
+SPIDERS	category	1:yes;2:no
+ASCITES	category	1:yes;2:no
+VARICES	category	1:yes;2:no
 BILIRUBIN	float	0.39,4.00
 ALK PHOSPHATE	float	33, 80, 120, 160, 200, 250
 SGOT	float	13,500
 ALBUMIN	float	2.1,6.0
 PROTIME	float	10,90
-HISTOLOGY	category	1:no;2:yes
+HISTOLOGY	category	1:yes;2:no
