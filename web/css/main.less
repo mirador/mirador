@@ -145,13 +145,46 @@ body {
             #title {
                 width: 500px;
                 float: left;
-            }
-            #button {
-                margin-top: 15px;
-            }			
-			h1 {
-                display: inline;
-                padding-left: 10px;
+                h1 {
+                	padding-left: 10px;
+                }
+            }		
+			#links {
+				div {
+					float: right;
+					background: fade(@warm, 50%);
+					height: 30px;
+					margin: 10px 0 0 5px;
+					width: 80px;
+					h1 {
+						font-family: RoboReg;
+						color: white;
+						font-size: 14px;
+						line-height: 30px;
+						padding: 0 15px;
+						text-align: center;
+					}
+				}
+			}
+			#button {
+				float: right;
+				input {
+					margin-top: 5px;
+					height: 40px;
+					border-radius: 0;
+					background: fade(@warm, 50%);
+					border: 0px;
+					font-family: RoboReg;
+					font-size: 14px;
+					color: white;
+					.anti-aliased();
+					padding: 0 10px;
+					.ease();
+					cursor: pointer;
+					&:hover {
+						opacity: .8;
+					}
+				}
 			}
 		}
 		#intro {
@@ -160,6 +193,7 @@ body {
 				padding: 95px 0 0px 0;
 				h2 {
 					font-size: 28px;
+					margin: 40px 0;
 				}
 			}
 		}
@@ -233,6 +267,61 @@ body {
 					width: auto;
 					max-width: 70%;
 					height: auto;
+				}
+				.section {
+					border-top: 1px solid fade(@warm, 20%);
+					margin: 30px 0;
+					&#guideline {
+						height: 340px;
+						min-width: 700px;
+					}
+					.category {
+						float: left;
+						width: 200px;
+						height: 200px;
+						background: white;
+						margin-right: 20px;
+						.shadow();
+						position: relative;
+						.ease();
+						cursor: pointer;
+						&:hover {
+							.shadow(0px, 0px, 5px, 5px)
+						}
+						h4 {
+							font-family: MerriLight;
+							font-size: 18px;
+							padding: 0 10px;
+							color: fade(@warm, 80%);
+						}
+						h1 {
+							font-family: RoboReg;
+							font-size: 14px;
+							text-align: center;
+							text-transform: uppercase;
+							width: 100%;
+							margin-top: 15px;
+							position: absolute;
+							bottom: 0px;
+							line-height: 50px;
+							color: white;
+						}
+						.color {
+							width: 100%;
+							height: 5px;
+							position: absolute;
+							top: 0px;
+						}
+						&#bio .color, &#bio h1 {
+							background: rgb(0, 155, 123);
+						}
+						&#social .color, &#social h1 {
+							background: rgb(42, 82, 139);
+						}
+						&#financial .color, &#financial h1 {
+							background: rgb(136, 1, 6);
+						}
+					}
 				}
 			}
 

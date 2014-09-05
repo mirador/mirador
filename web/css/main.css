@@ -115,14 +115,49 @@ body #main-con #header-con #title {
   width: 500px;
   float: left;
 }
-body #main-con #header-con #button {
-  margin-top: 15px;
-}
-body #main-con #header-con h1 {
-  display: inline;
+body #main-con #header-con #title h1 {
   padding-left: 10px;
 }
-
+body #main-con #header-con #links div {
+  float: right;
+  background: rgba(30, 20, 0, 0.5);
+  height: 30px;
+  margin: 10px 0 0 5px;
+  width: 80px;
+}
+body #main-con #header-con #links div h1 {
+  font-family: RoboReg;
+  color: white;
+  font-size: 14px;
+  line-height: 30px;
+  padding: 0 15px;
+  text-align: center;
+}
+body #main-con #header-con #button {
+  float: right;
+}
+body #main-con #header-con #button input {
+  margin-top: 5px;
+  height: 40px;
+  border-radius: 0;
+  background: rgba(30, 20, 0, 0.5);
+  border: 0px;
+  font-family: RoboReg;
+  font-size: 14px;
+  color: white;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  padding: 0 10px;
+  webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+body #main-con #header-con #button input:hover {
+  opacity: .8;
+}
 body #main-con #intro {
   padding: 95px 0 40px 0;
 }
@@ -131,6 +166,7 @@ body #main-con #intro.manual {
 }
 body #main-con #intro.manual h2 {
   font-size: 28px;
+  margin: 40px 0;
 }
 body #main-con #body-con {
   position: relative;
@@ -203,6 +239,71 @@ body #main-con #body-con #manual-contents img {
   width: auto;
   max-width: 70%;
   height: auto;
+}
+body #main-con #body-con #manual-contents .section {
+  border-top: 1px solid rgba(30, 20, 0, 0.2);
+  margin: 30px 0;
+}
+body #main-con #body-con #manual-contents .section#guideline {
+  height: 340px;
+  min-width: 700px;
+}
+body #main-con #body-con #manual-contents .section .category {
+  float: left;
+  width: 200px;
+  height: 200px;
+  background: white;
+  margin-right: 20px;
+  -webkit-box-shadow: 0px 0px 5px 3px rgba(30, 20, 0, 0.1);
+  -moz-box-shadow: 0px 0px 5px 3px rgba(30, 20, 0, 0.1);
+  box-shadow: 0px 0px 5px 3px rgba(30, 20, 0, 0.1);
+  position: relative;
+  webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+body #main-con #body-con #manual-contents .section .category:hover {
+  -webkit-box-shadow: 0px 0px 5px 5px rgba(30, 20, 0, 0.1);
+  -moz-box-shadow: 0px 0px 5px 5px rgba(30, 20, 0, 0.1);
+  box-shadow: 0px 0px 5px 5px rgba(30, 20, 0, 0.1);
+}
+body #main-con #body-con #manual-contents .section .category h4 {
+  font-family: MerriLight;
+  font-size: 18px;
+  padding: 0 10px;
+  color: rgba(30, 20, 0, 0.8);
+}
+body #main-con #body-con #manual-contents .section .category h1 {
+  font-family: RoboReg;
+  font-size: 14px;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+  margin-top: 15px;
+  position: absolute;
+  bottom: 0px;
+  line-height: 50px;
+  color: white;
+}
+body #main-con #body-con #manual-contents .section .category .color {
+  width: 100%;
+  height: 5px;
+  position: absolute;
+  top: 0px;
+}
+body #main-con #body-con #manual-contents .section .category#bio .color,
+body #main-con #body-con #manual-contents .section .category#bio h1 {
+  background: #009b7b;
+}
+body #main-con #body-con #manual-contents .section .category#social .color,
+body #main-con #body-con #manual-contents .section .category#social h1 {
+  background: #2a528b;
+}
+body #main-con #body-con #manual-contents .section .category#financial .color,
+body #main-con #body-con #manual-contents .section .category#financial h1 {
+  background: #880106;
 }
 body #main-con #body-con #instructions {
   width: 48%;
