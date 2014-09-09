@@ -345,6 +345,41 @@ body #main-con #body-con #more-info #reading a {
 body #main-con #body-con #more-info #reading a:hover {
   text-decoration: underline;
 }
+body #main-con #body-con form ::-webkit-input-placeholder {
+  color: white;
+}
+body #main-con #body-con form :-moz-placeholder {
+  /* Firefox 18- */
+  color: white;
+}
+body #main-con #body-con form ::-moz-placeholder {
+  /* Firefox 19+ */
+  color: white;
+}
+body #main-con #body-con form :-ms-input-placeholder {
+  color: white;
+}
+body #main-con #body-con form input {
+  padding: 15px;
+  margin: 5px 0;
+  border: 1px solid white;
+  background: rgba(30, 20, 0, 0.2);
+  -webkit-font-smoothing: antialiased !important;
+  -moz-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  font-size: 14px;
+}
+body #main-con #body-con form input[type="submit"] {
+  width: 100px;
+  line-height: 15px;
+  background: #278dd2;
+  color: white;
+  border: 0px;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
 body #main-con #footer {
   border-top: 1px solid rgba(30, 20, 0, 0.25);
   height: 50px;
