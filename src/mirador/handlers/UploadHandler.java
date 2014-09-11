@@ -110,24 +110,18 @@ public class UploadHandler {
         }     
       
         upload(username, password, url, db, var1, var2, rangelist, historystring);
-        
-//        JOptionPane JOptionPane = new JOptionPane();
-        javax.swing.JOptionPane.showMessageDialog(app.frame, "Upload successful.", "Success!",-1,null);
+        javax.swing.JOptionPane.showMessageDialog(app.frame, "Upload successful.", "Success!", -1, null);
       } catch (ConnectException e) {
         connected = false;
-        //JOptionPane JOptionPane = new JOptionPane();
         javax.swing.JOptionPane.showMessageDialog(app.frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
         System.out.println("authenticated but not connected");  
       } catch (NullPointerException e){
         JOptionPane.showMessageDialog(app.frame, "Please select a variable pair by clicking on a box.", "Error",-1,null);
         System.out.println("authenticated but no box selected");
       } catch (Exception e) {
-        // TODO Auto-generated catch block
-//        e.printStackTrace();
         System.out.println("some other error");
       }         
     } else if (connected){
-//    JOptionPane JOptionPane = new JOptionPane();
       javax.swing.JOptionPane.showMessageDialog(app.frame, "Those user credentials were not recognized. Please try again.", "Error",-1,null);      
     }
   }

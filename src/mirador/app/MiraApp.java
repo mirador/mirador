@@ -266,7 +266,7 @@ public class MiraApp extends PApplet {
   
   public void uploadSession() {    
     if (!uploader.isAuthenticated()) {
-      UserLogin login = new UserLogin("SEErador - Login", this);
+      UserLogin login = new UserLogin(this);
       login.setVisible(true);
     } else {
       uploader.upload();

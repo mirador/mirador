@@ -18,12 +18,18 @@ import javax.swing.JTextField;
 public class UserLogin extends JFrame {
   protected MiraApp app;
   
-  public UserLogin(String tileString, MiraApp app) {
+  public UserLogin(MiraApp app) {
     super();
     this.app = app;
     
+    
     setSize(300, 150);
-    setTitle(tileString);
+    setTitle("Sign in");
+    setResizable(false);
+    setAlwaysOnTop(true);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setLocationRelativeTo(app.frame);
+    
 //    setVisible(true);
     
     initPanel();
@@ -34,7 +40,7 @@ public class UserLogin extends JFrame {
         
     panel.setLayout(null);
 
-    JLabel userLabel = new JLabel("User");
+    JLabel userLabel = new JLabel("Username");
     userLabel.setBounds(10, 10, 80, 25);
     panel.add(userLabel);
 
@@ -50,12 +56,12 @@ public class UserLogin extends JFrame {
     passwordText.setBounds(100, 40, 160, 25);
     panel.add(passwordText);
 
-    JButton loginButton = new JButton("Login");
-    loginButton.setBounds(5, 80, 80, 25);
+    JButton loginButton = new JButton("Submit");
+    loginButton.setBounds(160, 80, 80, 25);
     panel.add(loginButton);
     
     JButton registerButton = new JButton("What's this?");
-    registerButton.setBounds(160, 80, 100, 25);
+    registerButton.setBounds(5, 80, 100, 25);
     panel.add(registerButton);    
     
     loginButton.addActionListener(new ActionListener() {
@@ -66,8 +72,8 @@ public class UserLogin extends JFrame {
         app.uploader.authenticate();        
         app.uploader.upload();
         if (app.uploader.isAuthenticated()) {
-          setVisible(false);          
-        }        
+          UserLogin.this.dispose();        
+        }     
       }
     });
     
