@@ -21,8 +21,7 @@ public class UserLogin extends JFrame {
   public UserLogin(MiraApp app) {
     super();
     this.app = app;
-    
-    
+        
     setSize(300, 150);
     setTitle("Sign in");
     setResizable(false);
@@ -33,6 +32,15 @@ public class UserLogin extends JFrame {
 //    setVisible(true);
     
     initPanel();
+  }
+  
+  public void setVisible(boolean b) {
+    super.setVisible(b);
+    if (b) {
+      app.intf.disable();
+    } else {
+      app.intf.enable();
+    }
   }
   
   protected void initPanel() {
@@ -66,14 +74,17 @@ public class UserLogin extends JFrame {
     
     loginButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
+        UserLogin.this.setVisible(false);
         app.uploader.setConnected(true);
         app.uploader.setUsername(userText.getText());
         app.uploader.setPassword(new String(passwordText.getPassword()));
-        app.uploader.authenticate();        
+        app.uploader.authenticate();
         app.uploader.upload();
         if (app.uploader.isAuthenticated()) {
-          UserLogin.this.dispose();        
-        }     
+          UserLogin.this.dispose();    
+        } else {
+          UserLogin.this.setVisible(true);
+        }
       }
     });
     

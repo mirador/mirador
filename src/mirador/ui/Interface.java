@@ -44,7 +44,8 @@ public class Interface implements PConstants {
   protected String recFilename;  
   
   protected int state;
- 
+  protected boolean enabled;  
+  
   protected boolean usingKeymap;
   protected HashMap<Character, Widget> keyMap;  
   protected HashMap<Integer, Widget> codeMap;
@@ -81,7 +82,16 @@ public class Interface implements PConstants {
     }
     
     bckColor = 0xFFFFFFFF;
+    enabled = true;
   }  
+  
+  public void enable() {
+    enabled = true;
+  }
+
+  public void disable() {
+    enabled = false;
+  }
   
   public void setBackground(int color) {
     bckColor = color;
@@ -326,6 +336,8 @@ public class Interface implements PConstants {
   }
   
   public void mousePressed() {
+    if (!enabled) return;
+    
     Widget selected0 = selected;
     selected = null;
     
@@ -357,6 +369,8 @@ public class Interface implements PConstants {
   }
 
   public void mouseDragged() {
+    if (!enabled) return;
+    
     if (selected != null) {
       Widget handler = selected;
       boolean dragParent = false;
@@ -386,6 +400,8 @@ public class Interface implements PConstants {
   }  
 
   public void mouseReleased() {
+    if (!enabled) return;
+    
     if (selected != null) {
       Widget handler = selected;      
       handler.updateMouse(app.mouseX, app.mouseY, app.pmouseX, app.pmouseY);
@@ -396,6 +412,8 @@ public class Interface implements PConstants {
   }
   
   public void mouseMoved() {
+    if (!enabled) return;
+    
     for (Widget wt: drawnWidgets) {
       wt.updateMouse(app.mouseX, app.mouseY, app.pmouseX, app.pmouseY);
     }    
@@ -445,6 +463,8 @@ public class Interface implements PConstants {
   }  
   
   public void keyPressed() {
+    if (!enabled) return;
+    
     Widget handler = null;
     if (usingKeymap && (selected == null || !selected.isCapturingKeys())) {
       handler = app.key == CODED ? codeMap.get(app.keyCode) : keyMap.get(app.key);
@@ -460,7 +480,9 @@ public class Interface implements PConstants {
     }     
   }
   
-  public void keyReleased() { 
+  public void keyReleased() {
+    if (!enabled) return;
+    
     Widget handler = null;    
     if (usingKeymap && (selected == null || !selected.isCapturingKeys())) {
       handler = app.key == CODED ? codeMap.get(app.keyCode) : keyMap.get(app.key);
@@ -475,6 +497,8 @@ public class Interface implements PConstants {
   }
   
   public void keyTyped() {
+    if (!enabled) return;
+    
     Widget handler = null;
     if (usingKeymap && (selected == null || !selected.isCapturingKeys())) {
       handler = app.key == CODED ? codeMap.get(app.keyCode) : keyMap.get(app.key);
