@@ -149,7 +149,7 @@ public class RowVariable extends RowWidget {
     }
     axisAlpha.update();
     
-    if (sortMode == UNSORTED) {
+    if (sortMode == UNSORTED && intf.isEnabled()) {
       updateLabel();
     }
   }

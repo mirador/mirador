@@ -85,6 +85,10 @@ public class Interface implements PConstants {
     enabled = true;
   }  
   
+  public boolean isEnabled() {
+    return enabled;
+  }
+  
   public void enable() {
     enabled = true;
   }
