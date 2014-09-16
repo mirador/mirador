@@ -26,10 +26,19 @@ public class UserLogin extends JFrame {
     setTitle("Sign in");
     setResizable(false);
     setAlwaysOnTop(true);
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);    
     setLocationRelativeTo(app.frame);
     
+//    setUndecorated(true);    
 //    setVisible(true);
+    
+    addWindowListener(new java.awt.event.WindowAdapter() {
+      @Override
+      public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+        UserLogin.this.app.intf.enable();
+      }
+    });  
+    
     
     initPanel();
   }
