@@ -100,7 +100,7 @@ public class UploadHandler {
     if (authenticated) {
       try {
         String url = "http://localhost/classes/access_user/add_submission.php";
-        String db = app.project.dataTitle;
+        String db = app.project.dataTitle.replace("'", "\\'");
         String var1 = app.browser.getSelectedCol().getName();
         String var2 = app.browser.getSelectedRow().getName();
         String rangelist = "";
@@ -109,8 +109,7 @@ public class UploadHandler {
           rangelist = app.ranges.toString();
         }     
       
-        upload(username, password, url, db, var1, var2, rangelist, historystring);
-        javax.swing.JOptionPane.showMessageDialog(app.frame, "Upload successful.", "Success!", -1, null);
+        upload(username, password, url, db, var1, var2, rangelist, historystring);      
       } catch (ConnectException e) {
         connected = false;
         javax.swing.JOptionPane.showMessageDialog(app.frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
@@ -139,8 +138,14 @@ public class UploadHandler {
     client = HttpClientBuilder.create().build();
 
     List<NameValuePair> submissionParams = 
-        getFormParams(result,username,password, db, var1, var2, ranges,historystring);
-    sendPost(url, submissionParams);
+        getFormParams(result, username, password, db, var1, var2, ranges, historystring);
+    boolean postRes = sendPost(url, submissionParams);
+    if (postRes) {
+      javax.swing.JOptionPane.showMessageDialog(app.frame, "Upload successful.", "Success!", -1, null);  
+    } else {
+      javax.swing.JOptionPane.showMessageDialog(app.frame, "Error uploading the submission to the database.", "Error",-1,null);
+      System.out.println("MySQL error most likely");            
+    }  
   }
 
   private boolean authenticate(String username, String password) throws Exception, ConnectException{
@@ -191,12 +196,15 @@ public class UploadHandler {
       result.append(line);
     }
 
-    System.out.println(result.toString());
-
-    if (responseCode == 302){
-      return true;
-    } else{
+    String str = result.toString();
+    System.out.println(str);
+//
+    
+    // http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+    if (responseCode >= 400 || -1 < str.indexOf("You have an error in your SQL syntax")) {
       return false;
+    } else{
+      return true;
     }
   }
 

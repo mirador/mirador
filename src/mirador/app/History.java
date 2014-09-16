@@ -67,21 +67,21 @@ public class History {
   public void addPair(Variable varx, Variable vary) {
     VariablePair pair = new VariablePair(varx, vary);
     if (pairs.add(pair)) {
-      write("+PAIR\t" + app.millis() + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());      
+      write("+PAIR\t" + app.millis() + " " + varx.getName() +"\t" + vary.getName());      
     }    
   }
   
   public void removePair(Variable varx, Variable vary) {
     VariablePair pair = new VariablePair(varx, vary);
     if (pairs.remove(pair)) {
-      write("-PAIR\t" + app.millis() + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+      write("-PAIR\t" + app.millis() + " " + varx.getName() +"\t" + vary.getName());
     }
   }
   
   public void addRange(Variable var, Range range) {
     VariableRange vrange = new VariableRange(var, range);
     if (ranges.add(vrange)) {
-      write("+RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
+      write("+RANGE\t" + app.millis() + " " + var.getName() +"\t" + var.formatRange(range, false));
     }
   }
   
@@ -96,7 +96,7 @@ public class History {
     if (vrange != null) {
       Range range = vrange.range;
       ranges.remove(vrange);
-      write("-RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
+      write("-RANGE\t" + app.millis() + " " + var.getName() +"\t" + var.formatRange(range, false));
     }
   }
   
@@ -112,7 +112,7 @@ public class History {
       ranges.remove(vrange);
       vrange = new VariableRange(var, range);
       if (ranges.add(vrange)) {
-        write("~RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
+        write("~RANGE\t" + app.millis() + " " + var.getName() +"\t" + var.formatRange(range, false));
       }      
     }
   }
@@ -124,7 +124,7 @@ public class History {
         VariableRange vrange = (VariableRange)obj;
         Variable var = vrange.var;
         Range range = vrange.range;
-        write("-RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
+        write("-RANGE\t" + app.millis() + " " + var.getName() +"\t" + var.formatRange(range, false));
       }
     }
   }
@@ -155,7 +155,7 @@ public class History {
       VariablePair pair = new VariablePair(varx, vary);
       if (!pair.equals(selPair)) {
         selPair = pair;
-        write("SELECT\t" + app.millis() + "\t" + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+        write("SELECT\t" + app.millis() + "\t" + varx.getName() +"\t" + vary.getName());
       }      
     } else if (selPair != null) {
       selPair = null;
@@ -166,7 +166,7 @@ public class History {
   public void sort(Variable var) {
     if (sortVar != var) {
       sortVar = var;
-      write("SORT\t" + app.millis() + "\t" + var.getName() + ":" + var.getAlias());
+      write("SORT\t" + app.millis() + "\t" + var.getName());
     }
   }
   
