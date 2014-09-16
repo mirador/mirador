@@ -112,16 +112,17 @@ public class UploadHandler {
         upload(username, password, url, db, var1, var2, rangelist, historystring);      
       } catch (ConnectException e) {
         connected = false;
-        javax.swing.JOptionPane.showMessageDialog(app.frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
+        javax.swing.JOptionPane.showMessageDialog(app.frame, "Please check you are connected to the internet and try again.", "Error", -1, null);
         System.out.println("authenticated but not connected");  
       } catch (NullPointerException e){
-        JOptionPane.showMessageDialog(app.frame, "Please select a variable pair by clicking on a box.", "Error",-1,null);
+        JOptionPane.showMessageDialog(app.frame, "Please select a variable pair by clicking on a plot.", "Error", -1, null);
         System.out.println("authenticated but no box selected");
       } catch (Exception e) {
+        JOptionPane.showMessageDialog(app.frame, "An unknown error happened...", "Error", -1, null);
         System.out.println("some other error");
       }         
     } else if (connected){
-      javax.swing.JOptionPane.showMessageDialog(app.frame, "Those user credentials were not recognized. Please try again.", "Error",-1,null);      
+      javax.swing.JOptionPane.showMessageDialog(app.frame, "Those user credentials were not recognized. Please try again.", "Error", -1, null);      
     }
   }
   
@@ -198,7 +199,6 @@ public class UploadHandler {
 
     String str = result.toString();
     System.out.println(str);
-//
     
     // http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
     if (responseCode >= 400 || -1 < str.indexOf("You have an error in your SQL syntax")) {

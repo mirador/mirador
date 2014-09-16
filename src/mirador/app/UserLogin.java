@@ -62,7 +62,7 @@ public class UserLogin extends JFrame {
     panel.add(userLabel);
 
     final JTextField userText = new JTextField(20);
-    userText.setBounds(100, 10, 160, 25);
+    userText.setBounds(100, 10, 190, 25);
     panel.add(userText);
 
     JLabel passwordLabel = new JLabel("Password");
@@ -70,16 +70,16 @@ public class UserLogin extends JFrame {
     panel.add(passwordLabel);
 
     final JPasswordField passwordText = new JPasswordField(20);
-    passwordText.setBounds(100, 40, 160, 25);
+    passwordText.setBounds(100, 40, 190, 25);
     panel.add(passwordText);
 
-    JButton loginButton = new JButton("Submit");
-    loginButton.setBounds(160, 80, 80, 25);
-    panel.add(loginButton);
-    
     JButton registerButton = new JButton("What's this?");
-    registerButton.setBounds(5, 80, 100, 25);
-    panel.add(registerButton);    
+    registerButton.setBounds(5, 90, 100, 25);
+    panel.add(registerButton);
+    
+    JButton loginButton = new JButton("Submit");
+    loginButton.setBounds(210, 90, 80, 25);
+    panel.add(loginButton);
     
     loginButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {
@@ -100,7 +100,7 @@ public class UserLogin extends JFrame {
     registerButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {        
         try {
-          String url ="http://localhost/classes/access_user/register.php";
+          String url ="http://fathom.info/mirador";
           Desktop dt = Desktop.getDesktop();
           URI uri = new URI(url);
           dt.browse(uri.resolve(uri));
