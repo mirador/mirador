@@ -100,7 +100,7 @@ public class UserLogin extends JFrame {
     registerButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent event) {        
         try {
-          String url ="http://fathom.info/mirador";
+          String url ="http://mirador.fathom.info/";
           Desktop dt = Desktop.getDesktop();
           URI uri = new URI(url);
           dt.browse(uri.resolve(uri));
