@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import mirador.app.MiraApp;
+import miralib.data.Variable;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -99,10 +100,12 @@ public class UploadHandler {
   public void upload() {
     if (authenticated) {
       try {
+        Variable varx = app.browser.getSelectedCol();
+        Variable vary = app.browser.getSelectedRow();
         String url = "http://localhost/classes/access_user/add_submission.php";
         String db = app.project.dataTitle.replace("'", "\\'");
-        String var1 = app.browser.getSelectedCol().getName();
-        String var2 = app.browser.getSelectedRow().getName();
+        String var1 = vary.getName() + ":" + vary.getAlias().replace("'", "\\'");
+        String var2 = varx.getName() + ":" + varx.getAlias().replace("'", "\\'");
         String rangelist = "";
         String historystring = app.history.read();
         if (app.ranges != null){
