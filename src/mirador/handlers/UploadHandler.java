@@ -171,7 +171,7 @@ public class UploadHandler {
     HttpPost post = new HttpPost(url);
 
     // add header
-    post.setHeader("Host", "http://mirador.fathom.info");
+    post.setHeader("Host", "mirador.fathom.info");
     post.setHeader("User-Agent", USER_AGENT);
     post.setHeader("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     post.setHeader("Cookie", getCookies());
