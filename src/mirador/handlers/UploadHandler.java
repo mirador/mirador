@@ -44,7 +44,8 @@ public class UploadHandler {
   //client.setRedirectStrategy(new LaxRedirectStrategy());
 
   private final String USER_AGENT = "Mozilla/5.0";
-
+//  private final String SERVER_NAME = "localhost";
+  private final String SERVER_NAME = "mirador.fathom.info";
   
   protected String username;
   protected String password;
@@ -102,7 +103,7 @@ public class UploadHandler {
       try {
         Variable varx = app.browser.getSelectedCol();
         Variable vary = app.browser.getSelectedRow();
-        String url = "http://mirador.fathom.info/classes/access_user/add_submission.php";
+        String url = "http://" + SERVER_NAME + "/classes/access_user/add_submission.php";
         String db = app.project.dataTitle.replace("'", "\\'");
         String var1 = vary.getName() + ":" + vary.getAlias().replace("'", "\\'");
         String var2 = varx.getName() + ":" + varx.getAlias().replace("'", "\\'");
@@ -153,7 +154,7 @@ public class UploadHandler {
   }
 
   private boolean authenticate(String username, String password) throws Exception, ConnectException{
-    String url = "http://mirador.fathom.info/classes/access_user/login.php";
+    String url = "http://" + SERVER_NAME + "/classes/access_user/login.php";
     CookieHandler.setDefault(new CookieManager());
 //    HttpConnector http = new HttpConnector();
     String page = GetPageContent(url);
@@ -171,12 +172,12 @@ public class UploadHandler {
     HttpPost post = new HttpPost(url);
 
     // add header
-    post.setHeader("Host", "mirador.fathom.info");
+    post.setHeader("Host", SERVER_NAME);
     post.setHeader("User-Agent", USER_AGENT);
     post.setHeader("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     post.setHeader("Cookie", getCookies());
     post.setHeader("Connection", "keep-alive");
-    post.setHeader("Referer", "http://mirador.fathom.info/classes/access_user/login.php");
+    post.setHeader("Referer", "http://" + SERVER_NAME + "/classes/access_user/login.php");
     post.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
     post.setEntity(new UrlEncodedFormEntity(postParams));
