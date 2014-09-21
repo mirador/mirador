@@ -108,9 +108,9 @@ public class UploadHandler {
             String var1 = vary.getName() + ":" + vary.getAlias().replace("'", "\\'");
             String var2 = varx.getName() + ":" + varx.getAlias().replace("'", "\\'");
             String rangelist = "";
-            String historystring = app.history.read();
+            String historystring = app.history.read().replace("'", "\\'");
             if (app.ranges != null){
-              rangelist = app.ranges.toString();
+              rangelist = app.ranges.toString().replace("'", "\\'");
             }          
             upload(username, password, url, db, var1, var2, rangelist, historystring);      
           } catch (ConnectException e) {
