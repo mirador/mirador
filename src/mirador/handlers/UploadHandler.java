@@ -44,8 +44,8 @@ public class UploadHandler {
   //client.setRedirectStrategy(new LaxRedirectStrategy());
 
   private final String USER_AGENT = "Mozilla/5.0";
-//  private final String SERVER_NAME = "localhost";
-  private final String SERVER_NAME = "mirador.fathom.info";
+  private final String SERVER_NAME = "localhost";
+//  private final String SERVER_NAME = "mirador.fathom.info";
   
   protected String username;
   protected String password;
@@ -84,64 +84,60 @@ public class UploadHandler {
     return connected;
   }
   
-  public void authenticate() {
+  public void authenticate() {    
     try {
       authenticated = authenticate(username, password);
       System.out.println(authenticated);
-//      loginFrame.setVisible(false);
     } catch (ConnectException e){
-//    JOptionPane JOptionPane = new JOptionPane();
       javax.swing.JOptionPane.showMessageDialog(app.frame, "Please check you are connected to the internet and try again.", "Error",-1,null);
       connected = false;        
     } catch (Exception e) {
       e.printStackTrace();
-    }      
+    }
   }
   
   public void upload() {
-    if (authenticated) {
-      try {
-        Variable varx = app.browser.getSelectedCol();
-        Variable vary = app.browser.getSelectedRow();
-        String url = "http://" + SERVER_NAME + "/classes/access_user/add_submission.php";
-        String db = app.project.dataTitle.replace("'", "\\'");
-        String var1 = vary.getName() + ":" + vary.getAlias().replace("'", "\\'");
-        String var2 = varx.getName() + ":" + varx.getAlias().replace("'", "\\'");
-        String rangelist = "";
-        String historystring = app.history.read();
-        if (app.ranges != null){
-          rangelist = app.ranges.toString();
-        }     
-      
-        upload(username, password, url, db, var1, var2, rangelist, historystring);      
-      } catch (ConnectException e) {
-        connected = false;
-        javax.swing.JOptionPane.showMessageDialog(app.frame, "Please check you are connected to the internet and try again.", "Error", -1, null);
-        System.out.println("authenticated but not connected");  
-      } catch (NullPointerException e){
-        JOptionPane.showMessageDialog(app.frame, "Please select a variable pair by clicking on a plot.", "Error", -1, null);
-        System.out.println("authenticated but no box selected");
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(app.frame, "An unknown error happened...", "Error", -1, null);
-        System.out.println("some other error");
-      }         
-    } else if (connected){
-      javax.swing.JOptionPane.showMessageDialog(app.frame, "Those user credentials were not recognized. Please try again.", "Error", -1, null);      
-    }
+    Thread thread = new Thread(new Runnable(){
+      public void run(){
+        if (authenticated) {
+          try {
+            Variable varx = app.browser.getSelectedCol();
+            Variable vary = app.browser.getSelectedRow();
+            String url = "http://" + SERVER_NAME + "/classes/access_user/add_submission.php";
+            String db = app.project.dataTitle.replace("'", "\\'");
+            String var1 = vary.getName() + ":" + vary.getAlias().replace("'", "\\'");
+            String var2 = varx.getName() + ":" + varx.getAlias().replace("'", "\\'");
+            String rangelist = "";
+            String historystring = app.history.read();
+            if (app.ranges != null){
+              rangelist = app.ranges.toString();
+            }          
+            upload(username, password, url, db, var1, var2, rangelist, historystring);      
+          } catch (ConnectException e) {
+            connected = false;
+            javax.swing.JOptionPane.showMessageDialog(app.frame, "Please check you are connected to the internet and try again.", "Error", -1, null);
+            System.out.println("authenticated but not connected");  
+          } catch (NullPointerException e){
+            JOptionPane.showMessageDialog(app.frame, "Please select a variable pair by clicking on a plot.", "Error", -1, null);
+            System.out.println("authenticated but no box selected");
+          } catch (Exception e) {
+            JOptionPane.showMessageDialog(app.frame, "An unknown error happened...", "Error", -1, null);
+            System.out.println("some other error");
+          }         
+        } else if (connected){
+          javax.swing.JOptionPane.showMessageDialog(app.frame, "Those user credentials were not recognized. Please try again.", "Error", -1, null);      
+        }
+      }
+    });
+    thread.start();
   }
   
   private void upload(String username, String password, String url,String db, String var1, String var2, String ranges, String historystring) throws ConnectException, Exception{
     CookieHandler.setDefault(new CookieManager());
-
-//    HttpConnector http = new HttpConnector();
-
     String result = GetPageContent(url);
     System.out.println(result);
-
     System.out.println("Got the add submission page. Let's parse.");
-
     client = HttpClientBuilder.create().build();
-
     List<NameValuePair> submissionParams = 
         getFormParams(result, username, password, db, var1, var2, ranges, historystring);
     boolean postRes = sendPost(url, submissionParams);
@@ -150,21 +146,17 @@ public class UploadHandler {
     } else {
       javax.swing.JOptionPane.showMessageDialog(app.frame, "Error uploading the submission to the database.", "Error",-1,null);
       System.out.println("MySQL error most likely");            
-    }  
+    }
   }
 
-  private boolean authenticate(String username, String password) throws Exception, ConnectException{
+  private boolean authenticate(String username, String password) throws Exception, ConnectException{   
     String url = "http://" + SERVER_NAME + "/classes/access_user/login.php";
     CookieHandler.setDefault(new CookieManager());
-//    HttpConnector http = new HttpConnector();
     String page = GetPageContent(url);
     List<NameValuePair> postParams = 
         getFormParams(page, username, password);
-
     boolean authenticated = sendPost(url, postParams);
-
-    //System.out.println(authenticated);
-    return authenticated;
+    return authenticated;    
   }
 
   private boolean sendPost(String url, List<NameValuePair> postParams) 
