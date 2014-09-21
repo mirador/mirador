@@ -216,7 +216,7 @@ public class History {
   }
   
   protected void write(String line) {
-    writer.println(line.replace("'", "\\'"));
+    writer.println(line);
     changed = true;
   }
   

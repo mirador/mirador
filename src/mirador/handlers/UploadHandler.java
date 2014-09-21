@@ -44,8 +44,8 @@ public class UploadHandler {
   //client.setRedirectStrategy(new LaxRedirectStrategy());
 
   private final String USER_AGENT = "Mozilla/5.0";
-  private final String SERVER_NAME = "localhost";
-//  private final String SERVER_NAME = "mirador.fathom.info";
+//  private final String SERVER_NAME = "localhost";
+  private final String SERVER_NAME = "mirador.fathom.info";
   
   protected String username;
   protected String password;
@@ -104,13 +104,13 @@ public class UploadHandler {
             Variable varx = app.browser.getSelectedCol();
             Variable vary = app.browser.getSelectedRow();
             String url = "http://" + SERVER_NAME + "/classes/access_user/add_submission.php";
-            String db = app.project.dataTitle.replace("'", "\\'");
-            String var1 = vary.getName() + ":" + vary.getAlias().replace("'", "\\'");
-            String var2 = varx.getName() + ":" + varx.getAlias().replace("'", "\\'");
+            String db = app.project.dataTitle.replace("'", "''");
+            String var1 = vary.getName() + ":" + vary.getAlias().replace("'", "''");
+            String var2 = varx.getName() + ":" + varx.getAlias().replace("'", "''");
             String rangelist = "";
-            String historystring = app.history.read().replace("'", "\\'");
+            String historystring = app.history.read().replace("'", "''");
             if (app.ranges != null){
-              rangelist = app.ranges.toString().replace("'", "\\'");
+              rangelist = app.ranges.toString().replace("'", "''");
             }          
             upload(username, password, url, db, var1, var2, rangelist, historystring);      
           } catch (ConnectException e) {
