@@ -6,8 +6,8 @@
   <property name="jar.name" value="${dist.name}.jar" />
   <property name="class.name" value="mirador.app.Mirador" />
 
-  <property name="version" value="1.1" />
-  <property name="revision" value="140630" />
+  <property name="version" value="1.2beta" />
+  <property name="revision" value="140923" />
 
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -145,7 +145,7 @@ convert image.png  -bordercolor white -border 0 \
 
   <target name="macosx" depends="jar">
     <!-- Set the version of Java that must be present to build. -->
-    <property name="jdk.update.macosx" value="60" />
+    <property name="jdk.update.macosx" value="67" />
     <property name="jdk.path.macosx" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_${jdk.update.macosx}.jdk" />
     
     <fail if="macosx" unless="macosx_jdk_found"
@@ -246,6 +246,11 @@ convert image.png  -bordercolor white -border 0 \
    <!-- this requires an Apple Developer certificate -->
    <property name="signer" value="'Developer ID Application'" />
 
+  	<!-- Code signer doesn't allow for symbolic links in OSX 10.9.5+ -->
+  	<delete file="macosx/${app.name}.app/Contents/PlugIns/jdk1.7.0_67.jdk/Contents/MacOS/libjli.dylib" />   	
+  	<copy file="macosx/${app.name}.app/Contents/PlugIns/jdk1.7.0_67.jdk/Contents/Home/jre/lib/jli/libjli.dylib" 
+  		  todir="macosx/${app.name}.app/Contents/PlugIns/jdk1.7.0_67.jdk/Contents/MacOS"/>
+  	
     <!-- first sign the JDK -->
     <exec executable="codesign" dir="macosx">
       <arg line="--force --sign ${signer} ${app.name}.app/Contents/PlugIns/jdk1.7.0_${jdk.update.macosx}.jdk" />
