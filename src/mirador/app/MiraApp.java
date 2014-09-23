@@ -36,7 +36,7 @@ public class MiraApp extends PApplet {
   static public String RENDERER = P2D;
   static public int SMOOTH_LEVEL = 4;
   static public final String APP_NAME = "mirador";
-  static public final String APP_VERSION = "1.2";
+  static public final String APP_VERSION = "1.2beta";
   
   static public String inputFile = "default.mira";
   static protected Preferences prefs;
