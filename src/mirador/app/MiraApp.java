@@ -238,6 +238,7 @@ public class MiraApp extends PApplet {
       loaded = false;
       animating = true;
       animTime = 0;
+      ranges.clear();
       animAlpha = new SoftFloat(255);
       loadThread = new LoadThread();
       loadThread.start();
