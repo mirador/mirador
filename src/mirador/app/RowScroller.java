@@ -162,7 +162,7 @@ public class RowScroller extends MiraWidget {
     SingleScroller currScroller = (SingleScroller)children.get(current);    
     if (key == CODED) {
       if (keyCode == LEFT) {
-        prev();
+        prev(mouseX > right());
       } else if (keyCode == RIGHT) {
         next();
       } else if (keyCode == UP) {
@@ -412,9 +412,9 @@ public class RowScroller extends MiraWidget {
         if (dragx) {
           int dx = pmouseX0 - mouseX;
           if (20 < dx) {
-            RowScroller.this.next();
+            RowScroller.this.next(false);
           } else if (dx < 20) {
-            RowScroller.this.prev();
+            RowScroller.this.prev(false);
           }
         } else {
           snap();
