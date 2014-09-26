@@ -107,9 +107,9 @@ public class InformationBar extends MiraWidget {
     if (countTask != null && countTask.isAlive()) {
       Log.message("Suspending count calculation...");
       countTask.interrupt();
-      while (countTask.isAlive()) {
-        Thread.yield();
-      }
+//      while (countTask.isAlive()) {
+//        Thread.yield();
+//      }
       Log.message("Done.");
     }  
     countTask = new CountTask();

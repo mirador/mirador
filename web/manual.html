@@ -13,7 +13,7 @@
 					<div id="img"></div>
 					<div id="title"><h1>mirador</h1></div>
 				</div>
-			</a>
+			</a>	
 			<div id="intro" class="basic manual">
 				<h2>User Manual</h2>
 			</div>
@@ -23,40 +23,14 @@
 					<p>Mirador is a software tool aimed at the visual exploration of complex datasets, with the ultimate goal of finding potential trends or correlations which can then be tested rigorously with more specialized statistical tools, and lead to new hypotheses. Although Mirador accepts any type of data as long as it is formatted correctly in a standard table format, it is specifically tailored to healthcare, epidemiological and infectious disease data.</p>
 
 					<h1>2. Main Interface</h1>
-					<p>The interface of Mirador consists of three main areas: the options panel on the left, the search and information bar on the top, and the variable browser occupying the rest of the screen. In the image below, the variable browser doesn't have a variable selected, so it shows default variable groups for the current dataset (Demographics, Clinical, Laboratory, and Treatment):</p>
+					<p>The interface of Mirador consists of three main areas: the options panel on the left, the search and information bar on the top, and the variable browser occupying the rest of the screen. In the image below, the variable browser doesn't have a variable selected, so it shows default variable groups for the current dataset (in the database open in the figure, they are Demographics, Examination, Laboratory, and Questionnaire, Composites, and Weights):</p>
 
 					<img src="css/images/main.png"/>
 
-					<p>The options panel allows the user to configure how the data is displayed on the variable browser, and allows the user to set some additional parameters of the program. The search bar lets the user lookup variables by name, which is useful in large datasets where manual browsing can be difficult. It also displays the number of selected data points under the current variable ranges (see section 4.4 below).</p>
+					<p>The options panel is the location from where the user can load a dataset, export selected data, upload findings, and grab a screen capture of the entire Mirador window in pdf format. The options panel also contains some additional parameters (P-value and available data %). The search bar lets the user lookup variables by name, which is useful in large datasets where manual browsing can be difficult. It also displays the number of selected data points under the current variable ranges.</p>
 
 					<h1>3. Loading data</h1>
-					<p>Upon start up, Mirador will open a file selection window to allow the user to select a file for upload. Currently, the only way to upload a new dataset into Mirador is to exit the program and go through the file selection process again at the beginning.</p>
-
-					<p>Mirador allows the upload of Comma-Separated Values (<a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV</a>), and Tab-Separated Values (<a href="http://en.wikipedia.org/wiki/Tab-separated_values">TSV</a>) files. Tables stored in the Open Document Spreadsheet (<a href="http://en.wikipedia.org/wiki/OpenDocument">ODS</a>) format are supported as well. A stand-alone csv, tsv, or ods file can be opened with the file selector as described in the previous paragraph. When selecting these types of files, Mirador will interpret each column as a variable, and each row as an individual data record holding a value for each variable. Missing values are allowed in the table, and identified by the "?" character. When conducting analysis, Mirador will do pairwise deletion of records with missing values. That is, when generating a plot or evaluating the association between variables X and Y, records that have a missing value in either the X column or the Y column will be ignored.</p>
-
-					<p>Each column or variable must have specific data types to be properly read by Mirador. The data types supported are the following:</p>
-					<ul>
-					<li><b>Category:</b> this type is used to characterize ordinal or nominal variables such as gender, martial status, etc.</li>
-					<li><b>Integer:</b> whole numbers between -2^31 and 2^31 - 1 (-2,147,483,648 and 2,147,483,647)</li>
-					<li><b>Long:</b> whole numbers between -2^63 and 2^63 - 1</li>
-					<li><b>Float:</b> single-precision (32 bit) floating-point values</li>
-					<li><b>Double:</b> double-precision (64 bit) floating-point values</li>					
-					</ul>
-					<p>
-					When loading a stand-alone table file, Mirador will try to guess the types of each column by inspecting its values. This approach works in most cases, but it might fail to assess the correct type in more ambiguous cases, such as when whole numbers are used to represent the different categories of an ordinal variable. In these cases, one can provide an auxiliary dictionary table that explicitly lists the data types for each column. This dictionary can be provided either as a csv or tsv file, and must contain two columns.  The first column contains the names of all the variables in the data table, and the second contains the corresponding type, which should be among the followin: int, long, float, double, or category. Mirador will automatically load any file called "dictionary.csv" or "dictionary.tsv" located alongside the main table file, and attempt to use it as its dictionary. Several examples are included with the Mirador download, and among them, the "Titanic" one shows how to define a simple dictionary file.
-					</p>
-
-					<p>
-					An example of when a dictionary is useful is when one has category variables that are coded in the table. If no additional information is provided, then Mirador will display the codes when labeling the axes, which can be confusing to the user. The mapping between codes and descriptions can be indicated in a third column in the dictionary file. The Titanic example also demonstrates this technique.
- 					</p>	
-
- 					<p>
- 					Sometimes, a less strict specification of types and code mappings could be convenient, for example when most of the types in the table can be accurately inferred from the values, with the exception of a few variables that need to be explicitly described. A codebook will allow for this, and a csv or tsv file will be read automatically if it is found inside the same folder as the main data file and named "codebook.csv" or "codebook.tsv". The "Diabetes 1999-2008" and "Indian Liver Patient" examples provided with the Mirador download uses codebook files and can serve as a reference for the time being.
-					</p>
-
-					<p>
-					Finally, more complex datasets often require additional information such as variable groupings, and sample weights (for faster loading times, save the tables in a binary format). To support these scenarios, Mirador offers a custom project format where all the information required to properly display the dataset (table and dictionary files, metadata specifications, additional parameters, etc.) can be stored in a .mira file. This file can be selected from the file dialog, and Mirador will parse it and open all the associated files. The "NHANES 2009-2010" example makes use of the .mira project format. However, this project format might still undergo changes after the 1.0 release.
-					</p>						
+					<p>Upon start up, Mirador will open a file selection window to allow the user to select a file for upload. To open a new dataset, you can use Load Data button in the options panel, which will bring another file selection window. <a href="data.html">This section</a> of the manual explains in detail the file formats supported by Mirador.</p>
 
 					<h1>4. Variable browser</h1>
 
@@ -162,9 +136,16 @@
 
 					<img src="css/images/histogram.png"/>
 
-					<p>The eikosogram is a plot where the width of each horizontal bin reflects the proportion of that bin in the data, and the vertical heights are proportional to the conditional probabilities of the Y (row) variable given the X (column) variable. It is <a href="http://fathom.info/latest/6246">particularly well suited</a> to depict associations between categorical variables.</p>
+					<p>The eikosogram is a plot where the width of each horizontal bin reflects the proportion of that bin in the data, and the vertical heights are proportional to the conditional probabilities of the Y (row) variable given the X (column) variable. It is <a href="http://fathom.info/latest/6246">well suited</a> to depict associations between categorical variables:</p>
 
 					<img src="css/images/eikosogram.png"/>
+
+                    <p>However, the eikosogram is not so convenient to represent a dependent numerical variable, because in this case there are typically many horizontal bands (as many as bin partitions along the Y axis), which make the plot difficult to read. Mirador uses a form of boxplot when Y is numerical (either integer or floating point), where the dark blue region is centered one standard deviation around the mean along the up and down directions, and the light blue extends two standard deviations away in both directions. As with the eikosograms, the width of each horizontal bin is proportional to its count:</p>
+
+                    <img src="css/images/eikosonum.png"/>
+
+                    <p>When the row and column correspond to the same variable, then the plot is a simple 1D histogram approximating the probability distribution of that variable, irrespective of the currently selected plot type:</p>
+					<img src="css/images/hist1d.png"/>
 
 					<h1>6. Profile view</h1>
 

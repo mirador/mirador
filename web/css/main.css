@@ -120,10 +120,10 @@ body #main-con #header-con #title h1 {
 }
 body #main-con #header-con #links div {
   float: right;
-  background: rgba(30, 20, 0, 0.5);
+  background: #ffa01e;
   height: 30px;
   margin: 10px 0 0 5px;
-  width: 80px;
+  width: 200px;
 }
 body #main-con #header-con #links div h1 {
   font-family: RoboReg;
@@ -231,6 +231,12 @@ body #main-con #body-con #manual-contents h1 {
 }
 body #main-con #body-con #manual-contents p {
   margin: 10px 0;
+}
+body #main-con #body-con #manual-contents a {
+  color: #278dd2;
+}
+body #main-con #body-con #manual-contents a:hover {
+  text-decoration: underline;
 }
 body #main-con #body-con #manual-contents h3 {
   margin: 20px 0 10px 0;

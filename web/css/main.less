@@ -152,10 +152,10 @@ body {
 			#links {
 				div {
 					float: right;
-					background: fade(@warm, 50%);
+					background: rgb(255, 160, 30);
 					height: 30px;
 					margin: 10px 0 0 5px;
-					width: 80px;
+					width: 200px;
 					h1 {
 						font-family: RoboReg;
 						color: white;
@@ -172,7 +172,7 @@ body {
 					margin-top: 5px;
 					height: 40px;
 					border-radius: 0;
-					background: rgb(255,135,39) ;
+					background: rgb(255,135,39);
 					border: 0px;
 					font-family: RoboReg;
 					font-size: 14px;
@@ -187,6 +187,8 @@ body {
 				}
 			}
 		}
+
+
 		#intro {
 			padding: 95px 0 40px 0;
 			&.manual {
@@ -258,6 +260,12 @@ body {
 				}
 				p {
 					margin: 10px 0;
+				}
+				a {
+					color: @blue;
+					&:hover {
+						text-decoration: underline;
+					}
 				}
 
 				h3{
