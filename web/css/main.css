@@ -331,6 +331,7 @@ body #main-con #body-con #more-info .topic h3 {
   margin-top: 0;
 }
 body #main-con #body-con #more-info #about {
+  position: absolute;
   width: 48%;
 }
 body #main-con #body-con #more-info #about a {
@@ -340,10 +341,8 @@ body #main-con #body-con #more-info #about a:hover {
   text-decoration: underline;
 }
 body #main-con #body-con #more-info #reading {
-  position: absolute;
+  float: right;
   width: 48%;
-  right: 0;
-  top: 0;
 }
 body #main-con #body-con #more-info #reading a {
   color: #278dd2;
