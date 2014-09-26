@@ -136,12 +136,15 @@
 
 					<img src="css/images/histogram.png"/>
 
-					<p>The eikosogram is a plot where the width of each horizontal bin reflects the proportion of that bin in the data, and the vertical heights are proportional to the conditional probabilities of the Y (row) variable given the X (column) variable. It is <a href="http://fathom.info/latest/6246">particularly well suited</a> to depict associations between categorical variables.</p>
-
-                    <img src="css/images/eikosonum.png"/>
+					<p>The eikosogram is a plot where the width of each horizontal bin reflects the proportion of that bin in the data, and the vertical heights are proportional to the conditional probabilities of the Y (row) variable given the X (column) variable. It is <a href="http://fathom.info/latest/6246">well suited</a> to depict associations between categorical variables:</p>
 
 					<img src="css/images/eikosogram.png"/>
 
+                    <p>However, the eikosogram is not so convenient to represent a dependent numerical variable, because in this case there are typically many horizontal bands (as many as bin partitions along the Y axis), which make the plot difficult to read. Mirador uses a form of boxplot when Y is numerical (either integer or floating point), where the dark blue region is centered one standard deviation around the mean along the up and down directions, and the light blue extends two standard deviations away in both directions. As with the eikosograms, the width of each horizontal bin is proportional to its count:</p>
+
+                    <img src="css/images/eikosonum.png"/>
+
+                    <p>When the row and column correspond to the same variable, then the plot is a simple 1D histogram approximating the probability distribution of that variable, irrespective of the currently selected plot type:</p>
 					<img src="css/images/hist1d.png"/>
 
 					<h1>6. Profile view</h1>
