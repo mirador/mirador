@@ -18,8 +18,8 @@ import miralib.data.DataSet;
 public class MiraWidget extends Widget {
   final public static int SNAP_THRESHOLD = 30;
   final public static int SHOW_COL_DELAY = 1000;
-  final public static int REMOVE_COL_DELAY = 5000;
-  final public static int REMOVE_ROW_DELAY = 5000;  
+  final public static int REMOVE_COL_DELAY = 2000;
+  final public static int REMOVE_ROW_DELAY = 2000;
   
   final protected static float padding = 2;
   

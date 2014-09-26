@@ -193,7 +193,11 @@ public class SearchBar extends MiraWidget {
     float x, y, w, h;
     PFont pFont;
     int bColor, pColor, sColor;
-    EditableText searchStr; 
+    EditableText searchStr;
+        
+    int lastKey;
+    String lastQuery = "";
+    boolean skipQuery = false;
     
     SearchBox(float x, float y, float w, float h) {
       this.x = x;
@@ -237,6 +241,12 @@ public class SearchBar extends MiraWidget {
       }      
       float yc = (h - pFont.getSize()) / 2;
       text(searchStr, x + 10, y + h - yc);
+      
+      int time = mira.millis();
+      if (skipQuery && 250 < time - lastKey) {
+        lastKey = time;
+        skipQuery = false;
+      }
     }
     
     void select() {
@@ -262,19 +272,25 @@ public class SearchBar extends MiraWidget {
       }
     }
     
-    String lastQuery = "";
     void keyPressed(char key, int code) {
+      int time = mira.millis();
       searchStr.setFocused(true);
       searchStr.keyPressed(key, code);
       String query = searchStr.get();
+      skipQuery = false;
       if (!lastQuery.equals(query)) {
         if (0 < query.length()) {
-          searchRes.search(query); // TODO: should search also look for groups/tables?
-        } else {
+          if (250 < time -lastKey) {
+            searchRes.search(query);
+          } else {
+            skipQuery = true;
+          }
+        } else {          
           searchRes.clear();
         }        
       }
       lastQuery = query;
+      lastKey = time;
     }
   }
   
@@ -313,9 +329,9 @@ public class SearchBar extends MiraWidget {
     void search(String query) {
       if (searchTask != null && searchTask.isAlive()) {
         searchTask.interrupt();
-        while (searchTask.isAlive()) {
-          Thread.yield();
-        }
+//        while (searchTask.isAlive()) {
+//          Thread.yield();
+//        }
       }
       
       searchTask = new SearchTask(query);
