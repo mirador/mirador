@@ -112,7 +112,7 @@ body #main-con #header-con #img {
   float: left;
 }
 body #main-con #header-con #title {
-  width: 500px;
+  width: 95px;
   float: left;
 }
 body #main-con #header-con #title h1 {
@@ -140,7 +140,7 @@ body #main-con #header-con #button input {
   margin-top: 5px;
   height: 40px;
   border-radius: 0;
-  background: rgba(30, 20, 0, 0.5);
+  background: #ff8727;
   border: 0px;
   font-family: RoboReg;
   font-size: 14px;
