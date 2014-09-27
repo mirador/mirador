@@ -54,6 +54,7 @@ public class SearchBar extends MiraWidget {
   }
   
   public void update() {
+    searchBox.update();
     searchRes.update();
   }
   
@@ -195,8 +196,8 @@ public class SearchBar extends MiraWidget {
     int bColor, pColor, sColor;
     EditableText searchStr;
         
-    int lastKey;
     String lastQuery = "";
+    int timeLastQuery;    
     boolean skipQuery = false;
     
     SearchBox(float x, float y, float w, float h) {
@@ -214,6 +215,15 @@ public class SearchBar extends MiraWidget {
       searchStr = new EditableText("Jump to a variable");
       searchStr.clearInitial();
       searchStr.setBound(w - 5 - pFont.getSize());
+    }
+    
+    void update() {
+      int time = mira.millis();
+      if (skipQuery && 250 < time - timeLastQuery) {
+        searchRes.search(lastQuery);
+        timeLastQuery = time;
+        skipQuery = false;
+      }      
     }
     
     void draw() {
@@ -241,12 +251,6 @@ public class SearchBar extends MiraWidget {
       }      
       float yc = (h - pFont.getSize()) / 2;
       text(searchStr, x + 10, y + h - yc);
-      
-      int time = mira.millis();
-      if (skipQuery && 250 < time - lastKey) {
-        lastKey = time;
-        skipQuery = false;
-      }
     }
     
     void select() {
@@ -280,8 +284,9 @@ public class SearchBar extends MiraWidget {
       skipQuery = false;
       if (!lastQuery.equals(query)) {
         if (0 < query.length()) {
-          if (250 < time -lastKey) {
+          if (250 < time - timeLastQuery) {
             searchRes.search(query);
+            timeLastQuery = time;            
           } else {
             skipQuery = true;
           }
@@ -290,7 +295,6 @@ public class SearchBar extends MiraWidget {
         }        
       }
       lastQuery = query;
-      lastKey = time;
     }
   }
   
@@ -319,10 +323,12 @@ public class SearchBar extends MiraWidget {
     }
     
     void update() {
-      for (SearchResult res: results.values()) res.update();  
+      if (searching()) return;  
+      for (SearchResult res: results.values()) res.update();
     }
     
     void draw() {
+      if (searching()) return;      
       for (SearchResult res: results.values()) res.draw();
     }    
     
@@ -338,12 +344,18 @@ public class SearchBar extends MiraWidget {
       searchTask.start();
     }
     
+    boolean searching() {
+      return searchTask != null && searchTask.isAlive();
+    }
+    
     void clear() {
+      if (searching()) return;
       results.clear();
       ordered.clear();
     }
     
     boolean inside(float x, float y) {
+      if (searching()) return false;
       for (SearchResult res: results.values()) {
         if (res.inside(x, y)) return true;
       }
@@ -351,6 +363,7 @@ public class SearchBar extends MiraWidget {
     }    
     
     void mousePressed(float mx, float my) {
+      if (searching()) return;
       SearchResult sel = null;
       for (SearchResult res: results.values()) { 
         if (res.select(mx, my)) {
@@ -367,6 +380,7 @@ public class SearchBar extends MiraWidget {
     }
     
     void enterPressed() {
+      if (searching()) return;
       SearchResult sel = null;
       for (SearchResult res: results.values()) { 
         if (res.selected) {
@@ -382,6 +396,7 @@ public class SearchBar extends MiraWidget {
     }
     
     void selectPrev() {
+      if (searching()) return;
       boolean noneSel = true;
       int n = ordered.size();
       for (int i = 0; i < n; i++) {
@@ -400,7 +415,8 @@ public class SearchBar extends MiraWidget {
       }
     }
     
-    void selectNext() {      
+    void selectNext() {
+      if (searching()) return;
       boolean noneSel = true;
       int n = ordered.size();
       for (int i = 0; i < n; i++) {
@@ -420,6 +436,7 @@ public class SearchBar extends MiraWidget {
     }  
     
     void hover(float mx, float my) {
+      if (searching()) return;
       for (SearchResult res: results.values()) { 
         res.select(mx, my);
       }      
