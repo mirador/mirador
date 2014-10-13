@@ -88,7 +88,7 @@ public class OptionsPanel extends MiraWidget {
     
     mdatOpt = new Options(10, 525, 110, 80, "SessionOptions");
     mdatOpt.title("Available\ndata", misColor);
-    mdatOpt.add("90%", "80%", "60%", "20%", "Don't use");
+    mdatOpt.add("90%", "80%", "40%", "20%", "Don't use");
     mdatOpt.select(mira.getMissingThreshold());    
   }
   
