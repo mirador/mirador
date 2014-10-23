@@ -316,6 +316,10 @@ public class RowVariable extends RowWidget {
     ((MiraWidget)parent).keyPressed(this);
   }    
   
+  public void enterPressed() {
+    plots.enterPressed();
+  }
+  
   public void dragRows(float dy) {
     ((MiraWidget)parent).dragRows(dy);
   }

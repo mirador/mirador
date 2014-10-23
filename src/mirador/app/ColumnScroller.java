@@ -106,6 +106,12 @@ abstract public class ColumnScroller extends MiraWidget {
     }    
   }
   
+  public void keyPressed() {
+    System.err.println("bloh");
+    for (Item item: visItems.values()) {
+    }    
+  }
+  
   public void jumpTo(int idx) {
     drag(jumpToImpl(idx));    
   }  

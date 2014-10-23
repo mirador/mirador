@@ -170,7 +170,9 @@ public class RowScroller extends MiraWidget {
       } else if (keyCode == DOWN) {
         currScroller.down();
       }
-    }    
+    } else if (key == ENTER || key == RETURN) {
+      currScroller.enter();      
+    }
   }
   
   protected void initItems() {
@@ -278,6 +280,14 @@ public class RowScroller extends MiraWidget {
     public void down() {
       fit(+heightClose);
     }    
+    
+    public void enter() {
+      for (Widget child: children) {
+        if (child instanceof RowVariable) {
+          ((RowVariable)child).enterPressed();
+        }
+      }
+    }
     
     public void prev() {      
       RowScroller.this.prev();

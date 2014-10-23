@@ -2,6 +2,7 @@
 
 package mirador.app;
 
+import java.nio.file.Paths;
 import java.util.concurrent.FutureTask;
 
 import processing.core.PApplet;
@@ -83,6 +84,13 @@ public class RowPlots extends ColumnScroller {
   public void mouseMoved() {
     mira.browser.setRowAxis(rowVar);
     mira.browser.setColAxis(getHoveredColumn());
+  }
+  
+  public void enterPressed() {
+    for (Item item: visItems.values()) {
+      Plot plot = (Plot)item;
+      if (plot.selected()) plot.save();
+    }
   }
   
   public String getRowLabel(Variable var) {
@@ -169,6 +177,11 @@ public class RowPlots extends ColumnScroller {
       blendf = new SoftFloat();
       
       mira.history.addPair(var, rowVar);
+    }
+    
+    boolean selected() {
+      return mira.browser.getSelectedRow() == rowVar &&
+             mira.browser.getSelectedCol() == var;
     }
     
     void dispose() {
@@ -265,7 +278,7 @@ public class RowPlots extends ColumnScroller {
       float w0 = w - 2 * padding;
       float h0 = h.get() - 2 * padding;
       
-      if (showContents && canvas != null) {        
+      if (showContents && canvas != null) {
         int bfa = blendf.getCeil();     
         if (bfa < 255 && pcanvas != null) {
           tint(color(255));
@@ -283,7 +296,7 @@ public class RowPlots extends ColumnScroller {
         }
         
         if (depend && mira.project.pvalue() < 1) {
-          // TODO: show some kind of animation while 
+          // TODO: show some kind of animation while calculating the significance...
           noStroke();
           fill(corColor);
           triangle(x0, y0, x0 + 13, y0, x0, y0 + 13);
@@ -300,14 +313,48 @@ public class RowPlots extends ColumnScroller {
         fill(color(255));
         rect(x0, y0, w0, h0);         
       }
-      boolean selected = mira.browser.getSelectedRow() == rowVar &&
-                         mira.browser.getSelectedCol() == var;
-      if (selected) {
+      if (selected()) {
         stroke(sColor);
         strokeWeight(3);
         noFill();
         rect(x0, y0, w0, h0);        
       }
+    }
+    
+    void draw(PGraphics pg) {
+      float x0 = x.get() - visX0.get() + padding;
+      float y0 = y.get() + padding;
+      float w0 = w - 2 * padding;
+      float h0 = h.get() - 2 * padding;
+      
+      pg.beginDraw();
+      pg.image(canvas, 0, 0);
+      if (view != null && (viewTask == null || viewTask.isDone()) && hovered &&
+          x0 <= mouseX && mouseX <= x0 + w0 &&
+          y0 <= mouseY && mouseY <= y0 + h0) {
+        double valx = PApplet.constrain((mouseX - x0) / w0, 0, 1);
+        double valy = PApplet.constrain((mouseY - y0) / h0, 0, 1);
+        drawSelection(pg, view.getSelection(valx, valy));
+      }
+      
+      if (depend && mira.project.pvalue() < 1) {
+        // TODO: show some kind of animation while calculating the significance...
+        pg.noStroke();
+        pg.fill(corColor);
+        pg.triangle(0, 0, 13, 0, 0, 13);
+      }
+      
+      if (mira.project.missingThreshold() <= missing) {
+        pg.noStroke();
+        pg.fill(misColor);
+        pg.triangle(pg.width - 13, 0, pg.width, 0, pg.width, 13);
+      }
+      
+      pg.noFill();
+      pg.stroke(0);
+      pg.strokeWeight(2);
+      pg.rect(0, 0, pg.width, pg.height);
+      pg.endDraw();
     }
     
     void drawSelection(View.Selection sel, 
@@ -345,6 +392,59 @@ public class RowPlots extends ColumnScroller {
         }
         
         text(sel.label, tx, ty);
+      }      
+    }
+    
+    void drawSelection(PGraphics pg, View.Selection sel) {
+      if (sel == null) return;
+      
+      float x0 = 0; 
+      float y0 = 0; 
+      float w0 = pg.width;
+      float h0 = pg.height;
+      
+      sel.scale(x0, y0, w0, h0);
+      
+      if (sel.isEllipse) {
+        // TODO: implement
+        pg.noStroke();
+        pg.fill(color(0, 0, 0), 50);
+        pg.ellipse(sel.x, sel.y, sel.w, sel.h);
+      } else {
+        pg.noStroke();
+        pg.fill(color(0, 0, 0), 50);
+        pg.rect(sel.x, sel.y, sel.w, sel.h);
+      }
+      
+      if (sel.hasLabel) {
+        pg.textFont(pFont);
+        pg.fill(pColor >> 16 & 0xFF, pColor >> 8 & 0xFF, pColor & 0xFF, 255);
+        float tw = pg.textWidth(sel.label);          
+        float tx = sel.x + sel.w/2 - tw/2;
+        if (tx < x0) tx = x0;
+        if (x0 + w0 < tx + tw) tx = x0 + w0 - tw;
+        
+        float ty = 0;
+        if (pFont.getSize() < sel.h) { 
+          float yc = (sel.h - pFont.getSize()) / 2;
+          ty = sel.y + sel.h - yc;      
+        } else {
+          ty = sel.y - 5;
+          if (ty - 5 - pFont.getSize() < y0) ty = sel.y + sel.h + 5 + pFont.getSize();
+        }
+                
+        pg.text(sel.label, tx, ty);
+      }       
+    }
+    
+    void save() {
+      if (showContents && canvas != null) {
+        PGraphics pg = intf.createCanvas((int)w, h.getCeil(), MiraApp.RENDERER, MiraApp.SMOOTH_LEVEL);
+        draw(pg);
+        
+        String imgName = var.getName() + "-" + rowVar.getName() + ".png";
+        String filename = Paths.get(mira.project.dataFolder, imgName).toString();
+        pg.save(filename);
       }      
     }
     
@@ -394,9 +494,7 @@ public class RowPlots extends ColumnScroller {
       float h0 = h.get() - 2 * padding;
       if (x0 <= mouseX && mouseX <= x0 + w0 &&
           y0 <= mouseY && mouseY <= y0 + h0) {
-        boolean selected = mira.browser.getSelectedRow() == rowVar &&
-                           mira.browser.getSelectedCol() == var;
-        if (!selected) {
+        if (!selected()) {
           mira.browser.setSelectedPair(var, rowVar);
         } else {
           mira.browser.setSelectedPair(null, null);

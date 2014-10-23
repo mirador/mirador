@@ -77,9 +77,10 @@ public class VariableBrowser extends MiraWidget {
     // with the search bar, which will capture any alphanumeric character. However
     // the mapping can be overridden by widgets that are set to capture keys when
     // they are selected.
-    intf.addKeymap(rowScroller, UP, DOWN, LEFT, RIGHT);    
+    intf.addKeymap(rowScroller, UP, DOWN, LEFT, RIGHT);
+    intf.addKeymap(rowScroller, ENTER, RETURN);
     intf.addKeymap(searchBar, Interface.ALL_CHARACTERS);
-    intf.addKeymap(searchBar, BACKSPACE, DELETE, TAB, ENTER, RETURN, ESC);
+    intf.addKeymap(searchBar, BACKSPACE, DELETE, TAB, ESC);
   }  
   
   @SuppressWarnings("unchecked")
@@ -286,6 +287,10 @@ public class VariableBrowser extends MiraWidget {
   public Variable getSelectedCol() {
     return selCol;
   } 
+  
+  public void saveSelectedPair() {
+    
+  }
   
   protected boolean rowsReady() {
     boolean ready = true;

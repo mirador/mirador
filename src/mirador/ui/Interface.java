@@ -474,7 +474,8 @@ public class Interface implements PConstants {
       handler = app.key == CODED ? codeMap.get(app.keyCode) : keyMap.get(app.key);
     } else {  
       handler = selected;
-    }  
+    }
+
     if (handler != null) {
       handler.updateKey(app.key, app.keyCode);
       handler.keyPressed();
