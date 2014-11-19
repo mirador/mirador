@@ -220,9 +220,12 @@ public class SearchBar extends MiraWidget {
     void update() {
       int time = mira.millis();
       if (skipQuery && 250 < time - timeLastQuery) {
-        searchRes.search(lastQuery);
-        timeLastQuery = time;
-        skipQuery = false;
+        if (searchRes.search(lastQuery)) {
+          timeLastQuery = time;
+          skipQuery = false;
+        } else {
+          skipQuery = true;  
+        }
       }      
     }
     
@@ -285,8 +288,11 @@ public class SearchBar extends MiraWidget {
       if (!lastQuery.equals(query)) {
         if (0 < query.length()) {
           if (250 < time - timeLastQuery) {
-            searchRes.search(query);
-            timeLastQuery = time;            
+            if (searchRes.search(query)) {
+              timeLastQuery = time;  
+            } else {
+              skipQuery = true;  
+            }
           } else {
             skipQuery = true;
           }
@@ -332,9 +338,10 @@ public class SearchBar extends MiraWidget {
       for (SearchResult res: results.values()) res.draw();
     }    
     
-    void search(String query) {
+    boolean search(String query) {
       if (searchTask != null && searchTask.isAlive()) {
-        searchTask.interrupt();
+        return false;
+//        searchTask.interrupt();
 //        while (searchTask.isAlive()) {
 //          Thread.yield();
 //        }
@@ -342,6 +349,7 @@ public class SearchBar extends MiraWidget {
       
       searchTask = new SearchTask(query);
       searchTask.start();
+      return true;
     }
     
     boolean searching() {
