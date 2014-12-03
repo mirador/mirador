@@ -43,7 +43,7 @@ with the path to where you have the code for miralib checked out." />
     <javac target="1.7" 
            encoding="UTF-8"
            includeAntRuntime="false"
-           classpath="${processing.dir}/core/bin:${miralib.dir}/lib/commons-math3-3.2.jar"
+           classpath="${processing.dir}/core/bin:${miralib.dir}/lib/*.jar"
            srcdir="../src" 
            destdir="../bin" />
   </target>
@@ -186,7 +186,7 @@ convert image.png  -bordercolor white -border 0 \
 
       <classpath file="../lib/*.jar" />
       
-      <classpath file="${miralib.dir}/lib/commons-math3-3.2.jar" />
+      <classpath file="${miralib.dir}/lib/*.jar" />
 
       <classpath file="${core.dir}/core.jar" />
       <classpath file="${core.dir}/jogl-all.jar" />
