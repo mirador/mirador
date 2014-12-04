@@ -75,7 +75,7 @@ public class Widget implements PConstants {
   protected int mouseX, mouseY;
   protected int pmouseX, pmouseY;
   
-  protected char key;
+  protected char key;  
   protected int keyCode;
   
   public Widget(Interface intf) {

@@ -495,7 +495,7 @@ public class Interface implements PConstants {
       handler = selected;
     }       
     if (handler != null) {
-      handler.updateKey(app.key, app.keyCode);
+      handler.updateKey(app.key, app.keyCode);     
       handler.keyReleased();
       if (handler.focused) handler.handleKey();
     }    

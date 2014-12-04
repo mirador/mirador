@@ -20,13 +20,11 @@ import miralib.data.Variable;
  */
 
 public class CategoricalRangeSelector extends RangeSelector { 
-  static public final int LONG_PRESS_TIME = 500;
   static public final float WIDTH_FACTOR = 1.7f;
   
   protected ArrayList<CategoryBox> boxes;
   protected boolean dragging;
   protected boolean pressing;
-  protected long presst0;
   protected float boxw, boxh, boxsp;
   protected int uColor, sColor;
   protected float brWeight;
@@ -146,7 +144,6 @@ public class CategoricalRangeSelector extends RangeSelector {
   public void mousePressed() {    
     dragging = false;    
     if (!pressing) {
-      presst0 = millis();
       pressing = true;
     }
   }
@@ -173,8 +170,6 @@ public class CategoricalRangeSelector extends RangeSelector {
     if (dragging) {
       snap();
     } else {
-      long presst1 = millis();
-      
       CategoryBox selBox = null; 
       for (CategoryBox box: boxes) {
         if (!box.contained()) continue;
@@ -185,7 +180,7 @@ public class CategoricalRangeSelector extends RangeSelector {
       }   
       if (selBox != null) {        
         boolean sel = !selBox.selected;
-        boolean all = LONG_PRESS_TIME < presst1 - presst0;
+        boolean all = keyPressed(SHIFT);
         intf.invoke(CategoricalRangeSelector.class, "selectValue", selVar, selBox.value, sel, all);
         requestedRangeUpdate = true;        
       }
