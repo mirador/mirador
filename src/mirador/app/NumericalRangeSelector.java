@@ -6,7 +6,7 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import mirador.ui.Interface;
 import mirador.ui.SoftFloat;
-import miralib.data.NumericalRange;
+import miralib.data.DateVariable;
 import miralib.data.NumericalVariable;
 import miralib.data.Range;
 import miralib.data.Variable;
@@ -130,9 +130,7 @@ public class NumericalRangeSelector extends RangeSelector {
   }
   
   public Range getRange() {
-    Range range = new NumericalRange(selVar);    
-    range.set(leftValue, rightValue);
-    return range;
+    return selVar.createRange(leftValue, rightValue);
   }  
   
   protected boolean setRange() {        
@@ -152,6 +150,46 @@ public class NumericalRangeSelector extends RangeSelector {
   }
   
   public void resetValues(NumericalVariable var) {
+    resetValuesImpl(var);
+  }
+
+  public void resetValues(DateVariable var) {
+    resetValuesImpl(var);
+  }  
+  
+  public void setLeftValue(NumericalVariable var, Float value, Boolean normalized) {
+    setLeftValueImpl(var, value, normalized);
+  }
+
+  public void setLeftValue(DateVariable var, Float value, Boolean normalized) {
+    setLeftValueImpl(var, value, normalized);
+  }  
+  
+  public void targetLeftValue(NumericalVariable var, Float value, Boolean normalized) {
+    targetLeftValueImpl(var, value, normalized);
+  }
+
+  public void targetLeftValue(DateVariable var, Float value, Boolean normalized) {
+    targetLeftValueImpl(var, value, normalized);
+  }  
+  
+  public void setRightValue(NumericalVariable var, Float value, Boolean normalized) {
+    setRightValueImpl(var, value, normalized);
+  }
+
+  public void setRightValue(DateVariable var, Float value, Boolean normalized) {
+    setRightValueImpl(var, value, normalized);
+  }  
+  
+  public void targetRightValue(NumericalVariable var, Float value, Boolean normalized) {    
+    targetRightValueImpl(var, value, normalized);
+  }
+
+  public void targetRightValue(DateVariable var, Float value, Boolean normalized) {    
+    targetRightValueImpl(var, value, normalized);
+  }  
+  
+  protected void resetValuesImpl(Variable var) {
     if (selVar != var) return;
     leftValue = 0;
     rightValue = 1;
@@ -169,7 +207,7 @@ public class NumericalRangeSelector extends RangeSelector {
     rightHandle.target(svalue);    
   }
   
-  public void setLeftValue(NumericalVariable var, Float value, Boolean normalized) {
+  protected void setLeftValueImpl(Variable var, Float value, Boolean normalized) {
     if (selVar != var) return;
     leftValue = normalized ? value : selVar.normalize(value);
     rangeBar.leftStr.set(selVar.formatValue(leftValue));
@@ -177,7 +215,7 @@ public class NumericalRangeSelector extends RangeSelector {
     leftHandle.set((float)leftValue);
   }
   
-  public void targetLeftValue(NumericalVariable var, Float value, Boolean normalized) {
+  protected void targetLeftValueImpl(Variable var, Float value, Boolean normalized) {
     if (selVar != var) return;
     leftValue = normalized ? value : selVar.normalize(value);  
     rangeBar.leftStr.set(selVar.formatValue(leftValue));    
@@ -187,7 +225,7 @@ public class NumericalRangeSelector extends RangeSelector {
     leftHandle.target(svalue);  
   }
   
-  public void setRightValue(NumericalVariable var, Float value, Boolean normalized) {
+  protected void setRightValueImpl(Variable var, Float value, Boolean normalized) {
     if (selVar != var) return;
     rightValue = normalized ? value : selVar.normalize(value);    
     rangeBar.rightStr.set(selVar.formatValue(rightValue));
@@ -195,7 +233,7 @@ public class NumericalRangeSelector extends RangeSelector {
     rightHandle.set((float)rightValue);
   }
   
-  public void targetRightValue(NumericalVariable var, Float value, Boolean normalized) {    
+  protected void targetRightValueImpl(Variable var, Float value, Boolean normalized) {    
     if (selVar != var) return;
     rightValue = normalized ? value : selVar.normalize(value);
     rangeBar.rightStr.set(selVar.formatValue(rightValue));    

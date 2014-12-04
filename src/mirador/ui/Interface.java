@@ -126,7 +126,7 @@ public class Interface implements PConstants {
     }   
     for (Widget wt: widgets) {
       try {
-        Method meth = wt.getClass().getMethod(method, types);        
+        Method meth = wt.getClass().getMethod(method, types);
         meth.invoke(wt, args);        
       } catch (Exception e) { 
         e.printStackTrace();
