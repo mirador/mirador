@@ -387,14 +387,15 @@ public class NumericalRangeSelector extends RangeSelector {
           leftStr.set(selVar.formatValue(leftValue));
           leftStr.setFocused(false);
         } else if (key == ENTER || key == RETURN || key == TAB) {
-          float value = leftStr.getFloat();
+          boolean datVar = selVar instanceof DateVariable;          
+          float value = datVar ? (float)selVar.getValue(leftStr.get()) : leftStr.getFloat(); 
           if (Float.isNaN(value)) {
             leftStr.set(selVar.formatValue(leftValue));
           } else {
-            float rvalue = rightStr.getFloat();
-            if (rvalue < value) value = rvalue;            
-            value = (float)selVar.snapValue(value, null, false);            
-            intf.invoke(NumericalRangeSelector.class, "targetLeftValue", selVar, value, false);
+            float rvalue = datVar ? (float)selVar.getValue(rightStr.get()) : rightStr.getFloat();   
+            if (rvalue < value) value = rvalue;
+            value = (float)selVar.snapValue(value, null, datVar);            
+            intf.invoke(NumericalRangeSelector.class, "targetLeftValue", selVar, value, datVar);
           }
           if (key == TAB) {
             leftStr.setFocused(false);
@@ -410,14 +411,15 @@ public class NumericalRangeSelector extends RangeSelector {
           rightStr.set(selVar.formatValue(rightValue));
           rightStr.setFocused(false);    
         } else if (key == ENTER || key == RETURN || key == TAB) {
-          float value = rightStr.getFloat();
+          boolean datVar = selVar instanceof DateVariable;          
+          float value = datVar ? (float)selVar.getValue(rightStr.get()) : rightStr.getFloat();          
           if (Float.isNaN(value)) {
             rightStr.set(selVar.formatValue(rightValue));
           } else {
-            float lvalue = leftStr.getFloat();
+            float lvalue = datVar ? (float)selVar.getValue(leftStr.get()) : leftStr.getFloat();            
             if (value < lvalue) value = lvalue;
-            value = (float)selVar.snapValue(value, null, false);
-            intf.invoke(NumericalRangeSelector.class, "targetRightValue", selVar, value, false);
+            value = (float)selVar.snapValue(value, null, datVar);
+            intf.invoke(NumericalRangeSelector.class, "targetRightValue", selVar, value, datVar);
           }
           if (key == TAB) {
             rightStr.setFocused(false);
