@@ -109,6 +109,10 @@ public class VariableBrowser extends MiraWidget {
   public void openRow(Variable var) {
     rowScroller.openRow(var);  
   }
+  
+  public void closeRowsBut(MiraWidget wt) {
+    rowScroller.closeRowsBut(wt);
+  }
 
   public void openColumn(Variable var) {
     rowScroller.showVariables();
@@ -141,6 +145,18 @@ public class VariableBrowser extends MiraWidget {
     rowScroller.closeColumn(var);
     mira.profile.remove(var);
   }
+
+  public void closeColumnsBut(Variable var) {
+    // Handle situation when columns are sorted by correlation...
+    
+    ArrayList<Variable> all = new ArrayList<Variable>(data.getColumns());
+    data.removeColumns(all, var); // Important: removing column from data must happen before updating the UI
+    for (Variable v1: all) {
+      colLabels.close(v1);
+      rowScroller.closeColumn(v1);
+    } 
+    mira.profile.remove(all, var);    
+  }  
   
   public void closeColumns(VariableContainer container) {
     ArrayList<Variable> vars = data.getVariables(container);

@@ -216,8 +216,12 @@ public class ColumnLabels extends ColumnScroller {
       if (!inside(mouseX, mouseY)) return;
         
       if (insideDismiss(mouseX, mouseY)) {
-        mira.browser.closeColumn(var);
-        markedForRemoval = true;
+        if (keyPressed(SHIFT)) {
+          mira.browser.closeColumnsBut(var);
+        } else {
+          mira.browser.closeColumn(var);
+          markedForRemoval = true;          
+        }
       } else {
         float x1 = selector.top() + selector.getFullHeight();
         if (itemHeight < x1) {

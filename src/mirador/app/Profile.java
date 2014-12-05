@@ -118,10 +118,15 @@ public class Profile extends MiraWidget {
   }
   
   public void remove(ArrayList<Variable> vars) {
-    varsToRemove.addAll(vars);
-    dirty = true;   
+    remove(vars, null);   
   }
 
+  public void remove(ArrayList<Variable> vars, Variable exvar) {
+    varsToRemove.addAll(vars);
+    varsToRemove.remove(exvar);
+    dirty = true;   
+  }  
+  
   public void add(Variable var) {
     varsToAdd.add(var);
     dirty = true;

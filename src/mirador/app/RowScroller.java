@@ -70,6 +70,10 @@ public class RowScroller extends MiraWidget {
     }
   }
   
+  public void closeRowsBut(MiraWidget wt) {
+    varScroller.closeAllBut(wt);
+  }
+  
   public void closeColumn(Variable var) {
     varScroller.closeColumn(var);
   }
@@ -396,6 +400,31 @@ public class RowScroller extends MiraWidget {
       }      
       fit();
     }
+    
+    public void closeAllBut(MiraWidget wt) {
+      Variable var = null;
+      if (wt instanceof RowVariable) {
+         var = ((RowVariable)wt).rowVar;
+      }
+      
+      for (int i = 0; i < children.size(); i++) {
+        MiraWidget wti = (MiraWidget)children.get(i);
+        if (wti == wt) continue;
+        if (canOpen(wti.idx)) {
+          if (isOpen(wti.idx)) {
+            close(wti.idx);
+            wti.targetHeight(heightClose);
+          }      
+          updatePositions(wti);
+        }
+      }
+      jumpTo(wt.idx);
+      
+      for (int i = 0; i < items.size(); i++) {
+        Item itm = items.get(i);
+        if (itm != var) itm.setClose();      
+      }
+    }   
     
     public void mousePressed() {
       if (active) {

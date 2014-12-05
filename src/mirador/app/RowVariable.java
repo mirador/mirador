@@ -236,6 +236,7 @@ public class RowVariable extends RowWidget {
   } 
   
   public void mouseReleased() {
+    boolean shift = keyPressed(SHIFT);
     if (labelMode == SORT_ACTION) {
       labelMode = SORTING_STATUS;
       sortMode = SORTING;
@@ -245,10 +246,16 @@ public class RowVariable extends RowWidget {
       mira.profile.clear();
       mira.history.sort(rowVar);
     } else if (sortMode == UNSORTED && !chkPressed) {
-      ((MiraWidget)parent).mouseReleased(this);
+      if (shift) {
+        mira.browser.closeRowsBut(this);
+      } else {
+        ((MiraWidget)parent).mouseReleased(this);  
+      }      
     }
-    
-    boolean open1 = rowVar.open();    
+  }    
+  
+  public void targetHeight(float h) {
+    boolean open1 = rowVar.open(); 
     if (open1 && !open) {
       plots.show();
       selector.show();
@@ -257,8 +264,10 @@ public class RowVariable extends RowWidget {
       plots.hide(false);
       selector.hide(false);
     }    
-    open = open1;
-  }    
+    open = open1;   
+    
+    bounds.h.setTarget(h);
+  }   
   
   public void mouseMoved() {
     updateLabel();
