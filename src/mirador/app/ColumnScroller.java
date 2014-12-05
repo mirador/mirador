@@ -87,6 +87,10 @@ abstract public class ColumnScroller extends MiraWidget {
     }      
   }  
   
+  public boolean isUpdating() {
+    return (visX0.isTargeting() || visX1.isTargeting());
+  }
+  
   public void mousePressed() {
     dragging = false;
   }  
@@ -103,12 +107,6 @@ abstract public class ColumnScroller extends MiraWidget {
       for (Item item: visItems.values()) {
         item.mouseReleased();
       }  
-    }    
-  }
-  
-  public void keyPressed() {
-    System.err.println("bloh");
-    for (Item item: visItems.values()) {
     }    
   }
   

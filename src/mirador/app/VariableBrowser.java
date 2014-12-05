@@ -147,11 +147,13 @@ public class VariableBrowser extends MiraWidget {
   }
 
   public void closeColumnsBut(Variable var) {
+    if (colLabels.isUpdating()) return;
     // Handle situation when columns are sorted by correlation...
     
-    ArrayList<Variable> all = new ArrayList<Variable>(data.getColumns());
+    ArrayList<Variable> all = data.getVariables();
     data.removeColumns(all, var); // Important: removing column from data must happen before updating the UI
     for (Variable v1: all) {
+      if (v1 == var) continue;
       colLabels.close(v1);
       rowScroller.closeColumn(v1);
     } 
