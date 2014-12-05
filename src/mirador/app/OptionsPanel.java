@@ -44,9 +44,14 @@ public class OptionsPanel extends MiraWidget {
     
     loadBtn = new MenuButton(intf, 10, 60, 100, 25, "Load Data") {
       public void handle() {
-        mira.loadDataset();
+        if (keyPressed(SHIFT)) {
+          mira.reloadDataset();
+        } else {
+          mira.loadDataset();  
+        }        
       }
     };
+    loadBtn.setShiftLabel("Reload");
     addChild(loadBtn, TOP_LEFT_CORNER);
     
     exportBtn = new MenuButton(intf, 10, 90, 100, 25, "Export selection") {
@@ -268,7 +273,8 @@ public class OptionsPanel extends MiraWidget {
   }
   
   protected class MenuButton extends Widget {
-    String label;    
+    String label;
+    String shiftLabel;
     int color;    
     SoftFloat hoverAlpha;
     
@@ -276,8 +282,13 @@ public class OptionsPanel extends MiraWidget {
                       String label) {
       super(intf, x, y, w, h);
       this.label = label;
+      this.shiftLabel = null;
       color = getStyleColor("OptionsPanel.Button", "color");
       hoverAlpha = new SoftFloat(90);
+    }
+    
+    public void setShiftLabel(String label) {
+      shiftLabel = label;
     }
     
     public void update() {
@@ -292,7 +303,12 @@ public class OptionsPanel extends MiraWidget {
       
       fill(pColor);
       textFont(pFont);
-      text(label, 5, height - center);      
+      if (shiftLabel != null && hovered && keyPressed(SHIFT)) {
+        text(shiftLabel, 5, height - center);
+      } else {
+        text(label, 5, height - center);
+      }
+            
     }  
     
     public void hoverIn() {

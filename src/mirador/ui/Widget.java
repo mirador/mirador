@@ -368,6 +368,15 @@ public class Widget implements PConstants {
     captureKeys = value;
   }
   
+  
+  public boolean keyPressed(char key) {
+    return intf.app.keyPressed && intf.app.key == key;  
+  }
+  
+  public boolean keyPressed(int code) {
+    return intf.app.keyPressed && intf.app.keyCode == code;
+  }
+  
   public void keyPressed() { }
   
   public void keyReleased() { }

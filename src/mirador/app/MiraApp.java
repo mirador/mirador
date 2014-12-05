@@ -250,6 +250,14 @@ public class MiraApp extends PApplet {
                 "outputSelected", new File(prefs.projectFolder), new LoadHandler(this));    
   }
   
+  public void reloadDataset() {
+    if (project.cfgFile != null) {
+      loadProject(project.cfgFile.getPath());  
+    } else {
+      loadProject(project.dataFile);
+    }    
+  }
+  
   public void exportProfile(ArrayList<Variable> vars) {    
     File file = new File(project.dataFolder, "profile-data.tsv");
     selectOutput("Select a csv or tsv file to save the selection to:", 

@@ -93,14 +93,6 @@ public class MiraWidget extends Widget {
   public void dragolumns(float dx) { }
   public void dragRows(float dy) { }
   
-  public boolean keyPressed(char key) {
-    return mira.keyPressed && mira.key == key;  
-  }
-  
-  public boolean keyPressed(int code) {
-    return mira.keyPressed && mira.keyCode == code;
-  }
-  
   protected void init() {
     mira = (MiraApp)intf.app;
     data = mira.dataset;
