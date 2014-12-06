@@ -2,10 +2,15 @@
 
 package mirador.views;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 import miralib.data.DataSlice2D;
+import miralib.data.Value1D;
 import miralib.data.Value2D;
+import miralib.math.Numbers;
 import miralib.shannon.BinOptimizer;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -21,11 +26,18 @@ public class Eikosogram extends View {
   protected float[][] density;
   protected float[][] logDensity;
   protected float[] marginalDensity;
-  protected double[] averageY;
-  protected double[] stddevY;
-  protected double[] onestdFrac;
-  protected double[] twostdGFrac;
-  protected double[] twostdSFrac;
+  
+  protected float[]median;
+  protected float[]perc9;
+  protected float[]perc25;
+  protected float[]perc75;
+  protected float[]perc91;
+  
+//  protected double[] averageY;
+//  protected double[] stddevY;
+//  protected double[] onestdFrac;
+//  protected double[] twostdGFrac;
+//  protected double[] twostdSFrac;
   protected float binSizeX;
   protected float binSizeY;
   protected int binCountX;
@@ -88,6 +100,7 @@ public class Eikosogram extends View {
         drawEikosogram(pg);
       } else {
         drawBoxplot(pg);
+//        pg.background(255, 0 ,0);
       }
     }
     pg.endDraw();
@@ -125,22 +138,36 @@ public class Eikosogram extends View {
   protected void drawBoxplot(PGraphics pg) {
     float x0 = 0;
     for (int bx = 0; bx < binCountX; bx++) {
-      float mean = (float)averageY[bx];
-      float std = (float)stddevY[bx];
       float dx = pg.width * marginalDensity[bx];
-      if (Float.isNaN(mean) || Float.isNaN(std)) continue;
-      float y0 = pg.height * (1 - mean - std);
-      float dy = pg.height * 2 * std;
+      
+//      float mean = (float)averageY[bx];
+//      float std = (float)stddevY[bx];
+//      if (Float.isNaN(mean) || Float.isNaN(std)) continue;
+      
       pg.noStroke();
       
-      // sigma boxes
+      float y0 = pg.height * (1 - perc75[bx]);
+      float dy = pg.height * (perc75[bx] - perc25[bx]);
+      
+      // Q1 - Q3 box
       pg.fill(mixColors(WHITE, BLUE, 1));
       pg.rect(x0, y0, dx, dy);
-      
-      // 2 * sigma boxes
+             
       pg.fill(mixColors(WHITE, BLUE, 0.5f));
-      pg.rect(x0, y0 - dy/2, dx, dy/2);
-      pg.rect(x0, y0 + dy, dx, dy/2);
+      
+      // Q0 - Q1 box
+      y0 = pg.height * (1 - perc25[bx]);
+      dy = pg.height * (perc25[bx] - perc9[bx]);
+      pg.rect(x0, y0, dx, dy);
+      
+      // Q3 - Q4 boxes
+      y0 = pg.height * (1 - perc91[bx]);
+      dy = pg.height * (perc91[bx] - perc75[bx]);
+      pg.rect(x0, y0, dx, dy);
+      
+      pg.stroke(0, 100);
+      y0 = pg.height * (1 - median[bx]);
+      pg.line(x0, y0, x0 + dx, y0);
       
       x0 += dx;  
     }    
@@ -174,37 +201,37 @@ public class Eikosogram extends View {
   }
   
   public Selection getBoxplotSelection(double valx, double valy) {
-    float x0 = 0;
-    for (int bx = 0; bx < binCountX; bx++) {
-      double mean = averageY[bx];
-      double std = stddevY[bx];
-      float dx = marginalDensity[bx];
-      float x1 = x0 + dx;
-      if (Double.isNaN(mean) || Double.isNaN(std)) continue;
-      
-      float y0 = (float)(1 - mean - std);
-      float dy = (float)(2 * std);
-      float y1 = y0 + dy;
-      
-      if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) {
-        Selection sel = new Selection(x0, y0, dx, dy);
-        sel.setColor(mixColors(WHITE, BLUE, 1));
-        sel.setLabel(PApplet.nfc(100 * (float)onestdFrac[bx], 2) + "%");
-        return sel;
-      } else if (x0 <= valx && valx <= x1 && y0 - dy/2 <= valy && valy <= y0) {
-        Selection sel = new Selection(x0, y0 - dy/2, dx, dy/2);
-        sel.setLabel(PApplet.nfc(100 * (float)twostdGFrac[bx], 2) + "%");
-        sel.setColor(mixColors(WHITE, BLUE, 0.5f));
-        return sel;
-      } else if (x0 <= valx && valx <= x1 && y0 + dy <= valy && valy <= y0 + 3*dy/2) {
-        Selection sel = new Selection(x0, y0 + dy, dx, dy/2);
-        sel.setLabel(PApplet.nfc(100 * (float)twostdSFrac[bx], 2) + "%");
-        sel.setColor(mixColors(WHITE, BLUE, 0.5f));
-        return sel;
-      }
-      
-      x0 += dx;  
-    }    
+//    float x0 = 0;
+//    for (int bx = 0; bx < binCountX; bx++) {
+//      double mean = averageY[bx];
+//      double std = stddevY[bx];
+//      float dx = marginalDensity[bx];
+//      float x1 = x0 + dx;
+//      if (Double.isNaN(mean) || Double.isNaN(std)) continue;
+//      
+//      float y0 = (float)(1 - mean - std);
+//      float dy = (float)(2 * std);
+//      float y1 = y0 + dy;
+//      
+//      if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) {
+//        Selection sel = new Selection(x0, y0, dx, dy);
+//        sel.setColor(mixColors(WHITE, BLUE, 1));
+//        sel.setLabel(PApplet.nfc(100 * (float)onestdFrac[bx], 2) + "%");
+//        return sel;
+//      } else if (x0 <= valx && valx <= x1 && y0 - dy/2 <= valy && valy <= y0) {
+//        Selection sel = new Selection(x0, y0 - dy/2, dx, dy/2);
+//        sel.setLabel(PApplet.nfc(100 * (float)twostdGFrac[bx], 2) + "%");
+//        sel.setColor(mixColors(WHITE, BLUE, 0.5f));
+//        return sel;
+//      } else if (x0 <= valx && valx <= x1 && y0 + dy <= valy && valy <= y0 + 3*dy/2) {
+//        Selection sel = new Selection(x0, y0 + dy, dx, dy/2);
+//        sel.setLabel(PApplet.nfc(100 * (float)twostdSFrac[bx], 2) + "%");
+//        sel.setColor(mixColors(WHITE, BLUE, 0.5f));
+//        return sel;
+//      }
+//      
+//      x0 += dx;  
+//    }    
     return null;
   }  
   
@@ -283,60 +310,148 @@ public class Eikosogram extends View {
       }
     } 
 
-    if (vary.numerical()) {
-      averageY = new double[binCountX];
-      stddevY = new double[binCountX];
-      onestdFrac = new double[binCountX];
-      twostdGFrac = new double[binCountX];
-      twostdSFrac = new double[binCountX]; 
-      marginalWeights = new double[binCountX];
-      
-      for (Value2D value: slice.values) {
-        int bx = PApplet.constrain((int)(value.x / binSizeX), 0, binCountX - 1);
-        averageY[bx] += value.y * value.w;
-        stddevY[bx] += value.y * value.y * value.w;
-      }
-      
-      for (int bx = 0; bx < binCountX; bx++) {
-        double tot = 0;
-        for (int by = 0; by < binCountY; by++) {
-          tot += weightSum[bx][by];
-        }
-        marginalWeights[bx] = tot;
-        if (0 < tot) { 
-          double mean = averageY[bx] /= tot;
-          double meansq = stddevY[bx] /= tot;
-          stddevY[bx] = Math.sqrt(Math.max(0, meansq - mean * mean));
-        } else {
-          averageY[bx] = Double.NaN;
-          stddevY[bx] = Double.NaN;
-        }
-      }
-      
-      Arrays.fill(onestdFrac, 0d);
-      Arrays.fill(twostdGFrac, 0d);
-      Arrays.fill(twostdSFrac, 0d);      
-      for (Value2D value: slice.values) {
-        int bx = PApplet.constrain((int)(value.x / binSizeX), 0, binCountX - 1);
-        double ave = averageY[bx];
-        double std = stddevY[bx];
-        if (Double.isNaN(ave) || Double.isNaN(std)) continue;
-        
-        if (ave - std <= value.y && value.y <= ave + std) {
-          onestdFrac[bx] += value.w;
-        } else if (ave + std < value.y && value.y <= ave + 2 * std) {
-          twostdGFrac[bx] += value.w;
-        } else if (ave - 2 * std <= value.y && value.y < ave - std) {
-          twostdSFrac[bx] += value.w;
-        }
-      }
-      
-      for (int bx = 0; bx < binCountX; bx++) {
-        double tot = marginalWeights[bx];
-        onestdFrac[bx] /= tot;
-        twostdGFrac[bx] /= tot;
-        twostdSFrac[bx] /= tot;
-      }      
-    }
+    if (vary.numerical()) calcBoxPlots(slice);
   }
+  
+  protected void calcBoxPlots(DataSlice2D slice) {
+    
+    
+    
+    
+//    averageY = new double[binCountX];
+//    stddevY = new double[binCountX];
+//    onestdFrac = new double[binCountX];
+//    twostdGFrac = new double[binCountX];
+//    twostdSFrac = new double[binCountX]; 
+//    marginalWeights = new double[binCountX];
+//
+//    averageY = new double[binCountX];
+//    stddevY = new double[binCountX];
+//    onestdFrac = new double[binCountX];
+    
+    median = new float[binCountX];
+    perc9 = new float[binCountX];
+    perc25 = new float[binCountX];
+    perc75 = new float[binCountX];
+    perc91 = new float[binCountX];
+//    count = new long[binCountX];
+//    fracCenter = new double[binCountX];
+//    fracLower = new double[binCountX];
+//    fracUpper = new double[binCountX];
+    
+    @SuppressWarnings("unchecked")
+    ArrayList<Value2D>[] values = new ArrayList[binCountX];
+    for (int i = 0; i < binCountX; i++) {
+      values[i] = new ArrayList<Value2D>(); 
+    }
+    
+    for (Value2D value: slice.values) {
+      int bx = PApplet.constrain((int)(value.x / binSizeX), 0, binCountX - 1);
+      values[bx].add(value);
+//      count[bx]++;
+    }
+    
+    for (int bx = 0; bx < binCountX; bx++) {
+      ArrayList<Value2D> vbx = values[bx];
+      if (vbx.size() == 0) continue;
+      Collections.sort(vbx, new ComparatorY());
+      double[] sum = new double[vbx.size()];
+      double[] prob = new double[vbx.size()];
+      double sum0 = 0;
+      for (int i = 0; i < sum.length; i++) {
+        sum[i] = sum0 + vbx.get(i).w;
+        sum0 = sum[i];
+      }
+      double F = 100 / sum[sum.length - 1];
+      for (int i = 0; i < sum.length; i++) {
+        prob[i] = F * (sum[i] - 0.5f * vbx.get(i).w);
+      }
+      float Q9 = findPercentile(vbx, prob, 9);
+      float Q25 = findPercentile(vbx, prob, 25);
+      float Q50 = findPercentile(vbx, prob, 50);
+      float Q75 = findPercentile(vbx, prob, 75);
+      float Q91 = findPercentile(vbx, prob, 91);
+//      float IQR = Q75 - Q25;
+//      System.out.println(Q25 + " " + Q50 + " " + Q75);
+      
+      median[bx] = Q50;
+      perc9[bx] = Q9;
+      perc25[bx] = Q25;
+      perc75[bx] = Q75;
+      perc91[bx] = Q91;
+//      iqr[bx] = 
+    }
+    
+    
+    
+    
+//    for (int bx = 0; bx < binCountX; bx++) {
+//      double tot = 0;
+//      for (int by = 0; by < binCountY; by++) {
+//        tot += weightSum[bx][by];
+//      }
+//      marginalWeights[bx] = tot;
+//      if (0 < tot) { 
+//        double mean = averageY[bx] /= tot;
+//        double meansq = stddevY[bx] /= tot;
+//        stddevY[bx] = Math.sqrt(Math.max(0, meansq - mean * mean));
+//      } else {
+//        averageY[bx] = Double.NaN;
+//        stddevY[bx] = Double.NaN;
+//      }
+//    }
+//    
+//    Arrays.fill(onestdFrac, 0d);
+//    Arrays.fill(twostdGFrac, 0d);
+//    Arrays.fill(twostdSFrac, 0d);      
+//    for (Value2D value: slice.values) {
+//      int bx = PApplet.constrain((int)(value.x / binSizeX), 0, binCountX - 1);
+//      double ave = averageY[bx];
+//      double std = stddevY[bx];
+//      if (Double.isNaN(ave) || Double.isNaN(std)) continue;
+//      
+//      if (ave - std <= value.y && value.y <= ave + std) {
+//        onestdFrac[bx] += value.w;
+//      } else if (ave + std < value.y && value.y <= ave + 2 * std) {
+//        twostdGFrac[bx] += value.w;
+//      } else if (ave - 2 * std <= value.y && value.y < ave - std) {
+//        twostdSFrac[bx] += value.w;
+//      }
+//    }
+//    
+//    for (int bx = 0; bx < binCountX; bx++) {
+//      double tot = marginalWeights[bx];
+//      onestdFrac[bx] /= tot;
+//      twostdGFrac[bx] /= tot;
+//      twostdSFrac[bx] /= tot;
+//    }
+    
+    
+    
+  }
+  
+  protected static float findPercentile(ArrayList<Value2D> vals, double[] prob, double P) {
+    int len = prob.length;
+    double p0 = 0;
+    double v0 = 0;
+    for (int i = 0; i < len; i++) {
+      double p = prob[i];
+      double v = vals.get(i).y;
+      if (Numbers.equal(P, p)) return (float)v;
+      if (p0 < P && P < p) {
+        return (float)(v0 + len * (v - v0) * (P - p0) / 100);
+      }      
+      p0 = p;
+      v0 = v;
+    }
+    return (float)vals.get(len - 1).y;
+  }
+  
+  // Sorts in ascending order using the y value
+  protected static class ComparatorY implements Comparator<Value2D> {
+    public int compare(Value2D v1, Value2D v2) {
+      if (Numbers.equal(v1.y, v2.y)) return 0;
+      else return (int)((v1.y - v2.y) / Math.abs(v1.y - v2.y));
+    }
+  }  
 }
