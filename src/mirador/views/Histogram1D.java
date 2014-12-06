@@ -29,7 +29,7 @@ public class Histogram1D extends View {
         float p = density[bx];
         float h = PApplet.map(p, 0, maxProb, 0, 0.5f);
 //        float p = density[bx];
-        pg.fill(BLUE);
+        pg.fill(GREY);
         pg.rect(binw * bx, pg.height * (1 - h), binw, pg.height * h);        
       }
     }        

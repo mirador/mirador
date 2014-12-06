@@ -24,6 +24,7 @@ abstract public class View {
   final static public int EIKOSOGRAM = 2;
   
   final static public int WHITE = 0xFFFFFFFF;
+  final static public int GREY  = 0xFF9B9B9B;
   final static public int BLUE  = 0xFF278DD2;
   
   protected Variable varx, vary;
