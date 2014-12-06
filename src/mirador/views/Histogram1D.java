@@ -13,6 +13,7 @@ public class Histogram1D extends View {
   protected float binSize;
   protected int binCount;
   protected float maxProb;
+  protected int sampleSize;
   
   public Histogram1D(DataSlice1D slice) {
     super(slice.varx, slice.varx, slice.ranges);
@@ -40,7 +41,7 @@ public class Histogram1D extends View {
     return "";
   }
   
-  public Selection getSelection(double valx, double valy) {
+  public Selection getSelection(double valx, double valy, boolean shift) {
     if (1 < binCount) { 
       float binw = 1.0f / binCount;          
       for (int bx = 0; bx < binCount; bx++) {        
@@ -50,7 +51,12 @@ public class Histogram1D extends View {
         float x1 = binw * bx + binw;
         if (x0 < valx && valx < x1) {
           Selection sel = new Selection(x0, (1 - h), binw, h);
-          sel.setLabel(PApplet.nfc(100 * p, 2) + "%");
+          if (shift) {
+            sel.setLabel(PApplet.round(sampleSize * p) + "/" + sampleSize);
+          } else {
+            sel.setLabel(PApplet.nfc(100 * p, 2) + "%");  
+          }
+          
           return sel;
         }        
       }
@@ -64,6 +70,8 @@ public class Histogram1D extends View {
     if (0 < binCount) {
       binSize = 1.0f / binCount;
     }
+    
+    sampleSize = slice.values.size();
     
     // Initializing arrays -----------------------------------------------------    
     weightSum = new double[binCount];

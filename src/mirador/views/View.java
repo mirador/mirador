@@ -24,7 +24,7 @@ abstract public class View {
   final static public int EIKOSOGRAM = 2;
   
   final static public int WHITE = 0xFFFFFFFF;
-  final static public int GREY  = 0xFF9B9B9B;
+  final static public int GREY  = 0xFFBFD8F2;
   final static public int BLUE  = 0xFF278DD2;
   
   protected Variable varx, vary;
@@ -65,7 +65,7 @@ abstract public class View {
   
   abstract public void draw(PGraphics pg);
   
-  abstract public Selection getSelection(double valx, double valy);
+  abstract public Selection getSelection(double valx, double valy, boolean shift);
   
   protected int mixColors(int col0, int col1, float f) {
     int a = (int)PApplet.map(f, 0, 1, col0 >> 24 & 0xFF, col1 >> 24 & 0xFF);

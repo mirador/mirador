@@ -292,7 +292,7 @@ public class RowPlots extends ColumnScroller {
             y0 <= mouseY && mouseY <= y0 + h0) {
           double valx = PApplet.constrain((mouseX - x0) / w0, 0, 1);
           double valy = PApplet.constrain((mouseY - y0) / h0, 0, 1);
-          drawSelection(view.getSelection(valx, valy), x0, y0, w0, h0);
+          drawSelection(view.getSelection(valx, valy, keyPressed(SHIFT)), x0, y0, w0, h0);
         }
         
         if (depend && mira.project.pvalue() < 1) {
@@ -334,7 +334,7 @@ public class RowPlots extends ColumnScroller {
           y0 <= mouseY && mouseY <= y0 + h0) {
         double valx = PApplet.constrain((mouseX - x0) / w0, 0, 1);
         double valy = PApplet.constrain((mouseY - y0) / h0, 0, 1);
-        drawSelection(pg, view.getSelection(valx, valy));
+        drawSelection(pg, view.getSelection(valx, valy, keyPressed(SHIFT)));
       }
       
       if (depend && mira.project.pvalue() < 1) {

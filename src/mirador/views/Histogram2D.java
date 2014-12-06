@@ -22,6 +22,7 @@ public class Histogram2D extends View {
   protected int binCountX;
   protected int binCountY;
   protected float maxProb; 
+  protected int sampleSize;
   
   public Histogram2D(DataSlice2D slice) {
     super(slice.varx, slice.vary, slice.ranges);
@@ -46,7 +47,7 @@ public class Histogram2D extends View {
     pg.endDraw();
   }
   
-  public Selection getSelection(double valx, double valy) {
+  public Selection getSelection(double valx, double valy, boolean shift) {
     if (1 < binCountX && 1 < binCountY) {
       float binw = 1.0f / binCountX;
       float binh = 1.0f / binCountY;
@@ -61,7 +62,11 @@ public class Histogram2D extends View {
             float p = density[bx][by];
             float np = PApplet.map(p, 0, maxProb, 0, 1);
             sel.setColor(mixColors(WHITE, BLUE, np));
-            sel.setLabel(PApplet.nfc(100 * p, 2) + "%");
+            if (shift) {
+              sel.setLabel(PApplet.round(sampleSize * p) + "/" + sampleSize);
+            } else {
+              sel.setLabel(PApplet.nfc(100 * p, 2) + "%");
+            }
             return sel;
           }
         }
@@ -79,6 +84,8 @@ public class Histogram2D extends View {
       binSizeX = 1.0f / binCountX;      
       binSizeY = 1.0f / binCountY;
     }
+    
+    sampleSize = slice.values.size();
     
     // Initializing arrays -----------------------------------------------------    
     weightSum = new double[binCountX][binCountY];

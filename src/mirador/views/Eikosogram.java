@@ -3,12 +3,9 @@
 package mirador.views;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-
 import miralib.data.DataSlice2D;
-import miralib.data.Value1D;
 import miralib.data.Value2D;
 import miralib.math.Numbers;
 import miralib.shannon.BinOptimizer;
@@ -22,22 +19,16 @@ import processing.core.PGraphics;
 
 public class Eikosogram extends View {
   protected double[][] weightSum;
-  protected double[] marginalWeights;
   protected float[][] density;
   protected float[][] logDensity;
+  protected int[] sampleCounts;
   protected float[] marginalDensity;
   
-  protected float[]median;
-  protected float[]perc9;
+  protected float[]perc09;
   protected float[]perc25;
   protected float[]perc75;
   protected float[]perc91;
   
-//  protected double[] averageY;
-//  protected double[] stddevY;
-//  protected double[] onestdFrac;
-//  protected double[] twostdGFrac;
-//  protected double[] twostdSFrac;
   protected float binSizeX;
   protected float binSizeY;
   protected int binCountX;
@@ -100,18 +91,17 @@ public class Eikosogram extends View {
         drawEikosogram(pg);
       } else {
         drawBoxplot(pg);
-//        pg.background(255, 0 ,0);
       }
     }
     pg.endDraw();
   }
   
-  public Selection getSelection(double valx, double valy) {
+  public Selection getSelection(double valx, double valy, boolean shift) {
     if (1 < binCountX && 1 < binCountY) {
       if (vary.categorical()) {
-        return getEikosogramSelection(valx, valy);
+        return getEikosogramSelection(valx, valy, shift);
       } else {
-        return getBoxplotSelection(valx, valy);
+        return getBoxplotSelection(valx, valy, shift);
       }
     }
     return null;
@@ -140,10 +130,6 @@ public class Eikosogram extends View {
     for (int bx = 0; bx < binCountX; bx++) {
       float dx = pg.width * marginalDensity[bx];
       
-//      float mean = (float)averageY[bx];
-//      float std = (float)stddevY[bx];
-//      if (Float.isNaN(mean) || Float.isNaN(std)) continue;
-      
       pg.noStroke();
       
       float y0 = pg.height * (1 - perc75[bx]);
@@ -157,23 +143,19 @@ public class Eikosogram extends View {
       
       // Q0 - Q1 box
       y0 = pg.height * (1 - perc25[bx]);
-      dy = pg.height * (perc25[bx] - perc9[bx]);
+      dy = pg.height * (perc25[bx] - perc09[bx]);
       pg.rect(x0, y0, dx, dy);
       
-      // Q3 - Q4 boxes
+      // Q3 - Q4 box
       y0 = pg.height * (1 - perc91[bx]);
       dy = pg.height * (perc91[bx] - perc75[bx]);
       pg.rect(x0, y0, dx, dy);
-      
-      pg.stroke(0, 100);
-      y0 = pg.height * (1 - median[bx]);
-      pg.line(x0, y0, x0 + dx, y0);
       
       x0 += dx;  
     }    
   }
   
-  public Selection getEikosogramSelection(double valx, double valy) {   
+  public Selection getEikosogramSelection(double valx, double valy, boolean shift) {   
     float x0 = 0;
     for (int bx = 0; bx < binCountX; bx++) {
       float dx = marginalDensity[bx];
@@ -187,10 +169,15 @@ public class Eikosogram extends View {
           Selection sel = new Selection(x0, y1, dx, dy);
           float f = PApplet.map(by, 0, binCountY - 1, 1, 0);
           sel.setColor(mixColors(WHITE, BLUE, f));
-          // For the percentage label we use the original density, not the logarithm
-          float perc = 100 * density[bx][by] / dx;
-          if (logY) sel.setLabel("log(" + PApplet.nfc(perc, 2) + "%)");
-          else sel.setLabel(PApplet.nfc(perc, 2) + "%");
+          if (shift) {            
+            float count = (density[bx][by] / dx) * sampleCounts[bx];
+            sel.setLabel(PApplet.round(count) + "/" + sampleCounts[bx]);           
+          } else {
+            // For the percentage label we use the original density, not the logarithm
+            float perc = 100 * density[bx][by] / dx;
+            if (logY) sel.setLabel("log(" + PApplet.nfc(perc, 2) + "%)");
+            else sel.setLabel(PApplet.nfc(perc, 2) + "%");            
+          }
           return sel;
         }        
         y0 -= dy;
@@ -200,7 +187,36 @@ public class Eikosogram extends View {
     return null;
   }
   
-  public Selection getBoxplotSelection(double valx, double valy) {
+  public Selection getBoxplotSelection(double valx, double valy, boolean shift) {
+//    float x0 = 0;
+//    for (int bx = 0; bx < binCountX; bx++) {
+//      float dx = pg.width * marginalDensity[bx];
+//      
+//      pg.noStroke();
+//      
+//      float y0 = pg.height * (1 - perc75[bx]);
+//      float dy = pg.height * (perc75[bx] - perc25[bx]);
+//      
+//      // Q1 - Q3 box
+//      pg.fill(mixColors(WHITE, BLUE, 1));
+//      pg.rect(x0, y0, dx, dy);
+//             
+//      pg.fill(mixColors(WHITE, BLUE, 0.5f));
+//      
+//      // Q0 - Q1 box
+//      y0 = pg.height * (1 - perc25[bx]);
+//      dy = pg.height * (perc25[bx] - perc09[bx]);
+//      pg.rect(x0, y0, dx, dy);
+//      
+//      // Q3 - Q4 box
+//      y0 = pg.height * (1 - perc91[bx]);
+//      dy = pg.height * (perc91[bx] - perc75[bx]);
+//      pg.rect(x0, y0, dx, dy);
+//      
+//      x0 += dx;  
+//    }  
+    
+    
 //    float x0 = 0;
 //    for (int bx = 0; bx < binCountX; bx++) {
 //      double mean = averageY[bx];
@@ -249,6 +265,7 @@ public class Eikosogram extends View {
     weightSum = new double[binCountX][binCountY];
     density = new float[binCountX][binCountY];
     marginalDensity = new float[binCountX];
+    sampleCounts = new int[binCountX];
     
     for (int bx = 0; bx < binCountX; bx++) {
       for (int by = 0; by < binCountY; by++) {
@@ -266,7 +283,8 @@ public class Eikosogram extends View {
         int by = PApplet.constrain((int)(value.y / binSizeY), 0, binCountY - 1);
         weightSum[bx][by] += value.w;
         totWeight += value.w;
-      }    
+        sampleCounts[bx]++;
+      }
 
       // Calculating density ---------------------------------------------------      
       for (int bx = 0; bx < binCountX; bx++) {
@@ -308,36 +326,16 @@ public class Eikosogram extends View {
           }
         }
       }
+      
+      if (vary.numerical()) calcBoxPlots(slice);
     } 
-
-    if (vary.numerical()) calcBoxPlots(slice);
   }
   
   protected void calcBoxPlots(DataSlice2D slice) {
-    
-    
-    
-    
-//    averageY = new double[binCountX];
-//    stddevY = new double[binCountX];
-//    onestdFrac = new double[binCountX];
-//    twostdGFrac = new double[binCountX];
-//    twostdSFrac = new double[binCountX]; 
-//    marginalWeights = new double[binCountX];
-//
-//    averageY = new double[binCountX];
-//    stddevY = new double[binCountX];
-//    onestdFrac = new double[binCountX];
-    
-    median = new float[binCountX];
-    perc9 = new float[binCountX];
+    perc09 = new float[binCountX];
     perc25 = new float[binCountX];
     perc75 = new float[binCountX];
     perc91 = new float[binCountX];
-//    count = new long[binCountX];
-//    fracCenter = new double[binCountX];
-//    fracLower = new double[binCountX];
-//    fracUpper = new double[binCountX];
     
     @SuppressWarnings("unchecked")
     ArrayList<Value2D>[] values = new ArrayList[binCountX];
@@ -348,7 +346,6 @@ public class Eikosogram extends View {
     for (Value2D value: slice.values) {
       int bx = PApplet.constrain((int)(value.x / binSizeX), 0, binCountX - 1);
       values[bx].add(value);
-//      count[bx]++;
     }
     
     for (int bx = 0; bx < binCountX; bx++) {
@@ -366,71 +363,20 @@ public class Eikosogram extends View {
       for (int i = 0; i < sum.length; i++) {
         prob[i] = F * (sum[i] - 0.5f * vbx.get(i).w);
       }
-      float Q9 = findPercentile(vbx, prob, 9);
-      float Q25 = findPercentile(vbx, prob, 25);
-      float Q50 = findPercentile(vbx, prob, 50);
-      float Q75 = findPercentile(vbx, prob, 75);
-      float Q91 = findPercentile(vbx, prob, 91);
-//      float IQR = Q75 - Q25;
-//      System.out.println(Q25 + " " + Q50 + " " + Q75);
-      
-      median[bx] = Q50;
-      perc9[bx] = Q9;
-      perc25[bx] = Q25;
-      perc75[bx] = Q75;
-      perc91[bx] = Q91;
-//      iqr[bx] = 
+
+      perc09[bx] = findPercentile(vbx, prob, 9);
+      perc25[bx] = findPercentile(vbx, prob, 25);
+      perc75[bx] = findPercentile(vbx, prob, 75);
+      perc91[bx] = findPercentile(vbx, prob, 91);
     }
-    
-    
-    
-    
-//    for (int bx = 0; bx < binCountX; bx++) {
-//      double tot = 0;
-//      for (int by = 0; by < binCountY; by++) {
-//        tot += weightSum[bx][by];
-//      }
-//      marginalWeights[bx] = tot;
-//      if (0 < tot) { 
-//        double mean = averageY[bx] /= tot;
-//        double meansq = stddevY[bx] /= tot;
-//        stddevY[bx] = Math.sqrt(Math.max(0, meansq - mean * mean));
-//      } else {
-//        averageY[bx] = Double.NaN;
-//        stddevY[bx] = Double.NaN;
-//      }
-//    }
-//    
-//    Arrays.fill(onestdFrac, 0d);
-//    Arrays.fill(twostdGFrac, 0d);
-//    Arrays.fill(twostdSFrac, 0d);      
-//    for (Value2D value: slice.values) {
-//      int bx = PApplet.constrain((int)(value.x / binSizeX), 0, binCountX - 1);
-//      double ave = averageY[bx];
-//      double std = stddevY[bx];
-//      if (Double.isNaN(ave) || Double.isNaN(std)) continue;
-//      
-//      if (ave - std <= value.y && value.y <= ave + std) {
-//        onestdFrac[bx] += value.w;
-//      } else if (ave + std < value.y && value.y <= ave + 2 * std) {
-//        twostdGFrac[bx] += value.w;
-//      } else if (ave - 2 * std <= value.y && value.y < ave - std) {
-//        twostdSFrac[bx] += value.w;
-//      }
-//    }
-//    
-//    for (int bx = 0; bx < binCountX; bx++) {
-//      double tot = marginalWeights[bx];
-//      onestdFrac[bx] /= tot;
-//      twostdGFrac[bx] /= tot;
-//      twostdSFrac[bx] /= tot;
-//    }
-    
-    
-    
   }
   
-  protected static float findPercentile(ArrayList<Value2D> vals, double[] prob, double P) {
+  // Returns the value realizing the weighted percentile P, using the Linear 
+  // Interpolation Between Closest Ranks method:
+  // http://en.wikipedia.org/wiki/Percentile#The_Linear_Interpolation_Between_Closest_Ranks_method
+  // http://en.wikipedia.org/wiki/Percentile#The_Weighted_Percentile_method
+  protected static float findPercentile(ArrayList<Value2D> vals, 
+                                        double[] prob, double P) {
     int len = prob.length;
     double p0 = 0;
     double v0 = 0;

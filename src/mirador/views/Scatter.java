@@ -14,9 +14,7 @@ import processing.core.PGraphics;
  *
  */
 
-public class Scatter extends View {
-  final static public boolean USE_ELLIPSES = true; 
-  
+public class Scatter extends View {  
   protected ArrayList<Value2D> points;
   
   public Scatter(DataSlice2D slice) {
@@ -40,13 +38,13 @@ public class Scatter extends View {
       float py = pg.height * (float)(1 - pt.y);
       float pw = pg.width * rad;
       float ph = pg.height * rad;        
-      if (USE_ELLIPSES) pg.ellipse(px, py, pw, ph);
-      else pg.rect(px - pw/2, py - ph/2, pw, ph);
+      if (50000 < points.size()) pg.rect(px - pw/2, py - ph/2, pw, ph);
+      else pg.ellipse(px, py, pw, ph);
     }              
     pg.endDraw();
   }
   
-  public Selection getSelection(double valx, double valy) {
+  public Selection getSelection(double valx, double valy, boolean shift) {
     if (points.size() < 500) {
       int count = PApplet.min(500, points.size());
       float rad = PApplet.map(count, 0, 500, 0.05f, 0.01f);
