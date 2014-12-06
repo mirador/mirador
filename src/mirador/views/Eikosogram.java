@@ -188,66 +188,55 @@ public class Eikosogram extends View {
   }
   
   public Selection getBoxplotSelection(double valx, double valy, boolean shift) {
-//    float x0 = 0;
-//    for (int bx = 0; bx < binCountX; bx++) {
-//      float dx = pg.width * marginalDensity[bx];
-//      
-//      pg.noStroke();
-//      
-//      float y0 = pg.height * (1 - perc75[bx]);
-//      float dy = pg.height * (perc75[bx] - perc25[bx]);
-//      
-//      // Q1 - Q3 box
-//      pg.fill(mixColors(WHITE, BLUE, 1));
-//      pg.rect(x0, y0, dx, dy);
-//             
-//      pg.fill(mixColors(WHITE, BLUE, 0.5f));
-//      
-//      // Q0 - Q1 box
-//      y0 = pg.height * (1 - perc25[bx]);
-//      dy = pg.height * (perc25[bx] - perc09[bx]);
-//      pg.rect(x0, y0, dx, dy);
-//      
-//      // Q3 - Q4 box
-//      y0 = pg.height * (1 - perc91[bx]);
-//      dy = pg.height * (perc91[bx] - perc75[bx]);
-//      pg.rect(x0, y0, dx, dy);
-//      
-//      x0 += dx;  
-//    }  
-    
-    
-//    float x0 = 0;
-//    for (int bx = 0; bx < binCountX; bx++) {
-//      double mean = averageY[bx];
-//      double std = stddevY[bx];
-//      float dx = marginalDensity[bx];
-//      float x1 = x0 + dx;
-//      if (Double.isNaN(mean) || Double.isNaN(std)) continue;
-//      
-//      float y0 = (float)(1 - mean - std);
-//      float dy = (float)(2 * std);
-//      float y1 = y0 + dy;
-//      
-//      if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) {
-//        Selection sel = new Selection(x0, y0, dx, dy);
-//        sel.setColor(mixColors(WHITE, BLUE, 1));
-//        sel.setLabel(PApplet.nfc(100 * (float)onestdFrac[bx], 2) + "%");
-//        return sel;
-//      } else if (x0 <= valx && valx <= x1 && y0 - dy/2 <= valy && valy <= y0) {
-//        Selection sel = new Selection(x0, y0 - dy/2, dx, dy/2);
-//        sel.setLabel(PApplet.nfc(100 * (float)twostdGFrac[bx], 2) + "%");
-//        sel.setColor(mixColors(WHITE, BLUE, 0.5f));
-//        return sel;
-//      } else if (x0 <= valx && valx <= x1 && y0 + dy <= valy && valy <= y0 + 3*dy/2) {
-//        Selection sel = new Selection(x0, y0 + dy, dx, dy/2);
-//        sel.setLabel(PApplet.nfc(100 * (float)twostdSFrac[bx], 2) + "%");
-//        sel.setColor(mixColors(WHITE, BLUE, 0.5f));
-//        return sel;
-//      }
-//      
-//      x0 += dx;  
-//    }    
+    float x0 = 0;
+    for (int bx = 0; bx < binCountX; bx++) {
+      float dx = marginalDensity[bx];
+      float x1 = x0 + dx;
+      
+      float y0 = 1 - perc75[bx];
+      float dy =  perc75[bx] - perc25[bx];          
+      float y1 = y0 + dy;             
+      if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) { // Q1 - Q3 box
+        Selection sel = new Selection(x0, y0, dx, dy);
+        sel.setColor(mixColors(WHITE, BLUE, 1));
+        if (shift) {
+          sel.setLabel(PApplet.round(0.5f * sampleCounts[bx]) + "/" + sampleCounts[bx]);
+        } else {
+          sel.setLabel("50%");
+        }
+        return sel;
+      } 
+      
+      y0 = 1 - perc25[bx];
+      dy =  perc25[bx] - perc09[bx];          
+      y1 = y0 + dy;     
+      if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) { // Q0 - Q1 box
+        Selection sel = new Selection(x0, y0, dx, dy);
+        sel.setColor(mixColors(WHITE, BLUE, 0.5f));
+        if (shift) {
+          sel.setLabel(PApplet.round(0.16f * sampleCounts[bx]) + "/" + sampleCounts[bx]);
+        } else {
+          sel.setLabel("16%");
+        }
+        return sel; 
+      }
+            
+      y0 = 1 - perc91[bx];
+      dy =  perc91[bx] - perc75[bx];          
+      y1 = y0 + dy;
+      if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) { // Q3 - Q4 box
+        Selection sel = new Selection(x0, y0, dx, dy);
+        sel.setColor(mixColors(WHITE, BLUE, 0.5f));
+        if (shift) {
+          sel.setLabel(PApplet.round(0.16f * sampleCounts[bx]) + "/" + sampleCounts[bx]);
+        } else {
+          sel.setLabel("16%");
+        }
+        return sel; 
+      }
+      
+      x0 = x1;  
+    }    
     return null;
   }  
   
