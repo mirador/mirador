@@ -5,11 +5,14 @@ package mirador.views;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import mirador.ui.Widget;
 import miralib.data.DataSlice2D;
 import miralib.data.Value2D;
 import miralib.math.Numbers;
 import miralib.shannon.BinOptimizer;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PGraphics;
 
 /**
@@ -195,14 +198,18 @@ public class Eikosogram extends View {
   public Selection getBoxplotSelection(double valx, double valy, boolean shift) {
     float x0 = 0;
     for (int bx = 0; bx < binCountX; bx++) {
-      Selection sel = null;
+      BoxplotSelection sel = null;
       float dx = marginalDensity[bx];
       float x1 = x0 + dx;
       
       // Q1 - Q3 box
       sel = getPercentileSelection(x0, x1, perc25[bx], perc75[bx], weight75[bx],
                                    valx, valy, sampleCounts[bx], shift);
-      if (sel != null) return sel;
+      if (sel != null) {
+        sel.drawMedian = true;
+        sel.median = perc50[bx];
+        return sel;
+      }
       
       // Q0 - Q1 box
       sel = getPercentileSelection(x0, x1, perc09[bx], perc25[bx], weight25[bx], 
@@ -219,15 +226,15 @@ public class Eikosogram extends View {
     return null;
   }  
   
-  protected Selection getPercentileSelection(float x0, float x1, 
-                                             float v0, float v1, float p, 
-                                             double valx, double valy,
-                                             int counts, boolean shift) {
+  protected BoxplotSelection getPercentileSelection(float x0, float x1, 
+                                                    float v0, float v1, float p, 
+                                                    double valx, double valy,
+                                                    int counts, boolean shift) {
     float y0 = 1 - v1;
     float dy =  v1 - v0;          
     float y1 = y0 + dy;
     if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) {
-      Selection sel = new Selection(x0, y0, x1 - x0, dy);
+      BoxplotSelection sel = new BoxplotSelection(x0, y0, x1 - x0, dy);
       sel.setColor(mixColors(WHITE, BLUE, 0.5f));
       if (shift) {
         sel.setLabel(PApplet.round(p * counts) + "/" + counts);
@@ -412,4 +419,101 @@ public class Eikosogram extends View {
       else return (int)((v1.y - v2.y) / Math.abs(v1.y - v2.y));
     }
   }  
+  
+  public class BoxplotSelection extends Selection  {
+    boolean drawMedian = false;
+    float median;
+    
+    BoxplotSelection(float x, float y, float w, float h) {
+      super(x, y, w, h);
+    }
+    
+    public void draw(Widget wt, float x0, float y0, float w0, float h0, 
+                     PFont font, int color) {
+      scale(x0, y0, w0, h0);
+      
+      if (isEllipse) {
+        // TODO: implement
+        wt.noStroke();
+        wt.fill(wt.color(0, 0, 0), 50);
+        wt.ellipse(x, y, w, h);
+      } else {
+        wt.noStroke();
+        wt.fill(wt.color(0, 0, 0), 50);
+        wt.rect(x, y, w, h);
+      }
+      
+      if (drawMedian) {
+        wt.stroke(wt.color(0, 0, 0), 35);
+        float my = PApplet.map(1 - median, 0, 1, y0, y0 + h0);
+        wt.line(x, my, x + w, my);
+      }
+            
+      if (hasLabel) {
+        wt.textFont(font);
+        wt.fill(color);
+        float tw = wt.textWidth(label);          
+        float tx = x + w/2 - tw/2;
+        if (tx < x0) tx = x0;
+        if (x0 + w0 < tx + tw) tx = x0 + w0 - tw;
+        
+        float ty = 0;
+        if (font.getSize() < h) { 
+          float yc = (h - font.getSize()) / 2;
+          ty = y + h - yc;      
+        } else {
+          ty = y - 5;
+          if (ty - 5 - font.getSize() < y0) ty = y + h + 5 + font.getSize();
+        }
+        
+        wt.text(label, tx, ty);
+      }    
+    }
+    
+    public void draw(PGraphics pg, PFont font, int color) {
+      float x0 = 0; 
+      float y0 = 0; 
+      float w0 = pg.width;
+      float h0 = pg.height;
+      
+      scale(x0, y0, w0, h0);
+      
+      if (isEllipse) {
+        // TODO: implement
+        pg.noStroke();
+        pg.fill(pg.color(0, 0, 0), 50);
+        pg.ellipse(x, y, w, h);
+      } else {
+        pg.noStroke();
+        pg.fill(pg.color(0, 0, 0), 50);
+        pg.rect(x, y, w, h);
+      }
+
+      if (drawMedian) {
+        pg.stroke(pg.color(0, 0, 0), 35);
+        float my = PApplet.map(1 - median, 0, 1, y0, y0 + h0);
+        pg.line(x, my, x + w, my);        
+      }      
+      
+      if (hasLabel) {
+        pg.textFont(font);
+        pg.fill(color >> 16 & 0xFF, color >> 8 & 0xFF, color & 0xFF, 255);
+        float tw = pg.textWidth(label);          
+        float tx = x + w/2 - tw/2;
+        if (tx < x0) tx = x0;
+        if (x0 + w0 < tx + tw) tx = x0 + w0 - tw;
+        
+        float ty = 0;
+        if (font.getSize() < h) { 
+          float yc = (h - font.getSize()) / 2;
+          ty = y + h - yc;      
+        } else {
+          ty = y - 5;
+          if (ty - 5 - font.getSize() < y0) ty = y + h + 5 + font.getSize();
+        }
+                
+        pg.text(label, tx, ty);
+      }  
+    }
+  }
 }
