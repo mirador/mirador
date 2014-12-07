@@ -292,7 +292,8 @@ public class RowPlots extends ColumnScroller {
             y0 <= mouseY && mouseY <= y0 + h0) {
           double valx = PApplet.constrain((mouseX - x0) / w0, 0, 1);
           double valy = PApplet.constrain((mouseY - y0) / h0, 0, 1);
-          drawSelection(view.getSelection(valx, valy, keyPressed(SHIFT)), x0, y0, w0, h0);
+          view.drawSelection(valx, valy, keyPressed(SHIFT), x0, y0, w0, h0, 
+                             RowPlots.this, pFont, pColor);          
         }
         
         if (depend && mira.project.pvalue() < 1) {
@@ -334,7 +335,7 @@ public class RowPlots extends ColumnScroller {
           y0 <= mouseY && mouseY <= y0 + h0) {
         double valx = PApplet.constrain((mouseX - x0) / w0, 0, 1);
         double valy = PApplet.constrain((mouseY - y0) / h0, 0, 1);
-        drawSelection(pg, view.getSelection(valx, valy, keyPressed(SHIFT)));
+        view.drawSelection(valx, valy, keyPressed(SHIFT), pg, pFont, pColor);
       }
       
       if (depend && mira.project.pvalue() < 1) {
@@ -355,86 +356,6 @@ public class RowPlots extends ColumnScroller {
       pg.strokeWeight(2);
       pg.rect(0, 0, pg.width, pg.height);
       pg.endDraw();
-    }
-    
-    void drawSelection(View.Selection sel, 
-                       float x0, float y0, float w0, float h0) {
-      if (sel == null) return;
-      
-      sel.scale(x0, y0, w0, h0);
-      
-      if (sel.isEllipse) {
-        // TODO: implement
-        noStroke();
-        fill(color(0, 0, 0), 50);
-        ellipse(sel.x, sel.y, sel.w, sel.h);
-      } else {
-        noStroke();
-        fill(color(0, 0, 0), 50);
-        rect(sel.x, sel.y, sel.w, sel.h);
-      }
-      
-      if (sel.hasLabel) {
-        textFont(pFont);
-        fill(pColor);
-        float tw = textWidth(sel.label);          
-        float tx = sel.x + sel.w/2 - tw/2;
-        if (tx < x0) tx = x0;
-        if (x0 + w0 < tx + tw) tx = x0 + w0 - tw;
-        
-        float ty = 0;
-        if (pFont.getSize() < sel.h) { 
-          float yc = (sel.h - pFont.getSize()) / 2;
-          ty = sel.y + sel.h - yc;      
-        } else {
-          ty = sel.y - 5;
-          if (ty - 5 - pFont.getSize() < y0) ty = sel.y + sel.h + 5 + pFont.getSize();
-        }
-        
-        text(sel.label, tx, ty);
-      }      
-    }
-    
-    void drawSelection(PGraphics pg, View.Selection sel) {
-      if (sel == null) return;
-      
-      float x0 = 0; 
-      float y0 = 0; 
-      float w0 = pg.width;
-      float h0 = pg.height;
-      
-      sel.scale(x0, y0, w0, h0);
-      
-      if (sel.isEllipse) {
-        // TODO: implement
-        pg.noStroke();
-        pg.fill(color(0, 0, 0), 50);
-        pg.ellipse(sel.x, sel.y, sel.w, sel.h);
-      } else {
-        pg.noStroke();
-        pg.fill(color(0, 0, 0), 50);
-        pg.rect(sel.x, sel.y, sel.w, sel.h);
-      }
-      
-      if (sel.hasLabel) {
-        pg.textFont(pFont);
-        pg.fill(pColor >> 16 & 0xFF, pColor >> 8 & 0xFF, pColor & 0xFF, 255);
-        float tw = pg.textWidth(sel.label);          
-        float tx = sel.x + sel.w/2 - tw/2;
-        if (tx < x0) tx = x0;
-        if (x0 + w0 < tx + tw) tx = x0 + w0 - tw;
-        
-        float ty = 0;
-        if (pFont.getSize() < sel.h) { 
-          float yc = (sel.h - pFont.getSize()) / 2;
-          ty = sel.y + sel.h - yc;      
-        } else {
-          ty = sel.y - 5;
-          if (ty - 5 - pFont.getSize() < y0) ty = sel.y + sel.h + 5 + pFont.getSize();
-        }
-                
-        pg.text(sel.label, tx, ty);
-      }       
     }
     
     void save() {

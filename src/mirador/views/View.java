@@ -2,12 +2,14 @@
 
 package mirador.views;
 
+import mirador.ui.Widget;
 import miralib.data.DataRanges;
 import miralib.data.DataSlice1D;
 import miralib.data.DataSlice2D;
 import miralib.data.Variable;
 import miralib.utils.Log;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PGraphics;
 
 /**
@@ -66,6 +68,19 @@ abstract public class View {
   abstract public void draw(PGraphics pg);
   
   abstract public Selection getSelection(double valx, double valy, boolean shift);
+
+  public void drawSelection(double valx, double valy, boolean shift,
+                            float x0, float y0, float w0, float h0,
+                            Widget wt, PFont font, int color) {
+    Selection sel = getSelection(valx, valy, shift);
+    if (sel != null) sel.draw(wt, x0, y0, w0, h0, font, color);
+  }  
+    
+  public void drawSelection(double valx, double valy, boolean shift,
+                            PGraphics pg, PFont font, int color) {
+    Selection sel = getSelection(valx, valy, shift);
+    if (sel != null) sel.draw(pg, font, color);
+  }
   
   protected int mixColors(int col0, int col1, float f) {
     int a = (int)PApplet.map(f, 0, 1, col0 >> 24 & 0xFF, col1 >> 24 & 0xFF);
@@ -122,6 +137,82 @@ abstract public class View {
       }
       if (y0 + h0 < y + h) h = y0 + h0 - y;      
     }
+    
+    public void draw(Widget wt, float x0, float y0, float w0, float h0, 
+                     PFont font, int color) {
+      scale(x0, y0, w0, h0);
+      
+      if (isEllipse) {
+        // TODO: implement
+        wt.noStroke();
+        wt.fill(wt.color(0, 0, 0), 50);
+        wt.ellipse(x, y, w, h);
+      } else {
+        wt.noStroke();
+        wt.fill(wt.color(0, 0, 0), 50);
+        wt.rect(x, y, w, h);
+      }
+      
+      if (hasLabel) {
+        wt.textFont(font);
+        wt.fill(color);
+        float tw = wt.textWidth(label);          
+        float tx = x + w/2 - tw/2;
+        if (tx < x0) tx = x0;
+        if (x0 + w0 < tx + tw) tx = x0 + w0 - tw;
+        
+        float ty = 0;
+        if (font.getSize() < h) { 
+          float yc = (h - font.getSize()) / 2;
+          ty = y + h - yc;      
+        } else {
+          ty = y - 5;
+          if (ty - 5 - font.getSize() < y0) ty = y + h + 5 + font.getSize();
+        }
+        
+        wt.text(label, tx, ty);
+      }      
+    }
+    
+    public void draw(PGraphics pg, PFont font, int color) {
+      float x0 = 0; 
+      float y0 = 0; 
+      float w0 = pg.width;
+      float h0 = pg.height;
+      
+      scale(x0, y0, w0, h0);
+      
+      if (isEllipse) {
+        // TODO: implement
+        pg.noStroke();
+        pg.fill(pg.color(0, 0, 0), 50);
+        pg.ellipse(x, y, w, h);
+      } else {
+        pg.noStroke();
+        pg.fill(pg.color(0, 0, 0), 50);
+        pg.rect(x, y, w, h);
+      }
+      
+      if (hasLabel) {
+        pg.textFont(font);
+        pg.fill(color >> 16 & 0xFF, color >> 8 & 0xFF, color & 0xFF, 255);
+        float tw = pg.textWidth(label);          
+        float tx = x + w/2 - tw/2;
+        if (tx < x0) tx = x0;
+        if (x0 + w0 < tx + tw) tx = x0 + w0 - tw;
+        
+        float ty = 0;
+        if (font.getSize() < h) { 
+          float yc = (h - font.getSize()) / 2;
+          ty = y + h - yc;      
+        } else {
+          ty = y - 5;
+          if (ty - 5 - font.getSize() < y0) ty = y + h + 5 + font.getSize();
+        }
+                
+        pg.text(label, tx, ty);
+      }      
+    }    
   }
   
   static public String typeToString(int type) {
