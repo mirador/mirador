@@ -26,8 +26,13 @@ public class Eikosogram extends View {
   
   protected float[]perc09;
   protected float[]perc25;
+  protected float[]perc50;
   protected float[]perc75;
   protected float[]perc91;
+  
+  protected float[]weight25;
+  protected float[]weight75;
+  protected float[]weight91;  
   
   protected float binSizeX;
   protected float binSizeY;
@@ -190,55 +195,50 @@ public class Eikosogram extends View {
   public Selection getBoxplotSelection(double valx, double valy, boolean shift) {
     float x0 = 0;
     for (int bx = 0; bx < binCountX; bx++) {
+      Selection sel = null;
       float dx = marginalDensity[bx];
       float x1 = x0 + dx;
       
-      float y0 = 1 - perc75[bx];
-      float dy =  perc75[bx] - perc25[bx];          
-      float y1 = y0 + dy;             
-      if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) { // Q1 - Q3 box
-        Selection sel = new Selection(x0, y0, dx, dy);
-        sel.setColor(mixColors(WHITE, BLUE, 1));
-        if (shift) {
-          sel.setLabel(PApplet.round(0.5f * sampleCounts[bx]) + "/" + sampleCounts[bx]);
-        } else {
-          sel.setLabel("50%");
-        }
-        return sel;
-      } 
+      // Q1 - Q3 box
+      sel = getPercentileSelection(x0, x1, perc25[bx], perc75[bx], weight75[bx],
+                                   valx, valy, sampleCounts[bx], shift);
+      if (sel != null) return sel;
       
-      y0 = 1 - perc25[bx];
-      dy =  perc25[bx] - perc09[bx];          
-      y1 = y0 + dy;     
-      if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) { // Q0 - Q1 box
-        Selection sel = new Selection(x0, y0, dx, dy);
-        sel.setColor(mixColors(WHITE, BLUE, 0.5f));
-        if (shift) {
-          sel.setLabel(PApplet.round(0.16f * sampleCounts[bx]) + "/" + sampleCounts[bx]);
-        } else {
-          sel.setLabel("16%");
-        }
-        return sel; 
-      }
-            
-      y0 = 1 - perc91[bx];
-      dy =  perc91[bx] - perc75[bx];          
-      y1 = y0 + dy;
-      if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) { // Q3 - Q4 box
-        Selection sel = new Selection(x0, y0, dx, dy);
-        sel.setColor(mixColors(WHITE, BLUE, 0.5f));
-        if (shift) {
-          sel.setLabel(PApplet.round(0.16f * sampleCounts[bx]) + "/" + sampleCounts[bx]);
-        } else {
-          sel.setLabel("16%");
-        }
-        return sel; 
-      }
+      // Q0 - Q1 box
+      sel = getPercentileSelection(x0, x1, perc09[bx], perc25[bx], weight25[bx], 
+                                   valx, valy, sampleCounts[bx], shift);
+      if (sel != null) return sel;
+      
+      // Q3 - Q4 box
+      sel = getPercentileSelection(x0, x1, perc75[bx], perc91[bx], weight91[bx],
+                                   valx, valy, sampleCounts[bx], shift);
+      if (sel != null) return sel;
       
       x0 = x1;  
     }    
     return null;
   }  
+  
+  protected Selection getPercentileSelection(float x0, float x1, 
+                                             float v0, float v1, float p, 
+                                             double valx, double valy,
+                                             int counts, boolean shift) {
+    float y0 = 1 - v1;
+    float dy =  v1 - v0;          
+    float y1 = y0 + dy;
+    if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) {
+      Selection sel = new Selection(x0, y0, x1 - x0, dy);
+      sel.setColor(mixColors(WHITE, BLUE, 0.5f));
+      if (shift) {
+        sel.setLabel(PApplet.round(p * counts) + "/" + counts);
+      } else {
+        sel.setLabel(PApplet.nfc(100 * p, 2) + "%");
+      }
+      return sel; 
+    }
+    
+    return null;
+  }
   
   protected void calcDensity(DataSlice2D slice) {
     // Calculating number of bins ----------------------------------------------
@@ -323,8 +323,13 @@ public class Eikosogram extends View {
   protected void calcBoxPlots(DataSlice2D slice) {
     perc09 = new float[binCountX];
     perc25 = new float[binCountX];
+    perc50 = new float[binCountX];
     perc75 = new float[binCountX];
     perc91 = new float[binCountX];
+
+    weight25 = new float[binCountX];
+    weight75 = new float[binCountX];
+    weight91 = new float[binCountX];    
     
     @SuppressWarnings("unchecked")
     ArrayList<Value2D>[] values = new ArrayList[binCountX];
@@ -355,8 +360,26 @@ public class Eikosogram extends View {
 
       perc09[bx] = findPercentile(vbx, prob, 9);
       perc25[bx] = findPercentile(vbx, prob, 25);
+      perc50[bx] = findPercentile(vbx, prob, 50);
       perc75[bx] = findPercentile(vbx, prob, 75);
       perc91[bx] = findPercentile(vbx, prob, 91);
+      
+      double margw = 0;
+      for (Value2D v: vbx) {
+        margw += (float)v.w;
+        if (v.y <= perc09[bx] || perc91[bx] < v.y ) continue;
+        if (v.y <= perc25[bx]) {
+          weight25[bx] += (float)v.w;  
+        } else if (v.y <= perc75[bx]) {
+          weight75[bx] += (float)v.w;
+        } else if (v.y <= perc91[bx]) {
+          weight91[bx] += (float)v.w;
+        }
+      }
+      
+      weight25[bx] /= margw;
+      weight75[bx] /= margw;
+      weight91[bx] /= margw;
     }
   }
   
