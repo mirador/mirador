@@ -52,6 +52,23 @@
 					<p>
 					Finally, more complex datasets often require additional information such as variable groupings, and sample weights (for faster loading times, save the tables in a binary format). To support these scenarios, Mirador offers a custom project format where all the information required to properly display the dataset (table and dictionary files, additional parameters, etc.) can be stored in a .mira file. This file can be selected from the file dialog, and Mirador will parse it and open all the associated files.
 					</p>
+
+                    <h1>5. Data labels</h1>
+                    <p>
+                    String variables are not loaded into the UI, but they can still be used to attach labels to data points in the scatter view. All that is needed to enable this feature is to include the word "label" in the third column of the corresponding entry for that variable in the dictionary file (when provided).
+                    </p>
+
+                    <h1>6. Handling dates</h1>
+                    <p>
+                    Dates can be stored in a string column. Mirador will check if the values stored in any string column match an <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> format, and if so, it will assign a Date variable to that column. By default, Mirador will check strings against the "yyyy-MM-dd" format descriptor, meaning that valid date strings must contain year, month, and day represented as numbers, and separated by hyphens. Date values are handled internally as ordererd numbers, so date ranges are handled with the regular numerical range selector used for any other numerical variable:
+                    </p>
+
+                    <img src="css/images/dates.png"/>
+
+                    <p>
+                    Dates are printed by default using the "d MMM, yyyy" pattern, where day and year are numbers, and months are three letter abbreviations. Both date patterns (print and input) can be set by the user in the Mirador project file in the dates.parse and dates.print fields.
+                    </p>
+
 				</div>
 			</div>
 			<div id="footer" class="basic">
