@@ -82,7 +82,7 @@
 
 					<img src="css/images/catrange.png"/>
 
-					<p>Long-pressing of a checkbox will result in all the other checkboxes becoming unchecked/checked depending on the status of the checkbox receiving the long-press. This behavior can be useful to quickly switch and compare between two categories, or one category can be compared to all the rest.</p>
+					<p>Pressing the SHIFT key while clicking on a checkbox will result in inverting the current category selection. This behavior can be useful to quickly switch and compare between two categories, or one category can be compared to all the rest.</p>
 
 					<p>The information bar at the top of the window will update the number of selected data points. A “Reset” button also appears next to the counts.</p> 
 
@@ -128,7 +128,7 @@
 
 					<p>Mirador displays the data for each pair of variables using three different plot types: scatter, histogram, and eikosogram.</p>
 
-					<p>The scatter plot is the most straightforward representation of the data. For numerical, continuous variables, each circle simply stands for a single data instance. However, in the case of discrete variables (numerical integer or categorical), the area of the circles are scaled proportional to the total count of points falling into that value.</p>
+					<p>The scatter plot is the most straightforward representation of the data. For numerical, continuous variables, each circle simply stands for a single data instance. However, in the case of categorical variables, the position of the circles is randomized by wiggling them around the center locations, so they are not all drawn on top of each other.</p>
 
 					<img src="css/images/scatter.png"/>
 
@@ -140,9 +140,13 @@
 
 					<img src="css/images/eikosogram.png"/>
 
-                    <p>However, the eikosogram is not so convenient to represent a dependent numerical variable, because in this case there are typically many horizontal bands (as many as bin partitions along the Y axis), which make the plot difficult to read. Mirador uses a form of boxplot when Y is numerical (either integer or floating point), where the dark blue region is centered one standard deviation around the mean along the up and down directions, and the light blue extends two standard deviations away in both directions. As with the eikosograms, the width of each horizontal bin is proportional to its count:</p>
+                    <p>However, the eikosogram is not so convenient to represent a dependent numerical variable, because in this case there are typically many horizontal bands (as many as bin partitions along the Y axis), which make the plot difficult to read. Mirador uses a boxplot when Y is numerical (either integer or floating point), where the dark blue region includes the data between the 25 and 75-percentiles, and the top and bottom light blue boxes covers the 75-91 and 9-25 percentile ranges, respectively. As with the eikosograms, the width of each horizontal bin is proportional to its count:</p>
 
                     <img src="css/images/eikosonum.png"/>
+
+                    <p>The following figure shows the interpretation of the eikosogram plot in Mirador depending on the type of the vertical variable. In either case, statistical independence can be visually identified by a flat profile, since the conditional probabilities or the distributions summarized by the boxplots are independent of X:</p>
+
+					<img src="css/images/eiko-overview.png"/>
 
                     <p>When the row and column correspond to the same variable, then the plot is a simple 1D histogram approximating the probability distribution of that variable, irrespective of the currently selected plot type:</p>
 					<img src="css/images/hist1d.png"/>
@@ -155,12 +159,22 @@
 
 					<p>The exported profile data is saved as a stand-alone Mirador project, including not only the profile, but also the data for the selected variables and the current ranges. This data can be used for further statistical analysis outside of Mirador, as it is shown in this <a href="http://nbviewer.ipython.org/urls/github.com/mirador/mirador-docs/releases/download/statmod/mirador_statmod.ipynb">Machine Learning tutorial</a>.</p>
 
-					<h1>7. Scripting</h1>
+					<h1>7. Keyboard use</h1>
+
+					<p>Mirador is designed to be used entirely with the mouse, but it also accepts keyboard input to speed up certain operations. The previous sections shown that variable names can be typed in the search box to locate a variable more quickly, and also the SHIFT+mouse click combination allows to invert category selections.</p>
+
+                    <p>A few other instances where keyboard input is supported are the following:</p>
+                    <ul>
+                    <li><p>Cursor keys (LEFT, RIGHT, TOP, DOWN) to scroll through the variable browser.</p></li>
+                    <li><p>Pressing SHIFT while hovering the "Load Data" button will turn it into "Reload", which simply loads the current data into memory again, reseting any ranges and view changes.</p></li>
+                    <li><p>SHIFT can also be used to invert a closing operation: if SHIFT is pressed when closing a row or column, then all the other rows/columns with the exception of the selected one will be closed.</p></li>
+                    <li><p>Pressing SHIFT while hovering the histograms or eikosograms will reveal sample counts instead of percentages:</p></li>
+                    </ul>
+					<h1>8. Scripting</h1>
 
 					<p>It is also possible to use the underlying functionality in Mirador (data loading, correlation calculation) from Python. <a href="https://github.com/mirador/miralib">Miralib</a> is the underlying module in Mirador that handles the data loading and statistics analysis, which be accessed from Python, as it is described in <a href="http://nbviewer.ipython.org/urls/github.com/mirador/mirador-docs/releases/download/network/network.ipynb">this tutorial</a>.</p>
 
 					<p>The documentation of the Miralib API is not yet complete, but can be accessed <a href="./javadoc/index.html">here</a>.</p>
-
 				</div>
 			</div>
 			<div id="footer" class="basic">
