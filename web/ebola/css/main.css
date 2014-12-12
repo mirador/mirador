@@ -361,29 +361,23 @@ body #main-con #body-con #manual-contents .section .datasets .color {
   width: 100%;
   height: 5px;
 }
-body #main-con #body-con #manual-contents .section .datasets#health .color {
+body #main-con #body-con #manual-contents .section .datasets#raw .color {
   background: #009b7b;
 }
-body #main-con #body-con #manual-contents .section .datasets#health2 .color {
+body #main-con #body-con #manual-contents .section .datasets#mira .color {
   background: #00b82d;
 }
-body #main-con #body-con #manual-contents .section .datasets#sports .color {
-  background: #2a528b;
+body #main-con #body-con #manual-contents .section .datasets#csv .color {
+  background: #7cd196;
 }
-body #main-con #body-con #manual-contents .section .datasets#global .color {
-  background: #880106;
-}
-body #main-con #body-con #manual-contents .section .datasets#health .data-button:hover {
+body #main-con #body-con #manual-contents .section .datasets#raw .data-button:hover {
   background: #009b7b;
 }
-body #main-con #body-con #manual-contents .section .datasets#health2 .data-button:hover {
+body #main-con #body-con #manual-contents .section .datasets#mira .data-button:hover {
   background: #00b82d;
 }
-body #main-con #body-con #manual-contents .section .datasets#sports .data-button:hover {
-  background: #2a528b;
-}
-body #main-con #body-con #manual-contents .section .datasets#global .data-button:hover {
-  background: #880106;
+body #main-con #body-con #manual-contents .section .datasets#csv .data-button:hover {
+  background: #7cd196;
 }
 body #main-con #body-con #manual-contents .section .datasets h4 {
   font-family: MerriLight;
