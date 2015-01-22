@@ -31,7 +31,6 @@ import processing.core.PConstants;
  * 
  */
 
-@SuppressWarnings("serial")
 public class MiraApp extends PApplet {
   static public String RENDERER = P2D;
   static public int SMOOTH_LEVEL = 4;
