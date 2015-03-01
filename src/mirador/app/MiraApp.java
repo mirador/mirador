@@ -35,7 +35,7 @@ public class MiraApp extends PApplet {
   static public String RENDERER = P2D;
   static public int SMOOTH_LEVEL = 4;
   static public final String APP_NAME = "mirador";
-  static public final String APP_VERSION = "1.3";
+  static public final String APP_VERSION = "1.4beta";
   
   static public String inputFile = "default.mira";
   static protected Preferences prefs;
@@ -180,12 +180,12 @@ public class MiraApp extends PApplet {
   }
   
   public int getMissingThreshold() {
-    return project.missingThreshold;
+    return project.missThreshold;
   }
   
   public void setMissingThreshold(int threshold) {
-    if (project.missingThreshold != threshold) {
-      project.missingThreshold = threshold;
+    if (project.missThreshold != threshold) {
+      project.missThreshold = threshold;
       project.save();
       dataset.resort(project.pvalue(), project.missingThreshold());
       history.setMissingThreshold(project.missingThreshold());
