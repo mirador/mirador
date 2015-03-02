@@ -370,6 +370,9 @@ body #main-con #body-con #manual-contents .section .datasets#mira .color {
 body #main-con #body-con #manual-contents .section .datasets#csv .color {
   background: #7cd196;
 }
+body #main-con #body-con #manual-contents .section .datasets#verse .color {
+  background: #14c9a6;
+}
 body #main-con #body-con #manual-contents .section .datasets#raw .data-button:hover {
   background: #009b7b;
 }
@@ -378,6 +381,9 @@ body #main-con #body-con #manual-contents .section .datasets#mira .data-button:h
 }
 body #main-con #body-con #manual-contents .section .datasets#csv .data-button:hover {
   background: #7cd196;
+}
+body #main-con #body-con #manual-contents .section .datasets#verse .data-button:hover {
+  background: #14c9a6;
 }
 body #main-con #body-con #manual-contents .section .datasets h4 {
   font-family: MerriLight;

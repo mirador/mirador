@@ -35,7 +35,7 @@
 
                     <h1>Download the Data</h1>
 
-                    <p>The data is available in three packages: one containing the original raw files in Excel and <a href="http://en.wikipedia.org/wiki/Variant_Call_Format">VCF</a> formats, the second containing the project files that can be loaded directly into Mirador, and the third as a single CSV file that can read from virtually any tool. The Mirador dataset and the CSV file were generated from the raw files using the scripts available <a href="https://github.com/mirador/ebola">here</a>.</p>
+                    <p>The data is available in four packages: one containing the original raw files in Excel and <a href="http://en.wikipedia.org/wiki/Variant_Call_Format">VCF</a> formats, the second containing the project files that can be loaded directly into Mirador, the third as a single CSV file that can read from virtually any tool, and the fourth as a <a href="http://dataverse.org/">Dataverse</a> hosted on the <a href="http://thedata.harvard.edu/dvn/">Harvard Dataverse Network</a>. The Mirador dataset and the CSV file were generated from the raw files using the scripts available <a href="https://github.com/mirador/ebola">here</a>.</p>
 
                     <div class="datasets" id="raw">
 						<div class="color"></div>
@@ -86,33 +86,34 @@
 						</div>
 					</div>					
 
+					<div class="datasets" id="verse">
+						<div class="color"></div>
+						<h4>Ebola Dataverse hosted on the Harvard Dataverse Network</h4>
+						<div class="data-buttons">
+							<a href="http://thedata.harvard.edu/dvn/dv/ebola">
+								<div class="data-button down">
+									<h1>Open</h1>
+								</div>
+							</a>
+							<a href="http://dataverse.org/about/">
+								<div class="data-button about">
+									<h1>About</h1>
+								</div>
+							</a>
+						</div>
+					</div>					
+
 					<br style="clear:both" />
 				    </div>
 
 					<h1>How to Use the Data</h1>
-					<p>The raw data can be used with any software for statistical analysis, as well as the single CSV file. The Mirador dataset is specially formatted to load into the tool <a href="http://fathom.info/mirador/">Mirador</a> to conduct exploratory analysis and identify hypothesis of statistical association. A few ideas on the type of analysis that could be done with this data:</p>
-
-<!-- 
-					<p>In order to facilitate access to the data, we uploaded it to a couple of online storage and data visualization tools:</p>
-
-                    <ul>
-                        <li><a href="https://opendata.socrata.com/dataset/Ebola-Clinical-Data/gbrh-nbh8">OpenData</a></li>
-                        <li><a href="https://plot.ly/plot#">Plotly</a></li>
-                    </ul>
-
-                    <p>These tools make possible to share the data, add comments, create plots, and run <a href="http://nbviewer.ipython.org/github/plotly/python-user-guide/blob/master/s00_homepage/s00_homepage.ipynb">your own analysis</a> on it. A few ideas on the type of analysis that could be done:</p>
- -->
+					<p>The raw data can be used with any software for statistical analysis, as well as the single CSV file. The Dataverse offers <a href="http://thedata.harvard.edu/dvn/dv/ebola/faces/subsetting/SubsettingPage.xhtml?dtId=93727&versionNumber=1&studyListingIndex=12_c19baed82039311aefe758cb8eaa">several options</a> for descriptive statistics and advanced analysis. The Mirador dataset is specially formatted to load into the tool <a href="http://fathom.info/mirador/">Mirador</a> to conduct exploratory analysis and identify hypothesis of statistical association. A few ideas on the type of analysis that could be done with this data:</p>
 
                     <ul>
                         <li><p>We used date and location information to establish transmission chains. Other questions to answer: Are mortality rates higher in some places more than others? Are there any symptoms that are more common in specific areas?</p></li>
                         <li><p>There are several correlations in this data that link outcome with several clinical and laboratory variables, such as temperature and viral load. What other associatons can be found? Which of these correlations indicate a real causal relationship?</p></li>
                         <li><p>Is it possible to use this data to build a predictive model of Ebola prognosis? What variables should be incorporated in such model and why?</p> </li> 
                     </ul>
-
-<!-- Possible sites to link to the data -->
-<!-- http://datahub.io/ -->
-<!-- http://thedata.harvard.edu/dvn/ -->
-<!-- http://databib.org/index.php -->
 
                     <h1>Loading the Data into Mirador</h1>
 
@@ -135,7 +136,7 @@
 				</div>
 			</div>
 			<div id="footer" class="basic">
-				<p>Copyright © 2014 Fathom Information Design. All Rights Reserved.</p>
+				<p>Copyright © 2014-15 Fathom Information Design. All Rights Reserved.</p>
 			</div>
 		</div>
 	</body>
