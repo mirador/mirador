@@ -1023,9 +1023,9 @@ public class Widget implements PConstants {
     return intf.app.createShape();
   }
 
-  public PShape createShape(PShape source) {
-    return intf.app.createShape(source);
-  } 
+//  public PShape createShape(PShape source) {
+//    return intf.app.createShape(source);
+//  } 
   
   public PShape createShape(int type) {
     return intf.app.createShape(type);

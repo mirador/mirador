@@ -193,13 +193,13 @@ public class RowPlots extends ColumnScroller {
       }
       
       if (pcanvas != null) {
-        mira.removeCache(pcanvas);
+        mira.g.removeCache(pcanvas);
         pcanvas.dispose();
         pcanvas = null;
       }
       
       if (canvas != null) {
-        mira.removeCache(canvas);
+        mira.g.removeCache(canvas);
         canvas.dispose();
         canvas = null;       
       }
