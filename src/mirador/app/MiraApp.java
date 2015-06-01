@@ -71,28 +71,34 @@ public class MiraApp extends PApplet {
   protected float animTime;
   protected SoftFloat animAlpha;  
   
-  public int sketchQuality() {
-    return SMOOTH_LEVEL;
-  }
-
-  public int sketchWidth() {
-    return optWidth + varWidth + 4 * plotWidth;
-  }
-
-  public int sketchHeight() {
-    return labelHeightClose + 3 * plotHeight;
-  }
-
-  public String sketchRenderer() {
-    return RENDERER;
-  }
-
-  public boolean sketchFullScreen() {
-    return false;
-  }  
+//  public int sketchQuality() {
+//    return SMOOTH_LEVEL;
+//  }
+//
+//  public int sketchWidth() {
+//    return optWidth + varWidth + 4 * plotWidth;
+//  }
+//
+//  public int sketchHeight() {
+//    return labelHeightClose + 3 * plotHeight;
+//  }
+//
+//  public String sketchRenderer() {
+//    return RENDERER;
+//  }
+//
+//  public boolean sketchFullScreen() {
+//    return false;
+//  }  
     
-  public void setup() {
+  
+  public void settings() {
     size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
+//    smooth(SMOOTH_LEVEL);
+  }  
+  
+  public void setup() {
+    //size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
     smooth(SMOOTH_LEVEL);
     
     Log.init();
@@ -294,7 +300,7 @@ public class MiraApp extends PApplet {
     int alpha = animAlpha.getFloor();
     if (alpha == 0) {
       animating = false;
-      MiraApp.this.frame.setResizable(true);
+      MiraApp.this.surface.setResizable(true);
     }    
     float x = 0.5f * width;
     float y = 0.5f * height;
@@ -345,7 +351,7 @@ public class MiraApp extends PApplet {
       initInterface();      
       loaded = true;
       animAlpha.setTarget(0);
-      frame.setTitle(project.dataTitle);
+      surface.setTitle( project.dataTitle);
     }
   }  
   
