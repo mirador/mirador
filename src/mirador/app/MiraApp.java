@@ -94,7 +94,8 @@ public class MiraApp extends PApplet {
   
   public void settings() {
     size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
-//    smooth(SMOOTH_LEVEL);
+    pixelDensity(1);
+    smooth(4);
   }  
   
   public void setup() {
