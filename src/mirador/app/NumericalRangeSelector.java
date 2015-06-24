@@ -130,7 +130,7 @@ public class NumericalRangeSelector extends RangeSelector {
   }
   
   public Range getRange() {
-    return selVar.createRange(leftValue, rightValue);
+    return selVar.createRange(leftValue, rightValue, true);
   }  
   
   protected boolean setRange() {        
