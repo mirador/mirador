@@ -38,18 +38,18 @@ abstract public class View {
     this.ranges = ranges;    
   }
   
-  static public View create(DataSlice1D slice) {
-    return new Histogram1D(slice);
+  static public View create(DataSlice1D slice, int binAlgo) {
+    return new Histogram1D(slice, binAlgo);
   }
   
-  static public View create(DataSlice2D slice, int type) {
+  static public View create(DataSlice2D slice, int type, int binAlgo) {
     View view = null;
     if (type == SCATTER) {
       view = new Scatter(slice);
     } else if (type == HISTOGRAM) {
-      view = new Histogram2D(slice);  
+      view = new Histogram2D(slice, binAlgo);  
     } else if (type == EIKOSOGRAM) {
-      view = new Eikosogram(slice);
+      view = new Eikosogram(slice, binAlgo);
     } else {
       String err = "Unsupported view type: " + type;
       Log.error(err, new RuntimeException(err));

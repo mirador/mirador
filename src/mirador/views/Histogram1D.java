@@ -15,9 +15,9 @@ public class Histogram1D extends View {
   protected float maxProb;
   protected int sampleSize;
   
-  public Histogram1D(DataSlice1D slice) {
+  public Histogram1D(DataSlice1D slice, int algo) {
     super(slice.varx, slice.varx, slice.ranges);
-    calcDensity(slice);
+    calcDensity(slice, algo);
   }
 
   public void draw(PGraphics pg) {
@@ -64,9 +64,9 @@ public class Histogram1D extends View {
     return null;
   } 
 
-  protected void calcDensity(DataSlice1D slice) {
+  protected void calcDensity(DataSlice1D slice, int algo) {
     // Calculating number of bins ----------------------------------------------
-    binCount = BinOptimizer.calculate(slice);
+    binCount = BinOptimizer.calculate(slice, algo);
     if (0 < binCount) {
       binSize = 1.0f / binCount;
     }

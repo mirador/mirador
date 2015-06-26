@@ -43,9 +43,9 @@ public class Eikosogram extends View {
   protected int binCountY; 
   protected boolean logY;
   
-  public Eikosogram(DataSlice2D slice) {
+  public Eikosogram(DataSlice2D slice, int algo) {
     super(slice.varx, slice.vary, slice.ranges);
-    calcDensity(slice); 
+    calcDensity(slice, algo); 
   }
   
   public String getLabelX(double valx, double valy) {
@@ -247,9 +247,9 @@ public class Eikosogram extends View {
     return null;
   }
   
-  protected void calcDensity(DataSlice2D slice) {
+  protected void calcDensity(DataSlice2D slice, int algo) {
     // Calculating number of bins ----------------------------------------------
-    int[] res = BinOptimizer.calculate(slice);
+    int[] res = BinOptimizer.calculate(slice, algo);
     binCountX = res[0];
     binCountY = res[1];
     if (0 < binCountX && 0 < binCountY) {
