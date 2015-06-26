@@ -24,9 +24,9 @@ public class Histogram2D extends View {
   protected float maxProb; 
   protected int sampleSize;
   
-  public Histogram2D(DataSlice2D slice) {
+  public Histogram2D(DataSlice2D slice, int algo) {
     super(slice.varx, slice.vary, slice.ranges);
-    calcDensity(slice); 
+    calcDensity(slice, algo); 
   }
   
   public void draw(PGraphics pg) {
@@ -75,9 +75,9 @@ public class Histogram2D extends View {
     return null;
   }
   
-  protected void calcDensity(DataSlice2D slice) {
+  protected void calcDensity(DataSlice2D slice, int algo) {
     // Calculating number of bins ----------------------------------------------
-    int[] res = BinOptimizer.calculate(slice);
+    int[] res = BinOptimizer.calculate(slice, algo);
     binCountX = res[0];
     binCountY = res[1];
     if (0 < binCountX && 0 < binCountY) {

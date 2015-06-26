@@ -220,11 +220,11 @@ public class RowPlots extends ColumnScroller {
               if (var == rowVar) {
                 DataSlice1D slice = data.getSlice(rowVar, mira.ranges);
                 missing = slice.missing;
-                view = View.create(slice);
+                view = View.create(slice, mira.project.binAlgo);
               } else {
                 DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges);
                 missing = slice.missing;
-                view = View.create(slice, mira.getPlotType());
+                view = View.create(slice, mira.getPlotType(), mira.project.binAlgo);
               }
               update = true;
             }
