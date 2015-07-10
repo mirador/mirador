@@ -12,7 +12,9 @@ import mirador.ui.Interface;
 import mirador.ui.SoftFloat;
 import mirador.ui.Widget;
 import miralib.data.Variable;
+import miralib.math.Numbers;
 import miralib.utils.Log;
+import miralib.utils.Project;
 
 /**
  * Widget containing the profile view in Mirador.
@@ -53,6 +55,8 @@ public class Profile extends MiraWidget {
   protected float selRangeRight;
   protected SelectionHandle selLeftHandle;
   protected SelectionHandle selRightHandle;
+  
+  protected float fdr;
   
   protected Variable hoverVar;
   protected SoftFloat hoverAlpha;
@@ -261,6 +265,12 @@ public class Profile extends MiraWidget {
     
     selLeftHandle.draw();
     selRightHandle.draw();
+    
+    if (mira.project.sortMethod == Project.PVALUE) {
+      textFont(pFont);
+      fill(pColor);
+      text("FDR = " + PApplet.nfc(fdr, 2) + "%", selx1, y0);
+    }
   }
   
   protected void drawPoints() {
@@ -287,7 +297,12 @@ public class Profile extends MiraWidget {
       int alpha = PApplet.ceil(PApplet.map(hoverAlpha.get(), 255, 100, 0, 255));
       String ptLabel = hoverVar.getName();
       String ptAlias = hoverVar.getAlias();
-      if (!ptLabel.equals(ptAlias)) ptLabel += ": " + ptAlias; 
+      float score = data.getScore(hoverVar);
+      if (!ptLabel.equals(ptAlias)) ptLabel += ": " + ptAlias;      
+      if (mira.project.sortMethod == Project.PVALUE) {
+        double p = Math.pow(10, -score);
+        ptLabel += "\nP = " + Numbers.dfc(p); 
+      }
       
       textFont(ptFont);
       fill(ptColor, alpha);
@@ -396,6 +411,8 @@ public class Profile extends MiraWidget {
   }
   
   protected void updatePointSelection() {
+    Variable lastSel = null; 
+    float xmax = -1000;
     for (Variable var: points.keySet()) {
       SoftPoint pt = points.get(var);
       if (pt == null) {
@@ -404,9 +421,21 @@ public class Profile extends MiraWidget {
         continue; 
       }
       float x = pt.x.get();
-      pt.selected = selRangeLeft <= x && x <= selRangeRight;      
+      pt.selected = selRangeLeft <= x && x <= selRangeRight;
+      if (pt.selected && xmax < x) {
+        lastSel = var;
+        xmax = x;
+      }
     }
-    requestedUpdateSelection = false;
+    if (mira.project.sortMethod == Project.PVALUE && lastSel != null) {
+      int i = data.getColumn(lastSel) + 1;
+      int m = data.getColumnCount();
+      float score = data.getScore(lastSel);
+      float p = (float)Math.pow(10, -score);      
+      float q = ((float)m / i) * p;
+      fdr = Math.min(100 * q, 100); 
+      requestedUpdateSelection = false;
+    }
   }
   
   protected void handleResize(int newWidth, int newHeight) {
