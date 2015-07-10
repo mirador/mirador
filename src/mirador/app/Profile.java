@@ -3,6 +3,7 @@
 package mirador.app;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -269,7 +270,7 @@ public class Profile extends MiraWidget {
     if (mira.project.sortMethod == Project.PVALUE) {
       textFont(pFont);
       fill(pColor);
-      text("FDR = " + PApplet.nfc(fdr, 2) + "%", selx1, y0);
+      text("FDR < " + PApplet.nfc(fdr, 2) + "%", selx1, y0);
     }
   }
   
@@ -301,7 +302,7 @@ public class Profile extends MiraWidget {
       if (!ptLabel.equals(ptAlias)) ptLabel += ": " + ptAlias;      
       if (mira.project.sortMethod == Project.PVALUE) {
         double p = Math.pow(10, -score);
-        ptLabel += "\nP = " + Numbers.dfc(p); 
+        ptLabel += " P = " + Numbers.dfc(p); 
       }
       
       textFont(ptFont);
@@ -428,12 +429,17 @@ public class Profile extends MiraWidget {
       }
     }
     if (mira.project.sortMethod == Project.PVALUE && lastSel != null) {
-      int i = data.getColumn(lastSel) + 1;
-      int m = data.getColumnCount();
-      float score = data.getScore(lastSel);
-      float p = (float)Math.pow(10, -score);      
-      float q = ((float)m / i) * p;
-      fdr = Math.min(100 * q, 100); 
+      int lasti = data.getColumn(lastSel);
+      int count = data.getColumnCount();
+      ArrayList<Float> fdrList = new ArrayList<Float>();
+      for (int i = lasti + 1; i < data.getColumnCount(); i++) {
+        float score = data.getScore(i);
+        float p = (float)Math.pow(10, -score);      
+        float q = Math.min(100 * ((float)count / (i + 1)) * p, 100);
+        fdrList.add(q);
+      }
+      Collections.sort(fdrList);
+      fdr = fdrList.get(0);
       requestedUpdateSelection = false;
     }
   }
