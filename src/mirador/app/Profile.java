@@ -3,6 +3,7 @@
 package mirador.app;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -12,7 +13,9 @@ import mirador.ui.Interface;
 import mirador.ui.SoftFloat;
 import mirador.ui.Widget;
 import miralib.data.Variable;
+import miralib.math.Numbers;
 import miralib.utils.Log;
+import miralib.utils.Project;
 
 /**
  * Widget containing the profile view in Mirador.
@@ -51,8 +54,10 @@ public class Profile extends MiraWidget {
   
   protected float selRangeLeft;
   protected float selRangeRight;
-  protected SelectionHandle selLeftHandle;
+//  protected SelectionHandle selLeftHandle;
   protected SelectionHandle selRightHandle;
+  
+  protected float fdr;
   
   protected Variable hoverVar;
   protected SoftFloat hoverAlpha;
@@ -186,12 +191,12 @@ public class Profile extends MiraWidget {
   }
 
   public void mousePressed() {
-    selLeftHandle.mousePressed();
+//    selLeftHandle.mousePressed();
     selRightHandle.mousePressed();
   }
 
   public void mouseDragged() {
-    selLeftHandle.mouseDragged();
+//    selLeftHandle.mouseDragged();
     selRightHandle.mouseDragged();
   } 
   
@@ -204,7 +209,7 @@ public class Profile extends MiraWidget {
         hide(true);
         mira.browser.openColumn(hoverVar);
       }
-      selLeftHandle.mouseReleased();
+//      selLeftHandle.mouseReleased();
       selRightHandle.mouseReleased();      
     }
   }
@@ -234,10 +239,10 @@ public class Profile extends MiraWidget {
     float y0 = topm - 10;
     float y1 = y0 + height - bottomm - topm;
     
-    float selx0 = PApplet.map(selRangeLeft, 0, 1, x0, x1);
+//    float selx0 = PApplet.map(selRangeLeft, 0, 1, x0, x1);
     float selx1 = PApplet.map(selRangeRight, 0, 1, x0, x1);
     
-    selLeftHandle = new SelectionHandle(selx0, y1 + 20, handlew, handleh, SelectionHandle.LEFT);
+//    selLeftHandle = new SelectionHandle(selx0, y1 + 20, handlew, handleh, SelectionHandle.LEFT);
     selRightHandle = new SelectionHandle(selx1, y1 + 20, handlew, handleh, SelectionHandle.RIGHT);
   }
   
@@ -251,7 +256,8 @@ public class Profile extends MiraWidget {
     fill(selBarColor);
     rect(x0, y1, x1 - x0, 20);
 
-    float selx0 = selLeftHandle.x0;  //PApplet.map(selRangeLeft, 0, 1, x0, x1);
+//    float selx0 = selLeftHandle.x0;  //PApplet.map(selRangeLeft, 0, 1, x0, x1);
+    float selx0 = PApplet.map(selRangeLeft, 0, 1, x0, x1);
     float selx1 = selRightHandle.x0; //PApplet.map(selRangeRight, 0, 1, x0, x1);
     fill(selBarColor);
     rect(selx0, y0, selx1 - selx0, y1 - y0);
@@ -259,8 +265,16 @@ public class Profile extends MiraWidget {
     fill(color(0), 190);
     rect(selx0, y1, selx1 - selx0, 20);
     
-    selLeftHandle.draw();
+//    selLeftHandle.draw();
     selRightHandle.draw();
+    
+    if (mira.project.sortMethod == Project.PVALUE) {
+      textFont(pFont);
+      fill(pColor);
+      textAlign(CENTER);
+      text("False Discovery Rate < " + PApplet.nfc(fdr, 2) + "%", selx1, y0 - 10);
+      textAlign(LEFT);
+    }
   }
   
   protected void drawPoints() {
@@ -287,7 +301,12 @@ public class Profile extends MiraWidget {
       int alpha = PApplet.ceil(PApplet.map(hoverAlpha.get(), 255, 100, 0, 255));
       String ptLabel = hoverVar.getName();
       String ptAlias = hoverVar.getAlias();
-      if (!ptLabel.equals(ptAlias)) ptLabel += ": " + ptAlias; 
+      float score = data.getScore(hoverVar);
+      if (!ptLabel.equals(ptAlias)) ptLabel += ": " + ptAlias;      
+      if (mira.project.sortMethod == Project.PVALUE) {
+        double p = Math.pow(10, -score);
+        ptLabel += " P = " + Numbers.dfc(p); 
+      }
       
       textFont(ptFont);
       fill(ptColor, alpha);
@@ -396,6 +415,8 @@ public class Profile extends MiraWidget {
   }
   
   protected void updatePointSelection() {
+    Variable lastSel = null; 
+    float xmax = -1000;
     for (Variable var: points.keySet()) {
       SoftPoint pt = points.get(var);
       if (pt == null) {
@@ -404,9 +425,26 @@ public class Profile extends MiraWidget {
         continue; 
       }
       float x = pt.x.get();
-      pt.selected = selRangeLeft <= x && x <= selRangeRight;      
+      pt.selected = selRangeLeft <= x && x <= selRangeRight;
+      if (pt.selected && xmax < x) {
+        lastSel = var;
+        xmax = x;
+      }
     }
-    requestedUpdateSelection = false;
+    if (mira.project.sortMethod == Project.PVALUE && lastSel != null) {
+      int lasti = data.getColumn(lastSel);
+      int count = data.getColumnCount();
+      ArrayList<Float> fdrList = new ArrayList<Float>();
+      for (int i = lasti + 1; i < data.getColumnCount(); i++) {
+        float score = data.getScore(i);
+        float p = (float)Math.pow(10, -score);      
+        float q = Math.min(100 * ((float)count / (i + 1)) * p, 100);
+        fdrList.add(q);
+      }
+      Collections.sort(fdrList);
+      fdr = fdrList.get(0);
+      requestedUpdateSelection = false;
+    }
   }
   
   protected void handleResize(int newWidth, int newHeight) {
@@ -415,7 +453,7 @@ public class Profile extends MiraWidget {
     
     float y0 = topm - 10;
     float y1 = y0 + newHeight - bottomm - topm;    
-    selLeftHandle.setY(y1 + 20);
+//    selLeftHandle.setY(y1 + 20);
     selRightHandle.setY(y1 + 20);
     // TODO: re-adjust selected range according to new width...
   }
@@ -468,8 +506,8 @@ public class Profile extends MiraWidget {
           if (pt.selected) {
             vars.add(var);
             scores.add(1.0f);
-          }          
-        }        
+          }
+        }      
         mira.exportProfile(vars);        
       }      
     }
@@ -557,11 +595,13 @@ public class Profile extends MiraWidget {
         
         dragging = true;
         float dragx = 0;
-        if (side == LEFT) {
-          dragx = PApplet.constrain(mouseX + dx0, left, selRightHandle.x0);  
-        } else if (side == RIGHT) {
-          dragx = PApplet.constrain(mouseX + dx0, selLeftHandle.x0, right);
-        }
+//        if (side == LEFT) {
+//          dragx = PApplet.constrain(mouseX + dx0, left, selRightHandle.x0);  
+//        } else if (side == RIGHT) {
+//          dragx = PApplet.constrain(mouseX + dx0, selLeftHandle.x0, right);
+//        }
+        
+        dragx = PApplet.constrain(mouseX + dx0, left, right);        
         
         float value = PApplet.constrain(PApplet.map(dragx, left + 30, right - 30, 0, 1), 0, 1);
         if (side == LEFT) {
