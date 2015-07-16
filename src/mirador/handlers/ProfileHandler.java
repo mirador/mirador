@@ -8,10 +8,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import mirador.app.MiraApp;
+import miralib.data.Range;
 import miralib.data.Variable;
-import miralib.utils.Project;
 import processing.core.PApplet;
-import processing.data.Table;
+//import miralib.utils.Project;
+//import processing.data.Table;
 
 /**
  * Handler for profile export. 
@@ -29,11 +30,74 @@ public class ProfileHandler {
   
   public void outputSelected(File selection) {
     if (selection == null) return;
-    String filename = selection.getAbsolutePath();    
-    String ext = PApplet.checkExtension(filename);
-    if (ext == null || (!ext.equals("csv") && !ext.equals("tsv"))) {
-      filename += ".tsv";
+    String varFN = selection.getAbsolutePath();
+    String ext = PApplet.checkExtension(varFN);
+    if (ext == null || !ext.equals("txt")) {
+      varFN += ".txt";
     }
+
+    Path dataPath = Paths.get(varFN);
+    String filePath = dataPath.getParent().toAbsolutePath().toString();    
+    
+    // All variables in the profile
+    String[] varLines = new String[variables.size()];
+    for (int i = 0; i < variables.size(); i++) {
+      Variable var = variables.get(i);
+      varLines[i] = var.getName() + " " + Variable.formatType(var.type());
+    }    
+    File varFile = new File(varFN);
+    PApplet.saveStrings(varFile, varLines);
+    
+    // Ranges file
+    Variable[] rvars = app.ranges.keySet().toArray(new Variable[0]);    
+    String[] rangeLines = new String[rvars.length];
+    for (int i = 0; i < rvars.length; i++) {
+      Variable var = rvars[i];
+      Range range = app.ranges.get(var); 
+      rangeLines[i] = var.getName() + " " + Variable.formatType(var.type()) + " " + range.toString(); 
+    }
+    File rangeFile = new File(filePath, "ranges.txt");
+    PApplet.saveStrings(rangeFile, rangeLines);
+
+    // Alias file
+    String[] aliasLines = new String[variables.size()];    
+    for (int i = 0; i < variables.size(); i++) {
+      Variable var = variables.get(i);
+      aliasLines[i] = var.getName() + " " + var.getAlias();
+    }    
+    File aliasFile = new File(filePath, "alias.txt");
+    PApplet.saveStrings(aliasFile, aliasLines);
+        
+    // Units file
+    String[] unitLines = new String[variables.size()];    
+    for (int i = 0; i < variables.size(); i++) {
+      Variable var = variables.get(i);
+      unitLines[i] = var.getName();
+    }    
+    File unitsFile = new File(filePath, "units.txt");
+    PApplet.saveStrings(unitsFile, unitLines);
+    
+    // Outcome file
+    Variable ovar = variables.get(0);
+    Range orange = ovar.range();
+    ArrayList<String> values = orange.getValues();
+    String[] outLines = new String[values.size()];
+    for (int i = 0; i < values.size(); i++) {
+      String value = values.get(i);
+      String label = ovar.formatValue(value);
+      outLines[i] = value + "," + label;
+     
+    }
+    File outFile = new File(filePath, "outcome.txt");
+    PApplet.saveStrings(outFile, outLines);    
+    
+    /*
+
+    // TODO: need to test this code anyways, it was not working before, maybe a bug in
+    miralib?
+    
+    String filename = selection.getAbsolutePath();    
+
     String prefix = "";
     if (-1 < filename.indexOf("profile-")) {
       prefix = "profile-";
@@ -71,5 +135,6 @@ public class ProfileHandler {
     proj.codeFile = "";
     
     proj.save(projFile.toString());
+    */
   }
 }
