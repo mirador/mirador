@@ -1,4 +1,4 @@
-<!-- COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. -->
+<!-- COPYRIGHT (C) 2014-15 Fathom Information Design. All Rights Reserved. -->
 
 <project default="build">
   <property name="app.name" value="Mirador" />
@@ -6,8 +6,8 @@
   <property name="jar.name" value="${dist.name}.jar" />
   <property name="class.name" value="mirador.app.Mirador" />
 
-  <property name="version" value="1.3" />
-  <property name="revision" value="141204" />
+  <property name="version" value="1.4beta" />
+  <property name="revision" value="150727" />
 
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -145,8 +145,9 @@ convert image.png  -bordercolor white -border 0 \
 
   <target name="macosx" depends="jar">
     <!-- Set the version of Java that must be present to build. -->
-    <property name="jdk.update.macosx" value="67" />
-    <property name="jdk.path.macosx" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_${jdk.update.macosx}.jdk" />
+    <property name="jdk.version.macosx" value="1.8.0" />
+    <property name="jdk.update.macosx" value="51" />
+    <property name="jdk.path.macosx" value="/Library/Java/JavaVirtualMachines/jdk${jdk.version.macosx}_${jdk.update.macosx}.jdk" />
     
     <fail if="macosx" unless="macosx_jdk_found"
           message="JDK 7u${jdk.update.macosx} required.${line.separator}To build on OS X, you must install Oracle's JDK 7u${jdk.update.macosx} from${line.separator}http://www.oracle.com/technetwork/java/javase/downloads${line.separator}Note that only 7u${jdk.update.macosx} (not a later or earlier version) will work. ${line.separator}And it must be the JDK, not the JRE. And do not try to defy me again." />
@@ -247,13 +248,13 @@ convert image.png  -bordercolor white -border 0 \
    <property name="signer" value="'Developer ID Application'" />
 
   	<!-- Code signer doesn't allow for symbolic links in OSX 10.9.5+ -->
-  	<delete file="macosx/${app.name}.app/Contents/PlugIns/jdk1.7.0_67.jdk/Contents/MacOS/libjli.dylib" />   	
-  	<copy file="macosx/${app.name}.app/Contents/PlugIns/jdk1.7.0_67.jdk/Contents/Home/jre/lib/jli/libjli.dylib" 
-  		  todir="macosx/${app.name}.app/Contents/PlugIns/jdk1.7.0_67.jdk/Contents/MacOS"/>
+  	<delete file="macosx/${app.name}.app/Contents/PlugIns/jdk${jdk.version.macosx}_${jdk.update.macosx}.jdk/Contents/MacOS/libjli.dylib" />   	
+  	<copy file="macosx/${app.name}.app/Contents/PlugIns/jdk${jdk.version.macosx}_${jdk.update.macosx}.jdk/Contents/Home/jre/lib/jli/libjli.dylib" 
+  		  todir="macosx/${app.name}.app/Contents/PlugIns/jdk${jdk.version.macosx}_${jdk.update.macosx}.jdk/Contents/MacOS"/>
   	
     <!-- first sign the JDK -->
     <exec executable="codesign" dir="macosx">
-      <arg line="--force --sign ${signer} ${app.name}.app/Contents/PlugIns/jdk1.7.0_${jdk.update.macosx}.jdk" />
+      <arg line="--force --sign ${signer} ${app.name}.app/Contents/PlugIns/jdk${jdk.version.macosx}_${jdk.update.macosx}.jdk" />
     </exec>
 
     <!-- then sign the actual app -->
@@ -312,7 +313,7 @@ convert image.png  -bordercolor white -border 0 \
         <classPath mainClass="${class.name}">
           <cp>./lib/*.jar</cp>
         </classPath>
-        <jre minVersion="1.7.0" path="java">
+        <jre minVersion="${jdk.version.macosx}" path="java">
           <opt>-Xmx512M</opt>
         </jre>
       </config>
