@@ -33,6 +33,7 @@ import processing.core.PConstants;
 
 public class MiraApp extends PApplet {
   static public String RENDERER = P2D;
+  static public int PIXEL_DENSITY = 1;
   static public int SMOOTH_LEVEL = 4;
   static public final String APP_NAME = "mirador";
   static public final String APP_VERSION = "1.4beta";
@@ -94,14 +95,11 @@ public class MiraApp extends PApplet {
   
   public void settings() {
     size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
-    pixelDensity(1);
-    smooth(4);
+    pixelDensity(PIXEL_DENSITY);
+    smooth(SMOOTH_LEVEL);
   }  
   
   public void setup() {
-    //size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
-    smooth(SMOOTH_LEVEL);
-    
     Log.init();
     loadPreferences();
     
