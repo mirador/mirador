@@ -2,11 +2,14 @@
 
 package mirador.app;
 
+import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 import mirador.handlers.LoadHandler;
 import mirador.handlers.PDFHandler;
@@ -66,32 +69,13 @@ public class MiraApp extends PApplet {
     
   protected int plotType;
   
-  protected boolean loaded;  
+  protected boolean loaded;
+  protected boolean loadingError;
+  protected String errorMessage;
   protected LoadThread loadThread;
   protected boolean animating;
   protected float animTime;
   protected SoftFloat animAlpha;  
-  
-//  public int sketchQuality() {
-//    return SMOOTH_LEVEL;
-//  }
-//
-//  public int sketchWidth() {
-//    return optWidth + varWidth + 4 * plotWidth;
-//  }
-//
-//  public int sketchHeight() {
-//    return labelHeightClose + 3 * plotHeight;
-//  }
-//
-//  public String sketchRenderer() {
-//    return RENDERER;
-//  }
-//
-//  public boolean sketchFullScreen() {
-//    return false;
-//  }  
-    
   
   public void settings() {
     size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
@@ -109,8 +93,7 @@ public class MiraApp extends PApplet {
     
     uploader = new UploadHandler(this);
     
-    frame.setTitle(APP_NAME + " is loading...");
-    frame.setAutoRequestFocus(true);
+    surface.setTitle(APP_NAME + " is loading...");
     
     loadSession();    
     loadProject(inputFile);
@@ -124,7 +107,12 @@ public class MiraApp extends PApplet {
     }
     if (animating) {
       drawLoadAnimation();
-    }   
+    }
+    if (loadingError) {
+      JOptionPane.showMessageDialog(new Frame(), errorMessage, "Loading error!", 
+          JOptionPane.ERROR_MESSAGE);     
+      exit();      
+    }
   }  
   
   public void mousePressed() {
@@ -233,8 +221,9 @@ public class MiraApp extends PApplet {
       prefs.save();
       if (history != null) history.dispose();
       history = new History(this, project, plotType);      
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (Exception ex) {
+      JOptionPane.showMessageDialog(new Frame(), ex.getMessage(), "Loading error!", 
+                                    JOptionPane.ERROR_MESSAGE);     
       exit();
     }
     
@@ -346,11 +335,17 @@ public class MiraApp extends PApplet {
   protected class LoadThread extends Thread { 
     @Override
     public void run() {
-      dataset = new DataSet(project);      
-      initInterface();      
-      loaded = true;
-      animAlpha.setTarget(0);
-      surface.setTitle( project.dataTitle);
+      loadingError = false;
+      try {
+        dataset = new DataSet(project);      
+        initInterface();      
+        loaded = true;
+        animAlpha.setTarget(0);
+        surface.setTitle(project.dataTitle);
+      } catch (Exception ex) {
+        loadingError = true;
+        errorMessage = ex.getMessage();
+      }
     }
   }  
   
