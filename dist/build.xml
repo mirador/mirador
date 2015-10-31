@@ -7,7 +7,7 @@
   <property name="class.name" value="mirador.app.Mirador" />
 
   <property name="version" value="1.4beta" />
-  <property name="revision" value="150727" />
+  <property name="revision" value="151031" />
 
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -169,7 +169,7 @@ convert image.png  -bordercolor white -border 0 \
                identifier="mira.app"
                signature="mira"
                icon="macosx/app.icns"
-               copyright="© Broad Institute 2014"
+               copyright="© Broad Institute 2014-15"
                getInfo="${version}, Copyright © The Broad Institute"
                shortVersion="${version}"
                version="${revision}"
