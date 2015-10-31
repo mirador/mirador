@@ -301,9 +301,6 @@ public class Interface implements PConstants {
         Numbers.different(viewport.h, app.height)) {
       setSize(app.width, app.height);
       root.resizeChildren(app.width, app.height);
-      // TODO: fix the issue where drag is not correct until clicking on the
-      // title bar of the window after a resize (on OSX)
-      app.frame.setVisible(true);
     }
   }
 
