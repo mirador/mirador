@@ -28,6 +28,7 @@ import miralib.utils.Preferences;
 import miralib.utils.Project;
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.opengl.PJOGL;
 
 /**
  * Mirador main class. 
@@ -81,6 +82,15 @@ public class MiraApp extends PApplet {
     size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
     pixelDensity(PIXEL_DENSITY);
     smooth(SMOOTH_LEVEL);
+  
+    if (RENDERER == P2D || RENDERER == P3D) {
+      final int[] sizes = { 16, 32, 48, 64, 128, 256, 512 };
+      String[] icons = new String[sizes.length];
+      for (int i = 0; i < sizes.length; i++) {
+        icons[i] = "data/icons/icon-" + sizes[i] + ".png";
+      }
+      PJOGL.setIcon(icons);
+    }
   }  
   
   public void setup() {
