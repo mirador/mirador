@@ -21,12 +21,14 @@
 
   <fail unless="props.present" 
         message="To make the build work, create a file named local.properties, 
-(inside the dist folder), and put two lines, one that read reads 
+(inside the dist folder), and put three lines in it, one that read reads 
 processing.dir=/path/to/processing-git
 with the path to where you have the code for processing checked out.
-inside that folder, it will expect to find 'core' and 'pdf', and the second
+inside that folder, it will expect to find 'core' and 'pdf', the second
 miralib.dir=/path/to/miralib-git
-with the path to where you have the code for miralib checked out." />
+with the path to where you have the code for miralib checked out. The third one
+should contain a valid certificate name for app signing:
+certificate.signer='Mira Dor'" />
 
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
