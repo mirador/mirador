@@ -262,7 +262,7 @@ public class MiraApp extends PApplet {
   }
   
   public void exportProfile(ArrayList<Variable> vars) {    
-    File file = new File(project.dataFolder, "variables-profile.txt");
+    File file = new File(project.dataFolder, "variables.txt");
     selectOutput("Select a csv or tsv file to save the selection to:", 
                  "outputSelected", file, new ProfileHandler(this, vars));
   }
