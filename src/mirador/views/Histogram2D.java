@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
 
 package mirador.views;
 

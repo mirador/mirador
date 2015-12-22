@@ -1,12 +1,12 @@
-/* COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
 import java.util.ArrayList;
 
 import processing.core.PApplet;
-import mirador.ui.Interface;
-import mirador.ui.Widget;
+import mui.Interface;
+import mui.Widget;
 import miralib.data.DataTree;
 import miralib.data.Variable;
 import miralib.data.VariableContainer;

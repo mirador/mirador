@@ -1,8 +1,8 @@
-/* COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
 
 package mirador.views;
 
-import mirador.ui.Widget;
+import mui.Widget;
 import miralib.data.DataRanges;
 import miralib.data.DataSlice1D;
 import miralib.data.DataSlice2D;

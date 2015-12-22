@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import mirador.ui.Widget;
+import mui.Widget;
 import miralib.data.DataSlice2D;
 import miralib.data.Value2D;
 import miralib.math.Numbers;

@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="lib/httpclient-cache-4.3.4.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/httpmime-4.3.4.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/mui"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,9 +1,9 @@
-/* COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
 import processing.core.PFont;
-import mirador.ui.Interface;
+import mui.Interface;
 import miralib.data.DataTree;
 import miralib.data.VariableContainer;
 

@@ -1,3 +1,5 @@
+/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+
 package mirador.views;
 
 import miralib.data.DataSlice1D;

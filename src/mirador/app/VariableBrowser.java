@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
@@ -8,8 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import mirador.ui.Interface;
-import mirador.ui.Widget;
+import mui.Interface;
+import mui.Widget;
 import miralib.data.Variable;
 import miralib.data.VariableContainer;
 import processing.core.PApplet;

@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 import processing.core.PFont;
-import mirador.ui.Interface;
-import mirador.ui.SoftFloat;
+import mui.Interface;
+import mui.SoftFloat;
 import miralib.data.CategoricalRange;
 import miralib.data.CategoricalVariable;
 import miralib.data.Range;

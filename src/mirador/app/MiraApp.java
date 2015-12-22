@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
@@ -16,8 +16,8 @@ import mirador.handlers.PDFHandler;
 import mirador.handlers.ProfileHandler;
 import mirador.handlers.SelectionHandler;
 import mirador.handlers.UploadHandler;
-import mirador.ui.Interface;
-import mirador.ui.SoftFloat;
+import mui.Interface;
+import mui.SoftFloat;
 import mirador.views.View;
 import miralib.data.DataRanges;
 import miralib.data.DataSet;

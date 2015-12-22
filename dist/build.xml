@@ -21,12 +21,14 @@
 
   <fail unless="props.present" 
         message="To make the build work, create a file named local.properties, 
-(inside the dist folder), and put three lines in it, one that read reads 
+(inside the dist folder), and put four lines in it, one that read reads 
 processing.dir=/path/to/processing-git
 with the path to where you have the code for processing checked out.
-inside that folder, it will expect to find 'core' and 'pdf', the second
-miralib.dir=/path/to/miralib-git
-with the path to where you have the code for miralib checked out. The third one
+inside that folder, it will expect to find 'core' and 'pdf', the second and third
+miralib.dir=/path/to/miralib-git  
+mui.dir=/path/to/mui-git 
+with the paths to where you have the code for miralib and mui checked out.
+The third one
 should contain a valid certificate name for app signing:
 certificate.signer='Mira Dor'" />
 
@@ -45,7 +47,7 @@ certificate.signer='Mira Dor'" />
     <javac target="1.7" 
            encoding="UTF-8"
            includeAntRuntime="false"
-           classpath="${processing.dir}/core/bin:${miralib.dir}/lib/*.jar"
+           classpath="${processing.dir}/core/bin:${miralib.dir}/lib/*.jar;${mui.dir}/lib/*.jar"
            srcdir="../src" 
            destdir="../bin" />
   </target>
@@ -66,6 +68,7 @@ certificate.signer='Mira Dor'" />
       <fileset dir=".." includes="data/**" />
       <fileset dir="${processing.dir}/core/bin"/>      
       <fileset dir="${miralib.dir}/bin"/>
+      <fileset dir="${mui.dir}/bin"/>
     </jar>   
   </target>
 
@@ -190,6 +193,7 @@ convert image.png  -bordercolor white -border 0 \
       <classpath file="../lib/*.jar" />
       
       <classpath file="${miralib.dir}/lib/*.jar" />
+      <classpath file="${mui.dir}/lib/*.jar" />
 
       <classpath file="${core.dir}/core.jar" />
       <classpath file="${core.dir}/jogl-all.jar" />
@@ -299,6 +303,9 @@ convert image.png  -bordercolor white -border 0 \
       <fileset dir="${miralib.dir}/lib">
         <include name="*.jar" />
       </fileset>
+      <fileset dir="${mui.dir}/lib">
+        <include name="*.jar" />
+      </fileset>      
     </copy>  
 
     <!-- find . -name *.[oa] -exec svn add {} ';' -->
