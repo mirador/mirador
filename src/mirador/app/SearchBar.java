@@ -9,6 +9,7 @@ import java.util.HashSet;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;
+import mui.EditableText;
 import mui.Interface;
 import mui.SoftFloat;
 import miralib.data.Variable;
@@ -212,7 +213,7 @@ public class SearchBar extends MiraWidget {
       
       bColor = getStyleColor("InfoBar.SearchAdd.SearchBar", "background-color");
       
-      searchStr = new EditableText("Jump to a variable");
+      searchStr = new EditableText(SearchBar.this, "Jump to a variable");
       searchStr.clearInitial();
       searchStr.setBound(w - 5 - pFont.getSize());
     }
@@ -245,7 +246,7 @@ public class SearchBar extends MiraWidget {
       endShape();
       
       textFont(pFont);
-      if (searchStr.focused) {
+      if (searchStr.isFocused()) {
         fill(sColor);
         stroke(sColor);        
       } else {

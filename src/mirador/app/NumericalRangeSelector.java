@@ -4,6 +4,7 @@ package mirador.app;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import mui.EditableText;
 import mui.Interface;
 import mui.SoftFloat;
 import miralib.data.DateVariable;
@@ -259,8 +260,8 @@ public class NumericalRangeSelector extends RangeSelector {
       leftSel = new SoftFloat(x + (float)(leftValue * w)); 
       rightSel = new SoftFloat(x + (float)(rightValue * w));
       
-      leftStr = new EditableText(selVar.formatValue(leftValue));
-      rightStr = new EditableText(selVar.formatValue(rightValue));     
+      leftStr = new EditableText(NumericalRangeSelector.this, selVar.formatValue(leftValue));
+      rightStr = new EditableText(NumericalRangeSelector.this, selVar.formatValue(rightValue));     
       
       toStr = " to ";
       editStr = "enter a range";

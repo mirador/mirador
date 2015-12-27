@@ -4,6 +4,7 @@ package mirador.app;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import mui.EditableText;
 import mui.Interface;
 import mui.Widget;
 import miralib.data.DataSet;
@@ -111,6 +112,7 @@ public class MiraWidget extends Widget {
     return str.width();
   }
   
+  /*
   // Class to handle a (single) line of editable text
   class EditableText {
     static final int CURSOR_HIDDEN = 0;
@@ -286,4 +288,5 @@ public class MiraWidget extends Widget {
       }
     }      
   }
+  */
 }
