@@ -269,7 +269,7 @@ public class SearchBar extends MiraWidget {
     
     void mousePressed(float mx, float my) {
       textFont(pFont);
-      if (searchStr.inside(x + 5, y + h - 5, mx, my)) {
+      if (searchStr.insideBounds(x + 5, y + h - 5, mx, my)) {
         searchStr.setFocused(true);
       } else {
         searchStr.setFocused(false);
