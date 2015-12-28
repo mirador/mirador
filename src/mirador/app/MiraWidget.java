@@ -2,7 +2,6 @@
 
 package mirador.app;
 
-import mui.EditableText;
 import mui.Interface;
 import mui.Widget;
 import miralib.data.DataSet;
