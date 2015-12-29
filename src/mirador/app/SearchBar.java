@@ -213,7 +213,7 @@ public class SearchBar extends MiraWidget {
       
       bColor = getStyleColor("InfoBar.SearchAdd.SearchBar", "background-color");
       
-      searchStr = new EditableText(SearchBar.this, "Jump to a variable");
+      searchStr = new EditableText(SearchBar.this, "Search for a variable");
       searchStr.clearInitial();
       searchStr.setBound(w - 5 - pFont.getSize());
     }
