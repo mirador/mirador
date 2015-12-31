@@ -30,6 +30,7 @@ public class ProfileHandler {
   
   public void outputSelected(File selection) {
     if (selection == null) return;
+    
     String varFN = selection.getAbsolutePath();
     String ext = PApplet.checkExtension(varFN);
     if (ext == null || !ext.equals("txt")) {
@@ -72,7 +73,18 @@ public class ProfileHandler {
     String[] unitLines = new String[variables.size()];    
     for (int i = 0; i < variables.size(); i++) {
       Variable var = variables.get(i);
-      unitLines[i] = var.getName();
+      String alias = var.getAlias();
+      String ustr = "";
+      int n0 = alias.indexOf('(');
+      int n1 = alias.indexOf(')');
+      if (-1 < n0 && n0 < n1) {
+        ustr = alias.substring(n0 + 1, n1);
+      } else {
+        n0 = alias.indexOf('[');
+        n1 = alias.indexOf(']');
+        if (-1 < n0 && n0 < n1) ustr = alias.substring(n0 + 1, n1);
+      }
+      unitLines[i] = ustr;
     }    
     File unitsFile = new File(filePath, "units.txt");
     PApplet.saveStrings(unitsFile, unitLines);
