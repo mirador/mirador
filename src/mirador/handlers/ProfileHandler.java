@@ -84,7 +84,7 @@ public class ProfileHandler {
         n1 = alias.indexOf(']');
         if (-1 < n0 && n0 < n1) ustr = alias.substring(n0 + 1, n1);
       }
-      unitLines[i] = ustr;
+      unitLines[i] = var.getName() + " " + ustr;
     }    
     File unitsFile = new File(filePath, "units.txt");
     PApplet.saveStrings(unitsFile, unitLines);
