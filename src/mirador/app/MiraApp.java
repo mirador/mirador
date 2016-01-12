@@ -270,9 +270,13 @@ public class MiraApp extends PApplet {
   public void exportSelection() {
     if (browser.getSelectedRow() != null && browser.getSelectedCol() != null) {
       File file = new File(project.dataFolder, "selected-data.tsv");
+      
+      Variable keyVar = dataset.getKeyVariable();
+      
       selectOutput("Select a csv or tsv file to save the selection to:", 
                    "outputSelected", file, new SelectionHandler(this, browser.getSelectedCol(), 
-                                                                      browser.getSelectedRow()));      
+                                                                      browser.getSelectedRow(), 
+                                                                      keyVar));      
     }
   }
   

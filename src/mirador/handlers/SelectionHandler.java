@@ -21,11 +21,12 @@ public class SelectionHandler {
   protected MiraApp app;
   protected ArrayList<Variable> variables;
   
-  public SelectionHandler(MiraApp app, Variable varx, Variable vary) {
+  public SelectionHandler(MiraApp app, Variable varx, Variable vary, Variable vark) {
     this.app = app;
     variables = new ArrayList<Variable>();
+    if (vark != null) variables.add(vark);
     variables.add(varx);
-    variables.add(vary);
+    if (varx != vary) variables.add(vary);
   }
   
   public void outputSelected(File selection) {
