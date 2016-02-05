@@ -49,6 +49,16 @@ public class ProfileHandler {
     File varFile = new File(varFN);
     PApplet.saveStrings(varFile, varLines);
     
+    String[] pvalLines = new String[variables.size() - 1];
+    for (int i = 1; i < variables.size(); i++) {
+      Variable var = variables.get(i);
+      float score = app.dataset.getScore(var);
+      double pvalue = Math.pow(10, -score);
+      pvalLines[i - 1] = var.getName() + " " + pvalue;
+    }    
+    File pvalFile = new File(filePath, "pvalues.txt");
+    PApplet.saveStrings(pvalFile, pvalLines);
+    
     // Ranges file
     Variable[] rvars = app.ranges.keySet().toArray(new Variable[0]);    
     String[] rangeLines = new String[rvars.length];
@@ -102,51 +112,5 @@ public class ProfileHandler {
     }
     File outFile = new File(filePath, "outcome.txt");
     PApplet.saveStrings(outFile, outLines);    
-    
-    /*
-
-    // TODO: need to test this code anyways, it was not working before, maybe a bug in
-    miralib?
-    
-    String filename = selection.getAbsolutePath();    
-
-    String prefix = "";
-    if (-1 < filename.indexOf("profile-")) {
-      prefix = "profile-";
-    }
-    
-    Path dataPath = Paths.get(filename);
-    String filePath = dataPath.getParent().toAbsolutePath().toString(); 
-    File dictFile = new File(filePath, prefix + "dictionary.tsv");
-    File varsFile = new File(filePath, prefix + "variables.tsv");
-    File projFile = new File(filePath, prefix + "config.mira");
-    
-    Table[] tabdict = app.dataset.getTable(variables, app.ranges);
-    Table data = tabdict[0];
-    if (data != null) {
-      app.saveTable(data, filename);
-    }
-    
-    Table dict = tabdict[1];
-    if (dict != null) {      
-      app.saveTable(dict, dictFile.getAbsolutePath());          
-    }
-    
-    Table vars = app.dataset.getProfile(variables);      
-    if (vars != null) {
-      app.saveTable(vars, varsFile.getAbsolutePath());  
-    }
-    
-    Project proj = new Project(app.project);
-    proj.dataTitle = "Profile";
-    proj.dataURL = "";
-    proj.dataFile = dataPath.getFileName().toString();
-    proj.dictFile = dictFile.getName();     
-    proj.grpsFile = "";
-    proj.binFile = "";
-    proj.codeFile = "";
-    
-    proj.save(projFile.toString());
-    */
   }
 }
