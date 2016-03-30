@@ -1,4 +1,4 @@
-<!-- COPYRIGHT (C) 2014-15 Fathom Information Design. All Rights Reserved. -->
+<!-- COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. -->
 
 <project default="build">
   <property name="app.name" value="Mirador" />
@@ -6,8 +6,8 @@
   <property name="jar.name" value="${dist.name}.jar" />
   <property name="class.name" value="mirador.app.Mirador" />
 
-  <property name="version" value="1.4beta" />
-  <property name="revision" value="151031" />
+  <property name="version" value="1.4" />
+  <property name="revision" value="160330" />
 
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -151,7 +151,7 @@ convert image.png  -bordercolor white -border 0 \
   <target name="macosx" depends="jar">
     <!-- Set the version of Java that must be present to build. -->
     <property name="jdk.version.macosx" value="1.8.0" />
-    <property name="jdk.update.macosx" value="51" />
+    <property name="jdk.update.macosx" value="77" />
     <property name="jdk.path.macosx" value="/Library/Java/JavaVirtualMachines/jdk${jdk.version.macosx}_${jdk.update.macosx}.jdk" />
     
     <fail if="macosx" unless="macosx_jdk_found"
@@ -174,7 +174,7 @@ convert image.png  -bordercolor white -border 0 \
                identifier="mira.app"
                signature="mira"
                icon="macosx/app.icns"
-               copyright="© Broad Institute 2014-15"
+               copyright="© Broad Institute 2014-16"
                getInfo="${version}, Copyright © The Broad Institute"
                shortVersion="${version}"
                version="${revision}"
