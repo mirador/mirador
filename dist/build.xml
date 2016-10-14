@@ -195,6 +195,9 @@ convert image.png  -bordercolor white -border 0 \
       <classpath file="${miralib.dir}/lib/*.jar" />
       <classpath file="${mui.dir}/lib/*.jar" />
 
+      
+      
+      <classpath file="${processing.dir}/java/libraries/pdf/library/*.jar" />
       <classpath file="${core.dir}/core.jar" />
       <classpath file="${core.dir}/jogl-all.jar" />
       <classpath file="${core.dir}/jogl-all-natives-macosx-universal.jar" />
