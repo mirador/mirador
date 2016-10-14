@@ -359,13 +359,15 @@ public class RowPlots extends ColumnScroller {
     }
     
     void save() {
-      String imgName = var.getName() + "-" + rowVar.getName() + ".pdf";
-      String filename = Paths.get(mira.project.dataFolder, imgName).toString(); 
-      PGraphics pdf = intf.createCanvas((int)w, h.getCeil(), PDF, filename);
-      
-      if (showContents) {
-        view.draw(pdf, true);
-      }
+      if (showContents && canvas != null) {
+        String imgName = var.getName() + "-" + rowVar.getName() + ".pdf";
+        String filename = Paths.get(mira.project.dataFolder, imgName).toString();
+        PGraphics pdf = intf.createCanvas((int)w, h.getCeil(), PDF, filename);
+        
+        if (showContents) {
+          view.draw(pdf, true);
+        }        
+      }      
       
 //      if (showContents && canvas != null) {
 //        PGraphics pg = intf.createCanvas((int)w, h.getCeil(), MiraApp.RENDERER, MiraApp.SMOOTH_LEVEL);
