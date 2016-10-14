@@ -29,7 +29,7 @@ public class Histogram2D extends View {
     calcDensity(slice, algo); 
   }
   
-  public void draw(PGraphics pg) {
+  public void draw(PGraphics pg, boolean pdf) {
     pg.beginDraw();
     pg.background(WHITE);
     if (1 < binCountX && 1 < binCountY) { 
@@ -43,7 +43,8 @@ public class Histogram2D extends View {
           pg.rect(binw * bx, pg.height - binh * by, binw, -binh);        
         }
       }
-    }        
+    }
+    if (pdf) pg.dispose();
     pg.endDraw();
   }
   

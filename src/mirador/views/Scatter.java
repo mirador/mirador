@@ -22,7 +22,7 @@ public class Scatter extends View {
     initPoints(slice);
   }
 
-  public void draw(PGraphics pg) {
+  public void draw(PGraphics pg, boolean pdf) {
     pg.beginDraw();
     pg.background(WHITE);
     pg.noStroke();
@@ -40,7 +40,8 @@ public class Scatter extends View {
       float ph = pg.height * rad;        
       if (50000 < points.size()) pg.rect(px - pw/2, py - ph/2, pw, ph);
       else pg.ellipse(px, py, pw, ph);
-    }              
+    }          
+    if (pdf) pg.dispose();
     pg.endDraw();
   }
   

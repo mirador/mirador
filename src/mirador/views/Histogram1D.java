@@ -22,7 +22,7 @@ public class Histogram1D extends View {
     calcDensity(slice, algo);
   }
 
-  public void draw(PGraphics pg) {
+  public void draw(PGraphics pg, boolean pdf) {
     pg.beginDraw();
     pg.background(WHITE);
     if (1 < binCount) { 
@@ -35,7 +35,8 @@ public class Histogram1D extends View {
         pg.fill(GREY);
         pg.rect(binw * bx, pg.height * (1 - h), binw, pg.height * h);        
       }
-    }        
+    }
+    if (pdf) pg.dispose();
     pg.endDraw();
   }
 

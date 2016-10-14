@@ -91,7 +91,7 @@ public class Eikosogram extends View {
     }
   } 
   
-  public void draw(PGraphics pg) {
+  public void draw(PGraphics pg, boolean pdf) {
     pg.beginDraw();
     pg.background(WHITE);
     if (1 < binCountX && 1 < binCountY) {  
@@ -101,6 +101,7 @@ public class Eikosogram extends View {
         drawBoxplot(pg);
       }
     }
+    if (pdf) pg.dispose();
     pg.endDraw();
   }
   

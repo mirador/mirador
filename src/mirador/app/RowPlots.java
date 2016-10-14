@@ -263,7 +263,7 @@ public class RowPlots extends ColumnScroller {
             pcanvas.endDraw();
           }
           
-          view.draw(canvas);
+          view.draw(canvas, false);
           blendf.set(0);
           blendf.setTarget(255);          
         }     
@@ -359,14 +359,22 @@ public class RowPlots extends ColumnScroller {
     }
     
     void save() {
-      if (showContents && canvas != null) {
-        PGraphics pg = intf.createCanvas((int)w, h.getCeil(), MiraApp.RENDERER, MiraApp.SMOOTH_LEVEL);
-        draw(pg);
-        
-        String imgName = var.getName() + "-" + rowVar.getName() + ".png";
-        String filename = Paths.get(mira.project.dataFolder, imgName).toString();
-        pg.save(filename);
-      }      
+      String imgName = var.getName() + "-" + rowVar.getName() + ".pdf";
+      String filename = Paths.get(mira.project.dataFolder, imgName).toString(); 
+      PGraphics pdf = intf.createCanvas((int)w, h.getCeil(), PDF, filename);
+      
+      if (showContents) {
+        view.draw(pdf, true);
+      }
+      
+//      if (showContents && canvas != null) {
+//        PGraphics pg = intf.createCanvas((int)w, h.getCeil(), MiraApp.RENDERER, MiraApp.SMOOTH_LEVEL);
+//        draw(pg);
+//        
+//        String imgName = var.getName() + "-" + rowVar.getName() + ".png";
+//        String filename = Paths.get(mira.project.dataFolder, imgName).toString();
+//        pg.save(filename);
+//      }      
     }
     
     void dataChanged() {

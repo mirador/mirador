@@ -65,7 +65,7 @@ abstract public class View {
     return vary.formatValue(1 - valy, ranges);
   } 
   
-  abstract public void draw(PGraphics pg);
+  abstract public void draw(PGraphics pg, boolean pdf);
   
   abstract public Selection getSelection(double valx, double valy, boolean shift);
 

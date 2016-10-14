@@ -40,7 +40,7 @@ public class MiraApp extends PApplet {
   static public int PIXEL_DENSITY = 1;
   static public int SMOOTH_LEVEL = 4;
   static public final String APP_NAME = "mirador";
-  static public final String APP_VERSION = "1.4";
+  static public final String APP_VERSION = "1.4.1";
   
   static public String inputFile = "default.mira";
   static protected Preferences prefs;
