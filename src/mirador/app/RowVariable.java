@@ -4,6 +4,7 @@ package mirador.app;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import mui.Widget;
@@ -15,6 +16,28 @@ import miralib.data.Variable;
  */
 
 public class RowVariable extends RowWidget {
+  int marginx = Display.scale(10);
+  int marginy = Display.scale(10);
+  int posy = Display.scale(70);
+  int numh = Display.scale(50);
+  float chkOff = Display.scale(5);
+  float chkBoxColX = Display.scale(10);
+  float chkBoxCovX = Display.scale(100);
+  float labelH = Display.scale(40);
+  int axisLabelX = Display.scale(7);
+  int chkBoxYOff = Display.scale(33);
+  
+  float hoverInW = Display.scale(100);
+  float hoverOutH = Display.scale(70);
+  float titleX = Display.scale(10);
+  float titleY = Display.scale(10);
+  
+  int profBtnX = Display.scale(80);
+  int profBtnY = Display.scale(90);
+  int profBtnW = Display.scale(115);
+  int profBtnH = Display.scale(60);
+  int sortOptH = Display.scale(5);
+  
   final static public int UNSORTED = 0;
   final static public int SORTING  = 1;
   final static public int SORTED   = 2;
@@ -56,9 +79,9 @@ public class RowVariable extends RowWidget {
     addChild(plots, TOP_RIGHT_CORNER);
     
     if (rowVar.numerical()) {
-      selector = new NumericalRangeSelector(intf, 10, 70, width - 20, 50, rowVar);
+      selector = new NumericalRangeSelector(intf, marginx, posy, width - marginx*2, numh, rowVar);
     } else if (rowVar.categorical()) {
-      selector = new CategoricalRangeSelector(intf, 10, 70, width - 20, mira.plotHeight - 70 - padding, rowVar);
+      selector = new CategoricalRangeSelector(intf, marginx, posy, width - marginx*2, mira.plotHeight - posy - padding, rowVar);
     } 
     selector.setInner(true);
     addChild(selector, TOP_LEFT_CORNER);
@@ -103,7 +126,7 @@ public class RowVariable extends RowWidget {
     
     selector.setBackgroundColor(bColor);
     
-    CheckBox chkbxCol = new CheckBox(10, 2 * padding + 5) {
+    CheckBox chkbxCol = new CheckBox(chkBoxColX, 2 * padding + chkOff) {
       void updateState() {
         state = rowVar.column() ? FULLY_SELECTED : DESELECTED;
       }
@@ -119,7 +142,7 @@ public class RowVariable extends RowWidget {
     chkbxCol.setLabel("Column");
     addCheckBox(chkbxCol);  
     
-    CheckBox cchkbxCov = new CheckBox(100, 2 * padding + 5) {
+    CheckBox cchkbxCov = new CheckBox(chkBoxCovX, 2 * padding + chkOff) {
       void updateState() {
         state = rowVar.covariate() ? FULLY_SELECTED : DESELECTED;
       }
@@ -188,7 +211,7 @@ public class RowVariable extends RowWidget {
     } else if (labelMode == UNSORT_ACTION) {
       label = "Unsort " + label;
     }
-    text(label, 10, 10, width - 20, 40);   
+    text(label, marginx, marginy, width - marginx*2, labelH);   
     
     if (axisMode) {
       fill(pColor);
@@ -199,7 +222,7 @@ public class RowVariable extends RowWidget {
       float[] tby = textTopBottom(my);
       if (tby[0] < 0) my += -tby[0];
       if (h1 < tby[1]) my -= tby[1] - h1;
-      text(label, width - vw - 7, my);      
+      text(label, width - vw - axisLabelX, my);      
     }
   }
   
@@ -209,10 +232,10 @@ public class RowVariable extends RowWidget {
       int alpha = chkbx.maxAlpha.getCeil();
       if (alpha < 1) return;
       
-      float y1 = height - 33 - padding;  
+      float y1 = height - chkBoxYOff - padding;  
       noStroke();
       fill(color(221, 220, 217), alpha);
-      rect(0, y1, width - padding, 33);
+      rect(0, y1, width - padding, chkBoxYOff);
       stroke(color(191, 190, 197), alpha);
       line(0, y1, width - 2 * padding, y1);
     }
@@ -222,7 +245,7 @@ public class RowVariable extends RowWidget {
   
   public void hoverIn() {
     if (open && rowVar.categorical()) {
-      selector.setHeight(targetHeight() - 100 - padding);
+      selector.setHeight(targetHeight() - hoverInW - padding);
     }    
     super.hoverIn();
   }
@@ -230,7 +253,7 @@ public class RowVariable extends RowWidget {
   public void hoverOut() {
     super.hoverOut();
     if (open && rowVar.categorical()) {
-      selector.targetHeight(targetHeight() - 70 - padding);
+      selector.targetHeight(targetHeight() - hoverOutH - padding);
     }
     labelMode = UNSORTED_TITLE;
   } 
@@ -304,17 +327,17 @@ public class RowVariable extends RowWidget {
       label = "Unsort " + label;
     }
 
-    float f = textWidth(label) / (width - 20);
+    float f = textWidth(label) / (width - titleX*2);
     int nlines = PApplet.ceil(f);
     float frac = f - (int)f;
     float lineh = textLeading();
     
     float h = (nlines - 1) * lineh;
-    float x0 = 10;
-    float x1 = x0 + width - 20;
-    float y0 = 10;
+    float x0 = titleX;
+    float x1 = x0 + width - titleX*2;
+    float y0 = titleY;
     float y1 = y0 + h;
-    float x2 = x0 + frac * (width - 20);
+    float x2 = x0 + frac * (width - titleX*2);
     float y2 = y1 + lineh;
     
     return (x0 <= mx && mx <= x1  && y0 <= my && my <= y1) ||
@@ -401,7 +424,7 @@ public class RowVariable extends RowWidget {
     public SortOptions(Interface intf, float x, float y, float w, float h) {
       super(intf, x, y, w, h);
       
-      profileBtn = new ProfileButton(intf, 80, 90, 115, 60);
+      profileBtn = new ProfileButton(intf, profBtnX, profBtnY, profBtnW, profBtnH);
       addChild(profileBtn);
 //      networkBtn = new NetworkButton(intf, 145, 100, 115, 60);
 //      addChild(networkBtn);
@@ -439,7 +462,7 @@ public class RowVariable extends RowWidget {
       float w = PApplet.map(data.sortProgress(), 0, 1, 0, width - padding);
       noStroke();
       fill(color(39, 141, 210));
-      rect(0, padding, w, 5); 
+      rect(0, padding, w, sortOptH); 
     }
     
     public void mouseMoved() {
@@ -481,6 +504,16 @@ public class RowVariable extends RowWidget {
   }
   
   protected class ProfileButton extends Widget {
+    float x0 = Display.scale(20);
+    float y0 = Display.scale(10);
+    float x1 = Display.scale(35);
+    float y1 = Display.scale(35);      
+    float x2 = Display.scale(50);
+    float y2 = Display.scale(48);    
+    float rad = Display.scale(10);
+    float txtX = Display.scale(65);
+    float txtY = Display.scale(30);
+    
     SoftFloat hoverAlpha;
     
     public ProfileButton(Interface intf, float x, float y, float w, float h) {
@@ -493,13 +526,6 @@ public class RowVariable extends RowWidget {
     }
     
     public void draw() {
-      float x0 = 20;
-      float y0 = 10;
-      float x1 = 35;
-      float y1 = 35;      
-      float x2 = 50;
-      float y2 = 48;
-      
       stroke(color(39, 141, 210), hoverAlpha.getCeil());
       strokeWeight(2);
       line(x0, y0, x1, y1);
@@ -507,12 +533,12 @@ public class RowVariable extends RowWidget {
       
       noStroke();
       fill(color(39, 141, 210), hoverAlpha.getCeil());
-      ellipse(x0, y0, 10, 10);
-      ellipse(x1, y1, 10, 10);
-      ellipse(x2, y2, 10, 10);
+      ellipse(x0, y0, rad, rad);
+      ellipse(x1, y1, rad, rad);
+      ellipse(x2, y2, rad, rad);
       
       fill(color(255), hoverAlpha.getCeil());
-      text("Profile", 65, 30);
+      text("Profile", txtX, txtY);
     }  
     
     public void hoverIn() {

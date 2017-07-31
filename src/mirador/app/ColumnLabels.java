@@ -4,6 +4,7 @@ package mirador.app;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import miralib.data.Variable;
@@ -89,8 +90,19 @@ public class ColumnLabels extends ColumnScroller {
   }
   
   protected class Label extends Item {
+    // TODO: Make into CCS size parameters
+    int crossw = Display.scale(10);
+    int marginx = Display.scale(10);
+    int marginy = Display.scale(7);
+    int posy = Display.scale(55);
+    int numh = Display.scale(40);
+    int dismissy = Display.scale(10); 
+    int labelh = Display.scale(35);
+    int breakx = Display.scale(5);
+    int breaky = Display.scale(34);
+    int breakh = Display.scale(40);
+
     boolean open;
-    float crossw = 10;
     long t0;
     boolean ready;
     RangeSelector selector;
@@ -103,14 +115,14 @@ public class ColumnLabels extends ColumnScroller {
       open = false;
       
       if (var.numerical()) {
-        selector = new NumericalRangeSelector(intf, 10 + x.get(), 55, w - 20, 40, var);        
+        selector = new NumericalRangeSelector(intf, marginx + x.get(), posy, w - marginx*2, numh, var);        
       } else if (var.categorical()) {
-        selector = new CategoricalRangeSelector(intf, 10 + x.get(), 55, w - 20, h - 55, var);
+        selector = new CategoricalRangeSelector(intf, marginx + x.get(), posy, w - marginx*2, h - posy, var);
       }
       selector.setBackgroundColor(bColor);
       selector.setOffset(visX0);
       selector.hide(false);
-      if (anim) selector.targetX(10 + x.getTarget());
+      if (anim) selector.targetX(marginx + x.getTarget());
       addChild(selector, TOP_LEFT_CORNER);
       t0 = millis();
       ready = false;
@@ -144,7 +156,7 @@ public class ColumnLabels extends ColumnScroller {
     
     void updatePosition() {
       super.updatePosition();
-      selector.copyX(x, 10);      
+      selector.copyX(x, marginx);      
 //      selector.targetX(10 + x.getTarget());
     }    
     
@@ -176,7 +188,7 @@ public class ColumnLabels extends ColumnScroller {
       label = var.getName();
       String alias = var.getAlias();
       if (!label.equals(alias)) label += ": " + alias;
-      text(label, x0 + 10, y0 + 7, w - padding - crossw - 20, 35);  
+      text(label, x0 + marginx, y0 + marginy, w - padding - crossw - marginx*2, labelh);  
       
       if (axisMode) {
         fill(pColor);
@@ -188,17 +200,17 @@ public class ColumnLabels extends ColumnScroller {
           float x1 = mouseX - vw/2;
           if (x1 < x0 + padding) x1 = x0 + padding;
           if (x0 + w1 < x1 + vw) x1 = x0 + w1 - vw;
-          text(label, x1, y0 + h1 - 7);          
+          text(label, x1, y0 + h1 - marginy);          
         } else {
           // This value string is too long, breaking it into two lines.
-          text(label, x0 + 5, y0 + h1 - 34, w1 - 5, 40);           
+          text(label, x0 + breakx, y0 + h1 - breaky, w1 - breakx, breakh);           
         }
       }
     }
-    
+
     void drawDismiss() {
-      float x0 = x.get() - visX0.get() + w - padding - crossw - 10;
-      float y0 = y.get() + 10;
+      float x0 = x.get() - visX0.get() + w - padding - crossw - marginx;
+      float y0 = y.get() + dismissy;
       
       stroke(hColor, 100);
       strokeWeight(1);
@@ -207,8 +219,8 @@ public class ColumnLabels extends ColumnScroller {
     }
 
     boolean insideDismiss(float mx, float my) {
-      float x0 = x.get() - visX0.get() + w - padding - crossw - 10;
-      float y0 = y.get() + 10;
+      float x0 = x.get() - visX0.get() + w - padding - crossw - marginx;
+      float y0 = y.get() + dismissy;
       return x0 <= mx && mx <= x0 + crossw && y0 <= my && my <= y0 + crossw; 
     }
     
@@ -232,7 +244,7 @@ public class ColumnLabels extends ColumnScroller {
             selector.targetHeight(h1 - selector.top());
           } else {
             h.setTarget(itemHeight);
-            selector.targetHeight(itemHeight - 55);            
+            selector.targetHeight(itemHeight - posy);            
           }          
         }        
       }

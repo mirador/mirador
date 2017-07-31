@@ -4,6 +4,7 @@ package mirador.app;
 
 import processing.core.PFont;
 import processing.core.PShape;
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import miralib.utils.Log;
@@ -15,6 +16,16 @@ import miralib.utils.Log;
  */
 
 public class InformationBar extends MiraWidget {
+  // TODO: Make into CCS size parameters
+  int rxpad = Display.scale(5);
+  int rxinc = Display.scale(25);
+  int iconw = Display.scale(13);
+  int iconh = Display.scale(13);
+  int iconx = Display.scale(12);
+  int icony = Display.scale(7);
+  int selh = Display.scale(25);
+  int selx = Display.scale(10);
+  
   protected int totalCount, currentCount;
   protected CountTask countTask;
   protected int bColor;
@@ -71,22 +82,19 @@ public class InformationBar extends MiraWidget {
     String label = currentCount + " of " + totalCount + " data points selected";
     float tw = textWidth(label);
     
-    float w0 = 5 + tw + 5;
-    if (currentCount < totalCount) w0 += 25;
+    float w0 = rxpad + tw + rxpad;
+    if (currentCount < totalCount) w0 += rxinc;
     if (0 < rx.get()) {
-      rx.setTarget(width - w0 - 10);  
+      rx.setTarget(width - w0 - rxpad*2);  
     } else {
-      rx.set(width - w0 - 10);
+      rx.set(width - w0 - rxpad*2);
     }
-    
-//    float rw = width - 10 - rx.get();
         
     fill(rColor);
-//    rect(rx.get(), height/2 - 15, rw, 30);
     
     if (currentCount < totalCount) {
       tint(color(255), ia.getCeil());
-      shape(rIcon, tw + 12, height/2 - 7, 13, 13);
+      shape(rIcon, tw + iconx, height/2 - icony, iconw, iconh);
       tint(color(255));
     }    
     
@@ -96,9 +104,9 @@ public class InformationBar extends MiraWidget {
   }
   
   public void mouseReleased() {
-    float rw = width - 10 - rx.get();
+    float rw = width - selx - rx.get();
     if (rx.get() <= mouseX && mouseX <= rx.get() + rw && 
-        height/2 - 15 <= mouseY && mouseY <= height/2 + 15) {    
+        height/2 - selh <= mouseY && mouseY <= height/2 + selh) {    
       requestedRangeReset = true;      
     }    
   }  

@@ -8,6 +8,7 @@ import java.util.concurrent.FutureTask;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import mirador.views.View;
@@ -150,6 +151,8 @@ public class RowPlots extends ColumnScroller {
   }    
   
   protected class Plot extends Item {
+    float triSize = Display.scale(13);
+    
     View view;    
     PGraphics pcanvas;
     PGraphics canvas;
@@ -300,14 +303,14 @@ public class RowPlots extends ColumnScroller {
           // TODO: show some kind of animation while calculating the significance...
           noStroke();
           fill(corColor);
-          triangle(x0, y0, x0 + 13, y0, x0, y0 + 13);
+          triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
         }
         
         if (mira.project.missingThreshold() <= missing) {
           float x1 = x0 + w0;
           noStroke();
           fill(misColor);
-          triangle(x1 - 13, y0, x1, y0, x1, y0 + 13);
+          triangle(x1 - triSize, y0, x1, y0, x1, y0 + triSize);
         }
       } else {
         noStroke();
@@ -342,13 +345,13 @@ public class RowPlots extends ColumnScroller {
         // TODO: show some kind of animation while calculating the significance...
         pg.noStroke();
         pg.fill(corColor);
-        pg.triangle(0, 0, 13, 0, 0, 13);
+        pg.triangle(0, 0, triSize, 0, 0, triSize);
       }
       
       if (mira.project.missingThreshold() <= missing) {
         pg.noStroke();
         pg.fill(misColor);
-        pg.triangle(pg.width - 13, 0, pg.width, 0, pg.width, 13);
+        pg.triangle(pg.width - triSize, 0, pg.width, 0, pg.width, triSize);
       }
       
       pg.noFill();

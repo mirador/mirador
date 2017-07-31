@@ -9,6 +9,7 @@ import java.util.HashSet;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import mui.Widget;
@@ -23,15 +24,42 @@ import miralib.utils.Project;
  */
 
 public class Profile extends MiraWidget {
-  protected float crossw = 20;
-  protected float handlew = 30;
-  protected float handleh = 30;
+  // TODO: Make into CCS size parameters
+  protected float crossw = Display.scale(20);
+  protected float handlew = Display.scale(30);
+  protected float handleh = Display.scale(30);
+
+  protected float rightm = Display.scale(100);
+  protected float topm = Display.scale(200);
+  protected float bottomm = Display.scale(100);
+  protected float leftm = Display.scale(100);
   
-  // Margins for plot area
-  protected float rightm = 100;
-  protected float topm = 200;
-  protected float bottomm = 100;
-  protected float leftm = 100;
+  int expBtnX = Display.scale(150); 
+  int expBtnY = Display.scale(75); 
+  int expBtnW = Display.scale(150); 
+  int expBtnH = Display.scale(50);  
+  int progBarH = Display.scale(10);
+  
+  int corrLabelX = Display.scale(90);
+  int highLabelH = Display.scale(50);
+  int lowLabelH = Display.scale(40);
+  int lowLabelY = Display.scale(40);
+  int corrLabelW = Display.scale(80);    
+  int labelY = Display.scale(100); 
+  
+  int handleY = Display.scale(20);
+  int selW = Display.scale(20); 
+  float fdrY = Display.scale(10);
+  float pointRad = Display.scale(15);
+  
+  int ptLabelOffset = Display.scale(5);
+  int dismissX = Display.scale(50);
+  
+  int exportSelX = Display.scale(40);
+  int dragLimitX = Display.scale(30);
+  
+  int softPointX = Display.scale(30);
+  int softPointY = Display.scale(10);  
   
   protected boolean dirty;
   protected boolean sort0;
@@ -95,7 +123,7 @@ public class Profile extends MiraWidget {
     
     selBarColor = getStyleColor("Profile.Selector", "selection-color");    
     
-    export = new ExportButton(intf, -leftm - 150, 75, 150, 50);
+    export = new ExportButton(intf, -leftm - expBtnX, expBtnY, expBtnW, expBtnH);
     addChild(export, TOP_RIGHT_CORNER);
     
     hoverVar = null;
@@ -164,7 +192,7 @@ public class Profile extends MiraWidget {
     float w = PApplet.map(data.sortProgress(), 0, 1, 0, width);
     noStroke();
     fill(color(39, 141, 210));
-    rect(0, 0, w, 10);
+    rect(0, 0, w, progBarH);
     
     Variable sortVar = data.sortKey();
     String label = sortVar.getName();
@@ -174,15 +202,16 @@ public class Profile extends MiraWidget {
       int perc = (int)(data.sortProgress() * 100);
       label = "Sorting " + label + ", " + perc + "% completed"; 
     }
+    
     textFont(h1Font);
     fill(h1Color);
-    text(label, rightm, 100);
+    text(label, rightm, labelY);
     
     textFont(pFont);
     fill(pColor);
     textAlign(RIGHT);
-    text("Highest correlation", rightm - 90, topm, 80, 50);
-    text("Lowest correlation", rightm - 90, height - bottomm - 40, 80, 40);
+    text("Highest correlation", rightm - corrLabelX, topm, corrLabelW, highLabelH);
+    text("Lowest correlation", rightm - corrLabelX, height - bottomm - lowLabelY, corrLabelW, lowLabelH);
     textAlign(LEFT);
     
     drawSelection();
@@ -232,7 +261,7 @@ public class Profile extends MiraWidget {
     }
     if (hoverVar == null) hoverAlpha.set(255);
   }
- 
+
   protected void initSelHandles() {
     float x0 = rightm;
     float x1 = x0 + width - leftm - rightm;
@@ -243,9 +272,9 @@ public class Profile extends MiraWidget {
     float selx1 = PApplet.map(selRangeRight, 0, 1, x0, x1);
     
 //    selLeftHandle = new SelectionHandle(selx0, y1 + 20, handlew, handleh, SelectionHandle.LEFT);
-    selRightHandle = new SelectionHandle(selx1, y1 + 20, handlew, handleh, SelectionHandle.RIGHT);
+    selRightHandle = new SelectionHandle(selx1, y1 + handleY, handlew, handleh, SelectionHandle.RIGHT);
   }
-  
+   
   protected void drawSelection() {
     float x0 = rightm;
     float x1 = x0 + width - leftm - rightm;
@@ -254,7 +283,7 @@ public class Profile extends MiraWidget {
     
     noStroke();
     fill(selBarColor);
-    rect(x0, y1, x1 - x0, 20);
+    rect(x0, y1, x1 - x0, selW);
 
 //    float selx0 = selLeftHandle.x0;  //PApplet.map(selRangeLeft, 0, 1, x0, x1);
     float selx0 = PApplet.map(selRangeLeft, 0, 1, x0, x1);
@@ -263,7 +292,7 @@ public class Profile extends MiraWidget {
     rect(selx0, y0, selx1 - selx0, y1 - y0);
     
     fill(color(0), 190);
-    rect(selx0, y1, selx1 - selx0, 20);
+    rect(selx0, y1, selx1 - selx0, selW);
     
 //    selLeftHandle.draw();
     selRightHandle.draw();
@@ -272,7 +301,7 @@ public class Profile extends MiraWidget {
       textFont(pFont);
       fill(pColor);
       textAlign(CENTER);
-      text("False Discovery Rate < " + PApplet.nfc(fdr, 2) + "%", selx1, y0 - 10);
+      text("False Discovery Rate < " + PApplet.nfc(fdr, 2) + "%", selx1, y0 - fdrY);
       textAlign(LEFT);
     }
   }
@@ -293,7 +322,7 @@ public class Profile extends MiraWidget {
         noStroke();  
       }      
       fill(ptInColor, alpha);
-      ellipse(pt.x(), pt.y(), 15, 15);
+      ellipse(pt.x(), pt.y(), pointRad, pointRad);
     }
       
     SoftPoint pt = points.get(hoverVar);
@@ -312,16 +341,16 @@ public class Profile extends MiraWidget {
       fill(ptColor, alpha);
       float tw = textWidth(ptLabel);
       float tx = pt.x() - tw/2;
-      float ty = pt.y() - ptFont.getSize() - 5;
+      float ty = pt.y() - ptFont.getSize() - ptLabelOffset;
       if (width < tx + tw) {
-        tx = width - tw - 5;  
+        tx = width - tw - ptLabelOffset;  
       }
       text(ptLabel, tx, ty);
     }
   } 
   
   protected void drawDismiss() {
-    float x0 = width - crossw - leftm + 50;
+    float x0 = width - crossw - leftm + dismissX;
     float y0 = 90;
     
     stroke(color(255), 200);
@@ -331,7 +360,7 @@ public class Profile extends MiraWidget {
   }
 
   protected boolean insideDismiss(float mx, float my) {
-    float x0 = width - crossw - leftm + 50;
+    float x0 = width - crossw - leftm + dismissX;
     float y0 = 90;
     return x0 <= mx && mx <= x0 + crossw && y0 <= my && my <= y0 + crossw; 
   }
@@ -454,7 +483,7 @@ public class Profile extends MiraWidget {
     float y0 = topm - 10;
     float y1 = y0 + newHeight - bottomm - topm;    
 //    selLeftHandle.setY(y1 + 20);
-    selRightHandle.setY(y1 + 20);
+    selRightHandle.setY(y1 + handleY);
     // TODO: re-adjust selected range according to new width...
   }
   
@@ -487,7 +516,7 @@ public class Profile extends MiraWidget {
       fill(h2Color, maxa);
       textFont(h2Font);
       float yc = (height - h2Font.getSize()) / 2;
-      text("Export selection", 40, height - yc);
+      text("Export selection", exportSelX, height - yc);
     }    
     
     public void handle() {
@@ -603,7 +632,7 @@ public class Profile extends MiraWidget {
         
         dragx = PApplet.constrain(mouseX + dx0, left, right);        
         
-        float value = PApplet.constrain(PApplet.map(dragx, left + 30, right - 30, 0, 1), 0, 1);
+        float value = PApplet.constrain(PApplet.map(dragx, left + dragLimitX, right - dragLimitX, 0, 1), 0, 1);
         if (side == LEFT) {
           selRangeLeft = value;
           requestedUpdateSelection = true;
@@ -654,11 +683,11 @@ public class Profile extends MiraWidget {
     }
 
     float x() {
-      return PApplet.map(x.get(), 0, 1, rightm + 30, width - leftm - 30);
+      return PApplet.map(x.get(), 0, 1, rightm + softPointX, width - leftm - softPointX);
     }
     
     float y() {
-      return PApplet.map(y.get(), 1, 0, topm + 10, height - bottomm - 20);
+      return PApplet.map(y.get(), 1, 0, topm + softPointY, height - bottomm - softPointY * 2);
     }    
-  }  
+  }
 }

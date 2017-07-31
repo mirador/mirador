@@ -5,6 +5,7 @@ package mirador.app;
 import java.util.ArrayList;
 
 import processing.core.PFont;
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 
@@ -14,6 +15,8 @@ import mui.SoftFloat;
  */
 
 public class RowWidget extends MiraWidget {
+  float labelPad = Display.scale(1);
+  
   protected ArrayList<CheckBox> chkBoxes;
   protected boolean chkPressed;
   
@@ -141,7 +144,7 @@ public class RowWidget extends MiraWidget {
       fill(pColor, alpha);
       textFont(pFont);
       float yc = (h - pFont.getSize()) / 2; 
-      text(label, x + w + 5, y + h - yc - 1);
+      text(label, x + w + 5, y + h - yc - labelPad);
     }
     
     void show() {

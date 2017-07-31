@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import mui.Display;
 import mui.Interface;
 import mui.Widget;
 import miralib.data.Variable;
@@ -20,6 +21,8 @@ import processing.core.PApplet;
  */
 
 public class VariableBrowser extends MiraWidget {
+  int infoBarH = Display.scale(35);
+  
   final static public int NUM_FREE_PROCESSORS = 1;
   
   protected ThreadPoolExecutor taskPool1;
@@ -61,10 +64,10 @@ public class VariableBrowser extends MiraWidget {
       showColumnLabels();
     }
     
-    infoBar = new InformationBar(intf, 0, 0, mira.varWidth, 35);    
+    infoBar = new InformationBar(intf, 0, 0, mira.varWidth, infoBarH);    
     addChild(infoBar, TOP_LEFT_CORNER);
     
-    searchBar = new SearchBar(intf, 0, 35, mira.varWidth, mira.labelHeightClose - 35);    
+    searchBar = new SearchBar(intf, 0, infoBarH, mira.varWidth, mira.labelHeightClose - infoBarH);    
     addChild(searchBar, TOP_LEFT_CORNER); 
     
     covBar = new CovariatesBar(intf, 0, -mira.covarHeightClose, width, mira.covarHeightClose,

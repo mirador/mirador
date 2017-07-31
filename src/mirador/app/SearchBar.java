@@ -9,6 +9,7 @@ import java.util.HashSet;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;
+import mui.Display;
 import mui.EditableText;
 import mui.Interface;
 import mui.SoftFloat;
@@ -28,6 +29,15 @@ public class SearchBar extends MiraWidget {
   SearchBox searchBox;
   SearchResults searchRes;
   
+  float tabsY = Display.scale(10);  
+  float tabsX = Display.scale(10);  
+  float tabsH = Display.scale(30);  
+  float pad1 = Display.scale(1); 
+  float pad2 = Display.scale(2);
+  float pad3 = Display.scale(3); 
+  float pad5 = Display.scale(5);
+  float pad10 = Display.scale(10);
+  
   public SearchBar(Interface intf, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
     captureKeys = true;
@@ -42,16 +52,14 @@ public class SearchBar extends MiraWidget {
     float tw = sw/3;
 //    float sh = getStyleSize("InfoBar.SearchAdd", "height");
     
-    float y0 = 10;
-    
     searchTabs = new ArrayList<SearchTab>();
-    searchTabs.add(new SearchTab(10, y0, tw - 1, 30, "Covariate"));     
-    searchTabs.add(new SearchTab(10 + tw + 1, y0, tw - 2, 30, "Row")); 
-    searchTabs.add(new SearchTab(10 + 2 * tw + 1, y0, tw - 1, 30, "Column"));
+    searchTabs.add(new SearchTab(tabsX, tabsY, tw - pad1, tabsH, "Covariate"));     
+    searchTabs.add(new SearchTab(tabsX + tw + pad1, tabsY, tw - pad2, tabsH, "Row")); 
+    searchTabs.add(new SearchTab(tabsX + 2*tw + pad1, tabsY, tw - pad1, tabsH, "Column"));
     searchTabs.get(0).selected = true;
     
-    searchBox = new SearchBox(10, y0 + 30, sw, 30);    
-    searchRes = new SearchResults(10, y0 + 30 + 30 + 2, 10);
+    searchBox = new SearchBox(tabsX, tabsY + tabsH, sw, tabsH);    
+    searchRes = new SearchResults(tabsX, tabsY + tabsH + tabsH + pad2, 10);
   }
   
   public void update() {
@@ -177,7 +185,7 @@ public class SearchBar extends MiraWidget {
       fill(pColor);
       textFont(pFont);
       textAlign(pAlign);
-      text(label, x, y + yc - 3, w, h);      
+      text(label, x, y + yc - pad3, w, h);      
       textAlign(PConstants.LEFT);
     }
     
@@ -215,7 +223,7 @@ public class SearchBar extends MiraWidget {
       
       searchStr = new EditableText(SearchBar.this, "Search for a variable");
       searchStr.clearInitial();
-      searchStr.setBound(w - 5 - pFont.getSize());
+      searchStr.setBound(w - pad5 - pFont.getSize());
     }
     
     void update() {
@@ -241,8 +249,8 @@ public class SearchBar extends MiraWidget {
       vertex(x, y);
       vertex(x + w, y);
       fill(color(0), 0);
-      vertex(x + w, y - 10);
-      vertex(x, y - 10);      
+      vertex(x + w, y - pad10);
+      vertex(x, y - pad10);      
       endShape();
       
       textFont(pFont);
@@ -254,7 +262,7 @@ public class SearchBar extends MiraWidget {
         stroke(pColor);
       }      
       float yc = (h - pFont.getSize()) / 2;
-      text(searchStr, x + 10, y + h - yc);
+      text(searchStr, x + pad10, y + h - yc);
     }
     
     void select() {
@@ -269,7 +277,7 @@ public class SearchBar extends MiraWidget {
     
     void mousePressed(float mx, float my) {
       textFont(pFont);
-      if (searchStr.insideBounds(x + 5, y + h - 5, mx, my)) {
+      if (searchStr.insideBounds(x + pad5, y + h - pad5, mx, my)) {
         searchStr.setFocused(true);
       } else {
         searchStr.setFocused(false);
@@ -547,7 +555,7 @@ public class SearchBar extends MiraWidget {
         w.setTarget(w0);        
       }
       if (w.isTargeting()) {
-        label = chopStringRight(label, w.get() - 10);
+        label = chopStringRight(label, w.get() - pad10);
       }
       
       rect(x, y.get(), w.get(), h);

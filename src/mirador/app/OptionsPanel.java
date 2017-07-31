@@ -4,6 +4,7 @@ package mirador.app;
 
 import java.util.ArrayList;
 
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import mui.Widget;
@@ -27,6 +28,32 @@ public class OptionsPanel extends MiraWidget {
 //  MenuButton uploadBtn;
   Options plotOpt, statOpt, mdatOpt;
 
+  // TODO: Make into CCS size parameters
+  int marginX = Display.scale(10);
+  
+  int loadBtnY = Display.scale(60);
+  int exportBtnY = Display.scale(90);
+  int pdfBtnY = Display.scale(120);
+  
+  int btnWidth = Display.scale(100); 
+  int btnHeight = Display.scale(25);
+
+  int plotOptY = Display.scale(165);
+  int statOptY = Display.scale(295);
+  int mdatOptY = Display.scale(495);  
+  
+  int optWidth = Display.scale(110);
+  int optHeight = Display.scale(80);
+  
+  int appNameY = Display.scale(25);
+  int appVersionY = Display.scale(45);  
+  
+  int shadowOffsetX = Display.scale(15);
+  
+  int optOffsetX = Display.scale(5);
+  int optOffsetY = Display.scale(10);  
+  int btnOffsetX = Display.scale(5);
+  
   public OptionsPanel(Interface intf, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
   }
@@ -42,7 +69,7 @@ public class OptionsPanel extends MiraWidget {
     corColor = getStyleColor("RowPlots.Pvalue", "background-color");
     misColor = getStyleColor("RowPlots.MissingData", "background-color");
     
-    loadBtn = new MenuButton(intf, 10, 60, 100, 25, "Load Data") {
+    loadBtn = new MenuButton(intf, marginX, loadBtnY, btnWidth, btnHeight, "Load Data") {
       public void handle() {
         if (keyPressed(SHIFT)) {
           mira.reloadDataset();
@@ -54,7 +81,7 @@ public class OptionsPanel extends MiraWidget {
     loadBtn.setShiftLabel("Reload");
     addChild(loadBtn, TOP_LEFT_CORNER);
     
-    exportBtn = new MenuButton(intf, 10, 90, 100, 25, "Export selection") {
+    exportBtn = new MenuButton(intf, marginX, exportBtnY, btnWidth, btnHeight, "Export selection") {
       public void handle() {
         mira.exportSelection();
       }
@@ -75,24 +102,24 @@ public class OptionsPanel extends MiraWidget {
 //    };
 //    addChild(pdfBtn, TOP_LEFT_CORNER);
     
-    pdfBtn = new MenuButton(intf, 10, 120, 100, 25, "Save PDF") {
+    pdfBtn = new MenuButton(intf, marginX, pdfBtnY, btnWidth, btnHeight, "Save PDF") {
       public void handle() {
         mira.savePDF();
       }
     };
     addChild(pdfBtn, TOP_LEFT_CORNER); 
-    
-    plotOpt = new Options(10, 165, 110, 80, "PlotOptions");
+         
+    plotOpt = new Options(marginX, plotOptY, optWidth, optHeight, "PlotOptions");
     plotOpt.title("Plot Type");
     plotOpt.add("Scatter", "Histogram", "Eikosogram");
     plotOpt.select(mira.getPlotType());
     
-    statOpt = new Options(10, 295, 110, 80, "StatsOptions");
+    statOpt = new Options(marginX, statOptY, optWidth, optHeight, "StatsOptions");
     statOpt.title("P-value", corColor);
     statOpt.add("99.9%", "99.5%", "99%", "95%", "90%", "Don't use");
     statOpt.select(mira.getPValue());    
     
-    mdatOpt = new Options(10, 495, 110, 80, "SessionOptions");
+    mdatOpt = new Options(marginX, mdatOptY, optWidth, optHeight, "SessionOptions");
     mdatOpt.title("Available\ndata", misColor);
     mdatOpt.add("90%", "80%", "40%", "20%", "Don't use");
     mdatOpt.select(mira.getMissingThreshold());    
@@ -103,7 +130,7 @@ public class OptionsPanel extends MiraWidget {
     statOpt.update();
     mdatOpt.update();    
   }
-  
+
   public void draw() {
     noStroke();
     fill(bColor);
@@ -111,11 +138,11 @@ public class OptionsPanel extends MiraWidget {
 
     fill(h1Color);
     textFont(h1Font);
-    text(MiraApp.APP_NAME, 10, 25); 
+    text(MiraApp.APP_NAME, marginX, appNameY); 
     
     fill(color(0), 150);
     textFont(pFont);
-    text(MiraApp.APP_VERSION, 10, 45); 
+    text(MiraApp.APP_VERSION, marginX, appVersionY); 
     
     plotOpt.draw();
     statOpt.draw();
@@ -129,8 +156,8 @@ public class OptionsPanel extends MiraWidget {
     vertex(width, 0);
     vertex(width, height);
     fill(color(0), 0);
-    vertex(width - 15, height);
-    vertex(width - 15, 0);      
+    vertex(width - shadowOffsetX, height);
+    vertex(width - shadowOffsetX, 0);      
     endShape();
   }
   
@@ -209,7 +236,7 @@ public class OptionsPanel extends MiraWidget {
     }
     
     boolean select(int mx, int my) {
-      float x0 = x + 5;
+      float x0 = x + optOffsetX;
       float x1 = x0 + sWidth;
       float y0 = selY0;
       float y1 = selY0 + list.size() * sHeight;
@@ -232,10 +259,10 @@ public class OptionsPanel extends MiraWidget {
     void draw() {
       stroke(bColor);
       strokeWeight(bWidth);
-      line(x, y, x + w - 10, y);
+      line(x, y, x + w - optOffsetX*2, y);
       
-      float x1 = x + 5;
-      float y0 = y + 10;
+      float x1 = x + optOffsetX;
+      float y0 = y + optOffsetY;
       float y1 = y0;
       
       fill(h1Color);
@@ -251,10 +278,10 @@ public class OptionsPanel extends MiraWidget {
         noStroke();
         fill(tColor);
         y0 += th - textAscent();
-        rect(0, y0, 5, y1 - y0);
+        rect(0, y0, optOffsetX, y1 - y0);
       }
 
-      y1 += 10;
+      y1 += optOffsetY;
       selY0 = y1;
       float y2 = y1 + selY.get();
       noStroke();
@@ -306,7 +333,7 @@ public class OptionsPanel extends MiraWidget {
       if (shiftLabel != null && hovered && keyPressed(SHIFT)) {
         text(shiftLabel, 5, height - center);
       } else {
-        text(label, 5, height - center);
+        text(label, btnOffsetX, height - center);
       }
             
     }  

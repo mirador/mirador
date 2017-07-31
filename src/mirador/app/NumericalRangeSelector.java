@@ -4,6 +4,7 @@ package mirador.app;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import mui.Display;
 import mui.EditableText;
 import mui.Interface;
 import mui.SoftFloat;
@@ -245,6 +246,10 @@ public class NumericalRangeSelector extends RangeSelector {
   }
   
   class RangeBar {
+    float texty1 = Display.scale(1);
+    float texty3 = Display.scale(3);
+    float insidey = Display.scale(20);
+    
     float x, y, w, h;
     SoftFloat leftSel, rightSel;
     EditableText leftStr, rightStr;
@@ -306,7 +311,7 @@ public class NumericalRangeSelector extends RangeSelector {
       }
       
       fill(pColor, defAnim.getCeil());
-      text(centerStr, xc - centerStrW/2, y + h - yc - 1);
+      text(centerStr, xc - centerStrW/2, y + h - yc - texty1);
       
       if (set) {
         noStroke();
@@ -325,8 +330,8 @@ public class NumericalRangeSelector extends RangeSelector {
       String val0 = selVar.formatValue(0);
       String val1 = selVar.formatValue(1);
       float w1 = textWidth(val1);
-      text(val0, x, y + h + pFont.getSize() + 3);
-      text(val1, x + w - w1, y + h + pFont.getSize() + 3);
+      text(val0, x, y + h + pFont.getSize() + texty3);
+      text(val1, x + w - w1, y + h + pFont.getSize() + texty3);
     }
     
     void setLeft(float f) {
@@ -367,7 +372,7 @@ public class NumericalRangeSelector extends RangeSelector {
           leftStr.setFocused(false);
         }
         
-        if (rightStr.inside(xc + toStrW/2, y + 20, mouseX, mouseY)) {
+        if (rightStr.inside(xc + toStrW/2, y + insidey, mouseX, mouseY)) {
           rightStr.setFocused(true);
         } else {
           rightStr.setFocused(false);

@@ -5,6 +5,7 @@ package mirador.app;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import mui.Display;
 import mui.Interface;
 import mui.Widget;
 import miralib.data.DataTree;
@@ -19,6 +20,8 @@ import miralib.data.DataTree.Item;
  */
 
 public class RowScroller extends MiraWidget {
+  float snapThreshold = Display.scale(30);
+  
   protected DataTree tree;
   protected int current;
   protected float heightOpen;
@@ -659,11 +662,11 @@ public class RowScroller extends MiraWidget {
         
         if (PApplet.abs(first.targetY()) < 30) {
           offset = -first.targetY();
-        } else if (PApplet.abs(first.targetY() + first.targetHeight()) < 30) {
+        } else if (PApplet.abs(first.targetY() + first.targetHeight()) < snapThreshold) {
           offset = -(first.targetY() + first.targetHeight());
         } else if (PApplet.abs(last.targetY() - h) < 30) { 
           offset = h - last.targetY();
-        } else if (PApplet.abs(last.targetY() + last.targetHeight() - h) < 30) {
+        } else if (PApplet.abs(last.targetY() + last.targetHeight() - h) < snapThreshold) {
           offset = h - (last.targetY() + last.targetHeight());
         }
         

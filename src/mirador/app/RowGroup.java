@@ -3,6 +3,7 @@
 package mirador.app;
 
 import processing.core.PFont;
+import mui.Display;
 import mui.Interface;
 import miralib.data.DataTree;
 import miralib.data.VariableContainer;
@@ -13,6 +14,13 @@ import miralib.data.VariableContainer;
  */
 
 public class RowGroup extends RowWidget {
+  // TODO: Make into CCS size parameters
+  float chkOff = Display.scale(5);
+  float chkBoxX = Display.scale(10);
+  float textX = Display.scale(10);
+  float textY = Display.scale(10);
+  float textH = Display.scale(40);
+  
   protected VariableContainer rowGroup;  
   protected PFont hFont;
   protected float hLead;
@@ -31,7 +39,7 @@ public class RowGroup extends RowWidget {
     hColor = getStyleColor("SubjDir.h1", "color");
     hLead = getStyleSize("SubjDir.h1", "line-height");
     
-    CheckBox chkbx = new CheckBox(10, 2 * padding + 5) {
+    CheckBox chkbx = new CheckBox(chkBoxX, 2 * padding + chkOff) {
       void updateState() {
         state = rowGroup.getColumnSelection();
       }
@@ -56,7 +64,7 @@ public class RowGroup extends RowWidget {
     fill(hColor);    
     textFont(hFont);    
     textLeading(hLead);
-    text(rowGroup.getName(), 10, 10, width - 20, 40);    
+    text(rowGroup.getName(), textX, textY, width - textX*2, textH);    
     drawCheckBoxes();
   }    
 }

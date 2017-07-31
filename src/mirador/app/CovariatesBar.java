@@ -4,6 +4,7 @@ package mirador.app;
 
 import processing.core.PApplet;
 import processing.core.PFont;
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import miralib.data.Variable;
@@ -72,8 +73,15 @@ public class CovariatesBar extends ColumnScroller {
   }   
   
   protected class Covariate extends Item {
+    // TODO: Make into CCS size parameters
+    int marginx = Display.scale(10);
+    int posy = Display.scale(5);
+    float selh = Display.scale(50);
+    float crossw = Display.scale(10);
+    float htexty = Display.scale(6);
+    float ptexty = Display.scale(4);
+    
     boolean open;
-    float crossw = 10;
     RangeSelector selector;
     SoftFloat maxAlpha;
     
@@ -83,13 +91,13 @@ public class CovariatesBar extends ColumnScroller {
       open = false;
       
       if (var.numerical()) {
-        selector = new NumericalRangeSelector(intf, x.get() + 10, h + 5, w - 20, 50, var);        
+        selector = new NumericalRangeSelector(intf, marginx + x.get(), h + posy, w - marginx*2, selh, var);        
       } else if (var.categorical()) {
-        selector = new CategoricalRangeSelector(intf, x.get() + 10, h + 5, w - 20, 50, var);
+        selector = new CategoricalRangeSelector(intf, marginx + x.get(), h + posy, w - marginx*2, selh, var);
       }
       selector.setBackgroundColor(oColor);
       selector.setOffset(visX0);
-      if (anim) selector.targetX(x.getTarget() + 20);
+      if (anim) selector.targetX(x.getTarget() + marginx*2);
       addChild(selector, TOP_LEFT_CORNER);      
     }
     
@@ -100,7 +108,7 @@ public class CovariatesBar extends ColumnScroller {
     
     void update() {
       super.update();
-      selector.targetX(x.getTarget() + 10);
+      selector.targetX(x.getTarget() + marginx);
       maxAlpha.update();
     }
     
@@ -124,19 +132,19 @@ public class CovariatesBar extends ColumnScroller {
       String label = var.getName();
       String alias = var.getAlias();
       if (!label.equals(alias)) label += ": " + alias;      
-      label = chopStringRight(label, w - padding - crossw - 20);
-      text(label, x0 + 10, y0 + hFont.getSize() + 6);
+      label = chopStringRight(label, w - padding - crossw - marginx*2);
+      text(label, x0 + marginx, y0 + hFont.getSize() + htexty);
       
       textFont(pFont);
       String range = var.formatRange(mira.ranges.get(var));
       range = chopStringRight(range, w - padding - crossw - 20);
-      text(range, x0 + 10, y0 + textLeading() + hFont.getSize() + 4);
+      text(range, x0 + marginx, y0 + textLeading() + hFont.getSize() + ptexty);
       
       drawDismiss();
     }
 
     void drawDismiss() {
-      float x0 = x.get() - visX0.get() + w - padding - crossw - 10;
+      float x0 = x.get() - visX0.get() + w - padding - crossw - marginx;
       float y0 = y.get() + itemHeight/2 - crossw/2;      
       stroke(dColor, maxAlpha.getCeil());
       strokeWeight(1);
@@ -145,7 +153,7 @@ public class CovariatesBar extends ColumnScroller {
     }
 
     boolean insideDismiss(float mx, float my) {
-      float x0 = x.get() - visX0.get() + w - padding - crossw - 10;
+      float x0 = x.get() - visX0.get() + w - padding - crossw - marginx;
       float y0 = y.get() + itemHeight/2 - crossw/2;
       return x0 <= mx && mx <= x0 + crossw && y0 <= my && my <= y0 + crossw; 
     }
@@ -159,17 +167,17 @@ public class CovariatesBar extends ColumnScroller {
       } else {
         open = !open;
         if (open) {
-          float h1 = PApplet.min(covarHeightMax, itemHeight + 5 + selector.getFullHeight() + 10);
+          float h1 = PApplet.min(covarHeightMax, itemHeight + posy + selector.getFullHeight() + 2*posy);
           
           y.setTarget(-(h1 - itemHeight));
           h.setTarget(h1);
-          selector.targetY(y.getTarget() + itemHeight + 5);
-          selector.setHeight(h1 - itemHeight - 5);
+          selector.targetY(y.getTarget() + itemHeight + posy);
+          selector.setHeight(h1 - itemHeight - posy);
         } else {
           y.setTarget(0);
           h.setTarget(itemHeight);
-          selector.targetY(itemHeight + 5);
-          selector.setHeight(50);
+          selector.targetY(itemHeight + posy);
+          selector.setHeight(selh);
         }
       }
     }

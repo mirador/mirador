@@ -16,6 +16,7 @@ import mirador.handlers.PDFHandler;
 import mirador.handlers.ProfileHandler;
 import mirador.handlers.SelectionHandler;
 import mirador.handlers.UploadHandler;
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import mirador.views.View;
@@ -40,21 +41,21 @@ public class MiraApp extends PApplet {
   static public int PIXEL_DENSITY = 1;
   static public int SMOOTH_LEVEL = 4;
   static public final String APP_NAME = "mirador";
-  static public final String APP_VERSION = "1.4.1";
+  static public final String APP_VERSION = "1.4.2";
   
   static public String inputFile = "default.mira";
   static protected Preferences prefs;
   
-  // TODO: move these somewhere else, make into parameters?
-  int optWidth = 120;  
-  int varWidth = 300;
-  int varHeight = 85;
-  int labelHeightClose = 115;
-  int labelHeightMax = 300;
-  int covarHeightClose = 50;
-  int covarHeightMax = 300;
-  int plotWidth = 200;
-  int plotHeight = 200;
+  // TODO: Make into CCS size parameters
+  int optWidth = Display.scale(120);  
+  int varWidth = Display.scale(300);
+  int varHeight = Display.scale(85);
+  int labelHeightClose = Display.scale(115);
+  int labelHeightMax = Display.scale(300);
+  int covarHeightClose = Display.scale(50);
+  int covarHeightMax = Display.scale(300);
+  int plotWidth = Display.scale(200);
+  int plotHeight = Display.scale(200);
   /////////////////////////////////////////////////////////////////////////////
 
   public Project project;
