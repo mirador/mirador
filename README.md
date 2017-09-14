@@ -1,6 +1,10 @@
-## Mirador
+# Mirador
 
 Mirador is a tool to identify new hypothesis in complex datasets through visual exploration.
+
+## IntelliJ project
+
+Use to edit and debug the code. Already set to run the main class mirador.app.Mirador
 
 ## Maven build
 
