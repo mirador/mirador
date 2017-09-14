@@ -1,0 +1,17 @@
+{
+    "platform": "mac",
+    "jdk": "/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk",
+    "executable": "mirador",
+    "classpath": [
+        "../target/mirador.jar"
+    ],
+    "mainclass": "mirador.app.Mirador",
+    "vmargs": [
+       "Xmx1G"
+    ],
+    "resources": [
+        "../examples"
+    ],
+    "minimizejre": "soft",
+    "output": "mac/mirador.app"
+}

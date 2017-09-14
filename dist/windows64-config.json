@@ -1,0 +1,18 @@
+{
+    "platform": "windows64",
+    "jdk": "C:/Program Files/Java/jdk1.8.0_144",
+    "executable": "mirador",
+    "classpath": [
+        "../target/mirador.jar"
+    ],
+    "mainclass": "mirador.app.Mirador",
+    "vmargs": [
+       "-Dsun.java2d.dpiaware=true",
+       "Xmx1G"
+    ],
+    "resources": [
+        "../examples"
+    ],
+    "minimizejre": "soft",
+    "output": "windows/windows64"
+}
