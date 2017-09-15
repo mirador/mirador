@@ -18,12 +18,28 @@ mvn install assembly:assembly
 
 Uses [Packr](https://github.com/libgdx/packr)
 
-```
-cd dist
-java -jar packr.jar mac-config.json 
-```
+* Mac:
 
 ```
 cd dist
-java -jar packr.jar windows64-config.json 
+java -jar packr.jar config/macos.json 
 ```
+
+* Windows:
+
+```
+cd dist
+java -jar packr.jar config/windows64.json 
+```
+
+* Linux:
+
+```
+cd dist
+java -jar packr.jar config/linux64.json 
+```
+
+## Create Windows, Linux, and Mac installers
+
+Run the ant build script inside the dist folder, it will create the corresponding
+installation package for each platform.
