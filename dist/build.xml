@@ -1,0 +1,28 @@
+<project default="dist">
+    
+    <property file="build.properties" />
+    
+    <target name="dist">
+        
+        <!-- build app bundle with packr -->
+        <java jar="packr.jar" fork="true">
+            <arg line="config/macos.json" />
+        </java>
+
+        <!-- packr does not allow to set the version string, doing it manually -->
+        <copy file="macos/Info.plist.tmpl" tofile="macos/Mirador.app/Contents/Info.plist" overwrite="true"/>
+        <replace file="macos/Mirador.app/Contents/Info.plist" token="@@mirador.version@@" value="${mirador.version}"/>
+
+        <!-- signing app bundle -->
+        <exec executable="codesign">
+            <arg line="--verbose --force --sign ${certificate.application} macos/Mirador.app" />
+        </exec>
+
+        <!-- create flat installation package -->
+        <exec executable="pkgbuild">
+            <arg line="--root macos --component-plist macos/component.plist --install-location /Applications --sign ${certificate.installer} --scripts macos/scripts macos/Mirador-${mirador.version}.pkg" />
+        </exec>
+
+    </target>
+
+</project>

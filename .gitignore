@@ -1,2 +1,6 @@
+**/.DS_Store
 target/
 examples/**/.history
+.idea/workspace.xml
+dist/macos/*.app
+dist/macos/*.pkg

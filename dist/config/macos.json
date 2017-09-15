@@ -1,7 +1,9 @@
 {
     "platform": "mac",
     "jdk": "/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk",
-    "executable": "mirador",
+    "executable": "Mirador",
+    "icon": "macos/app.icns", 
+    "bundleidentifier": "info.fathom.mirador", 
     "classpath": [
         "../target/mirador.jar"
     ],
@@ -13,5 +15,5 @@
         "../examples"
     ],
     "minimizejre": "soft",
-    "output": "mac/mirador.app"
+    "output": "macos/Mirador.app"
 }
