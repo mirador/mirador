@@ -22,6 +22,11 @@
     <target name="distMac" if="isMac">
 	    <echo message="Creating macOS Universal distribution of Mirador" />
         
+       	<!-- delete previous builds, just in case -->
+		<delete dir="macos/Mirador.app" />
+	    <delete file="macos/Mirador-${mirador.version}-macos.zip" />
+		<delete file="macos/Mirador-${mirador.version}.pkg" />	    
+        
         <!-- build app bundle with packr -->
         <java jar="packr.jar" fork="true">
             <arg line="config/macos.json" />
@@ -37,7 +42,9 @@
         </exec>
 
 		<!-- create zip package -->
-		
+        <exec executable="ditto" dir="macos">
+            <arg line="-c -k --keepParent -rsrc Mirador.app Mirador-${mirador.version}-macos.zip" />
+        </exec>		
 		
         <!-- create flat installation package -->
         <exec executable="pkgbuild">
@@ -45,7 +52,7 @@
         </exec>
 		
 		<!-- cleanup -->
-		<delete dir="macos/Mirador.app" />		
+		<delete dir="macos/Mirador.app" />
 
     </target>
 	
