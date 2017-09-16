@@ -24,8 +24,8 @@
         
        	<!-- delete previous builds, just in case -->
         <delete dir="macos/mirador" />
-        <delete file="macos/Mirador-${mirador.version}-macos.zip" />
-        <delete file="macos/Mirador-${mirador.version}.pkg" />	    
+        <delete file="macos/mirador-${mirador.version}-macos.zip" />
+        <delete file="macos/mirador-${mirador.version}.pkg" />	    
         
         <!-- build app bundle with packr -->
         <java jar="packr.jar" fork="true">
@@ -43,12 +43,12 @@
 
         <!-- create zip package -->
         <exec executable="ditto" dir="macos">
-            <arg line="-c -k --keepParent -rsrc mirador/Mirador.app Mirador-${mirador.version}-macos.zip" />
+            <arg line="-c -k --keepParent -rsrc mirador/Mirador.app mirador-${mirador.version}-macos.zip" />
         </exec>		
 		
         <!-- create flat installation package -->
         <exec executable="pkgbuild">
-            <arg line="--root macos/mirador --component-plist macos/component.plist --install-location /Applications --sign ${certificate.installer} --scripts macos/scripts macos/Mirador-${mirador.version}.pkg" />
+            <arg line="--root macos/mirador --component-plist macos/component.plist --install-location /Applications --sign ${certificate.installer} --scripts macos/scripts macos/mirador-${mirador.version}.pkg" />
         </exec>
 		
         <!-- cleanup -->
