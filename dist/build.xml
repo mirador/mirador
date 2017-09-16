@@ -2,7 +2,7 @@
     
     <property file="build.properties" />
 	
-	<property name="mirador.version" value="${mirador.versionmajor}.${mirador.versionminor}.${mirador.versionbuild}" />
+    <property name="mirador.version" value="${mirador.versionmajor}.${mirador.versionminor}.${mirador.versionbuild}" />
     
     <condition property="isMac">
         <os family="mac" />
@@ -20,12 +20,12 @@
     </condition>	
 	
     <target name="distMac" if="isMac">
-	    <echo message="Creating macOS Universal distribution of Mirador" />
+        <echo message="Creating macOS Universal distribution of Mirador" />
         
        	<!-- delete previous builds, just in case -->
-		<delete dir="macos/mirador" />
-	    <delete file="macos/Mirador-${mirador.version}-macos.zip" />
-		<delete file="macos/Mirador-${mirador.version}.pkg" />	    
+        <delete dir="macos/mirador" />
+        <delete file="macos/Mirador-${mirador.version}-macos.zip" />
+        <delete file="macos/Mirador-${mirador.version}.pkg" />	    
         
         <!-- build app bundle with packr -->
         <java jar="packr.jar" fork="true">
@@ -41,7 +41,7 @@
             <arg line="--verbose --force --sign ${certificate.application} macos/mirador/Mirador.app" />
         </exec>
 
-		<!-- create zip package -->
+        <!-- create zip package -->
         <exec executable="ditto" dir="macos">
             <arg line="-c -k --keepParent -rsrc mirador/Mirador.app Mirador-${mirador.version}-macos.zip" />
         </exec>		
@@ -51,98 +51,144 @@
             <arg line="--root macos/mirador --component-plist macos/component.plist --install-location /Applications --sign ${certificate.installer} --scripts macos/scripts macos/Mirador-${mirador.version}.pkg" />
         </exec>
 		
-		<!-- cleanup -->
-		<delete dir="macos/mirador" />
+        <!-- cleanup -->
+	<delete dir="macos/mirador" />
 
     </target>
 	
-	<target name="distWindows64" if="isWindows">
-	    <echo message="Creating Windows 64bit distribution of Mirador" />
+    <target name="distWindows64" if="isWindows">
+        <echo message="Creating Windows 64bit distribution of Mirador" />
 
-		<!-- delete previous builds, just in case -->
-		<delete dir="windows/mirador" />
-		<delete file="windows/mirador-${mirador.version}-windows64.zip" />
-	    <delete file="windows/mirador-${mirador.version}-windows64-installer.exe" />
+        <!-- delete previous builds, just in case -->
+        <delete dir="windows/mirador" />
+        <delete file="windows/mirador-${mirador.version}-windows64.zip" />
+	<delete file="windows/mirador-${mirador.version}-windows64-installer.exe" />
 	
         <!-- build app bundle with packr -->
-		<java jar="packr.jar" fork="true">
+        <java jar="packr.jar" fork="true">
             <arg line="config/windows64.json" />
         </java>
 	
-		<!-- copy app icon and license -->
-		<copy file="windows/app.ico" tofile="windows/mirador/app.ico" overwrite="true"/>
-		<copy file="windows/gpl-2.0.rtf" tofile="windows/mirador/gpl-2.0.rtf" overwrite="true"/>
+        <!-- copy app icon and license -->
+        <copy file="windows/app.ico" tofile="windows/mirador/app.ico" overwrite="true"/>
+        <copy file="windows/gpl-2.0.rtf" tofile="windows/mirador/gpl-2.0.rtf" overwrite="true"/>
 		
-		<!-- create zip package -->
-		<zip destfile="windows/mirador-${mirador.version}-windows64.zip" filesonly="no">
-		    <fileset dir="windows/mirador" />
-		</zip>
+        <!-- create zip package -->
+        <zip destfile="windows/mirador-${mirador.version}-windows64.zip" filesonly="no">
+            <fileset dir="windows/mirador" />
+        </zip>
 		
-		<!-- add version to template of nsis script -->
-		<copy file="windows/install.nsi.tmpl" tofile="windows/mirador/install.nsi" overwrite="true"/>
-		<replace file="windows/mirador/install.nsi" token="@@mirador.version@@" value="${mirador.version}"/>
-		<replace file="windows/mirador/install.nsi" token="@@mirador.versionmajor@@" value="${mirador.versionmajor}"/>
-		<replace file="windows/mirador/install.nsi" token="@@mirador.versionminor@@" value="${mirador.versionminor}"/>
-		<replace file="windows/mirador/install.nsi" token="@@mirador.versionbuild@@" value="${mirador.versionbuild}"/>
-		<replace file="windows/mirador/install.nsi" token="@@platform@@" value="windows64"/>
-		<replace file="windows/mirador/install.nsi" token="@@programfiles@@" value="$PROGRAMFILES64"/>
+        <!-- add version to template of nsis script -->
+        <copy file="windows/install.nsi.tmpl" tofile="windows/mirador/install.nsi" overwrite="true"/>
+        <replace file="windows/mirador/install.nsi" token="@@mirador.version@@" value="${mirador.version}"/>
+        <replace file="windows/mirador/install.nsi" token="@@mirador.versionmajor@@" value="${mirador.versionmajor}"/>
+        <replace file="windows/mirador/install.nsi" token="@@mirador.versionminor@@" value="${mirador.versionminor}"/>
+        <replace file="windows/mirador/install.nsi" token="@@mirador.versionbuild@@" value="${mirador.versionbuild}"/>
+        <replace file="windows/mirador/install.nsi" token="@@platform@@" value="windows64"/>
+        <replace file="windows/mirador/install.nsi" token="@@programfiles@@" value="$PROGRAMFILES64"/>
 		
-		<!-- create nsis installer package -->
-		<exec executable="./windows/nsis/makensis" dir="windows">
-		    <arg line="./mirador/install.nsi" />
-		</exec>
+        <!-- create nsis installer package -->
+        <exec executable="./windows/nsis/makensis" dir="windows">
+            <arg line="./mirador/install.nsi" />
+        </exec>
 		
-		<!-- cleanup -->
-		<delete dir="windows/mirador" />
+        <!-- cleanup -->
+        <delete dir="windows/mirador" />
 		
-	</target>
+    </target>
 	
-	<target name="distWindows32" if="isWindows">
-	    <echo message="Creating Windows 32bit distribution of Mirador" />
+    <target name="distWindows32" if="isWindows">
+        <echo message="Creating Windows 32bit distribution of Mirador" />
 
-		<!-- delete previous builds, just in case -->
-		<delete dir="windows/mirador" />
-		<delete file="windows/mirador-${mirador.version}-windows32.zip" />
-	    <delete file="windows/mirador-${mirador.version}-windows32-installer.exe" />
+        <!-- delete previous builds, just in case -->
+        <delete dir="windows/mirador" />
+        <delete file="windows/mirador-${mirador.version}-windows32.zip" />
+        <delete file="windows/mirador-${mirador.version}-windows32-installer.exe" />
 	
         <!-- build app bundle with packr -->
-		<java jar="packr.jar" fork="true">
+        <java jar="packr.jar" fork="true">
             <arg line="config/windows32.json" />
         </java>
 	
-		<!-- copy app icon and license -->
-		<copy file="windows/app.ico" tofile="windows/mirador/app.ico" overwrite="true"/>
-		<copy file="windows/gpl-2.0.rtf" tofile="windows/mirador/gpl-2.0.rtf" overwrite="true"/>
+        <!-- copy app icon and license -->
+        <copy file="windows/app.ico" tofile="windows/mirador/app.ico" overwrite="true"/>
+        <copy file="windows/gpl-2.0.rtf" tofile="windows/mirador/gpl-2.0.rtf" overwrite="true"/>
 		
-		<!-- create zip package -->
-		<zip destfile="windows/mirador-${mirador.version}-windows32.zip" filesonly="no">
-		    <fileset dir="windows/mirador" />
-		</zip>
+        <!-- create zip package -->
+        <zip destfile="windows/mirador-${mirador.version}-windows32.zip" filesonly="no">
+            <fileset dir="windows/mirador" />
+        </zip>
 		
-		<!-- add version to template of nsis script -->
-		<copy file="windows/install.nsi.tmpl" tofile="windows/mirador/install.nsi" overwrite="true"/>
-		<replace file="windows/mirador/install.nsi" token="@@mirador.version@@" value="${mirador.version}"/>
-		<replace file="windows/mirador/install.nsi" token="@@mirador.versionmajor@@" value="${mirador.versionmajor}"/>
-		<replace file="windows/mirador/install.nsi" token="@@mirador.versionminor@@" value="${mirador.versionminor}"/>
-		<replace file="windows/mirador/install.nsi" token="@@mirador.versionbuild@@" value="${mirador.versionbuild}"/>
-		<replace file="windows/mirador/install.nsi" token="@@platform@@" value="windows32"/>
-		<replace file="windows/mirador/install.nsi" token="@@programfiles@@" value="$PROGRAMFILES32"/>
+        <!-- add version to template of nsis script -->
+        <copy file="windows/install.nsi.tmpl" tofile="windows/mirador/install.nsi" overwrite="true"/>
+        <replace file="windows/mirador/install.nsi" token="@@mirador.version@@" value="${mirador.version}"/>
+        <replace file="windows/mirador/install.nsi" token="@@mirador.versionmajor@@" value="${mirador.versionmajor}"/>
+        <replace file="windows/mirador/install.nsi" token="@@mirador.versionminor@@" value="${mirador.versionminor}"/>
+        <replace file="windows/mirador/install.nsi" token="@@mirador.versionbuild@@" value="${mirador.versionbuild}"/>
+        <replace file="windows/mirador/install.nsi" token="@@platform@@" value="windows32"/>
+        <replace file="windows/mirador/install.nsi" token="@@programfiles@@" value="$PROGRAMFILES32"/>
 		
-		<!-- create nsis installer package -->
-		<exec executable="./windows/nsis/makensis" dir="windows">
-		    <arg line="./mirador/install.nsi" />
-		</exec>
+        <!-- create nsis installer package -->
+        <exec executable="./windows/nsis/makensis" dir="windows">
+            <arg line="./mirador/install.nsi" />
+        </exec>
 		
-		<!-- cleanup -->
-		<delete dir="windows/mirador" />
+        <!-- cleanup -->
+        <delete dir="windows/mirador" />
 		
-	</target>
+    </target>
 	
-	<target name="distLinux" if="isLinux">
-        <echo message="Creating Linux distribution of Mirador" />
-	</target>	
+    <target name="distLinux64" if="isLinux">
+        <echo message="Creating Linux 64bit distribution of Mirador" />
+
+        <!-- delete previous builds, just in case -->
+        <delete dir="linux/mirador" />
+        <delete file="linux/mirador-${mirador.version}-linux64.zip" />
+
+        <!-- build app bundle with packr -->
+        <java jar="packr.jar" fork="true">
+            <arg line="config/linux64.json" />
+        </java>
+
+        <!-- copy app icon -->
+        <copy file="linux/icon.png" tofile="linux/mirador/icon.png" overwrite="true"/>
+
+        <!-- create zip package -->
+        <zip destfile="linux/mirador-${mirador.version}-linux64.zip" filesonly="no">
+            <fileset dir="linux/mirador" />
+        </zip>
+
+        <!-- cleanup -->
+        <delete dir="linux/mirador" />
+
+    </target>
+
+    <target name="distLinux32" if="isLinux">
+        <echo message="Creating Linux 32bit distribution of Mirador" />
+
+        <!-- delete previous builds, just in case -->
+        <delete dir="linux/mirador" />
+        <delete file="linux/mirador-${mirador.version}-linux32.zip" />
+
+        <!-- build app bundle with packr -->
+        <java jar="packr.jar" fork="true">
+            <arg line="config/linux32.json" />
+        </java>
+
+        <!-- copy app icon -->
+        <copy file="linux/icon.png" tofile="linux/mirador/icon.png" overwrite="true"/>
+
+        <!-- create zip package -->
+        <zip destfile="linux/mirador-${mirador.version}-linux32.zip" filesonly="no">
+            <fileset dir="linux/mirador" />
+        </zip>
+
+        <!-- cleanup -->
+        <delete dir="linux/mirador" />
+
+    </target>	
     
-	<target name="dist" depends="distMac, distWindows64, distWindows32, distLinux">
+    <target name="dist" depends="distMac, distWindows64, distWindows32, distLinux64, distLinux32">
     </target>
 	
 </project>

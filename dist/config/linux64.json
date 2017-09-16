@@ -1,0 +1,17 @@
+{
+    "platform": "linux64",
+    "jdk": "/usr/lib/jvm/java-8-openjdk-amd64",
+    "executable": "Mirador",
+    "classpath": [
+        "../target/mirador.jar"
+    ],
+    "mainclass": "mirador.app.Mirador",
+    "vmargs": [
+       "Xmx1G"
+    ],
+    "resources": [
+        "../examples"
+    ],
+    "minimizejre": "soft",
+    "output": "linux/mirador"
+}
