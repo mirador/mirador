@@ -9,5 +9,4 @@ dist/windows/mirador
 dist/windows/*.zip
 dist/windows/*.exe
 dist/linux/mirador
-dist/linux/*.zip
-dist/linux/*.deb
+dist/linux/*.tar.gz

@@ -142,7 +142,7 @@
         <echo message="Creating Linux 64bit distribution of Mirador" />
 
         <!-- delete previous builds, just in case -->
-        <delete dir="linux/mirador" />
+        <delete dir="linux/tmp" />
         <delete file="linux/mirador-${mirador.version}-linux64.zip" />
 
         <!-- build app bundle with packr -->
@@ -151,15 +151,21 @@
         </java>
 
         <!-- copy app icon -->
-        <copy file="linux/icon.png" tofile="linux/mirador/icon.png" overwrite="true"/>
+        <copy file="linux/icon.png" tofile="linux/tmp/mirador/icon.png" overwrite="true"/>
 
-        <!-- create zip package -->
-        <zip destfile="linux/mirador-${mirador.version}-linux64.zip" filesonly="no">
-            <fileset dir="linux/mirador" />
-        </zip>
+        <!-- create tar.gz package -->
+        <tar destfile="linux/mirador-${mirador.version}-linux64.tar.gz" compression="gzip"> 
+            <tarfileset dir="linux/tmp" filemode="755">
+                <include name="mirador/Mirador" />
+            </tarfileset>
+            <tarfileset dir="linux/tmp">
+                <include name="mirador/**/*" />
+                <exclude name="mirador/Mirador"/>
+            </tarfileset>
+        </tar>
 
         <!-- cleanup -->
-        <delete dir="linux/mirador" />
+        <delete dir="linux/tmp" />
 
     </target>
 
@@ -167,7 +173,7 @@
         <echo message="Creating Linux 32bit distribution of Mirador" />
 
         <!-- delete previous builds, just in case -->
-        <delete dir="linux/mirador" />
+        <delete dir="linux/tmp/mirador" />
         <delete file="linux/mirador-${mirador.version}-linux32.zip" />
 
         <!-- build app bundle with packr -->
@@ -176,15 +182,21 @@
         </java>
 
         <!-- copy app icon -->
-        <copy file="linux/icon.png" tofile="linux/mirador/icon.png" overwrite="true"/>
+        <copy file="linux/icon.png" tofile="linux/tmp/mirador/icon.png" overwrite="true"/>
 
-        <!-- create zip package -->
-        <zip destfile="linux/mirador-${mirador.version}-linux32.zip" filesonly="no">
-            <fileset dir="linux/mirador" />
-        </zip>
+        <!-- create tar.gz package -->
+        <tar destfile="linux/mirador-${mirador.version}-linux32.tar.gz" compression="gzip"> 
+            <tarfileset dir="linux/tmp" filemode="755">
+                <include name="mirador/Mirador" />
+            </tarfileset>
+            <tarfileset dir="linux/tmp">
+                <include name="mirador/**/*" />
+                <exclude name="mirador/Mirador"/>
+            </tarfileset>
+        </tar>
 
         <!-- cleanup -->
-        <delete dir="linux/mirador" />
+        <delete dir="linux/tmp" />
 
     </target>	
     
