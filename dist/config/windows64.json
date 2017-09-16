@@ -14,5 +14,5 @@
         "../examples"
     ],
     "minimizejre": "soft",
-    "output": "linux/mirador"
+    "output": "windows/mirador"
 }
