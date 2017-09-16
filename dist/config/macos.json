@@ -15,5 +15,5 @@
         "../examples"
     ],
     "minimizejre": "soft",
-    "output": "macos/mirador/Mirador.app"
+    "output": "macos/tmp/Mirador.app"
 }

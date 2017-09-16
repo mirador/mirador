@@ -23,9 +23,9 @@
         <echo message="Creating macOS Universal distribution of Mirador" />
         
        	<!-- delete previous builds, just in case -->
-        <delete dir="macos/mirador" />
+        <delete dir="macos/tmp" />
         <delete file="macos/mirador-${mirador.version}-macos.zip" />
-        <delete file="macos/mirador-${mirador.version}.pkg" />	    
+        <delete file="macos/mirador-${mirador.version}-macos.pkg" />	    
         
         <!-- build app bundle with packr -->
         <java jar="packr.jar" fork="true">
@@ -33,26 +33,26 @@
         </java>
 
         <!-- packr does not allow to set the version string, doing it manually -->
-        <copy file="macos/Info.plist.tmpl" tofile="macos/mirador/Mirador.app/Contents/Info.plist" overwrite="true"/>
-        <replace file="macos/mirador/Mirador.app/Contents/Info.plist" token="@@mirador.version@@" value="${mirador.version}"/>
+        <copy file="macos/Info.plist.tmpl" tofile="macos/tmp/Mirador.app/Contents/Info.plist" overwrite="true"/>
+        <replace file="macos/tmp/Mirador.app/Contents/Info.plist" token="@@mirador.version@@" value="${mirador.version}"/>
 
         <!-- signing app bundle -->
         <exec executable="codesign">
-            <arg line="--verbose --force --sign ${certificate.application} macos/mirador/Mirador.app" />
+            <arg line="--verbose --force --sign ${certificate.application} macos/tmp/Mirador.app" />
         </exec>
 
         <!-- create zip package -->
         <exec executable="ditto" dir="macos">
-            <arg line="-c -k --keepParent -rsrc mirador/Mirador.app mirador-${mirador.version}-macos.zip" />
+            <arg line="-c -k --keepParent -rsrc tmp/Mirador.app mirador-${mirador.version}-macos.zip" />
         </exec>		
 		
         <!-- create flat installation package -->
         <exec executable="pkgbuild">
-            <arg line="--root macos/mirador --component-plist macos/component.plist --install-location /Applications --sign ${certificate.installer} --scripts macos/scripts macos/mirador-${mirador.version}.pkg" />
+            <arg line="--root macos/tmp --component-plist macos/component.plist --install-location /Applications --sign ${certificate.installer} --scripts macos/scripts macos/mirador-${mirador.version}-macos.pkg" />
         </exec>
 		
         <!-- cleanup -->
-	<delete dir="macos/mirador" />
+	<delete dir="macos/tmp" />
 
     </target>
 	
