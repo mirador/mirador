@@ -2,7 +2,23 @@
     
     <property file="build.properties" />
     
-    <target name="dist">
+    <condition property="isMac">
+        <os family="mac" />
+    </condition>
+
+    <condition property="isWindows">
+        <os family="windows" />
+    </condition>
+
+    <condition property="isLinux">
+        <and>
+            <os family="unix"/>
+            <not><os family="mac"/></not>
+        </and>
+    </condition>	
+	
+    <target name="distMac" if="isMac">
+	    <echo message="Creating macOS distribution of Mirador" />
         
         <!-- build app bundle with packr -->
         <java jar="packr.jar" fork="true">
@@ -24,5 +40,16 @@
         </exec>
 
     </target>
-
+	
+	<target name="distWindows" if="isWindows">
+	    <echo message="Creating Windows distribution of Mirador" />
+	</target>
+	
+	<target name="distLinux" if="isLinux">
+        <echo message="Creating Linux distribution of Mirador" />
+	</target>	
+    
+	<target name="dist" depends="distMac, distWindows, distLinux">
+    </target>
+	
 </project>
