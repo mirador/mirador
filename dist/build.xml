@@ -21,7 +21,9 @@
 	
     <target name="distMac" if="isMac">
         <echo message="Creating macOS Universal distribution of Mirador" />
-        
+                
+        <property file="macos/cert.properties" />
+            
        	<!-- delete previous builds, just in case -->
         <delete dir="macos/tmp" />
         <delete file="macos/mirador-${mirador.version}-macos.zip" />
