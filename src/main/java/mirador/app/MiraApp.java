@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import com.sun.jna.Platform;
 import mirador.handlers.LoadHandler;
 import mirador.handlers.PDFHandler;
 import mirador.handlers.ProfileHandler;
@@ -27,6 +28,7 @@ import miralib.data.Variable;
 import miralib.utils.Log;
 import miralib.utils.Preferences;
 import miralib.utils.Project;
+import miralib.utils.Fileu;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.opengl.PJOGL;
@@ -44,6 +46,7 @@ public class MiraApp extends PApplet {
   static public final String APP_VERSION = "1.4.2";
   
   static public String inputFile = "default.mira";
+  static public File miraFolder;
   static protected Preferences prefs;
   
   // TODO: Make into CCS size parameters
@@ -367,34 +370,75 @@ public class MiraApp extends PApplet {
   //////////////////////////////////////////////////////////////////////////////  
   
   static public void loadPreferences() {
+    miraFolder = defaultFolder();
     try {
-      prefs = new Preferences(defaultFolder().toString());
+      prefs = new Preferences(miraFolder.toString());
     } catch (IOException e) {
       e.printStackTrace();
       System.exit(1);
-    }        
-  }
-  
-  static public File defaultFolder() {
-    String path = Mirador.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-    // Path may have URL encoding, so remove it
-    String decodedPath = PApplet.urlDecode(path);
-    if (decodedPath.toLowerCase().contains("/mirador/bin")) {
-      // Running from Eclipse
-      File file = new File(path);
-      String filePath = file.getAbsolutePath();
-      return new File(filePath, "../examples/.");      
-    } else {
-      if (PApplet.platform == PApplet.MACOSX) {      
-        File file = new File(path);
-        String absolutePath = file.getAbsolutePath();
-        String filePath = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator));      
-        return new File(filePath, "../Resources/examples/.");
-      } else {
-        return new File(System.getProperty("user.dir"), "examples/.");
-      }      
     }
-  }   
+  }
+
+  static public void copyExamples() {
+    if (prefs.copyExamples) {
+      String path = Mirador.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+      File jarFile = new File(path);
+      File builtinExamplesFolder = new File(jarFile.getParent(), "examples");
+      File defExamplesFolder = new File(miraFolder, "examples");
+      if (builtinExamplesFolder.exists() && !defExamplesFolder.exists()) {
+        // Copy the built-in examples to the default folder
+        System.out.println("Copying built-in examples...");
+        Fileu.copyFolder(builtinExamplesFolder, defExamplesFolder);
+        prefs.copyExamples = false;
+        prefs.save();
+        System.out.println("Done!");
+      }
+    }
+  }
+
+
+  static public File defaultFolder() {
+    File homeFolder = new File(System.getProperty("user.home"));
+    File cfgFolder = new File(homeFolder, ".mirador");
+    File cfgFile = new File(cfgFolder, "config.txt");
+    File miraFolder = homeFolder;
+    boolean save = true;
+    if (!cfgFolder.exists() || !cfgFile.exists()) {
+      if (!cfgFolder.mkdirs()) {
+        String err = "Cannot create a folder to store the basic configuration";
+        Log.error(err, new RuntimeException(err));
+        save = false;
+      }
+      if (Platform.isMac()) {
+        miraFolder = new File(homeFolder, "Documents");
+      } else if (Platform.isWindows()) {
+        miraFolder = new File(homeFolder, "My Documents");
+      } else if (Platform.isLinux()) {
+        miraFolder = new File(homeFolder, "Documents");
+      }
+      if (miraFolder.exists()) {
+        miraFolder = new File(miraFolder, "Mirador");
+      } else {
+        miraFolder = new File(homeFolder, "Mirador");
+      }
+    } else {
+      String[] lines = PApplet.loadStrings(cfgFile);
+      if (0 < lines.length) {
+        miraFolder = new File(lines[0]);
+      }
+      if (miraFolder.exists()) {
+        save = false;
+      } else {
+        miraFolder = new File(homeFolder, "Mirador");
+      }
+    }
+
+    if (save) {
+      PApplet.saveStrings(cfgFile, new String[] {miraFolder.getAbsolutePath()});
+    }
+
+    return miraFolder;
+  }
   
   public static void main(String args[]) {
     if (0 < args.length) inputFile = args[0];

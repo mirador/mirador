@@ -3,6 +3,7 @@ target/
 examples/**/.history
 .idea/workspace.xml
 dist/macos/tmp
+dist/macos/Mirador.app
 dist/macos/*.zip
 dist/macos/*.pkg
 dist/windows/tmp
