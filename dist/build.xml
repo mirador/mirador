@@ -56,7 +56,7 @@
 
     </target>
 	
-    <target name="distWindows64" if="isLinux">
+    <target name="distWindows64" if="isWindows">
         <echo message="Creating Windows 64bit distribution of Mirador" />
 
         <!-- delete previous builds, just in case -->
