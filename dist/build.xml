@@ -62,7 +62,7 @@
         <!-- delete previous builds, just in case -->
         <delete dir="windows/tmp" />
         <delete file="windows/mirador-${mirador.version}-windows64.zip" />
-	<delete file="windows/mirador-${mirador.version}-windows64-installer.exe" />
+        <delete file="windows/mirador-${mirador.version}-windows64-installer.exe" />
 	
         <!-- build app bundle with packr -->
         <java jar="packr.jar" fork="true">
