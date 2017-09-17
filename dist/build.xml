@@ -56,11 +56,11 @@
 
     </target>
 	
-    <target name="distWindows64" if="isWindows">
+    <target name="distWindows64" if="isLinux">
         <echo message="Creating Windows 64bit distribution of Mirador" />
 
         <!-- delete previous builds, just in case -->
-        <delete dir="windows/mirador" />
+        <delete dir="windows/tmp" />
         <delete file="windows/mirador-${mirador.version}-windows64.zip" />
 	<delete file="windows/mirador-${mirador.version}-windows64-installer.exe" />
 	
@@ -70,30 +70,30 @@
         </java>
 	
         <!-- copy app icon and license -->
-        <copy file="windows/app.ico" tofile="windows/mirador/app.ico" overwrite="true"/>
-        <copy file="windows/gpl-2.0.rtf" tofile="windows/mirador/gpl-2.0.rtf" overwrite="true"/>
+        <copy file="windows/app.ico" tofile="windows/tmp/mirador/app.ico" overwrite="true"/>
+        <copy file="windows/gpl-2.0.rtf" tofile="windows/tmp/mirador/gpl-2.0.rtf" overwrite="true"/>
 		
         <!-- create zip package -->
         <zip destfile="windows/mirador-${mirador.version}-windows64.zip" filesonly="no">
-            <fileset dir="windows/mirador" />
+            <fileset dir="windows/tmp" />
         </zip>
 		
         <!-- add version to template of nsis script -->
-        <copy file="windows/install.nsi.tmpl" tofile="windows/mirador/install.nsi" overwrite="true"/>
-        <replace file="windows/mirador/install.nsi" token="@@mirador.version@@" value="${mirador.version}"/>
-        <replace file="windows/mirador/install.nsi" token="@@mirador.versionmajor@@" value="${mirador.versionmajor}"/>
-        <replace file="windows/mirador/install.nsi" token="@@mirador.versionminor@@" value="${mirador.versionminor}"/>
-        <replace file="windows/mirador/install.nsi" token="@@mirador.versionbuild@@" value="${mirador.versionbuild}"/>
-        <replace file="windows/mirador/install.nsi" token="@@platform@@" value="windows64"/>
-        <replace file="windows/mirador/install.nsi" token="@@programfiles@@" value="$PROGRAMFILES64"/>
+        <copy file="windows/install.nsi.tmpl" tofile="windows/tmp/mirador/install.nsi" overwrite="true"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@mirador.version@@" value="${mirador.version}"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@mirador.versionmajor@@" value="${mirador.versionmajor}"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@mirador.versionminor@@" value="${mirador.versionminor}"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@mirador.versionbuild@@" value="${mirador.versionbuild}"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@platform@@" value="windows64"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@programfiles@@" value="$PROGRAMFILES64"/>
 		
         <!-- create nsis installer package -->
-        <exec executable="./windows/nsis/makensis" dir="windows">
-            <arg line="./mirador/install.nsi" />
+        <exec executable="windows/nsis/makensis" dir="windows">
+            <arg line="tmp/mirador/install.nsi" />
         </exec>
 		
         <!-- cleanup -->
-        <delete dir="windows/mirador" />
+        <delete dir="windows/tmp" />
 		
     </target>
 	
@@ -101,7 +101,7 @@
         <echo message="Creating Windows 32bit distribution of Mirador" />
 
         <!-- delete previous builds, just in case -->
-        <delete dir="windows/mirador" />
+        <delete dir="windows/tmp" />
         <delete file="windows/mirador-${mirador.version}-windows32.zip" />
         <delete file="windows/mirador-${mirador.version}-windows32-installer.exe" />
 	
@@ -111,30 +111,30 @@
         </java>
 	
         <!-- copy app icon and license -->
-        <copy file="windows/app.ico" tofile="windows/mirador/app.ico" overwrite="true"/>
-        <copy file="windows/gpl-2.0.rtf" tofile="windows/mirador/gpl-2.0.rtf" overwrite="true"/>
+        <copy file="windows/app.ico" tofile="windows/tmp/mirador/app.ico" overwrite="true"/>
+        <copy file="windows/gpl-2.0.rtf" tofile="windows/tmp/mirador/gpl-2.0.rtf" overwrite="true"/>
 		
         <!-- create zip package -->
         <zip destfile="windows/mirador-${mirador.version}-windows32.zip" filesonly="no">
-            <fileset dir="windows/mirador" />
+            <fileset dir="windows/tmp" />
         </zip>
 		
         <!-- add version to template of nsis script -->
-        <copy file="windows/install.nsi.tmpl" tofile="windows/mirador/install.nsi" overwrite="true"/>
-        <replace file="windows/mirador/install.nsi" token="@@mirador.version@@" value="${mirador.version}"/>
-        <replace file="windows/mirador/install.nsi" token="@@mirador.versionmajor@@" value="${mirador.versionmajor}"/>
-        <replace file="windows/mirador/install.nsi" token="@@mirador.versionminor@@" value="${mirador.versionminor}"/>
-        <replace file="windows/mirador/install.nsi" token="@@mirador.versionbuild@@" value="${mirador.versionbuild}"/>
-        <replace file="windows/mirador/install.nsi" token="@@platform@@" value="windows32"/>
-        <replace file="windows/mirador/install.nsi" token="@@programfiles@@" value="$PROGRAMFILES32"/>
+        <copy file="windows/install.nsi.tmpl" tofile="windows/tmp/mirador/install.nsi" overwrite="true"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@mirador.version@@" value="${mirador.version}"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@mirador.versionmajor@@" value="${mirador.versionmajor}"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@mirador.versionminor@@" value="${mirador.versionminor}"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@mirador.versionbuild@@" value="${mirador.versionbuild}"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@platform@@" value="windows32"/>
+        <replace file="windows/tmp/mirador/install.nsi" token="@@programfiles@@" value="$PROGRAMFILES32"/>
 		
         <!-- create nsis installer package -->
-        <exec executable="./windows/nsis/makensis" dir="windows">
-            <arg line="./mirador/install.nsi" />
+        <exec executable="windows/nsis/makensis" dir="windows">
+            <arg line="tmp/mirador/install.nsi" />
         </exec>
 		
         <!-- cleanup -->
-        <delete dir="windows/mirador" />
+        <delete dir="windows/tmp" />
 		
     </target>
 	

@@ -5,8 +5,8 @@ examples/**/.history
 dist/macos/mirador
 dist/macos/*.zip
 dist/macos/*.pkg
-dist/windows/mirador
+dist/windows/tmp
 dist/windows/*.zip
 dist/windows/*.exe
-dist/linux/mirador
+dist/linux/tmp
 dist/linux/*.tar.gz
