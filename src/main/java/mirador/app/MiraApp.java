@@ -411,13 +411,7 @@ public class MiraApp extends PApplet {
           save = false;
         }
       }
-      if (Platform.isMac()) {
-        miraFolder = new File(homeFolder, "Documents");
-      } else if (Platform.isWindows()) {
-        miraFolder = new File(homeFolder, "My Documents");
-      } else if (Platform.isLinux()) {
-        miraFolder = new File(homeFolder, "Documents");
-      }
+      miraFolder = new File(homeFolder, "Documents");
       if (miraFolder.exists()) {
         miraFolder = new File(miraFolder, "Mirador");
       } else {
