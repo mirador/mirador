@@ -1,11 +1,14 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import miralib.utils.Log;
 import processing.core.PApplet;
 import mirador.views.View;
 import miralib.data.Range;
@@ -39,13 +42,27 @@ public class History {
   protected File file;
   protected PrintWriter writer;
   protected int lastFlush = 0;
-  protected boolean changed = false; 
+  protected boolean changed = false;
+
+  protected boolean enabled = true;
+
+  static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd.HHmm");
   
   public History(MiraApp app, Project prj, int ptype) {
     this.app = app;
     this.prj = prj;
-    
-    file = new File(prj.dataFolder, ".history");
+
+    File folder = new File(prj.dataFolder, "history");
+    if (!folder.exists()) {
+      boolean success = folder.mkdirs();
+      if (!success) {
+        Log.warning("Cannot create history folder inside the data folder. History recording will be disabled.");
+        enabled = false;
+      }
+    }
+
+    String stamp = getDateStamp();
+    file = new File(folder, "history-" + stamp);
     writer = PApplet.createWriter(file);
     
     pairs = new HashSet<VariablePair>();
@@ -65,6 +82,7 @@ public class History {
   }
   
   public void addPair(Variable varx, Variable vary) {
+    if (!enabled) return;
     VariablePair pair = new VariablePair(varx, vary);
     if (pairs.add(pair)) {
       write("+PAIR\t" + app.millis() + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());      
@@ -72,6 +90,7 @@ public class History {
   }
   
   public void removePair(Variable varx, Variable vary) {
+    if (!enabled) return;
     VariablePair pair = new VariablePair(varx, vary);
     if (pairs.remove(pair)) {
       write("-PAIR\t" + app.millis() + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
@@ -79,6 +98,7 @@ public class History {
   }
   
   public void addRange(Variable var, Range range) {
+    if (!enabled) return;
     VariableRange vrange = new VariableRange(var, range);
     if (ranges.add(vrange)) {
       write("+RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
@@ -86,6 +106,7 @@ public class History {
   }
   
   public void removeRange(Variable var) {
+    if (!enabled) return;
     VariableRange vrange = null;
     for (VariableRange r: ranges) {
       if (r.var == var) {
@@ -101,6 +122,7 @@ public class History {
   }
   
   public void replaceRange(Variable var, Range range) {
+    if (!enabled) return;
     VariableRange vrange = null;
     for (VariableRange r: ranges) {
       if (r.var == var) {
@@ -118,6 +140,7 @@ public class History {
   }
   
   public void clearRanges() {
+    if (!enabled) return;
     Object[] array = ranges.toArray();
     for (Object obj: array) {
       if (ranges.remove(obj)) {
@@ -130,6 +153,7 @@ public class History {
   }
   
   public void setPValue(float pvalue) {
+    if (!enabled) return;
     if (Numbers.different(this.pvalue, pvalue)) {
       this.pvalue = pvalue;
       write("PVALUE\t" + app.millis() + "\t" + pvalue);
@@ -137,6 +161,7 @@ public class History {
   }
   
   public void setMissingThreshold(float misst) {
+    if (!enabled) return;
     if (Numbers.different(this.misst, misst)) {
       this.misst = misst;
       write("MISSING\t" + app.millis() + "\t" + misst);
@@ -144,6 +169,7 @@ public class History {
   }
   
   public void setPlotType(int plotType) {
+    if (!enabled) return;
     if (this.plotType != plotType) {
       this.plotType = plotType;
       write("PLOT\t" + app.millis() + "\t" + View.typeToString(plotType));
@@ -151,6 +177,7 @@ public class History {
   }
   
   public void setSelectedPair(Variable varx, Variable vary) {
+    if (!enabled) return;
     if (varx != null && vary != null) {
       VariablePair pair = new VariablePair(varx, vary);
       if (!pair.equals(selPair)) {
@@ -164,6 +191,7 @@ public class History {
   }
   
   public void sort(Variable var) {
+    if (!enabled) return;
     if (sortVar != var) {
       sortVar = var;
       write("SORT\t" + app.millis() + "\t" + var.getName() + ":" + var.getAlias());
@@ -171,6 +199,7 @@ public class History {
   }
   
   public void unsort() {
+    if (!enabled) return;
     if (sortVar != null) {
       sortVar = null;
       write("SORT\t" + app.millis() + "\tNONE");
@@ -178,6 +207,7 @@ public class History {
   }
   
   public void openProfile() {
+    if (!enabled) return;
     if (!openProfile) {
       openProfile = true;
       write("+PROFILE\t" + app.millis());
@@ -185,6 +215,7 @@ public class History {
   }
   
   public void closeProfile() {
+    if (!enabled) return;
     if (openProfile) {
       openProfile = false;
       write("-PROFILE\t" + app.millis());
@@ -192,6 +223,7 @@ public class History {
   }  
   
   public void update() {
+    if (!enabled) return;
     int t = app.millis();
     if (FLUSH_INTERVAL < t - lastFlush && changed) {
       writer.flush();
@@ -201,11 +233,13 @@ public class History {
   }
   
   public void dispose() {
+    if (!enabled) return;
     writer.flush();
     writer.close();
   }
   
   public String read() {
+    if (!enabled) return "";
     writer.flush();
     String[] lines = PApplet.loadStrings(file);
     String concat = "";
@@ -219,7 +253,11 @@ public class History {
     writer.println(line);
     changed = true;
   }
-  
+
+  static public String getDateStamp() {
+    return dateFormat.format(new Date());
+  }
+
   class VariablePair {
     Variable varx, vary;
     

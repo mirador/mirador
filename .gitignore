@@ -1,6 +1,6 @@
 **/.DS_Store
 target/
-examples/**/.history
+examples/**/history
 .idea/workspace.xml
 dist/macos/cert.properties
 dist/macos/tmp
