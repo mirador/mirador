@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.net.URL;
 
 import javax.swing.JOptionPane;
 
@@ -379,19 +380,22 @@ public class MiraApp extends PApplet {
     }
   }
 
-  static public void copyExamples() {
+  static public void copyExamples(Frame frame) {
     if (prefs.copyExamples) {
-      String path = Mirador.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-      File jarFile = new File(path);
-      File builtinExamplesFolder = new File(jarFile.getParent(), "examples");
-      File defExamplesFolder = new File(miraFolder, "examples");
-      if (builtinExamplesFolder.exists() && !defExamplesFolder.exists()) {
-        // Copy the built-in examples to the default folder
-        System.out.println("Copying built-in examples...");
-        Fileu.copyFolder(builtinExamplesFolder, defExamplesFolder);
-        prefs.copyExamples = false;
-        prefs.save();
-        System.out.println("Done!");
+      try {
+        URL url = Mirador.class.getProtectionDomain().getCodeSource().getLocation();
+        File jarFile = Paths.get(url.toURI()).toFile();
+        File builtinExamplesFolder = new File(jarFile.getParent(), "examples");
+        File defExamplesFolder = new File(miraFolder, "examples");
+        if (builtinExamplesFolder.exists() && !defExamplesFolder.exists()) {
+          // Copy the built-in examples to the default folder
+          Fileu.copyFolder(builtinExamplesFolder, defExamplesFolder);
+          prefs.copyExamples = false;
+          prefs.save();
+        }
+      } catch (Exception ex) {
+        System.err.println("Error tyring to copy the built-in examples:");
+        ex.printStackTrace();
       }
     }
   }

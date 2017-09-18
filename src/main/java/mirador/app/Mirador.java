@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
@@ -147,14 +147,8 @@ public class Mirador extends JFrame {
     outer.setBackground(new Color(247, 247, 247));
 
     URL iconUrl = getClass().getResource("/data/icons/icon-" + LOGO_SIZE + ".png");
-
-    System.out.println("*************************");
-    System.out.println(getClass());
-    System.out.println(iconUrl);
     ImageIcon image = new ImageIcon(iconUrl);
     JLabel imageLabel = new JLabel(image);
-    System.out.println(image.getIconWidth() + "x" + image.getIconHeight());
-
 
     Box vbox = Box.createVerticalBox();
     vbox.setBorder(new EmptyBorder(BOX_BORDER, BOX_BORDER, BOX_BORDER, BOX_BORDER));
@@ -279,7 +273,7 @@ public class Mirador extends JFrame {
     final Thread update = new Thread() {
       @Override
       public void run() {
-        MiraApp.copyExamples();
+        MiraApp.copyExamples(Mirador.this);
         loadButton.setEnabled(true);
         quitButton.setEnabled(true);
         status.setText("");
