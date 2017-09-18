@@ -175,7 +175,8 @@ body #main-con #body-con #download-info {
   width: 50%;
 }
 body #main-con #body-con #download-info #download-it {
-  margin: 0px 0 10px 0;
+  text-align: center;
+  margin: 0px 0px 10px -40px;
 }
 body #main-con #body-con #download-info #download-it p span {
   font-family: roboBold;
@@ -186,7 +187,8 @@ body #main-con #body-con #download-info #download-links {
 }
 body #main-con #body-con #download-info #download-links .links {
   float: left;
-  width: 100px;
+  text-align: center;
+  width: 150px;
 }
 body #main-con #body-con #download-info #download-links .links h1 {
   color: rgba(30, 20, 0, 0.65);
