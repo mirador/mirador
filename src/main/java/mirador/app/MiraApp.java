@@ -411,6 +411,7 @@ public class MiraApp extends PApplet {
           save = false;
         }
       }
+      // Set default locations
       miraFolder = new File(homeFolder, "Documents");
       if (miraFolder.exists()) {
         miraFolder = new File(miraFolder, "Mirador");
@@ -421,11 +422,17 @@ public class MiraApp extends PApplet {
       String[] lines = PApplet.loadStrings(cfgFile);
       if (0 < lines.length) {
         miraFolder = new File(lines[0]);
-      }
-      if (miraFolder.exists()) {
-        save = false;
-      } else {
-        miraFolder = new File(homeFolder, "Mirador");
+        if (miraFolder.exists()) {
+          save = false;
+        } else {
+          // Folder in config does not exist, try default locations
+          miraFolder = new File(homeFolder, "Documents");
+          if (miraFolder.exists()) {
+            miraFolder = new File(miraFolder, "Mirador");
+          } else {
+            miraFolder = new File(homeFolder, "Mirador");
+          }
+        }
       }
     }
 
