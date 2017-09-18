@@ -19,6 +19,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.HyperlinkEvent;
+import java.awt.image.BufferedImage;
 
 import mui.Display;
 import processing.core.PApplet;
@@ -122,11 +123,25 @@ public class Mirador extends JFrame {
 
   public Mirador() {
     super("Welcome to Mirador!");
+    setLookAndFeel();
     createLayout();
   }
 
 
+  private void setLookAndFeel() {
+    if (PApplet.platform == PApplet.WINDOWS) {
+      try {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+      } catch (Exception e) { }
+    }
+
+    // Set a 1x1 transparent icon, apparently the only way to remove the coffee cup icon.
+    Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE);
+    setIconImage(icon);
+  }
+
   private void createLayout() {
+
     Container outer = getContentPane();
     outer.removeAll();
     outer.setBackground(new Color(247, 247, 247));
