@@ -23,6 +23,18 @@
         <echo message="Creating macOS Universal distribution of Mirador" />
                 
         <property file="macos/cert.properties" />
+  
+         <condition property="cert.present">
+             <available file="macos/cert.properties" />
+         </condition>
+
+         <fail unless="cert.present" 
+            message="
+In order to build the application and installer packages for Mac,${line.separator}
+create a file named cert.properties (inside the dist/macos folder),and put the following two lines in it:${line.separator}
+certificate.application='Developer ID Application: ...'${line.separator}
+certificate.installer='Developer ID Installer: ...'${line.separator}
+containing the common name of the Developer ID Application and Installer certificates issued by Apple." />
             
        	<!-- delete previous builds, just in case -->
         <delete dir="macos/tmp" />
