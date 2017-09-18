@@ -404,10 +404,12 @@ public class MiraApp extends PApplet {
     File miraFolder = homeFolder;
     boolean save = true;
     if (!cfgFolder.exists() || !cfgFile.exists()) {
-      if (!cfgFolder.mkdirs()) {
-        String err = "Cannot create a folder to store the basic configuration";
-        Log.error(err, new RuntimeException(err));
-        save = false;
+      if (!cfgFolder.exists()) {
+        boolean success = cfgFolder.mkdirs();
+        if (!success) {
+          System.err.println("Cannot create .mirador inside the home folder");
+          save = false;
+        }
       }
       if (Platform.isMac()) {
         miraFolder = new File(homeFolder, "Documents");

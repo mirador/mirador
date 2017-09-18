@@ -29,8 +29,10 @@ public class Display {
     public final Pointer DPI_AWARENESS_CONTEXT_UNAWARE = new Pointer(-1);
     public final Pointer DPI_AWARENESS_CONTEXT_SYSTEM_AWARE = new Pointer(-2);
     public final Pointer DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE = new Pointer(-3);
-  }  
-  
+  }
+
+  static private float scale = 0;
+
   public static int detectSystemDPI() {
     try {
       ExtUser32.INSTANCE.SetProcessDpiAwareness(ExtUser32.DPI_AWARENESS_SYSTEM_AWARE);
@@ -51,28 +53,36 @@ public class Display {
     }
   }  
   
-  static float scale = 0;  
-  static public int scale(int pixels) {
+
+  static private void setScale() {
     if (scale == 0) {
       if (PApplet.platform == PConstants.WINDOWS) {
-        scale = detectSystemDPI() / 96;  
+        scale = detectSystemDPI() / 96;
       } else {
         scale = 1;
       }
-      
     }
+  }
+
+
+  static private int nextPOT(int val) {
+    int ret = 1;
+    while (ret < val) ret <<= 1;
+    return ret;
+  }
+
+
+  static public int scale(int pixels) {
+    setScale();
     return (int) Math.ceil(scale * pixels);
   }
   
   static public float scalef(float pixels) {
-    if (scale == 0) {
-      if (PApplet.platform == PConstants.WINDOWS) {
-        scale = detectSystemDPI() / 96;  
-      } else {
-        scale = 1;
-      }
-      
-    }
+    setScale();
     return scale * pixels;
+  }
+
+  static public int scalepot(int pixels) {
+    return nextPOT(scale(pixels));
   }
 }

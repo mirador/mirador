@@ -41,6 +41,7 @@ public class Mirador extends JFrame {
   final static private int GAP = Display.scale(26);
   final static private int FONT_SIZE = Display.scale(12);
   final static private int TEXT_MARGIN = Display.scale(3);
+  final static private int LOGO_SIZE = Display.scalepot(128);
 
   private JButton loadButton;
   private JButton quitButton;
@@ -130,7 +131,7 @@ public class Mirador extends JFrame {
     outer.removeAll();
     outer.setBackground(new Color(247, 247, 247));
 
-    URL iconUrl = getClass().getResource("/data/icons/icon-128.png");
+    URL iconUrl = getClass().getResource("/data/icons/icon-" + LOGO_SIZE + ".png");
 
     System.out.println("*************************");
     System.out.println(getClass());
