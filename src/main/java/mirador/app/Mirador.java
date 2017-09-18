@@ -273,7 +273,7 @@ public class Mirador extends JFrame {
     final Thread update = new Thread() {
       @Override
       public void run() {
-        MiraApp.copyExamples(Mirador.this);
+        MiraApp.copyExamples();
         loadButton.setEnabled(true);
         quitButton.setEnabled(true);
         status.setText("");

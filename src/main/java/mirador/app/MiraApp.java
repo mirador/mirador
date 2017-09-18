@@ -380,7 +380,7 @@ public class MiraApp extends PApplet {
     }
   }
 
-  static public void copyExamples(Frame frame) {
+  static public void copyExamples() {
     if (prefs.copyExamples) {
       try {
         URL url = Mirador.class.getProtectionDomain().getCodeSource().getLocation();
