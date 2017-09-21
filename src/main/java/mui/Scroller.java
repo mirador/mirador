@@ -13,6 +13,8 @@ import java.util.TreeMap;
 
 import processing.core.PApplet;
 
+import mirador.app.MiraWidget;
+
 /**
  * Class used to implement horizontal scrollers of large number of general
  * items. The contents of the list are updated dynamically depending on what is
@@ -20,7 +22,7 @@ import processing.core.PApplet;
  *
  */
 
-public abstract class Scroller<T extends Widget> extends Widget {
+public abstract class Scroller<T extends Widget> extends MiraWidget {
   final public static int HORIZONTAL = 0;
   final public static int VERTICAL   = 1;
   

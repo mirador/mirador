@@ -131,15 +131,21 @@ public class MiraApp extends PApplet {
   }  
   
   public void mousePressed() {
-    if (loaded) intf.mousePressed();
+    if (loaded) {
+      intf.mousePressed();
+    }
   }
   
   public void mouseDragged() {
-    if (loaded) intf.mouseDragged();
+    if (loaded) {
+      intf.mouseDragged();
+    }
   }
 
   public void mouseReleased() {
-    if (loaded) intf.mouseReleased();
+    if (loaded) {
+      intf.mouseReleased();
+    }
   }
   
   public void mouseMoved() {

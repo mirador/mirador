@@ -14,12 +14,20 @@ import java.util.ArrayList;
 public class SingleScroller2 extends Scroller<RowWidget> {
 
   protected ArrayList<DataTree.Item> items;
+  protected boolean active;
+  protected int savedIdx;
+  protected boolean needShow;
   protected float heightOpen;
   protected float heightClose;
+  protected RowScroller root;
 
 
-  public SingleScroller2(Interface intf, float x, float y, float w, float h) {
+  public SingleScroller2(Interface intf, RowScroller root, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
+    this.root = root;
+    active = false;
+    savedIdx = -1;
+    needShow = false;
     orientation = VERTICAL;
   }
 
@@ -38,6 +46,17 @@ public class SingleScroller2 extends Scroller<RowWidget> {
 
     fill(color(255));
     rect(getDragBoxLeft(), getDragBoxTop(), getDragBoxWidth(), getDragBoxHeight());
+  }
+
+
+  public void update() {
+    super.update();
+    if (active) {
+      if (needShow) {
+        for (Widget child: children) child.show(true);
+        needShow = false;
+      }
+    }
   }
 
 
@@ -100,6 +119,27 @@ public class SingleScroller2 extends Scroller<RowWidget> {
   }
 
 
+  public void up() {
+    jumpToPrev();
+  }
+
+  public void down() {
+    jumpToNext();
+  }
+
+  public void prev() {
+    root.prev();
+  }
+
+  public void next() {
+    root.next();
+  }
+
+  public void next(int i) {
+    root.next(i);
+  }
+
+
   public String getRowLabel(Variable varx, Variable vary) {
     for (Widget child: children) {
       if (child instanceof RowVariable) {
@@ -130,8 +170,8 @@ public class SingleScroller2 extends Scroller<RowWidget> {
     }
   }
 
+
   public void closeAllBut(MiraWidget wt) {
-    /*
     Variable var = null;
     if (wt instanceof RowVariable) {
       var = ((RowVariable)wt).rowVar;
@@ -145,7 +185,7 @@ public class SingleScroller2 extends Scroller<RowWidget> {
           close(wti.idx);
           wti.targetHeight(heightClose);
         }
-        updatePositions(wti);
+        initItems();
       }
     }
     jumpTo(wt.idx);
@@ -154,7 +194,24 @@ public class SingleScroller2 extends Scroller<RowWidget> {
       DataTree.Item itm = items.get(i);
       if (itm != var) itm.setClose();
     }
-    */
+  }
+
+
+  public boolean canOpen(int i) {
+    if (0 <= i && i < items.size()) {
+      return items.get(i).canOpen();
+    } else {
+      return false;
+    }
+  }
+
+
+  public boolean isOpen(int i) {
+    if (0 <= i && i < items.size()) {
+      return items.get(i).open();
+    } else {
+      return false;
+    }
   }
 
 
@@ -164,7 +221,6 @@ public class SingleScroller2 extends Scroller<RowWidget> {
 
 
   public void setActive(boolean active, boolean changeAlpha) {
-    /*
     this.active = active;
     if (!active) {
       savedIdx = -1;
@@ -178,9 +234,49 @@ public class SingleScroller2 extends Scroller<RowWidget> {
     } else {
       needShow = changeAlpha;
     }
-    */
   }
 
+
+  @Override
+  public void mouseReleased(MiraWidget  wt) {
+    if (active) {
+      if (canOpen(wt.idx)) {
+        if (isOpen(wt.idx)) {
+          close(wt.idx);
+          if (0 <= wt.idx && wt.idx < items.size()) {
+            items.get(wt.idx).setClose();
+          }
+          wt.targetHeight(heightClose);
+        } else {
+          open(wt.idx);
+          if (0 <= wt.idx && wt.idx < items.size()) {
+            items.get(wt.idx).setOpen();
+          }
+          wt.targetHeight(heightOpen);
+        }
+//        updatePositions(wt);
+        initItems();
+      } else {
+        next(wt.idx);
+      }
+    }
+  }
+
+  public void keyPressed(MiraWidget  wt) {
+    if (active) {
+      if (key == CODED) {
+        if (keyCode == LEFT) {
+          prev();
+        } else if (keyCode == RIGHT) {
+          next();
+        } else if (keyCode == UP) {
+          up();
+        } else if (keyCode == DOWN) {
+          down();
+        }
+      }
+    }
+  }
 
   protected void initItems() {
     int n = items.size();
@@ -203,13 +299,14 @@ public class SingleScroller2 extends Scroller<RowWidget> {
 //    Arrays.fill(lengths, len);
     float sum0 = 0;
     for (int i = 0; i < lengthSum.length; i++) {
+      closed[i] = !items.get(i).open();
       float h = items.get(i).open() ? heightOpen : heightClose;
       lengths[i] = h;
       lengthSum[i] = sum0 + h;
       sum0 = lengthSum[i];
     }
 
-    Arrays.fill(closed, false);
+//    Arrays.fill(closed, false);
     open0 = 0;
     open1 = n - 1;
   }

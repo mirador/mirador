@@ -88,7 +88,7 @@ public class MiraWidget extends Widget {
   
   public void mouseReleased(MiraWidget wt) { }
   public void keyPressed(MiraWidget wt) { }
-  public void dragolumns(float dx) { }
+  public void dragColumns(float dx) { }
   public void dragRows(float dy) { }
   
   protected void init() {

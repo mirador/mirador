@@ -179,31 +179,31 @@ public class RowScroller extends MiraWidget {
   protected void initItems() {
     if (1 < tree.groups.size()) {
       // Initializing all three scroll levels (group, table, variable)
-      groupScroller = new SingleScroller2(intf, 0, 0, width, height);
+      groupScroller = new SingleScroller2(intf, this, 0, 0, width, height);
       groupScroller.setItems(tree.groups, heightOpen, heightClose);
       groupScroller.setActive(true);
       addChild(groupScroller);
       intf.selectWidget(groupScroller);        
       
-      tableScroller = new SingleScroller2(intf, 0, 0, width, height);
+      tableScroller = new SingleScroller2(intf, this, 0, 0, width, height);
       tableScroller.setActive(false);
       tableScroller.setItems(tree.tables, heightOpen, heightClose);
       addChild(tableScroller);
       
-      varScroller = new SingleScroller2(intf, 0, 0, width, height);
+      varScroller = new SingleScroller2(intf, this, 0, 0, width, height);
       varScroller.setActive(false);
       varScroller.setItems(tree.variables, heightOpen, heightClose);
       addChild(varScroller);        
     } else if (1 < tree.tables.size()) {
       // Initializing only two scroll levels (table, variable), because there
       // is only one group
-      tableScroller = new SingleScroller2(intf, 0, 0, width, height);
+      tableScroller = new SingleScroller2(intf, this, 0, 0, width, height);
       tableScroller.setItems(tree.tables, heightOpen, heightClose);
       tableScroller.setActive(true);
       addChild(tableScroller);
       intf.selectWidget(tableScroller);
       
-      varScroller = new SingleScroller2(intf, 0, 0, width, height);
+      varScroller = new SingleScroller2(intf, this, 0, 0, width, height);
       varScroller.setActive(false);
       varScroller.setItems(tree.variables, heightOpen, heightClose);
       addChild(varScroller);
@@ -211,7 +211,7 @@ public class RowScroller extends MiraWidget {
       // Initializing only one scroll level (variable), because there
       // is only one group and one table. This is the case when no metadata
       // is provided.
-      varScroller = new SingleScroller2(intf, 0, 0, width, height);
+      varScroller = new SingleScroller2(intf, this, 0, 0, width, height);
       varScroller.setActive(true);
       varScroller.setItems(tree.variables, heightOpen, heightClose);
       addChild(varScroller);
