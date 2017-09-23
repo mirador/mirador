@@ -5,9 +5,8 @@ import miralib.data.Variable;
 import miralib.data.VariableContainer;
 import mui.Interface;
 import mui.Widget;
-import mui.Scroller;
 import mui.SoftFloat;
-import java.util.Arrays;
+
 import java.util.TreeMap;
 import java.util.ArrayList;
 
@@ -41,10 +40,10 @@ public class SingleScroller2 extends Scroller<RowWidget> {
 
 
   public void draw() {
-    fill(color(120));
-    rect(0, 0, width, height);
+//    fill(color(120));
+//    rect(0, 0, width, height);
 
-    fill(color(255));
+    fill(color(150));
     rect(getDragBoxLeft(), getDragBoxTop(), getDragBoxWidth(), getDragBoxHeight());
   }
 
@@ -57,6 +56,13 @@ public class SingleScroller2 extends Scroller<RowWidget> {
         needShow = false;
       }
     }
+  }
+
+
+  protected void handleResize(int newWidth, int newHeight) {
+    float h = newHeight - mira.labelHeightClose;
+    bounds.h.set(h);
+    visPos1.setTarget(visPos0.getTarget() + h);
   }
 
 
@@ -185,7 +191,7 @@ public class SingleScroller2 extends Scroller<RowWidget> {
           close(wti.idx);
           wti.targetHeight(heightClose);
         }
-        initItems();
+//        initItems();
       }
     }
     jumpTo(wt.idx);
@@ -255,7 +261,7 @@ public class SingleScroller2 extends Scroller<RowWidget> {
           wt.targetHeight(heightOpen);
         }
 //        updatePositions(wt);
-        initItems();
+//        initItems();
       } else {
         next(wt.idx);
       }

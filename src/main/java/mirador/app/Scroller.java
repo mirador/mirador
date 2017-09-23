@@ -1,6 +1,6 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
-package mui;
+package mirador.app;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,9 +11,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import mui.Interface;
+import mui.SoftFloat;
+import mui.Widget;
 import processing.core.PApplet;
-
-import mirador.app.MiraWidget;
 
 /**
  * Class used to implement horizontal scrollers of large number of general
@@ -105,9 +106,11 @@ public abstract class Scroller<T extends Widget> extends MiraWidget {
     dragBox1.setTarget((f0 + f) * length());
     
     dragBox0.update();
-    dragBox1.update();    
-  }  
-  
+    dragBox1.update();
+
+    System.out.println(visPos0.getTarget() + " " + visPos1.getTarget());
+  }
+
   public boolean isUpdating() {
     return visPos0.isTargeting() || visPos1.isTargeting();
   }
