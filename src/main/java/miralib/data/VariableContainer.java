@@ -42,9 +42,7 @@ public class VariableContainer implements DataTree.Item {
     return false;
   }
   
-  public boolean open() {
-    return true;
-  }
+  public boolean open() { return true; }
   
   public void setOpen() { }
   

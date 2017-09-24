@@ -55,7 +55,7 @@ abstract public class Variable implements DataTree.Item {
     this.column = true;
     this.covariate = false;
     this.sortKey = false;
-    this.open = true;    
+    this.open = true;
   }
   
   static public Variable create(int index, String name, int type) {

@@ -185,12 +185,12 @@ public class RowScroller extends MiraWidget {
       intf.selectWidget(groupScroller);
       groupScroller.setActive(true);
 
-      tableScroller = new SingleScroller2(intf, this, 0, 0, width, height);
+      tableScroller = new SingleScroller2(intf, this, width, 0, width, height);
       tableScroller.setItems(tree.tables, heightOpen, heightClose);
       addChild(tableScroller);
       tableScroller.setActive(false);
       
-      varScroller = new SingleScroller2(intf, this, 0, 0, width, height);
+      varScroller = new SingleScroller2(intf, this, 2 * width, 0, width, height);
       varScroller.setItems(tree.variables, heightOpen, heightClose);
       addChild(varScroller);
       varScroller.setActive(false);
@@ -203,7 +203,7 @@ public class RowScroller extends MiraWidget {
       intf.selectWidget(tableScroller);
       tableScroller.setActive(true);
       
-      varScroller = new SingleScroller2(intf, this, 0, 0, width, height);
+      varScroller = new SingleScroller2(intf, this, width, 0, width, height);
       varScroller.setItems(tree.variables, heightOpen, heightClose);
       addChild(varScroller);
       varScroller.setActive(false);

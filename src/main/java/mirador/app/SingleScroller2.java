@@ -12,7 +12,9 @@ import java.util.ArrayList;
 
 public class SingleScroller2 extends Scroller<RowWidget> {
 
+  protected TreeMap<Integer, Item> pvisItems;
   protected ArrayList<DataTree.Item> items;
+
   protected boolean active;
   protected int savedIdx;
   protected boolean needShow;
@@ -43,8 +45,10 @@ public class SingleScroller2 extends Scroller<RowWidget> {
 //    fill(color(120));
 //    rect(0, 0, width, height);
 
-    fill(color(150));
-    rect(getDragBoxLeft(), getDragBoxTop(), getDragBoxWidth(), getDragBoxHeight());
+    if (active) {
+      fill(color(150));
+      rect(getDragBoxLeft(), getDragBoxTop(), getDragBoxWidth(), getDragBoxHeight());
+    }
   }
 
 
@@ -332,6 +336,9 @@ public class SingleScroller2 extends Scroller<RowWidget> {
       row = new RowVariable(intf, 0, 0, width, h, (Variable)item);
     }
     addChild(row, Widget.TOP_LEFT_CORNER);
+    if (!active) {
+      row.hide(false);
+    }
     return new Item(index, row);
   }
 

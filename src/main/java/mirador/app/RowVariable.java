@@ -85,14 +85,14 @@ public class RowVariable extends RowWidget {
     } 
     selector.setInner(true);
     addChild(selector, TOP_LEFT_CORNER);
-    open = rowVar.open();
-    if (open) {
-      plots.show();
-      selector.show();
-    } else {
-      plots.hide(false);
-      selector.hide(false);
-    }
+//    open = false; //rowVar.open();
+//    if (open) {
+//      plots.show();
+//      selector.show();
+//    } else {
+//      plots.hide(false);
+//      selector.hide(false);
+//    }
         
     sortOpt = new SortOptions(intf, 0, 0, width, mira.plotHeight);
     if (rowVar.sortKey()) {

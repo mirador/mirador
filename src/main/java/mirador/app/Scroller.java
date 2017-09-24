@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import mui.Widget;
@@ -24,6 +25,8 @@ import processing.core.PApplet;
  */
 
 public abstract class Scroller<T extends Widget> extends MiraWidget {
+  int minDragHandlerSize = Display.scale(10);
+
   final public static int HORIZONTAL = 0;
   final public static int VERTICAL   = 1;
   
@@ -102,13 +105,13 @@ public abstract class Scroller<T extends Widget> extends MiraWidget {
     float totWidth = lengthSum[open1];
     float f = (visPos1.getTarget() - visPos0.getTarget()) / totWidth;
     float f0 = visPos0.getTarget() / totWidth;
-    dragBox0.setTarget(f0 * length());
-    dragBox1.setTarget((f0 + f) * length());
+    float p0 = f0 * length();
+    float p1 = p0 + PApplet.max(f * length(), minDragHandlerSize);
+    dragBox0.setTarget(p0);
+    dragBox1.setTarget(p1);
     
     dragBox0.update();
     dragBox1.update();
-
-    System.out.println(visPos0.getTarget() + " " + visPos1.getTarget());
   }
 
   public boolean isUpdating() {
@@ -321,7 +324,7 @@ public abstract class Scroller<T extends Widget> extends MiraWidget {
         item.dispose();
         visItems.remove(i);
         removed = true;
-//        Log.message("Removing item " + i);
+        System.out.println("Removing scroll item " + i);
       }
     }
     if (removed && 0 < visItems.size()) {
@@ -618,17 +621,30 @@ public abstract class Scroller<T extends Widget> extends MiraWidget {
       float vis1 = visPos1.get();
       float pos0 = 0;
       float pos1 = 0;
+//      float tpos0 = 0;
+//      float tpos1 = 0;
+//      float tlim0 = 0;
+//      float tlim1 = 0;
       if (orientation == HORIZONTAL) {
         pos0 = x.get();
         pos1 = pos0 + w;
+//        tpos0 = y.get();
+//        tpos1 = tpos0 + h;
+//        tlim0 = bounds.y.get();
+//        tlim1 = bounds.h.get();
       } else {
         pos0 = y.get();
-        pos1 = pos0 + h;        
+        pos1 = pos0 + h;
+//        tpos0 = x.get();
+//        tpos1 = tpos0 + w;
+//        tlim0 = bounds.x.get();
+//        tlim1 = bounds.w.get();
       }      
-      float[] pt = Widget.intersect(vis0, vis1, pos0, pos1);
-      
+      float[] vpt = Widget.intersect(vis0, vis1, pos0, pos1);
+//      float[] tpt = Widget.intersect(tlim0, tlim1, tpos0, tpos1);
+
       long t = intf.app.millis();
-      if (pt != null && visible()) {        
+      if (vpt != null && visible()) {
         if (!visible) {
           t0 = t;
         }

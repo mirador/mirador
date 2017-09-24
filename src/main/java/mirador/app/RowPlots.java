@@ -46,9 +46,11 @@ public class RowPlots extends ColumnScroller {
   }
 
   public void show(boolean now) {
-    if (rowVar.open()) super.show(now);
-  } 
-  
+    if (rowVar.open()) {
+      super.show(now);
+    }
+  }
+
   public void mouseDragged() {    
     if (pmouseX - mouseX != 0) {
       mira.browser.dragColumns(pmouseX - mouseX);  
