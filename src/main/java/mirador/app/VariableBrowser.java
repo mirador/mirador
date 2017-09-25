@@ -213,8 +213,8 @@ public class VariableBrowser extends MiraWidget {
       for (Widget child: children) {
         if (child instanceof RowScroller) {
           ((RowScroller)child).dragColumns(dx);
-        } else if (child instanceof ColumnLabels) {
-          ((ColumnLabels)child).drag(dx);
+        } else if (child instanceof ColScroller) {
+          ((ColScroller)child).drag(dx);
         }
       }      
     }    
@@ -225,8 +225,8 @@ public class VariableBrowser extends MiraWidget {
       for (Widget child: children) {
         if (child instanceof RowScroller) {
           ((RowScroller)child).snapColumns();
-        } else if (child instanceof ColumnLabels) {
-          ((ColumnLabels)child).snap();
+        } else if (child instanceof ColScroller) {
+          ((ColScroller)child).snap();
         }
       }      
     }
@@ -332,8 +332,8 @@ public class VariableBrowser extends MiraWidget {
           ready = false;
           break;          
         }
-      } else if (child instanceof ColumnLabels) {
-        if (!((ColumnLabels)child).ready()) {
+      } else if (child instanceof ColScroller) {
+        if (!((ColScroller)child).ready()) {
           ready = false;
           break;
         }        

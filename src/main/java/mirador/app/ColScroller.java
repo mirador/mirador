@@ -37,6 +37,23 @@ public class ColScroller extends Scroller<ColLabel> {
     return visItems.containsKey(var.getIndex());
   }
 
+  public boolean ready() {
+    return calledSetup;
+  }
+
+  public void mouseDragged() {
+    super.mouseDragged();
+    mira.browser.dragColumns(pmouseX - mouseX);
+  }
+
+  protected void handleResize(int newWidth, int newHeight) {
+    float w0 = bounds.w.get();
+    float w1 = newWidth - mira.optWidth - mira.varWidth;
+    float dw = w1 - w0;
+    bounds.w.set(w1);
+    visPos1.setTarget(visPos1.getTarget() + dw);
+  }
+
   @Override
   protected Scroller<ColLabel>.Item createItem(int index) {
     Variable var = data.getColumn(index);

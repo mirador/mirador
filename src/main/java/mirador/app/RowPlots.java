@@ -18,8 +18,7 @@ import miralib.data.Variable;
 import miralib.shannon.Similarity;
 
 /**
- * Widget that contains all the plots of a row variable. It is a subclass of
- * ColumnScroller to allow for arbitrary large number of plots.
+ * Widget that contains all the plots of a row variable.
  *
  */
 
