@@ -38,15 +38,15 @@ abstract public class ColumnScroller extends MiraWidget {
   }
   
   public ColumnScroller(Interface intf, float x, float y, float w, float h, 
-                        float iw, float ih, ColumnScroller init) {
+                        float iw, float ih, ColScroller init) {
     super(intf, x, y, w, h);
     visItems = new HashMap<Variable, Item>();
     if (init == null) {
       visX0 = new SoftFloat(0); 
       visX1 = new SoftFloat(width);      
     } else {
-      visX0 = new SoftFloat(init.visX0.getTarget()); 
-      visX1 = new SoftFloat(init.visX1.getTarget());      
+      visX0 = new SoftFloat(init.visPos0.getTarget());
+      visX1 = new SoftFloat(init.visPos1.getTarget());
     }
     itemWidth = iw; 
     itemHeight = ih;

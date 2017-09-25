@@ -160,6 +160,7 @@ public class RowScroller extends MiraWidget {
   }  
   
   public void keyPressed() {
+    // TODO: keys are hanging the UI, including variable search.
     SingleScroller2 currScroller = (SingleScroller2)children.get(current);
     if (key == CODED) {
       if (keyCode == LEFT) {

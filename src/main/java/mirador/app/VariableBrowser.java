@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
@@ -28,7 +28,8 @@ public class VariableBrowser extends MiraWidget {
   protected ThreadPoolExecutor taskPool1;
   protected ThreadPoolExecutor taskPool2;
   protected RowScroller rowScroller;
-  protected ColumnLabels colLabels;
+//  protected ColumnLabels colLabels;
+   protected ColScroller colScroller;
   protected InformationBar infoBar;
   protected SearchBar searchBar;
   protected CovariatesBar covBar;
@@ -53,11 +54,21 @@ public class VariableBrowser extends MiraWidget {
     rowScroller.clipBounds(true, false, true, false);
     addChild(rowScroller, TOP_LEFT_CORNER);
     
-    colLabels = new ColumnLabels(intf, mira.varWidth, 0, width - mira.varWidth, mira.labelHeightClose,
+
+        /*
+    ColumnLabels colLabels = new ColumnLabels(intf, mira.varWidth, 0, width - mira.varWidth, mira.labelHeightClose,
                                  mira.plotWidth, mira.labelHeightClose, mira.labelHeightMax);
     colLabels.clipBounds(true, false);
     addChild(colLabels, TOP_LEFT_CORNER);
     colLabels.hide(false);
+    */
+
+    colScroller = new ColScroller(intf, mira.varWidth, 0, width - mira.varWidth, mira.labelHeightClose,
+            mira.plotWidth, mira.labelHeightClose, mira.labelHeightMax);
+    colScroller.clipBounds(true, false);
+    addChild(colScroller, TOP_LEFT_CORNER);
+    colScroller.hide(false);
+
     if (data.getGroupCount() == 1 && data.getTableCount() == 1) {
       // No metadata, so the variables are already shown and the labels should
       // be visible as well.
@@ -132,7 +143,7 @@ public class VariableBrowser extends MiraWidget {
       }
       if (!data.sorting()) idx = data.getColumn(var); 
     }
-    if (-1 < idx) colLabels.jumpTo(idx);
+    if (-1 < idx) colScroller.jumpTo(idx);
     mira.profile.add(var);
   }
   
@@ -144,20 +155,20 @@ public class VariableBrowser extends MiraWidget {
   
   public void closeColumn(Variable var) {
     data.removeColumn(var); // Important: removing column from data must happen before updating the UI    
-    colLabels.close(var);
+    colScroller.close(var);
     rowScroller.closeColumn(var);
     mira.profile.remove(var);
   }
 
   public void closeColumnsBut(Variable var) {
-    if (colLabels.isUpdating()) return;
+    if (colScroller.isUpdating()) return;
     // Handle situation when columns are sorted by correlation...
     
     ArrayList<Variable> all = data.getVariables();
     data.removeColumns(all, var); // Important: removing column from data must happen before updating the UI
     for (Variable v1: all) {
       if (v1 == var) continue;
-      colLabels.close(v1);
+      colScroller.close(v1);
       rowScroller.closeColumn(v1);
     } 
     mira.profile.remove(all, var);    
@@ -167,7 +178,7 @@ public class VariableBrowser extends MiraWidget {
     ArrayList<Variable> vars = data.getVariables(container);
     data.removeColumns(vars); // Important: removing column from data must happen before updating the UI
     for (Variable var: vars) {
-      colLabels.close(var);
+      colScroller.close(var);
       rowScroller.closeColumn(var);
     } 
     mira.profile.remove(vars);
@@ -190,11 +201,11 @@ public class VariableBrowser extends MiraWidget {
   }
   
   public int getFirstColumn() {
-    return (int)(colLabels.visX0.getTarget() / mira.plotWidth);
+    return colScroller.getFirstVisible();
   }
 
   public int getLastColumn() {
-    return (int)(colLabels.visX1.getTarget() / mira.plotWidth);
+    return colScroller.getLastVisible();
   } 
   
   public void dragColumns(float dx) {
@@ -239,11 +250,11 @@ public class VariableBrowser extends MiraWidget {
   }
   
   public void showColumnLabels() {
-    colLabels.show();
+    colScroller.show();
   }
   
   public void hideColumnLabels() {
-    colLabels.hide();
+    colScroller.hide();
   }
   
   public void resetSelectors() {
@@ -274,14 +285,14 @@ public class VariableBrowser extends MiraWidget {
   } 
   
   public String getRowLabel() {
-    if (rowAxis != null && colAxis != null && colLabels.contains(colAxis)) {
+    if (rowAxis != null && colAxis != null && colScroller.contains(colAxis)) {
       return rowScroller.getRowLabel(colAxis, rowAxis);  
     }
     return "";
   }
 
   public String getColLabel() {
-    if (rowAxis != null && colAxis != null && colLabels.contains(colAxis)) {
+    if (rowAxis != null && colAxis != null && colScroller.contains(colAxis)) {
       return rowScroller.getColLabel(colAxis, rowAxis);  
     }
     return "";

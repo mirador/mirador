@@ -73,7 +73,7 @@ public class RowVariable extends RowWidget {
     rowVar = rvar;
     
     plots = new RowPlots(intf, 0, 0, mira.width - mira.varWidth - mira.optWidth, mira.plotHeight,
-                         mira.plotWidth, mira.plotHeight, mira.browser.colLabels);
+                         mira.plotWidth, mira.plotHeight, mira.browser.colScroller);
     plots.setRowVar(rowVar);
     plots.clipBounds(true);
     addChild(plots, TOP_RIGHT_CORNER);

@@ -30,7 +30,7 @@ public class RowPlots extends ColumnScroller {
   protected int sColor;
   
   public RowPlots(Interface intf, float x, float y, float w, float h, 
-                  float iw, float ih, ColumnScroller init) {
+                  float iw, float ih, ColScroller init) {
     super(intf, x, y, w, h, iw, ih, init);
   }
   

@@ -263,8 +263,18 @@ public abstract class Scroller<T extends Widget> extends MiraWidget {
       item.markedForRemoval = true;
       item.markedForClosing = true;
     }
-  }      
-  
+  }
+
+  public int getFirstVisible() {
+    float x0 = visPos0.getTarget();
+    return getItemIndex(x0);
+  }
+
+  public int getLastVisible() {
+    float x1 = visPos1.getTarget();
+    return getItemIndex(x1);
+  }
+
   protected void updateItemsImpl() {
     if (0 < getItemCount()) {
       for (Item item: visItems.values()) {        
