@@ -15,6 +15,7 @@ import miralib.data.Variable;
  *
  */
 
+// No longer used
 public class ColumnLabels extends ColumnScroller {
   protected float labelHeightMax;
   protected int bColor;

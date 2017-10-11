@@ -7,7 +7,7 @@ import mui.Interface;
 import mui.Widget;
 import miralib.data.DataTree;
 import miralib.data.Variable;
-
+import java.util.ArrayList;
 
 /**
  * Vertical scroller for group, tables, and variables. It updates dynamically 
@@ -43,9 +43,9 @@ public class RowScroller extends MiraWidget {
     varScroller.dragColumns(dx);    
   }
   
-  public void snapColumns() {
-    varScroller.snapColumns();
-  }
+//  public void snapColumns() {
+//    varScroller.snapColumns();
+//  }
 
   public void dataChanged() {
     varScroller.dataChanged();
@@ -66,7 +66,20 @@ public class RowScroller extends MiraWidget {
       varScroller.jumpTo(idx);      
     }
   }
-  
+
+  public ArrayList<RowVariable> getRowVariables() {
+    ArrayList<RowVariable> list = new ArrayList<RowVariable>();
+    for (int i = 0; i < varScroller.getChildrenCount(); i++) {
+      RowVariable rvar = (RowVariable)varScroller.getChild(i);
+      list.add(rvar);
+    }
+    return list;
+  }
+
+  public RowPlots getPlots(Variable rvar) {
+    return null;
+  }
+
   public void closeRowsBut(MiraWidget wt) {
     varScroller.closeAllBut(wt);
   }

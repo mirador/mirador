@@ -63,7 +63,7 @@ public class VariableBrowser extends MiraWidget {
     colLabels.hide(false);
     */
 
-    colScroller = new ColScroller(intf, mira.varWidth, 0, width - mira.varWidth, mira.labelHeightClose,
+    colScroller = new ColScroller(intf, rowScroller, mira.varWidth, 0, width - mira.varWidth, mira.labelHeightClose,
             mira.plotWidth, mira.labelHeightClose, mira.labelHeightMax);
     colScroller.clipBounds(true, false);
     addChild(colScroller, TOP_LEFT_CORNER);
@@ -223,11 +223,15 @@ public class VariableBrowser extends MiraWidget {
   public void snapColumns() {
     if (rowsReady()) {
       for (Widget child: children) {
-        if (child instanceof RowScroller) {
-          ((RowScroller)child).snapColumns();
-        } else if (child instanceof ColScroller) {
+        if (child instanceof ColScroller) {
           ((ColScroller)child).snap();
         }
+
+//        if (child instanceof RowScroller) {
+//          ((RowScroller)child).snapColumns();
+//        } else if (child instanceof ColScroller) {
+//          ((ColScroller)child).snap();
+//        }
       }      
     }
   }  

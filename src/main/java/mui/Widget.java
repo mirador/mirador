@@ -883,11 +883,21 @@ public class Widget implements PConstants {
       }
     }
   }
+
+  public void removeSelf() {
+    if (parent != null) {
+      parent.removeChild(this);
+    }
+  }
   
   public int getChildrenCount() {
     return children.size();
   }
-  
+
+  public Widget getChild(int idx) {
+    return children.get(idx);
+  }
+
   public int getChildIndex(Widget child) {
     return children.indexOf(child);
   }

@@ -84,22 +84,22 @@ public class SingleScroller2 extends Scroller<RowWidget> {
   }
 
 
-  public void dragColumns(float dx) {
-    for (Widget child: children) {
-      if (child instanceof RowVariable) {
-        ((RowVariable)child).drag(dx);
-      }
-    }
-  }
-
-
-  public void snapColumns() {
-    for (Widget child: children) {
-      if (child instanceof RowVariable) {
-        ((RowVariable)child).snap();
-      }
-    }
-  }
+//  public void dragColumns(float dx) {
+//    for (Widget child: children) {
+//      if (child instanceof RowVariable) {
+//        ((RowVariable)child).drag(dx);
+//      }
+//    }
+//  }
+//
+//
+//  public void snapColumns() {
+//    for (Widget child: children) {
+//      if (child instanceof RowVariable) {
+//        ((RowVariable)child).snap();
+//      }
+//    }
+//  }
 
 
   public void dataChanged() {

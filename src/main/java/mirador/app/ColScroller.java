@@ -5,13 +5,17 @@ import miralib.data.Variable;
 import miralib.data.VariableContainer;
 import mui.Interface;
 import mui.Widget;
+import java.util.ArrayList;
 
 public class ColScroller extends Scroller<ColLabel> {
-  float labelWidth, labelHeight;
+  protected RowScroller rowScroller;
+  protected float labelWidth, labelHeight;
   protected float labelHeightMax;
 
-  public ColScroller(Interface intf, float x, float y, float w, float h, float iw, float ih, float ihmax) {
+  public ColScroller(Interface intf, RowScroller scroller, float x, float y, float w, float h, float iw,
+                     float ih, float ihmax) {
     super(intf, x, y, w, h);
+    rowScroller = scroller;
     labelWidth = iw;
     labelHeight = ih;
     labelHeightMax = ihmax;
@@ -56,10 +60,19 @@ public class ColScroller extends Scroller<ColLabel> {
 
   @Override
   protected Scroller<ColLabel>.Item createItem(int index) {
-    Variable var = data.getColumn(index);
+    Variable cvar = data.getColumn(index);
 //    float h = item.open() ? heightOpen : heightClose;
-    ColLabel col = new ColLabel(intf, 0, 0, labelWidth, labelHeight, labelHeightMax, var,false /*defaultAnimation(event)*/);;
+    ColLabel col = new ColLabel(intf, 0, 0, labelWidth, labelHeight, labelHeightMax, cvar,false /*defaultAnimation(event)*/);;
     addChild(col, Widget.TOP_LEFT_CORNER);
-    return new Item(index, col);
+    Scroller<ColLabel>.Item item = new Item(index, col);
+
+    // Create new plot and attach to the scroller item, which will handle positioning and disposal automatically :-)
+    ArrayList<RowVariable> rows = rowScroller.getRowVariables();
+    for (RowVariable row: rows) {
+      Plot plot = row.createPlot(cvar);
+      item.attach(plot);
+    }
+
+    return item;
   }
 }

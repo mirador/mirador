@@ -355,31 +355,7 @@ public class RowVariable extends RowWidget {
   public void dragRows(float dy) {
     ((MiraWidget)parent).dragRows(dy);
   }
-  
-  public void drag(float dx) {
-    plots.drag(dx);
-  }
-  
-  public void snap() {
-    plots.snap();
-  }
-  
-  public void close(Variable var) {
-    plots.close(var);
-  }
-  
-  public void dataChanged() {
-    plots.dataChanged();
-  }
-  
-  public void pvalueChanged() {
-    plots.pvalueChanged();
-  }  
-  
-  public boolean plotsReady() {
-    return plots.ready();
-  }
-  
+
   public Variable getVariable() {
     return rowVar;
   }
@@ -502,7 +478,39 @@ public class RowVariable extends RowWidget {
       }      
     }
   }
-  
+
+
+  public Plot createPlot(Variable cvar) {
+    return plots.createPlot(cvar);
+  }
+
+//  public void drag(float dx) {
+//    plots.drag(dx);
+//  }
+//
+//  public void snap() {
+//    plots.snap();
+//  }
+
+  public void close(Variable var) {
+    // TODO: Need to de-attach from scroller item... unless item is disposed already... check!
+    plots.close(var);
+  }
+
+  public void dataChanged() {
+    plots.dataChanged();
+  }
+
+  public void pvalueChanged() {
+    plots.pvalueChanged();
+  }
+
+  public boolean plotsReady() {
+    return plots.ready();
+  }
+
+
+
   protected class ProfileButton extends Widget {
     float x0 = Display.scale(20);
     float y0 = Display.scale(10);
