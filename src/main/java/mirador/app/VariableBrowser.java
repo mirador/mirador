@@ -28,7 +28,6 @@ public class VariableBrowser extends MiraWidget {
   protected ThreadPoolExecutor taskPool1;
   protected ThreadPoolExecutor taskPool2;
   protected RowScroller rowScroller;
-//  protected ColumnLabels colLabels;
    protected ColScroller colScroller;
   protected InformationBar infoBar;
   protected SearchBar searchBar;
@@ -53,15 +52,6 @@ public class VariableBrowser extends MiraWidget {
                                   mira.plotHeight, mira.varHeight);
     rowScroller.clipBounds(true, false, true, false);
     addChild(rowScroller, TOP_LEFT_CORNER);
-    
-
-        /*
-    ColumnLabels colLabels = new ColumnLabels(intf, mira.varWidth, 0, width - mira.varWidth, mira.labelHeightClose,
-                                 mira.plotWidth, mira.labelHeightClose, mira.labelHeightMax);
-    colLabels.clipBounds(true, false);
-    addChild(colLabels, TOP_LEFT_CORNER);
-    colLabels.hide(false);
-    */
 
     colScroller = new ColScroller(intf, rowScroller, mira.varWidth, 0, width - mira.varWidth, mira.labelHeightClose,
             mira.plotWidth, mira.labelHeightClose, mira.labelHeightMax);
