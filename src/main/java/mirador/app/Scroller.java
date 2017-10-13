@@ -24,7 +24,7 @@ import processing.core.PApplet;
  *
  */
 
-public abstract class Scroller<T extends Widget> extends MiraWidget {
+public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
   int minDragHandlerSize = Display.scale(10);
 
   final public static int HORIZONTAL = 0;
@@ -243,7 +243,15 @@ public abstract class Scroller<T extends Widget> extends MiraWidget {
       item.dispose();
     }      
   }  
-  
+
+  public void attach(MiraWidget wt, MiraWidget att) {
+    int i = wt.getIndex();
+    Item item = visItems.get(i);
+    if (item != null) {
+      item.attach(att);
+    }
+  }
+
   public void open(int i) {    
     if (visItems.containsKey(i)) return;
     float pos0 = getItemPos(i);
@@ -578,7 +586,7 @@ public abstract class Scroller<T extends Widget> extends MiraWidget {
     protected boolean showContents;
     protected boolean markedForRemoval;
     protected boolean markedForClosing;
-    protected ArrayList<Widget> attached = new ArrayList<Widget>();
+    protected ArrayList<MiraWidget> attached = new ArrayList<MiraWidget>();
 
     public Item(int idx, T wt) {
       this.index = idx;
@@ -596,7 +604,8 @@ public abstract class Scroller<T extends Widget> extends MiraWidget {
         wt.setOffsetY(-1, visPos0);        
       }      
       wt.setPosition(x.get(), y.get());
-      
+      wt.setIndex(idx);
+
       visible = false;
       showContents = false;
       markedForRemoval = false;
@@ -608,26 +617,35 @@ public abstract class Scroller<T extends Widget> extends MiraWidget {
       if (index > open1) open1 = index;      
     }
 
-    public void attach(Widget wt) {
+    public void attach(MiraWidget wt) {
       attached.add(wt);
       if (orientation == HORIZONTAL) {
+        wt.setOffsetX(-1, visPos0);
         wt.setX(x.get());
       } else {
+        wt.setOffsetY(-1, visPos0);
         wt.setY(y.get());
       }
     }
 
     public void dispose() {
       widget.removeSelf();
-      for (Widget wt: attached) wt.removeSelf();
+      for (Widget wt: attached) {
+        System.out.println("removing attached widget " + wt);
+        wt.removeSelf();
+      }
 
     }
     
     public void updatePosition() {
       if (orientation == HORIZONTAL) {
         x.setTarget(getItemPos(index));
+        if (!x.isTargeting()) return;
         widget.copyX(x, 0);
-        for (Widget wt: attached) wt.copyX(x, 0);
+        for (Widget wt: attached) {
+          System.out.println("updating position of widget " + wt + " to " + x.get());
+          wt.copyX(x, 0);
+        }
       } else {
         y.setTarget(getItemPos(index));
         widget.copyY(y, 0);

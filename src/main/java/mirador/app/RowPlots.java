@@ -20,6 +20,7 @@ import miralib.shannon.Similarity;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.ArrayList;
 
 /**
  * Widget that contains all the plots of a row variable.
@@ -52,6 +53,16 @@ public class RowPlots extends MiraWidget {
   
   public void setRowVar(Variable rvar) {
     rowVar = rvar;
+
+    // Create new plots for all current columns, and attach them to the scroller item, which will handle positioning
+    // and disposal automatically :-)
+    ArrayList<ColLabel> cols = scroller.getColLabels();
+    for (ColLabel col: cols) {
+      Variable cvar = col.getVariable();
+      Plot plot = createPlot(cvar);
+      System.out.println("Creating plot for " + cvar.getName());
+      scroller.attach(col, plot);
+    }
   }
 
   public void show(boolean now) {
@@ -62,7 +73,7 @@ public class RowPlots extends MiraWidget {
 
   public Plot createPlot(Variable colVar) {
     Plot plot = new Plot(intf, colVar, rowVar, 0, 0, plotWidth, plotHeight);
-    addChild(plot);
+    addChild(plot, Widget.TOP_LEFT_CORNER);
     return plot;
   }
 

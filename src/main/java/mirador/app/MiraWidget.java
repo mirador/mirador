@@ -55,6 +55,8 @@ public class MiraWidget extends Widget {
   public void setIndex(int i) {
     this.idx = i;
   }
+
+  public int getIndex() { return idx; }
   
   public void setTimeOut(long t) {
     timeOut = t;

@@ -45,6 +45,15 @@ public class ColScroller extends Scroller<ColLabel> {
     return calledSetup;
   }
 
+  public ArrayList<ColLabel> getColLabels() {
+    ArrayList<ColLabel> list = new ArrayList<ColLabel>();
+    for (int i = 0; i < getChildrenCount(); i++) {
+      ColLabel clab = (ColLabel)getChild(i);
+      list.add(clab);
+    }
+    return list;
+  }
+
   public void mouseDragged() {
     super.mouseDragged();
     mira.browser.dragColumns(pmouseX - mouseX);
@@ -70,6 +79,7 @@ public class ColScroller extends Scroller<ColLabel> {
     ArrayList<RowVariable> rows = rowScroller.getRowVariables();
     for (RowVariable row: rows) {
       Plot plot = row.createPlot(cvar);
+      System.out.println("Creating plot for " + cvar.getName());
       item.attach(plot);
     }
 

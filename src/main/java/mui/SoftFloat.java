@@ -3,6 +3,7 @@
 package mui;
 
 import processing.core.PApplet;
+import miralib.math.Numbers;
 
 /**
  * Simple soft float class to implement smooth animations
@@ -12,7 +13,7 @@ import processing.core.PApplet;
 public class SoftFloat {
   private float ATTRACTION = 0.1f;
   private float DAMPING = 0.5f;
-  private float THRESHOLD = 0.0f;
+  private float THRESHOLD = Numbers.FLOAT_EPS;
 
   private float value;
   public float velocity;
@@ -128,15 +129,17 @@ public class SoftFloat {
   }
 
   public void setTarget(float t) {
-    targeting = true;
     target = t;
+    targeting = Math.abs(target - value) >= THRESHOLD;
     source = value;
+    if (!targeting) value = target;
   }
   
   public void incTarget(float dt) {
-    targeting = true;
     target += dt;
-    source = value;    
+    targeting = Math.abs(target - value) >= THRESHOLD;
+    source = value;
+    if (!targeting) value = target;
   }
 
   public float getTarget() {

@@ -179,4 +179,8 @@ public class ColLabel extends MiraWidget {
       }
     }
   }
+
+  public Variable getVariable() {
+    return colVar;
+  }
 }
