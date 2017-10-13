@@ -10,7 +10,7 @@ import mui.SoftFloat;
 import java.util.TreeMap;
 import java.util.ArrayList;
 
-public class SingleScroller2 extends Scroller<RowWidget> {
+public class SingleScroller extends Scroller<RowWidget> {
 
   protected TreeMap<Integer, Item> pvisItems;
   protected ArrayList<DataTree.Item> items;
@@ -23,7 +23,7 @@ public class SingleScroller2 extends Scroller<RowWidget> {
   protected RowScroller root;
 
 
-  public SingleScroller2(Interface intf, RowScroller root, float x, float y, float w, float h) {
+  public SingleScroller(Interface intf, RowScroller root, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
     this.root = root;
     active = false;
