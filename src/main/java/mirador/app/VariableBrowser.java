@@ -190,14 +190,14 @@ public class VariableBrowser extends MiraWidget {
       idx = data.getCovariate(var);
     } else {
       idx = data.addCovariate(var);
-      covBar.updateItems();  
+      covBar.open(idx);
     }
     if (-1 < idx) covBar.jumpTo(idx);
   }
   
   public void closeCovariate(Variable var) {
     data.removeCovariate(var); // Important: removing covariate from data must happen before updating the UI
-    covBar.close(var);    
+    covBar.close(idx);
   }
   
   public int getFirstColumn() {
