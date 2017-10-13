@@ -18,12 +18,16 @@ import mui.Widget;
 import processing.core.PApplet;
 
 /**
- * Class used to implement horizontal scrollers of large number of general
- * items. The contents of the list are updated dynamically depending on what is
- * visible to the user at each time.
+ * Abstract class that can be used to implement horizontal or vertical scrollers with a large number of items.
+ * Each item is associated with a MiraWidget, when items become visible they automatically create the corresponding
+ * MiraWidget, and when become invisible they dispose them. Items also have an open/close state, which is different
+ * from its visibility: an open item is one that can be scrolled to, whereas a closed item is temporarily disabled so
+ * it will not show up in the scroller.
  *
  */
 
+// TODO: does is support reordering of its items (needed for columns)?
+// TODO: add delay before creating widget, so no unneeded widgets are creatated while scrolling.
 public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
   int minDragHandlerSize = Display.scale(10);
 
@@ -42,29 +46,28 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
   
   protected boolean insideDragBox;
   protected SoftFloat dragBox0, dragBox1;    
-  protected  float[] lengths;
+  protected SoftFloat[] lengths;
   protected float[] lengthSum;
   protected boolean[] closed;
   protected int open0, open1; 
-  
+
+
   public Scroller(Interface intf, float x, float y, float w, float h) {
+    this(intf, x, y, w, h, VERTICAL);
+  }
+
+
+  public Scroller(Interface intf, float x, float y, float w, float h, int or) {
     super(intf, x, y, w, h);
+    orientation = or;
   }
-  
-  public Scroller(Interface intf, float x, float y, float w, float h, 
-                  float iw, float ih, int in) {
-    this(intf, x, y, w, h, iw, ih, in, VERTICAL);
-  }
-  
-  public Scroller(Interface intf, float x, float y, float w, float h, 
-                  float iw, float ih, int n, int ori) {
-    super(intf, x, y, w, h);
-    initItems(n, iw, ih, ori);
-  }
-  
+
+
   public void setup() {
+    initItems();
+
     if (visible()) {
-      for (int i = 0; i < getItemCount(); i++) {
+      for (int i = 0; i < getOpenItemCount(); i++) {
         if (isItemMissing(i, visPos0.get(), visPos1.get())) {
           Item item = createItem(i);
           visItems.put(i, item);        
@@ -72,15 +75,13 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       }
     }
   }    
-  
+
+
   public boolean inside(float x, float y) {
-    return super.inside(x, y) || insideItems(x, y); 
+    return super.inside(x, y) || insideItems(x, y);
   }  
-  
-  public float getOrientation() {
-    return orientation;
-  }
-  
+
+
   public void update() {
     visPos0.update();
     visPos1.update();
@@ -89,16 +90,20 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     Set<Entry<Integer, Scroller<T>.Item>> set = visItems.entrySet();
     Iterator<Entry<Integer, Scroller<T>.Item>> iterator = set.iterator();
     while (iterator.hasNext()) {
-      Map.Entry<Integer, Item> entry = (Map.Entry<Integer, Item>)iterator.next();
+      Map.Entry<Integer, Item> entry = (Map.Entry<Integer, Item>) iterator.next();
       Item item = entry.getValue();
-      lengths[item.index] = item.getTargetLength();
+      if (closed[item.index]) {
+        // Closed items have their length animating towards zero, so we need to update.ok
+        lengths[item.index].update();
+      } else {
+        lengths[item.index].set(item.getLength());
+      }
     }
 
     Arrays.fill(lengthSum, 0);
     int pi = open0;
     for (int i = open0; i <= open1; i++) {
-      if (closed[i]) continue; 
-      lengthSum[i] = lengthSum[pi] + lengths[i];
+      lengthSum[i] = lengthSum[pi] + lengths[i].get();
       pi = i;
     }
 
@@ -114,17 +119,20 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     dragBox1.update();
   }
 
+
   public boolean isUpdating() {
     return visPos0.isTargeting() || visPos1.isTargeting();
   }
-  
+
+
   public void mousePressed() {
     insideDragBox = false;
     if (dragBox0.get() <= mouse() && mouse() <= dragBox1.get()) {
       insideDragBox = true;
     }        
   }  
-  
+
+
   public void mouseDragged() {
     float dif = mouseDif();
     if (insideDragBox) {      
@@ -136,6 +144,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     }
     dragging = true;
   }
+
 
   public void mouseReleased() {
     if (dragging) {
@@ -184,7 +193,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
   
   
   public void drag(float dpos) {    
-    if (getItemCount() == 0) return;
+    if (getOpenItemCount() == 0) return;
     
     visPos0.incTarget(dpos);
     visPos1.incTarget(dpos);
@@ -221,9 +230,10 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       }
     }
   }
+
   
   public void snap() {
-    if (getItemCount() == 0) return;
+    if (getOpenItemCount() == 0) return;
 
     float vis0 = visPos0.getTarget();
     float vis1 = visPos1.getTarget();
@@ -237,20 +247,23 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       visPos1.setTarget(pos1);
     }
   }
+
   
   public void dispose() {
     for (Item item: visItems.values()) {
       item.dispose();
     }      
-  }  
+  }
 
-  public void attach(MiraWidget wt, MiraWidget att) {
-    int i = wt.getIndex();
+
+  public void attach(MiraWidget scrollWt, MiraWidget attachWt) {
+    int i = scrollWt.getIndex();
     Item item = visItems.get(i);
     if (item != null) {
-      item.attach(att);
+      item.attach(attachWt);
     }
   }
+
 
   public void open(int i) {    
     if (visItems.containsKey(i)) return;
@@ -264,6 +277,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       visItems.put(i, item);
     }    
   }
+
   
   public void close(int i) {
     Item item = visItems.get(i);
@@ -273,18 +287,56 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     }
   }
 
+
   public int getFirstVisible() {
     float x0 = visPos0.getTarget();
     return getItemIndex(x0);
   }
+
 
   public int getLastVisible() {
     float x1 = visPos1.getTarget();
     return getItemIndex(x1);
   }
 
+
+  abstract protected int getTotalItemCount();
+  abstract protected Item createItem(int index);
+  abstract protected boolean itemIsOpen(int index);
+
+//  abstract protected float getWidth(int index);
+//  abstract protected float getHeight(int index);
+  abstract protected float getTargetWidth(int index);
+  abstract protected float getTargetHeight(int index);
+
+
+  // Remove?
+  protected float getItemWidth(int index) {
+    if (orientation == HORIZONTAL) {
+      return lengths[index].get();
+    } else {
+      return getTargetWidth(index);
+    }
+  }
+
+
+  // Remove?
+  protected float getItemHeight(int index) {
+    if (orientation == VERTICAL) {
+      return lengths[index].get();
+    } else {
+      return getTargetHeight(index);
+    }
+  }
+
+
+  protected float getItemLength(int index) {
+    return lengths[index].get();
+  }
+
+
   protected void updateItemsImpl() {
-    if (0 < getItemCount()) {
+    if (0 < getOpenItemCount()) {
       for (Item item: visItems.values()) {        
         item.updatePosition();
       }
@@ -338,13 +390,14 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
             }
           }
         }
-        
+
         item.dispose();
+        lengths[i].setTarget(0);
         visItems.remove(i);
         removed = true;
-        System.out.println("Removing scroll item " + i);
       }
     }
+
     if (removed && 0 < visItems.size()) {
       int i0 = getItemIndex(visPos0.getTarget());  
       int i1 = getItemIndex(visPos1.getTarget());
@@ -367,7 +420,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
 
   
   protected float jumpToImpl(int index) {
-    if (getItemCount() == 0) return 0;
+    if (getOpenItemCount() == 0) return 0;
     
     float vis0 = visPos0.getTarget();
     float vis1 = visPos1.getTarget();
@@ -380,7 +433,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     // Creating some items in between, even if they disappear during the drag 
     // animation, in order to avid an empty scroller while animating.
     int spaceBorder = i1 - i0;
-    int spaceMiddle = PApplet.min(10, PApplet.max(1, getItemCount() / 50));
+    int spaceMiddle = PApplet.min(10, PApplet.max(1, getOpenItemCount() / 50));
     if (index < i0) {
       for (int i = index; i < i0; i++) {
         if (i < index + spaceBorder || i % spaceMiddle == 0 || i0 - spaceBorder < i) {          
@@ -403,7 +456,8 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     
     return dpos;
   }
-  
+
+
   protected boolean insideItems(float x, float y) {
     for (Item item: visItems.values()) {
       if (item.inside(x - left, y - top)) {
@@ -412,7 +466,8 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     }
     return false;
   }
-  
+
+
   protected float length() {
     if (orientation == HORIZONTAL) {
       return width;
@@ -420,7 +475,8 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       return height;
     }
   }
-  
+
+
   protected float mouse() {
     if (orientation == HORIZONTAL) {
       return mouseX;
@@ -428,7 +484,8 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       return mouseY;
     }
   }
-  
+
+
   protected float mouseDif() {
     if (orientation == HORIZONTAL) {
       return pmouseX - mouseX;
@@ -436,7 +493,8 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       return pmouseY - mouseY;
     }    
   }
-  
+
+
   protected float getDragBoxLeft() {
     if (orientation == HORIZONTAL) {
       return dragBox0.get();
@@ -444,7 +502,8 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       return 0;
     }
   }
-  
+
+
   protected float getDragBoxTop() {
     if (orientation == HORIZONTAL) {
       return 0;
@@ -453,6 +512,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     }    
   }
 
+
   protected float getDragBoxWidth() {
     if (orientation == HORIZONTAL) {
       return dragBox1.get() - dragBox0.get();
@@ -460,7 +520,8 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       return 20;
     }    
   }
-  
+
+
   protected float getDragBoxHeight() {
     if (orientation == HORIZONTAL) {
       return 20;
@@ -468,39 +529,20 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       return dragBox1.get() - dragBox0.get();
     }
   }
-  
-  abstract protected Item createItem(int index);
-  
-  protected int getItemCount() {
+
+
+  protected int getOpenItemCount() {
     return open1 - open0 + 1;
   }  
-  
-  protected float getItemWidth(int index) {
-    if (orientation == HORIZONTAL) { 
-      return lengths[index];
-    } else {
-      return initItemWidth;
-    }
-  }
-  
-  protected float getItemHeight(int index) {
-    if (orientation == VERTICAL) { 
-      return lengths[index];
-    } else {
-      return initItemHeight;
-    }
-  }
-  
-  protected float getItemLength(int index) {
-    return lengths[index];
-  }
-  
+
+
   protected float getItemPos(int index) {
     if (0 < index) {
       return lengthSum[index] - getItemLength(index);
     }
     return 0;
   }
+
 
   protected int getItemIndex(float pos) {
     float psum0 = 0;
@@ -515,6 +557,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     return open1;  
   }  
 
+
   protected int getCloserIndex(float pos) {
     float psum0 = 0;
     float psum1 = 0;
@@ -528,42 +571,56 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       if (psum0 <= pos && pos <= psum1) return i;
       pi = i;
     }
-    return open1;    
+    return open1;
   }
 
-  protected void initItems(int n, float iw, float ih, int ori) {
-    orientation = ori;
+
+  protected void initItems() {
+    int n = getTotalItemCount();
+
     visItems = new TreeMap<Integer, Item>();
     visPos0 = new SoftFloat(0);
     visPos1 = new SoftFloat(length());
     
-    initItemWidth = iw;
-    initItemHeight = ih;
-    
-    dragBox0 = new SoftFloat(); 
+    dragBox0 = new SoftFloat();
     dragBox1 = new SoftFloat();
     
-    lengths = new float[n];
+    lengths = new SoftFloat[n];
     lengthSum = new float[n];
     closed = new boolean[n];
     
-    float len = orientation == HORIZONTAL ? iw : ih; 
-    Arrays.fill(lengths, len);
-    for (int i = 0; i < lengthSum.length; i++) lengthSum[i] = (i + 1) * len;
-    
-    Arrays.fill(closed, false);
-    open0 = 0;
-    open1 = n - 1;    
+    open0 = n - 1;
+    open1 = 0;
+
+    float sum0 = 0;
+    for (int i = 0; i < lengthSum.length; i++) {
+      closed[i] = !itemIsOpen(i);
+      float len = 0;
+      if (itemIsOpen(i)) {
+        len = orientation == HORIZONTAL ? getTargetWidth(i) : getTargetHeight(i);
+        closed[i] = false;
+        if (i < open0) open0 = i;
+        if (open1 < i) open1 = i;
+      } else {
+        closed[i] = true;
+      }
+      lengths[i] = new SoftFloat(len);
+      lengthSum[i] = sum0 + len;
+      sum0 = lengthSum[i];
+    }
   }
+
   
   protected float getFirstPos() {
     return getItemPos(open0);
   }
-  
+
+
   protected float getLastPos() {    
     return getItemPos(open1) + getItemLength(open1); 
   }
-  
+
+
   protected boolean isItemMissing(int index, float vis0, float vis1) {
     if (!isItemMissing(index)) return false;
     float pos0 = getItemPos(index);
@@ -571,11 +628,13 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     float[] pt = Widget.intersect(vis0, vis1, pos0, pos1);
     return pt != null;
   }
-  
+
+
   protected boolean isItemMissing(int index) {
     return !closed[index] && !visItems.containsKey(index);
   }
-  
+
+
   public class Item {
     public int index;
     public T widget;
@@ -588,11 +647,12 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     protected boolean markedForClosing;
     protected ArrayList<MiraWidget> attached = new ArrayList<MiraWidget>();
 
+
     public Item(int idx, T wt) {
       this.index = idx;
       this.widget = wt;
-      this.w = getItemWidth(index);
-      this.h = getItemHeight(index);
+      this.w = wt.targetWidth();  // getItemWidth(index);
+      this.h = wt.targetHeight(); //getItemHeight(index);
       
       if (orientation == HORIZONTAL) {
         x = new SoftFloat(getItemPos(index));
@@ -617,6 +677,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       if (index > open1) open1 = index;      
     }
 
+
     public void attach(MiraWidget wt) {
       attached.add(wt);
       if (orientation == HORIZONTAL) {
@@ -628,36 +689,38 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       }
     }
 
+
     public void dispose() {
       widget.removeSelf();
       for (Widget wt: attached) {
         System.out.println("removing attached widget " + wt);
         wt.removeSelf();
       }
-
     }
-    
+
+
     public void updatePosition() {
       if (orientation == HORIZONTAL) {
         x.setTarget(getItemPos(index));
         if (!x.isTargeting()) return;
         widget.copyX(x, 0);
         for (Widget wt: attached) {
-          System.out.println("updating position of widget " + wt + " to " + x.get());
           wt.copyX(x, 0);
         }
       } else {
         y.setTarget(getItemPos(index));
+        if (!y.isTargeting()) return;
         widget.copyY(y, 0);
         for (Widget wt: attached) wt.copyY(y, 0);
       }
     }
-    
+
+
     public void update() {
       x.update();
       y.update();
-      w = getItemWidth(index);
-      h = getItemHeight(index);
+      w = widget.width();  //getItemWidth(index);
+      h = widget.height(); //getItemHeight(index);
       
       float vis0 = visPos0.get(); 
       float vis1 = visPos1.get();
@@ -688,6 +751,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       }
     }
 
+
     public boolean inside(float rx, float ry) {
       float x0 = 0;
       float y0 = 0;
@@ -700,12 +764,13 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       }
       return x0 <= rx && rx <= x0 + w && y0 <= ry && ry <= y0 + h;
     }
+
     
-    public float getTargetLength() {
+    public float getLength() {
       if (orientation == HORIZONTAL) {
-        return widget.targetWidth();
+        return widget.width();
       } else {
-        return widget.targetHeight();
+        return widget.height();
       }
     }
   }

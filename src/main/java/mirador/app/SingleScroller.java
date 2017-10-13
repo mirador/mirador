@@ -37,7 +37,7 @@ public class SingleScroller extends Scroller<RowWidget> {
     this.items = items;
     heightOpen = hopen;
     heightClose = hclose;
-    initItems();
+//    initItems();
   }
 
 
@@ -288,39 +288,11 @@ public class SingleScroller extends Scroller<RowWidget> {
     }
   }
 
-  protected void initItems() {
-    int n = items.size();
 
-    visItems = new TreeMap<Integer, Item>();
-    visPos0 = new SoftFloat(0);
-    visPos1 = new SoftFloat(length());
-
-    initItemWidth = width;
-    initItemHeight = heightOpen;
-
-    dragBox0 = new SoftFloat();
-    dragBox1 = new SoftFloat();
-
-    lengths = new float[n];
-    lengthSum = new float[n];
-    closed = new boolean[n];
-
-//    float len = ih;
-//    Arrays.fill(lengths, len);
-    float sum0 = 0;
-    for (int i = 0; i < lengthSum.length; i++) {
-      closed[i] = !items.get(i).open();
-      float h = items.get(i).open() ? heightOpen : heightClose;
-      lengths[i] = h;
-      lengthSum[i] = sum0 + h;
-      sum0 = lengthSum[i];
-    }
-
-//    Arrays.fill(closed, false);
-    open0 = 0;
-    open1 = n - 1;
+  @Override
+  protected int getTotalItemCount() {
+    return items.size();
   }
-
 
   @Override
   protected Scroller<RowWidget>.Item createItem(int index) {
@@ -342,4 +314,22 @@ public class SingleScroller extends Scroller<RowWidget> {
     return new Item(index, row);
   }
 
+  @Override
+  protected boolean itemIsOpen(int index) {
+    return true;
+  }
+
+  @Override
+  protected float getTargetWidth(int index) {
+    return width;
+  }
+
+  @Override
+  protected float getTargetHeight(int index) {
+    if (items.get(index).open()) { // open in this data items array is different from open in the scroller items.
+      return heightOpen;
+    } else {
+      return heightClose;
+    }
+  }
 }

@@ -32,9 +32,11 @@ public class Covariate extends MiraWidget {
 
   Covariate(Interface intf, float x, float y, float w, float h, float ihmax, Variable var, boolean anim) {
     super(intf, x, y, w, h);
-    maxAlpha = new SoftFloat(255);
-    open = false;
+
     covVar = var;
+    open = false;
+    maxAlpha = new SoftFloat(255);
+
     covarHeightMax = ihmax;
 
     if (var.numerical()) {
@@ -43,7 +45,6 @@ public class Covariate extends MiraWidget {
       selector = new CategoricalRangeSelector(intf, marginx + x, h + posy, w - marginx*2, selh, var);
     }
     selector.setBackgroundColor(oColor);
-//    selector.setOffset(visX0);
     if (anim) selector.targetX(x + marginx*2);
     addChild(selector, TOP_LEFT_CORNER);
   }
@@ -68,16 +69,16 @@ public class Covariate extends MiraWidget {
     float x0 = 0;
     float y0 = 0;
     noStroke();
-//    if (itemHeight < h.get()) {
+    if (open) {
       fill(oColor, maxAlpha.getCeil());
       rect(x0 + padding, y0, width - 2 * padding, height);
 
       fill(bColor, maxAlpha.getCeil());
       rect(x0 + padding, y0, width - 2 * padding, height);
-//    } else {
-//      fill(bColor, maxAlpha.getCeil());
-//      rect(x0 + padding, y0, w - 2 * padding, h.get());
-//    }
+    } else {
+      fill(bColor, maxAlpha.getCeil());
+      rect(x0 + padding, y0, width - 2 * padding, height);
+    }
 
     textFont(hFont);
     fill(hColor, maxAlpha.getCeil());

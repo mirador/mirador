@@ -28,7 +28,7 @@ public class VariableBrowser extends MiraWidget {
   protected ThreadPoolExecutor taskPool1;
   protected ThreadPoolExecutor taskPool2;
   protected RowScroller rowScroller;
-   protected ColScroller colScroller;
+  protected ColScroller colScroller;
   protected InformationBar infoBar;
   protected SearchBar searchBar;
   protected CovariatesBar covBar;

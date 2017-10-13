@@ -14,12 +14,11 @@ public class ColScroller extends Scroller<ColLabel> {
 
   public ColScroller(Interface intf, RowScroller scroller, float x, float y, float w, float h, float iw,
                      float ih, float ihmax) {
-    super(intf, x, y, w, h);
+    super(intf, x, y, w, h, HORIZONTAL);
     rowScroller = scroller;
     labelWidth = iw;
     labelHeight = ih;
     labelHeightMax = ihmax;
-    initItems(data.getColumnCount(), iw, ih, HORIZONTAL);
   }
 
   public void draw() {
@@ -67,6 +66,13 @@ public class ColScroller extends Scroller<ColLabel> {
     visPos1.setTarget(visPos1.getTarget() + dw);
   }
 
+
+  @Override
+  protected int getTotalItemCount() {
+    // This is problematic, as columns can be added and removed...
+    return data.getVariableCount();
+  }
+
   @Override
   protected Scroller<ColLabel>.Item createItem(int index) {
     Variable cvar = data.getColumn(index);
@@ -84,5 +90,24 @@ public class ColScroller extends Scroller<ColLabel> {
     }
 
     return item;
+  }
+
+  @Override
+  protected boolean itemIsOpen(int index) {
+    return data.getVariable(index).column();
+  }
+
+  @Override
+  protected float getTargetWidth(int index) {
+    return labelWidth;
+  }
+
+  @Override
+  protected float getTargetHeight(int index) {
+    return labelHeight;
+    // What happens when the label changes height?
+
+//    labelHeight = ih;
+//    labelHeightMax = ihmax
   }
 }
