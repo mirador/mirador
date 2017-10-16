@@ -258,22 +258,13 @@ public class Plot extends MiraWidget {
   }
 
   public void save() {
-    if (canvas != null) {
+    if (showContents && canvas != null) {
       String imgName = colVar.getName() + "-" + rowVar.getName() + ".pdf";
       String filename = Paths.get(mira.project.dataFolder, imgName).toString();
       PGraphics pdf = intf.createCanvas((int)width, PApplet.ceil(height), PDF, filename);
 
       view.draw(pdf, true);
     }
-
-//      if (showContents && canvas != null) {
-//        PGraphics pg = intf.createCanvas((int)w, h.getCeil(), MiraApp.RENDERER, MiraApp.SMOOTH_LEVEL);
-//        draw(pg);
-//
-//        String imgName = var.getName() + "-" + rowVar.getName() + ".png";
-//        String filename = Paths.get(mira.project.dataFolder, imgName).toString();
-//        pg.save(filename);
-//      }
   }
 
 
