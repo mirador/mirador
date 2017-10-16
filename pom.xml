@@ -86,7 +86,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>mirador.app.Mirador</mainClass>
+                            <mainClass>mirador.app.MiraLauncher</mainClass>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
@@ -110,7 +110,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>mirador.app.Mirador</mainClass>
+                            <mainClass>mirador.app.MiraLauncher</mainClass>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
