@@ -55,6 +55,7 @@ public class Plot extends MiraWidget {
     update = false;
     depend = false;
     blendf = new SoftFloat();
+    showContents = false;
 
     colVar = cvar;
     rowVar = rvar;
@@ -107,7 +108,7 @@ public class Plot extends MiraWidget {
   }
 
   public void update() {
-
+    if (showContents) {
       if (dirty) {
         dirty = false;
         update = false;
@@ -145,14 +146,14 @@ public class Plot extends MiraWidget {
       if (update) {
         update = false;
         if (pcanvas == null) {
-          pcanvas = intf.createCanvas((int)width, PApplet.ceil(height), MiraApplet.RENDERER, MiraApplet.SMOOTH_LEVEL);
+          pcanvas = intf.createCanvas((int) width, PApplet.ceil(height), MiraApplet.RENDERER, MiraApplet.SMOOTH_LEVEL);
         }
         if (canvas == null) {
-          canvas = intf.createCanvas((int)width, PApplet.ceil(height), MiraApplet.RENDERER, MiraApplet.SMOOTH_LEVEL);
+          canvas = intf.createCanvas((int) width, PApplet.ceil(height), MiraApplet.RENDERER, MiraApplet.SMOOTH_LEVEL);
           pcanvas.beginDraw();
           pcanvas.noStroke();
           pcanvas.fill(color(255));
-          pcanvas.rect(0, 0, (int)width, PApplet.ceil(height));
+          pcanvas.rect(0, 0, (int) width, PApplet.ceil(height));
           pcanvas.endDraw();
         } else {
           pcanvas.beginDraw();
@@ -166,7 +167,7 @@ public class Plot extends MiraWidget {
       }
 
       blendf.update();
-
+    }
   }
 
   public void draw() {
@@ -175,7 +176,7 @@ public class Plot extends MiraWidget {
     float w0 = width - 2 * padding;
     float h0 = height - 2 * padding;
 
-    if (canvas != null) {
+    if (showContents && canvas != null) {
       int bfa = blendf.getCeil();
       if (bfa < 255 && pcanvas != null) {
         tint(color(255));

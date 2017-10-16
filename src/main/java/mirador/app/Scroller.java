@@ -642,7 +642,6 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
     protected SoftFloat x, y;
     protected float w, h;
     protected long t0;
-    protected boolean showContents;
     protected boolean markedForRemoval;
     protected boolean markedForClosing;
     protected ArrayList<MiraWidget> attached = new ArrayList<MiraWidget>();
@@ -667,7 +666,6 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       wt.setIndex(idx);
 
       visible = false;
-      showContents = false;
       markedForRemoval = false;
       markedForClosing = false;
       t0 = intf.app.millis();
@@ -692,7 +690,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
 
     public void dispose() {
       widget.removeSelf();
-      for (Widget wt: attached) {
+      for (MiraWidget wt: attached) {
         System.out.println("removing attached widget " + wt);
         wt.removeSelf();
       }
@@ -704,14 +702,12 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
         x.setTarget(getItemPos(index));
         if (!x.isTargeting()) return;
         widget.copyX(x, 0);
-        for (Widget wt: attached) {
-          wt.copyX(x, 0);
-        }
+        for (MiraWidget wt: attached) wt.copyX(x, 0);
       } else {
         y.setTarget(getItemPos(index));
         if (!y.isTargeting()) return;
         widget.copyY(y, 0);
-        for (Widget wt: attached) wt.copyY(y, 0);
+        for (MiraWidget wt: attached) wt.copyY(y, 0);
       }
     }
 
@@ -741,7 +737,8 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
           t0 = t;
         }
         visible = true;
-        showContents |= t - t0 > SHOW_DELAY;
+        widget.showContents |= t - t0 > SHOW_DELAY;
+        for (MiraWidget wt: attached) wt.showContents |= t - t0 > SHOW_DELAY;
       } else {
         if (visible) {
           t0 = t;

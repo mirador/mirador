@@ -22,16 +22,13 @@ public class CovariatesBar extends Scroller<Covariate> {
 
   public CovariatesBar(Interface intf, float x, float y, float w, float h,
                       float iw, float ih, float ihmax) {
-    super(intf, x, y, w, h);
+    super(intf, x, y, w, h, HORIZONTAL);
     covWidth = iw;
     covHeight = ih;
     covarHeightMax = ihmax;
   }
 
   public void draw() {
-//    fill(color(120));
-//    rect(0, 0, width, height);
-
     fill(color(150));
     rect(getDragBoxLeft(), getDragBoxTop(), getDragBoxWidth(), getDragBoxHeight());
   }

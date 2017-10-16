@@ -28,7 +28,8 @@ public class MiraWidget extends Widget {
   protected long t0;
   protected boolean pvisible;
   protected boolean timedOut;
-  protected long timeOut;  
+  protected long timeOut;
+  protected boolean showContents;
   
   public MiraWidget(Interface intf) {
     super(intf);
@@ -101,5 +102,6 @@ public class MiraWidget extends Widget {
     pvisible = false;
     timedOut = false;
     timeOut = 0;
+    showContents = true;
   }
 }
