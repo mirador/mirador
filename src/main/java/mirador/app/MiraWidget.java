@@ -93,7 +93,11 @@ public class MiraWidget extends Widget {
   public void keyPressed(MiraWidget wt) { }
   public void dragColumns(float dx) { }
   public void dragRows(float dy) { }
-  
+
+  public boolean showContents() {
+    return showContents;
+  }
+
   protected void init() {
     mira = (MiraApplet)intf.app;
     data = mira.dataset;

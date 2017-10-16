@@ -110,7 +110,7 @@ public class RowVariable extends RowWidget {
       sortMode = UNSORTED_TITLE;
     }
     addChild(sortOpt, TOP_LEFT_CORNER);
-        
+
     axisMode = false;
     axisAlpha = new SoftFloat(0);
   }

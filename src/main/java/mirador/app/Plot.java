@@ -10,6 +10,7 @@ import miralib.shannon.Similarity;
 import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
+import mui.Widget;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -37,6 +38,7 @@ public class Plot extends MiraWidget {
   protected float missing;
   protected SoftFloat blendf;
 
+  private RowPlots plots;
 
   @SuppressWarnings("rawtypes")
   protected FutureTask viewTask, indepTask;
@@ -55,7 +57,6 @@ public class Plot extends MiraWidget {
     update = false;
     depend = false;
     blendf = new SoftFloat();
-    showContents = false;
 
     colVar = cvar;
     rowVar = rvar;
@@ -108,7 +109,7 @@ public class Plot extends MiraWidget {
   }
 
   public void update() {
-    if (showContents) {
+    if (showContents()) {
       if (dirty) {
         dirty = false;
         update = false;
@@ -176,7 +177,7 @@ public class Plot extends MiraWidget {
     float w0 = width - 2 * padding;
     float h0 = height - 2 * padding;
 
-    if (showContents && canvas != null) {
+    if (showContents() && canvas != null) {
       int bfa = blendf.getCeil();
       if (bfa < 255 && pcanvas != null) {
         tint(color(255));
@@ -258,7 +259,7 @@ public class Plot extends MiraWidget {
   }
 
   public void save() {
-    if (showContents && canvas != null) {
+    if (showContents() && canvas != null) {
       String imgName = colVar.getName() + "-" + rowVar.getName() + ".pdf";
       String filename = Paths.get(mira.project.dataFolder, imgName).toString();
       PGraphics pdf = intf.createCanvas((int)width, PApplet.ceil(height), PDF, filename);
@@ -306,5 +307,18 @@ public class Plot extends MiraWidget {
 
   public void lostFocus() {
     mira.browser.setSelectedPair(null, null);
+  }
+
+  @Override
+  protected void setParent(Widget parent) {
+    super.setParent(parent);
+    plots = (RowPlots)parent;
+  }
+
+  @Override
+  public boolean showContents() {
+    // It will show contents only if itself and the containing RowVariable widget can show contents. The column scroller
+    // will set this.showContents, while the row scroller will set showContents for the row.
+    return showContents && (plots.showContents());
   }
 }

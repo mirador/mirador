@@ -26,8 +26,6 @@ import processing.core.PApplet;
  *
  */
 
-// TODO: does is support reordering of its items (needed for columns)?
-// TODO: add delay before creating widget, so no unneeded widgets are creatated while scrolling.
 public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
   int minDragHandlerSize = Display.scale(10);
 
@@ -652,7 +650,8 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
       this.widget = wt;
       this.w = wt.targetWidth();  // getItemWidth(index);
       this.h = wt.targetHeight(); //getItemHeight(index);
-      
+      widget.showContents = false;
+
       if (orientation == HORIZONTAL) {
         x = new SoftFloat(getItemPos(index));
         y = new SoftFloat(20);      
@@ -678,6 +677,7 @@ public abstract class Scroller<T extends MiraWidget> extends MiraWidget {
 
     public void attach(MiraWidget wt) {
       attached.add(wt);
+      wt.showContents = false;
       if (orientation == HORIZONTAL) {
         wt.setOffsetX(-1, visPos0);
         wt.setX(x.get());

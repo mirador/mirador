@@ -22,6 +22,7 @@ public class RowPlots extends MiraWidget {
   protected HashMap<Variable, Plot> plots;
   protected ColScroller scroller;
   protected float plotWidth, plotHeight;
+  private RowVariable row;
   
   public RowPlots(Interface intf, float x, float y, float w, float h, 
                   float iw, float ih, ColScroller scroller) {
@@ -169,4 +170,14 @@ public class RowPlots extends MiraWidget {
     return data.getColumn(var);
   }
 
+  @Override
+  protected void setParent(Widget parent) {
+    super.setParent(parent);
+    row = (RowVariable)parent;
+  }
+
+  @Override
+  public boolean showContents() {
+    return showContents && (row.showContents());
+  }
 }
