@@ -145,10 +145,10 @@ public class Plot extends MiraWidget {
       if (update) {
         update = false;
         if (pcanvas == null) {
-          pcanvas = intf.createCanvas((int)width, PApplet.ceil(height), MiraApp.RENDERER, MiraApp.SMOOTH_LEVEL);
+          pcanvas = intf.createCanvas((int)width, PApplet.ceil(height), MiraApplet.RENDERER, MiraApplet.SMOOTH_LEVEL);
         }
         if (canvas == null) {
-          canvas = intf.createCanvas((int)width, PApplet.ceil(height), MiraApp.RENDERER, MiraApp.SMOOTH_LEVEL);
+          canvas = intf.createCanvas((int)width, PApplet.ceil(height), MiraApplet.RENDERER, MiraApplet.SMOOTH_LEVEL);
           pcanvas.beginDraw();
           pcanvas.noStroke();
           pcanvas.fill(color(255));

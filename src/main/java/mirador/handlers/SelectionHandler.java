@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import mirador.app.MiraApp;
+import mirador.app.MiraApplet;
 import miralib.data.Variable;
 import processing.core.PApplet;
 import processing.data.Table;
@@ -18,10 +18,10 @@ import processing.data.Table;
  */
 
 public class SelectionHandler {
-  protected MiraApp app;
+  protected MiraApplet app;
   protected ArrayList<Variable> variables;
   
-  public SelectionHandler(MiraApp app, Variable varx, Variable vary, Variable vark) {
+  public SelectionHandler(MiraApplet app, Variable varx, Variable vary, Variable vark) {
     this.app = app;
     variables = new ArrayList<Variable>();
     if (vark != null) variables.add(vark);

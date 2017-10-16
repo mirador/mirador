@@ -114,8 +114,8 @@ public class MiraLauncher extends JFrame {
     }
     new Thread(new Runnable() {
       public void run() {
-        MiraApp.inputFile = selectedFile.getAbsolutePath();        
-        PApplet.main(MiraApp.class.getName());  
+        MiraApplet.inputFile = selectedFile.getAbsolutePath();
+        PApplet.main(MiraApplet.class.getName());
       }
     }).start();
   }
@@ -236,7 +236,7 @@ public class MiraLauncher extends JFrame {
     loadButton.setPreferredSize(dim);
     loadButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        selectPrompt("Select data for analysis:", new File(MiraApp.prefs.projectFolder),MiraLauncher.this, FileDialog.LOAD);
+        selectPrompt("Select data for analysis:", new File(MiraApplet.prefs.projectFolder),MiraLauncher.this, FileDialog.LOAD);
         setVisible(false);
       }
     });
@@ -273,7 +273,7 @@ public class MiraLauncher extends JFrame {
     final Thread update = new Thread() {
       @Override
       public void run() {
-        MiraApp.copyExamples();
+        MiraApplet.copyExamples();
         loadButton.setEnabled(true);
         quitButton.setEnabled(true);
         status.setText("");
@@ -283,7 +283,7 @@ public class MiraLauncher extends JFrame {
   }
 
   static public void main(String[] args) {
-    MiraApp.loadPreferences();
+    MiraApplet.loadPreferences();
     MiraLauncher launcher = new MiraLauncher();
   }
 }

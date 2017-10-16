@@ -38,7 +38,7 @@ import processing.opengl.PJOGL;
  * 
  */
 
-public class MiraApp extends PApplet {
+public class MiraApplet extends PApplet {
   static public String RENDERER = P2D;
   static public int PIXEL_DENSITY = 1;
   static public int SMOOTH_LEVEL = 4;
@@ -312,7 +312,7 @@ public class MiraApp extends PApplet {
     int alpha = animAlpha.getFloor();
     if (alpha == 0) {
       animating = false;
-      MiraApp.this.surface.setResizable(true);
+      MiraApplet.this.surface.setResizable(true);
     }    
     float x = 0.5f * width;
     float y = 0.5f * height;
@@ -458,6 +458,6 @@ public class MiraApp extends PApplet {
       String appPath = System.getProperty("user.dir");
       inputFile = (new File(appPath, inputFile)).getAbsolutePath();      
     }    
-    PApplet.main(new String[] { MiraApp.class.getName() });
+    PApplet.main(new String[] { MiraApplet.class.getName() });
   }  
 }

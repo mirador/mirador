@@ -138,11 +138,11 @@ public class OptionsPanel extends MiraWidget {
 
     fill(h1Color);
     textFont(h1Font);
-    text(MiraApp.APP_NAME, marginX, appNameY); 
+    text(MiraApplet.APP_NAME, marginX, appNameY);
     
     fill(color(0), 150);
     textFont(pFont);
-    text(MiraApp.APP_VERSION, marginX, appVersionY); 
+    text(MiraApplet.APP_VERSION, marginX, appVersionY);
     
     plotOpt.draw();
     statOpt.draw();

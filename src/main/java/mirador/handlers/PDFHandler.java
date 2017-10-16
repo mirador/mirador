@@ -4,7 +4,7 @@ package mirador.handlers;
 
 import java.io.File;
 
-import mirador.app.MiraApp;
+import mirador.app.MiraApplet;
 import processing.core.PApplet;
 
 /**
@@ -13,9 +13,9 @@ import processing.core.PApplet;
  */
 
 public class PDFHandler {
-  protected MiraApp app;
+  protected MiraApplet app;
   
-  public PDFHandler(MiraApp app) {
+  public PDFHandler(MiraApplet app) {
     this.app = app;
   }
   

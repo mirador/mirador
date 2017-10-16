@@ -21,7 +21,7 @@ public class MiraWidget extends Widget {
   
   final protected static float padding = 2;
   
-  protected MiraApp mira;
+  protected MiraApplet mira;
   protected DataSet data;
   
   protected int idx;
@@ -94,7 +94,7 @@ public class MiraWidget extends Widget {
   public void dragRows(float dy) { }
   
   protected void init() {
-    mira = (MiraApp)intf.app;
+    mira = (MiraApplet)intf.app;
     data = mira.dataset;
     
     t0 = mira.millis();

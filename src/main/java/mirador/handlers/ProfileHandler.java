@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import mirador.app.MiraApp;
+import mirador.app.MiraApplet;
 import miralib.data.Range;
 import miralib.data.Variable;
 import processing.core.PApplet;
@@ -20,10 +20,10 @@ import processing.core.PApplet;
  */
 
 public class ProfileHandler {
-  protected MiraApp app;
+  protected MiraApplet app;
   protected ArrayList<Variable> variables;
   
-  public ProfileHandler(MiraApp app, ArrayList<Variable> vars) {
+  public ProfileHandler(MiraApplet app, ArrayList<Variable> vars) {
     this.app = app;
     variables = vars;
   }

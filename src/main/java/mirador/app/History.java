@@ -26,7 +26,7 @@ import miralib.utils.Project;
 public class History {
   static protected int FLUSH_INTERVAL = 10000; // in millis
   
-  protected MiraApp app;
+  protected MiraApplet app;
   protected Project prj;
   protected HashSet<VariablePair> pairs;
   protected HashSet<VariableRange> ranges;
@@ -48,7 +48,7 @@ public class History {
 
   static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd.HHmm");
   
-  public History(MiraApp app, Project prj, int ptype) {
+  public History(MiraApplet app, Project prj, int ptype) {
     this.app = app;
     this.prj = prj;
 

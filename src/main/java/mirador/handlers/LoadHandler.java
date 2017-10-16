@@ -3,7 +3,7 @@
 package mirador.handlers;
 
 import java.io.File;
-import mirador.app.MiraApp;
+import mirador.app.MiraApplet;
 
 /**
  * Handler for project loading. 
@@ -11,9 +11,9 @@ import mirador.app.MiraApp;
  */
 
 public class LoadHandler {
-  protected MiraApp app;
+  protected MiraApplet app;
   
-  public LoadHandler(MiraApp app) {
+  public LoadHandler(MiraApplet app) {
     this.app = app;
   }
   
