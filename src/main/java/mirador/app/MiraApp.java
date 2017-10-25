@@ -12,7 +12,6 @@ import java.net.URL;
 
 import javax.swing.JOptionPane;
 
-import com.sun.jna.Platform;
 import mirador.handlers.LoadHandler;
 import mirador.handlers.PDFHandler;
 import mirador.handlers.ProfileHandler;
@@ -44,7 +43,7 @@ public class MiraApp extends PApplet {
   static public int PIXEL_DENSITY = 1;
   static public int SMOOTH_LEVEL = 4;
   static public final String APP_NAME = "mirador";
-  static public final String APP_VERSION = "1.4.2";
+  static public final String APP_VERSION = "1.5";
   
   static public String inputFile = "default.mira";
   static public File miraFolder;
@@ -383,7 +382,7 @@ public class MiraApp extends PApplet {
   static public void copyExamples() {
     if (prefs.copyExamples) {
       try {
-        URL url = Mirador.class.getProtectionDomain().getCodeSource().getLocation();
+        URL url = MiraLauncher.class.getProtectionDomain().getCodeSource().getLocation();
         File jarFile = Paths.get(url.toURI()).toFile();
         File builtinExamplesFolder = new File(jarFile.getParent(), "examples");
         File defExamplesFolder = new File(miraFolder, "examples");

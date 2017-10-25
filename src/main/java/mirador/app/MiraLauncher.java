@@ -31,7 +31,7 @@ import processing.core.PConstants;
  * 
  */
 
-public class Mirador extends JFrame {
+public class MiraLauncher extends JFrame {
   final static String MIRADOR_URL = "https://fathom.info/mirador";
 
   final static int TEXT_WIDTH = Display.scale(280);
@@ -121,7 +121,7 @@ public class Mirador extends JFrame {
   }
 
 
-  public Mirador() {
+  public MiraLauncher() {
     super("Welcome to Mirador!");
     setLookAndFeel();
     createLayout();
@@ -236,7 +236,7 @@ public class Mirador extends JFrame {
     loadButton.setPreferredSize(dim);
     loadButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        selectPrompt("Select data for analysis:", new File(MiraApp.prefs.projectFolder),Mirador.this, FileDialog.LOAD);
+        selectPrompt("Select data for analysis:", new File(MiraApp.prefs.projectFolder),MiraLauncher.this, FileDialog.LOAD);
         setVisible(false);
       }
     });
@@ -284,6 +284,6 @@ public class Mirador extends JFrame {
 
   static public void main(String[] args) {
     MiraApp.loadPreferences();
-    Mirador mirador = new Mirador();
+    MiraLauncher mirador = new MiraLauncher();
   }
 }

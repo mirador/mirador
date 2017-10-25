@@ -6,7 +6,7 @@
 
     <groupId>info.fathom</groupId>
     <artifactId>mirador</artifactId>
-    <version>1.4.2</version>
+    <version>1.5</version>
     
     <name>mirador</name>
     <url>https://fathom.info/mirador</url>    
@@ -86,7 +86,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>mirador.app.Mirador</mainClass>
+                            <mainClass>mirador.app.MiraLauncher</mainClass>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
@@ -110,7 +110,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>mirador.app.Mirador</mainClass>
+                            <mainClass>mirador.app.MiraLauncher</mainClass>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
