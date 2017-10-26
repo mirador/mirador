@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class SingleScroller extends MiraWidget {
   protected float snapThreshold = Display.scale(30);
 
-  protected RowScroller row;
+  protected RowBrowser row;
   protected ArrayList<DataTree.Item> items;
   protected boolean active;
   protected boolean dragx;
@@ -23,7 +23,7 @@ public class SingleScroller extends MiraWidget {
   protected float heightOpen;
   protected float heightClose;
 
-  public SingleScroller(Interface intf, RowScroller row, float x, float y, float w, float h,
+  public SingleScroller(Interface intf, RowBrowser row, float x, float y, float w, float h,
                         float openh, float closeh) {
     super(intf, x, y, w, h);
     this.row = row;

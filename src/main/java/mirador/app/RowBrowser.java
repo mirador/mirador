@@ -19,15 +19,15 @@ import miralib.data.DataTree.Item;
  *
  */
 
-public class RowScroller extends MiraWidget {
+public class RowBrowser extends MiraWidget {
   protected DataTree tree;
   protected int current;
   protected float heightOpen;
   protected float heightClose;
   protected SingleScroller groupScroller, tableScroller, varScroller;
   
-  public RowScroller(Interface intf, float x, float y, float w, float h, 
-                     float openh, float closeh) {
+  public RowBrowser(Interface intf, float x, float y, float w, float h,
+                    float openh, float closeh) {
     super(intf, x, y, w, h);
     heightOpen = openh;
     heightClose = closeh;

@@ -27,7 +27,7 @@ public class VariableBrowser extends MiraWidget {
   
   protected ThreadPoolExecutor taskPool1;
   protected ThreadPoolExecutor taskPool2;
-  protected RowScroller rowScroller;
+  protected RowBrowser rowScroller;
   protected ColumnLabels colLabels;
   protected InformationBar infoBar;
   protected SearchBar searchBar;
@@ -48,7 +48,7 @@ public class VariableBrowser extends MiraWidget {
     taskPool1 = (ThreadPoolExecutor)Executors.newFixedThreadPool(PApplet.max(1, (int)(0.7f * tot)));
     taskPool2 = (ThreadPoolExecutor)Executors.newFixedThreadPool(PApplet.max(1, (int)(0.3f * tot)));
        
-    rowScroller = new RowScroller(intf, 0, mira.labelHeightClose + 2, mira.varWidth, height - mira.labelHeightClose, 
+    rowScroller = new RowBrowser(intf, 0, mira.labelHeightClose + 2, mira.varWidth, height - mira.labelHeightClose,
                                   mira.plotHeight, mira.varHeight);
     rowScroller.clipBounds(true, false, true, false);
     addChild(rowScroller, TOP_LEFT_CORNER);
@@ -200,8 +200,8 @@ public class VariableBrowser extends MiraWidget {
   public void dragColumns(float dx) {
     if (rowsReady()) {
       for (Widget child: children) {
-        if (child instanceof RowScroller) {
-          ((RowScroller)child).dragColumns(dx);
+        if (child instanceof RowBrowser) {
+          ((RowBrowser)child).dragColumns(dx);
         } else if (child instanceof ColumnLabels) {
           ((ColumnLabels)child).drag(dx);
         }
@@ -212,8 +212,8 @@ public class VariableBrowser extends MiraWidget {
   public void snapColumns() {
     if (rowsReady()) {
       for (Widget child: children) {
-        if (child instanceof RowScroller) {
-          ((RowScroller)child).snapColumns();
+        if (child instanceof RowBrowser) {
+          ((RowBrowser)child).snapColumns();
         } else if (child instanceof ColumnLabels) {
           ((ColumnLabels)child).snap();
         }
@@ -223,8 +223,8 @@ public class VariableBrowser extends MiraWidget {
   
   public void dataChanged() {
     for (Widget child: children) {
-      if (child instanceof RowScroller) {
-        ((RowScroller)child).dataChanged();
+      if (child instanceof RowBrowser) {
+        ((RowBrowser)child).dataChanged();
       }
     }
     infoBar.dataChanged();
@@ -232,8 +232,8 @@ public class VariableBrowser extends MiraWidget {
   
   public void pvalueChanged() {
     for (Widget child: children) {
-      if (child instanceof RowScroller) {
-        ((RowScroller)child).pvalueChanged();
+      if (child instanceof RowBrowser) {
+        ((RowBrowser)child).pvalueChanged();
       }
     }
   }
@@ -316,8 +316,8 @@ public class VariableBrowser extends MiraWidget {
   protected boolean rowsReady() {
     boolean ready = true;
     for (Widget child: children) {
-      if (child instanceof RowScroller) {
-        if (!((RowScroller)child).plotsReady()) {
+      if (child instanceof RowBrowser) {
+        if (!((RowBrowser)child).plotsReady()) {
           ready = false;
           break;          
         }
