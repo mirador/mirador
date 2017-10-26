@@ -75,8 +75,13 @@ public class Project {
     }
 
     Path p = Paths.get(filename);
-    Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();    
-    dataFolder = filePath.toString(); 
+    Path filePath;
+    if (inFile.isDirectory()) {
+      filePath = p.toAbsolutePath();
+    } else {
+      filePath = p.toAbsolutePath().getParent().toAbsolutePath();
+    }
+    dataFolder = filePath.toString();
     File[] prjFiles = filePath.toFile().listFiles();
     
     for (File f: prjFiles) {

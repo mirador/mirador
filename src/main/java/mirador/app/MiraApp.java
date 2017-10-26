@@ -253,16 +253,14 @@ public class MiraApp extends PApplet {
   }
   
   public void loadDataset() {
-    selectInput("Select a csv or tsv file to save the selection to:", 
+    selectInput("Select data for analysis:",
                 "outputSelected", new File(prefs.projectFolder), new LoadHandler(this));    
   }
   
   public void reloadDataset() {
-    if (project.cfgFile != null) {
-      loadProject(project.cfgFile.getPath());  
-    } else {
-      loadProject(project.dataFile);
-    }    
+    if (new File(project.dataFolder).exists()) {
+      loadProject(project.dataFolder);
+    }
   }
   
   public void exportProfile(ArrayList<Variable> vars) {    
