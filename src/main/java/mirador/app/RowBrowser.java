@@ -2,16 +2,10 @@
 
 package mirador.app;
 
-import java.util.ArrayList;
-
-import processing.core.PApplet;
-import mui.Display;
 import mui.Interface;
 import mui.Widget;
 import miralib.data.DataTree;
 import miralib.data.Variable;
-import miralib.data.VariableContainer;
-import miralib.data.DataTree.Item;
 
 /**
  * Vertical scroller for group, tables, and variables. It updates dynamically 
@@ -24,7 +18,7 @@ public class RowBrowser extends MiraWidget {
   protected int current;
   protected float heightOpen;
   protected float heightClose;
-  protected SingleScroller groupScroller, tableScroller, varScroller;
+  protected RowScroller groupScroller, tableScroller, varScroller;
   
   public RowBrowser(Interface intf, float x, float y, float w, float h,
                     float openh, float closeh) {
@@ -87,19 +81,19 @@ public class RowBrowser extends MiraWidget {
     return varScroller.getColLabel(varx, vary);
   }  
   
-  protected SingleScroller prev() {
+  protected RowScroller prev() {
     return prev(true);
   }
   
-  protected SingleScroller prev(boolean dragCol) {    
+  protected RowScroller prev(boolean dragCol) {
     if (dragCol && 0 < mira.browser.getFirstColumn()) {
       mira.browser.dragColumns(-mira.plotWidth);
-      return (SingleScroller)children.get(current);
+      return (RowScroller)children.get(current);
     }
     
     if (0 < current) {
-      SingleScroller scroller0 = (SingleScroller)children.get(current);
-      SingleScroller scroller1 = (SingleScroller)children.get(current - 1);
+      RowScroller scroller0 = (RowScroller)children.get(current);
+      RowScroller scroller1 = (RowScroller)children.get(current - 1);
       scroller0.setActive(false);        
       scroller1.setActive(true, false);
       intf.selectWidget(scroller1);
@@ -112,14 +106,14 @@ public class RowBrowser extends MiraWidget {
       current--;
       return scroller1;
     } else {      
-      return (SingleScroller)children.get(0);
+      return (RowScroller)children.get(0);
     }    
   } 
   
-  protected SingleScroller next(int i) {
+  protected RowScroller next(int i) {
     if (current < children.size() - 1) {
-      SingleScroller scroller0 = (SingleScroller)children.get(current);
-      SingleScroller scroller1 = (SingleScroller)children.get(current + 1);
+      RowScroller scroller0 = (RowScroller)children.get(current);
+      RowScroller scroller1 = (RowScroller)children.get(current + 1);
       scroller0.setActive(false, false);
       scroller1.setActive(true);
       intf.selectWidget(scroller1);
@@ -134,18 +128,18 @@ public class RowBrowser extends MiraWidget {
       current++;
       return scroller1;
     } else {            
-      return (SingleScroller)children.get(children.size() - 1);
+      return (RowScroller)children.get(children.size() - 1);
     }
   }
   
-  protected SingleScroller next() {
+  protected RowScroller next() {
     return next(true);
   } 
   
-  protected SingleScroller next(boolean dragCol) {
+  protected RowScroller next(boolean dragCol) {
     if (current < children.size() - 1) {
-      SingleScroller scroller0 = (SingleScroller)children.get(current);
-      SingleScroller scroller1 = (SingleScroller)children.get(current + 1);
+      RowScroller scroller0 = (RowScroller)children.get(current);
+      RowScroller scroller1 = (RowScroller)children.get(current + 1);
       scroller0.setActive(false, false); 
       scroller1.setActive(true);
       intf.selectWidget(scroller1);
@@ -159,12 +153,12 @@ public class RowBrowser extends MiraWidget {
       return scroller1;
     } else {
       if (dragCol) mira.browser.dragColumns(mira.plotWidth);
-      return (SingleScroller)children.get(children.size() - 1);
+      return (RowScroller)children.get(children.size() - 1);
     }
   }  
   
   public void keyPressed() {
-    SingleScroller currScroller = (SingleScroller)children.get(current);    
+    RowScroller currScroller = (RowScroller)children.get(current);
     if (key == CODED) {
       if (keyCode == LEFT) {
         prev(mouseX > right());
@@ -183,31 +177,31 @@ public class RowBrowser extends MiraWidget {
   protected void initItems() {
     if (1 < tree.groups.size()) {
       // Initializing all three scroll levels (group, table, variable)
-      groupScroller = new SingleScroller(intf, this,0, 0, width, height, heightOpen, heightClose);
+      groupScroller = new RowScroller(intf, this,0, 0, width, height, heightOpen, heightClose);
       groupScroller.setItems(tree.groups);
       groupScroller.setActive(true);
       addChild(groupScroller);
       intf.selectWidget(groupScroller);
 
-      tableScroller = new SingleScroller(intf,this, width, 0, width, height, heightOpen, heightClose);
+      tableScroller = new RowScroller(intf,this, width, 0, width, height, heightOpen, heightClose);
       tableScroller.setActive(false);
       tableScroller.setItems(tree.tables);
       addChild(tableScroller);
       
-      varScroller = new SingleScroller(intf,this,2 * width, 0, width, height, heightOpen, heightClose);
+      varScroller = new RowScroller(intf,this,2 * width, 0, width, height, heightOpen, heightClose);
       varScroller.setActive(false);
       varScroller.setItems(tree.variables);      
       addChild(varScroller);        
     } else if (1 < tree.tables.size()) {
       // Initializing only two scroll levels (table, variable), because there
       // is only one group
-      tableScroller = new SingleScroller(intf,this,0, 0, width, height, heightOpen, heightClose);
+      tableScroller = new RowScroller(intf,this,0, 0, width, height, heightOpen, heightClose);
       tableScroller.setItems(tree.tables);
       tableScroller.setActive(true);
       addChild(tableScroller);
       intf.selectWidget(tableScroller);
       
-      varScroller = new SingleScroller(intf,this, width, 0, width, height, heightOpen, heightClose);
+      varScroller = new RowScroller(intf,this, width, 0, width, height, heightOpen, heightClose);
       varScroller.setActive(false);
       varScroller.setItems(tree.variables);      
       addChild(varScroller);
@@ -215,7 +209,7 @@ public class RowBrowser extends MiraWidget {
       // Initializing only one scroll level (variable), because there
       // is only one group and one table. This is the case when no metadata
       // is provided.
-      varScroller = new SingleScroller(intf,this, 0, 0, width, height, heightOpen, heightClose);
+      varScroller = new RowScroller(intf,this, 0, 0, width, height, heightOpen, heightClose);
       varScroller.setItems(tree.variables);
       varScroller.setActive(true);
       addChild(varScroller);

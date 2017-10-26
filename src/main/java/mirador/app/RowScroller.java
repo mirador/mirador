@@ -10,7 +10,7 @@ import processing.core.PApplet;
 
 import java.util.ArrayList;
 
-public class SingleScroller extends MiraWidget {
+public class RowScroller extends MiraWidget {
   protected float snapThreshold = Display.scale(30);
 
   protected RowBrowser row;
@@ -23,8 +23,8 @@ public class SingleScroller extends MiraWidget {
   protected float heightOpen;
   protected float heightClose;
 
-  public SingleScroller(Interface intf, RowBrowser row, float x, float y, float w, float h,
-                        float openh, float closeh) {
+  public RowScroller(Interface intf, RowBrowser row, float x, float y, float w, float h,
+                     float openh, float closeh) {
     super(intf, x, y, w, h);
     this.row = row;
     active = false;
