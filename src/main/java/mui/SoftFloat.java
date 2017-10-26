@@ -3,44 +3,45 @@
 package mui;
 
 import processing.core.PApplet;
+import miralib.math.Numbers;
 
 /**
  * Simple soft float class to implement smooth animations
- * 
+ *
  */
 
 public class SoftFloat {
   private float ATTRACTION = 0.1f;
   private float DAMPING = 0.5f;
-  private float THRESHOLD = 0.0f;
+  private float THRESHOLD = Numbers.FLOAT_EPS;
 
   private float value;
   public float velocity;
   private float acceleration;
-  
-  private boolean enabled;  
+
+  private boolean enabled;
   private boolean targeting;
   private float source;
   private float target;
 
   public SoftFloat(float v, boolean targeting) {
     if (targeting) {
-      value = source = 0; 
+      value = source = 0;
       target = v;
       this.targeting = true;
     } else {
       value = source = target = v;
-      this.targeting = false;      
+      this.targeting = false;
     }
     enabled = true;
   }
-  
+
   public SoftFloat(SoftFloat that) {
     this(that, 0);
   }
-  
+
   public SoftFloat(SoftFloat that, float offset) {
-    copy(that, offset);   
+    copy(that, offset);
   }
 
   public void copy(SoftFloat that, float offset) {
@@ -51,13 +52,13 @@ public class SoftFloat {
     this.value = that.value + offset;
     this.velocity = that.velocity;
     this.acceleration = that.acceleration;
-    
-    this.enabled = that.enabled;  
+
+    this.enabled = that.enabled;
     this.targeting = that.targeting;
     this.source = that.source + offset;
-    this.target = that.target + offset;     
+    this.target = that.target + offset;
   }
-  
+
   public SoftFloat(float v) {
     this(v, false);
   }
@@ -72,21 +73,21 @@ public class SoftFloat {
 
   public void setDamping(float value) {
     DAMPING = value;
-  }  
-  
+  }
+
   public void setThreshold(float value) {
     THRESHOLD = value;
   }
-  
+
   public void inc(float dt) {
     value = source = value + dt;
     targeting = false;
   }
-  
+
   public void set(float v) {
     value = source = target = v;
     targeting = false;
-  }  
+  }
 
   public float get() {
     return value;
@@ -99,7 +100,7 @@ public class SoftFloat {
   public int getCeil() {
     return PApplet.ceil(value);
   }
-  
+
   public void enable() {
     enabled = true;
   }
@@ -119,7 +120,7 @@ public class SoftFloat {
       if (Math.abs(velocity) > 0.0001 && Math.abs(target - value) >= THRESHOLD) {
         return true;
       }
-      
+
       // arrived, set it to the target value to prevent rounding error
       value = target;
       targeting = false;
@@ -128,15 +129,17 @@ public class SoftFloat {
   }
 
   public void setTarget(float t) {
-    targeting = true;
     target = t;
+    targeting = Math.abs(target - value) >= THRESHOLD;
     source = value;
+    if (!targeting) value = target;
   }
-  
+
   public void incTarget(float dt) {
-    targeting = true;
     target += dt;
-    source = value;    
+    targeting = Math.abs(target - value) >= THRESHOLD;
+    source = value;
+    if (!targeting) value = target;
   }
 
   public float getTarget() {
@@ -146,7 +149,7 @@ public class SoftFloat {
   public float getSource() {
     return targeting ? source : value;
   }
-  
+
   public boolean isTargeting() {
     return targeting;
   }
