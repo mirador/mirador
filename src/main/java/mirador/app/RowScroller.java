@@ -61,6 +61,27 @@ public class RowScroller extends MiraWidget {
     }
   }
 
+  public int getTotalCount() {
+    return items.size();
+  }
+
+  public int getVisibleCount() {
+    return (int)(width/heightClose);
+//    int count = 0;
+//    for (Widget child: children) {
+//      if (!child.visible()) continue;
+//      count += 1;
+//    }
+//    return count;
+  }
+
+  public int getFirstIndex() {
+    for (Widget child: children) {
+      if (child.visible()) return ((MiraWidget)child).idx;
+    }
+    return 0;
+  }
+
   public boolean isActive() {
     return active;
   }

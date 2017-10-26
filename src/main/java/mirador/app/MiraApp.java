@@ -98,7 +98,7 @@ public class MiraApp extends PApplet {
   }  
   
   public void setup() {
-    Log.init(true);
+    Log.init(false);
     loadPreferences();
 
     intf = new Interface(this, "style.css");

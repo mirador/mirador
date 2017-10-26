@@ -27,7 +27,7 @@ public class VariableBrowser extends MiraWidget {
   
   protected ThreadPoolExecutor taskPool1;
   protected ThreadPoolExecutor taskPool2;
-  protected RowBrowser rowScroller;
+  protected RowBrowser rowBrowser;
   protected ColumnLabels colLabels;
   protected InformationBar infoBar;
   protected SearchBar searchBar;
@@ -35,6 +35,8 @@ public class VariableBrowser extends MiraWidget {
   
   protected Variable rowAxis, colAxis;
   protected Variable selRow, selCol;
+
+  protected VerticalScrollbar vscroll;
   
   VariableBrowser(Interface intf, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
@@ -48,10 +50,10 @@ public class VariableBrowser extends MiraWidget {
     taskPool1 = (ThreadPoolExecutor)Executors.newFixedThreadPool(PApplet.max(1, (int)(0.7f * tot)));
     taskPool2 = (ThreadPoolExecutor)Executors.newFixedThreadPool(PApplet.max(1, (int)(0.3f * tot)));
        
-    rowScroller = new RowBrowser(intf, 0, mira.labelHeightClose + 2, mira.varWidth, height - mira.labelHeightClose,
+    rowBrowser = new RowBrowser(intf, 0, mira.labelHeightClose + 2, mira.varWidth, height - mira.labelHeightClose,
                                   mira.plotHeight, mira.varHeight);
-    rowScroller.clipBounds(true, false, true, false);
-    addChild(rowScroller, TOP_LEFT_CORNER);
+    rowBrowser.clipBounds(true, false, true, false);
+    addChild(rowBrowser, TOP_LEFT_CORNER);
     
     colLabels = new ColumnLabels(intf, mira.varWidth, 0, width - mira.varWidth, mira.labelHeightClose,
                                  mira.plotWidth, mira.labelHeightClose, mira.labelHeightMax);
@@ -74,14 +76,18 @@ public class VariableBrowser extends MiraWidget {
                               mira.varWidth, mira.covarHeightClose, mira.covarHeightMax);
     covBar.clipBounds(true, false);
     addChild(covBar, BOTTOM_LEFT_CORNER);
+
+
+    vscroll = new VerticalScrollbar(intf, rowBrowser,-50, mira.labelHeightClose + 2, 50, height - mira.labelHeightClose);
+    addChild(vscroll, TOP_RIGHT_CORNER);
         
     // Defining a keymap in the interface so the row scroller will capture the
     // arrow keys irrespective of which widget is currently selected, and likewise
     // with the search bar, which will capture any alphanumeric character. However
     // the mapping can be overridden by widgets that are set to capture keys when
     // they are selected.
-    intf.addKeymap(rowScroller, UP, DOWN, LEFT, RIGHT);
-    intf.addKeymap(rowScroller, ENTER, RETURN);
+    intf.addKeymap(rowBrowser, UP, DOWN, LEFT, RIGHT);
+    intf.addKeymap(rowBrowser, ENTER, RETURN);
     intf.addKeymap(searchBar, Interface.ALL_CHARACTERS);
     intf.addKeymap(searchBar, BACKSPACE, DELETE, TAB, ESC);
   }  
@@ -110,15 +116,15 @@ public class VariableBrowser extends MiraWidget {
   }
   
   public void openRow(Variable var) {
-    rowScroller.openRow(var);  
+    rowBrowser.openRow(var);
   }
   
   public void closeRowsBut(MiraWidget wt) {
-    rowScroller.closeRowsBut(wt);
+    rowBrowser.closeRowsBut(wt);
   }
 
   public void openColumn(Variable var) {
-    rowScroller.showVariables();
+    rowBrowser.showVariables();
     int idx = -1;
     if (var.column()) {
       idx = data.getColumn(var);      
@@ -145,7 +151,7 @@ public class VariableBrowser extends MiraWidget {
   public void closeColumn(Variable var) {
     data.removeColumn(var); // Important: removing column from data must happen before updating the UI    
     colLabels.close(var);
-    rowScroller.closeColumn(var);
+    rowBrowser.closeColumn(var);
     mira.profile.remove(var);
   }
 
@@ -158,7 +164,7 @@ public class VariableBrowser extends MiraWidget {
     for (Variable v1: all) {
       if (v1 == var) continue;
       colLabels.close(v1);
-      rowScroller.closeColumn(v1);
+      rowBrowser.closeColumn(v1);
     } 
     mira.profile.remove(all, var);    
   }  
@@ -168,7 +174,7 @@ public class VariableBrowser extends MiraWidget {
     data.removeColumns(vars); // Important: removing column from data must happen before updating the UI
     for (Variable var: vars) {
       colLabels.close(var);
-      rowScroller.closeColumn(var);
+      rowBrowser.closeColumn(var);
     } 
     mira.profile.remove(vars);
   }
@@ -275,14 +281,14 @@ public class VariableBrowser extends MiraWidget {
   
   public String getRowLabel() {
     if (rowAxis != null && colAxis != null && colLabels.contains(colAxis)) {
-      return rowScroller.getRowLabel(colAxis, rowAxis);  
+      return rowBrowser.getRowLabel(colAxis, rowAxis);
     }
     return "";
   }
 
   public String getColLabel() {
     if (rowAxis != null && colAxis != null && colLabels.contains(colAxis)) {
-      return rowScroller.getColLabel(colAxis, rowAxis);  
+      return rowBrowser.getColLabel(colAxis, rowAxis);
     }
     return "";
   }

@@ -80,7 +80,11 @@ public class RowBrowser extends MiraWidget {
   public String getColLabel(Variable varx, Variable vary) {
     return varScroller.getColLabel(varx, vary);
   }  
-  
+
+  public RowScroller getScroller() {
+    return (RowScroller)children.get(current);
+  }
+
   protected RowScroller prev() {
     return prev(true);
   }
@@ -173,7 +177,25 @@ public class RowBrowser extends MiraWidget {
       currScroller.enter();      
     }
   }
-  
+
+  public int getTotItemsCount() {
+    RowScroller scroller = (RowScroller)children.get(current);
+    return scroller.getTotalCount();
+
+  }
+
+  public int getVisItemsCount() {
+    RowScroller scroller = (RowScroller)children.get(current);
+    return scroller.getVisibleCount();
+  }
+
+
+  public int getFirstItemIndex() {
+    RowScroller scroller = (RowScroller)children.get(current);
+    return scroller.getFirstIndex();
+  }
+
+
   protected void initItems() {
     if (1 < tree.groups.size()) {
       // Initializing all three scroll levels (group, table, variable)
