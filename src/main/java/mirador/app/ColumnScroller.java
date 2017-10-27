@@ -200,7 +200,24 @@ abstract public class ColumnScroller extends MiraWidget {
   public boolean contains(Variable var) {
     return visItems.containsKey(var);
   }
-  
+
+
+  public int getTotItemsCount() {
+    return getCount();
+  }
+
+
+  public int getVisItemsCount() {
+    return (int)(width / itemWidth);
+  }
+
+
+  public int getFirstItemIndex() {
+    int i0 = PApplet.constrain((int)(visX0.getTarget() / itemWidth), 0, getCount() - 1);
+    return i0;
+  }
+
+
   protected void updateItemsImpl(int event) {
     if (0 < getCount()) {
       for (Item item: visItems.values()) {        

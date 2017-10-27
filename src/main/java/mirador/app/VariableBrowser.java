@@ -37,6 +37,7 @@ public class VariableBrowser extends MiraWidget {
   protected Variable selRow, selCol;
 
   protected VerticalScrollbar vscroll;
+  protected HorizontalScrollbar hscroll;
   
   VariableBrowser(Interface intf, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
@@ -80,6 +81,9 @@ public class VariableBrowser extends MiraWidget {
 
     vscroll = new VerticalScrollbar(intf, rowBrowser,-50, mira.labelHeightClose + 2, 50, height - mira.labelHeightClose);
     addChild(vscroll, TOP_RIGHT_CORNER);
+
+    hscroll = new HorizontalScrollbar(intf, colLabels,mira.varWidth, -50, width - mira.varWidth, 50);
+    addChild(hscroll, BOTTOM_LEFT_CORNER);
         
     // Defining a keymap in the interface so the row scroller will capture the
     // arrow keys irrespective of which widget is currently selected, and likewise

@@ -181,7 +181,6 @@ public class RowBrowser extends MiraWidget {
   public int getTotItemsCount() {
     RowScroller scroller = (RowScroller)children.get(current);
     return scroller.getTotalCount();
-
   }
 
   public int getVisItemsCount() {
