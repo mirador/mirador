@@ -135,7 +135,7 @@ public class RowBrowser extends MiraWidget {
     if (!varScroller.isActive()) {
       hbar.hide(false);
       vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
-      vbar.setHeight(vbar.height() + mira.browser.scrollSize);
+      vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding);
     }
     RowScroller currScroller = (RowScroller)children.get(current);
     if (currScroller.getHeight() < height) vbar.hide(false);
@@ -249,12 +249,12 @@ public class RowBrowser extends MiraWidget {
       if (scroller1 == varScroller) {
         showColumnLabels();
         vbar.setX(-mira.browser.scrollSize);
-        vbar.setHeight(vbar.height() - mira.browser.scrollSize);
+        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - mira.browser.scrollSize - 2 * padding);
       } else {
         hideColumnLabels();
         hbar.hide(false);
         vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
-        vbar.setHeight(vbar.height() + mira.browser.scrollSize);
+        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding);
       }
       for (Widget wt: children) {
         float x = wt.targetX();
@@ -280,12 +280,12 @@ public class RowBrowser extends MiraWidget {
       if (scroller1 == varScroller) {
         showColumnLabels();
         vbar.setX(-mira.browser.scrollSize);
-        vbar.setHeight(vbar.height() - mira.browser.scrollSize);
+        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - mira.browser.scrollSize - 2 * padding);
       } else {
         hideColumnLabels();
         hbar.hide(false);
         vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
-        vbar.setHeight(vbar.height() + mira.browser.scrollSize);
+        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding);
       }
       int idx = scroller0.items.get(i).getFirstChild();
       scroller1.setNextIndex(idx);
@@ -316,12 +316,12 @@ public class RowBrowser extends MiraWidget {
       if (scroller1 == varScroller) {
         showColumnLabels();
         vbar.setX(-mira.browser.scrollSize);
-        vbar.setHeight(vbar.height() - mira.browser.scrollSize);
+        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - mira.browser.scrollSize - 2 * padding);
       } else {
         hideColumnLabels();
         hbar.hide(false);
         vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
-        vbar.setHeight(vbar.height() + mira.browser.scrollSize);
+        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding);
       }
       int i = scroller0.getFirstIndex();
       int idx = scroller0.items.get(i).getFirstChild();
