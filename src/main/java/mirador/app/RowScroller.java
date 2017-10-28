@@ -19,7 +19,7 @@ public class RowScroller extends MiraWidget {
   protected ArrayList<DataTree.Item> items;
   protected boolean active;
   protected boolean dragx;
-  protected int pmouseX0, dragx1;
+  protected int pmouseX0;
   protected int savedIdx;
   protected boolean needShow;
   protected float heightOpen;
@@ -61,6 +61,11 @@ public class RowScroller extends MiraWidget {
     } else {
       needShow = changeAlpha;
     }
+  }
+
+
+  public void setNextIndex(int idx) {
+    savedIdx = idx;
   }
 
   public int getTotalCount() {
@@ -283,7 +288,6 @@ public class RowScroller extends MiraWidget {
         updatePositions(wt);
       } else {
         next(wt.idx);
-        row.updateVertScrollbar();
       }
     }
   }
@@ -291,21 +295,17 @@ public class RowScroller extends MiraWidget {
   public void keyPressed(MiraWidget  wt) {
     if (active) {
       if (key == CODED) {
-        boolean move = false;
         if (keyCode == LEFT) {
           prev();
-          move = true;
         } else if (keyCode == RIGHT) {
           next();
-          move = true;
         } else if (keyCode == UP) {
           up();
-          move = true;
+          row.updateVertScrollbar();
         } else if (keyCode == DOWN) {
           down();
-          move = true;
+          row.updateVertScrollbar();
         }
-        if (move) row.updateVertScrollbar();
       }
     }
   }

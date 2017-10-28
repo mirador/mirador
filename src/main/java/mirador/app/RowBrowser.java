@@ -260,9 +260,10 @@ public class RowBrowser extends MiraWidget {
         float x = wt.targetX();
         wt.targetX(x + width);
       }
-      current--;
       vbar.hide(false);
       animating = true;
+      updateVertScrollbar();
+      current--;
       return scroller1;
     } else {
       return (RowScroller)children.get(0);
@@ -287,14 +288,14 @@ public class RowBrowser extends MiraWidget {
         vbar.setHeight(vbar.height() + mira.browser.scrollSize);
       }
       int idx = scroller0.items.get(i).getFirstChild();
-      scroller1.jumpTo(idx, false);
+      scroller1.setNextIndex(idx);
       for (Widget wt: children) {
         float x = wt.targetX();
         wt.targetX(x - width);
       }
-      current++;
       vbar.hide(false);
       animating = true;
+      current++;
       return scroller1;
     } else {
       return (RowScroller)children.get(children.size() - 1);
@@ -322,13 +323,16 @@ public class RowBrowser extends MiraWidget {
         vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
         vbar.setHeight(vbar.height() + mira.browser.scrollSize);
       }
+      int i = scroller0.getFirstIndex();
+      int idx = scroller0.items.get(i).getFirstChild();
+      scroller1.setNextIndex(idx);
       for (Widget wt: children) {
         float x = wt.targetX();
         wt.targetX(x - width);
       }
-      current++;
       vbar.hide(false);
       animating = true;
+      current++;
       return scroller1;
     } else {
       if (dragCol) mira.browser.dragColumns(mira.plotWidth);
