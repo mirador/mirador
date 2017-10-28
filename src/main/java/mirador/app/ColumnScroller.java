@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
@@ -85,7 +85,11 @@ abstract public class ColumnScroller extends MiraWidget {
     for (Item item: visItems.values()) {
       if (item.visible) item.postDraw();
     }      
-  }  
+  }
+
+  public float getWidth() {
+    return getCount() * itemWidth;
+  }
   
   public boolean isUpdating() {
     return (visX0.isTargeting() || visX1.isTargeting());

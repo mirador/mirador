@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
@@ -19,6 +19,9 @@ public class RowBrowser extends MiraWidget {
   protected float heightOpen;
   protected float heightClose;
   protected RowScroller groupScroller, tableScroller, varScroller;
+  protected VerticalScrollbar vbar;
+  protected HorizontalScrollbar hbar;
+  protected boolean animating = false;
   
   public RowBrowser(Interface intf, float x, float y, float w, float h,
                     float openh, float closeh) {
@@ -28,10 +31,46 @@ public class RowBrowser extends MiraWidget {
     tree = data.getTree();
     initItems();
   }
-  
+
+  public void update() {
+    RowScroller currScroller = (RowScroller)children.get(current);
+    if (animating && !currScroller.isPositioning()) {
+      animating = false;
+
+      if (currScroller.getHeight() < height) {
+        vbar.hide(false);
+      } else {
+        vbar.show(true);
+      }
+
+      if (currScroller == varScroller &&
+          mira.browser.width() - mira.varWidth < mira.browser.colLabels.getWidth()) {
+        hbar.show(true);
+      }
+
+    }
+  }
+
   protected void handleResize(int newWidth, int newHeight) {
-    bounds.h.set(newHeight - mira.labelHeightClose);
-  } 
+    float h1 = newHeight - mira.labelHeightClose;
+    bounds.h.set(h1);
+
+    RowScroller currScroller = (RowScroller)children.get(current);
+    if (h1 < currScroller.getHeight()) {
+      vbar.show(true);
+    } else {
+      vbar.hide(false);
+    }
+
+    if (currScroller == varScroller) {
+      float w1 = newWidth - mira.varWidth;
+      if (w1 < mira.browser.colLabels.getWidth()) {
+        hbar.show(true);
+      } else {
+        hbar.hide(false);
+      }
+    }
+  }
   
   public boolean plotsReady() {
     return varScroller.plotsReady();
@@ -52,16 +91,21 @@ public class RowBrowser extends MiraWidget {
   public void pvalueChanged() {
     varScroller.pvalueChanged();
   }
-  
+
+  public boolean showingVariables() {
+    return children.get(current) == varScroller;
+  }
+
   public void showVariables() {
     while (next(false) != varScroller);    
   }
-  
+
   public void openRow(Variable var) {
     int idx = data.getVariableIndex(var);
     if (-1 < idx) {
       while (next(false) != varScroller);
-      varScroller.jumpTo(idx);      
+      varScroller.jumpTo(idx);
+      updateVertScrollbar(idx);
     }
   }
   
@@ -85,82 +129,26 @@ public class RowBrowser extends MiraWidget {
     return (RowScroller)children.get(current);
   }
 
-  protected RowScroller prev() {
-    return prev(true);
+  public void setScrollbars(VerticalScrollbar vbar, HorizontalScrollbar hbar) {
+    this.vbar = vbar;
+    this.hbar = hbar;
+    if (!varScroller.isActive()) {
+      hbar.hide(false);
+      vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
+      vbar.setHeight(vbar.height() + mira.browser.scrollSize);
+    }
+    RowScroller currScroller = (RowScroller)children.get(current);
+    if (currScroller.getHeight() < height) vbar.hide(false);
   }
-  
-  protected RowScroller prev(boolean dragCol) {
-    if (dragCol && 0 < mira.browser.getFirstColumn()) {
-      mira.browser.dragColumns(-mira.plotWidth);
-      return (RowScroller)children.get(current);
-    }
-    
-    if (0 < current) {
-      RowScroller scroller0 = (RowScroller)children.get(current);
-      RowScroller scroller1 = (RowScroller)children.get(current - 1);
-      scroller0.setActive(false);        
-      scroller1.setActive(true, false);
-      intf.selectWidget(scroller1);
-      if (scroller1 == varScroller) showColumnLabels();
-      else hideColumnLabels();
-      for (Widget wt: children) {
-        float x = wt.targetX();
-        wt.targetX(x + width);
-      }
-      current--;
-      return scroller1;
-    } else {      
-      return (RowScroller)children.get(0);
-    }    
-  } 
-  
-  protected RowScroller next(int i) {
-    if (current < children.size() - 1) {
-      RowScroller scroller0 = (RowScroller)children.get(current);
-      RowScroller scroller1 = (RowScroller)children.get(current + 1);
-      scroller0.setActive(false, false);
-      scroller1.setActive(true);
-      intf.selectWidget(scroller1);
-      if (scroller1 == varScroller) showColumnLabels();
-      else hideColumnLabels();      
-      int idx = scroller0.items.get(i).getFirstChild();
-      scroller1.jumpTo(idx, false);
-      for (Widget wt: children) {
-        float x = wt.targetX();
-        wt.targetX(x - width);
-      }
-      current++;
-      return scroller1;
-    } else {            
-      return (RowScroller)children.get(children.size() - 1);
-    }
+
+  public void updateVertScrollbar() {
+    vbar.scrollToFirst();
   }
-  
-  protected RowScroller next() {
-    return next(true);
-  } 
-  
-  protected RowScroller next(boolean dragCol) {
-    if (current < children.size() - 1) {
-      RowScroller scroller0 = (RowScroller)children.get(current);
-      RowScroller scroller1 = (RowScroller)children.get(current + 1);
-      scroller0.setActive(false, false); 
-      scroller1.setActive(true);
-      intf.selectWidget(scroller1);
-      if (scroller1 == varScroller) showColumnLabels();
-      else hideColumnLabels();      
-      for (Widget wt: children) {
-        float x = wt.targetX();    
-        wt.targetX(x - width);
-      }
-      current++;
-      return scroller1;
-    } else {
-      if (dragCol) mira.browser.dragColumns(mira.plotWidth);
-      return (RowScroller)children.get(children.size() - 1);
-    }
-  }  
-  
+
+  public void updateVertScrollbar(int idx) {
+    vbar.scrollTo(idx);
+  }
+
   public void keyPressed() {
     RowScroller currScroller = (RowScroller)children.get(current);
     if (key == CODED) {
@@ -169,9 +157,11 @@ public class RowBrowser extends MiraWidget {
       } else if (keyCode == RIGHT) {
         next();
       } else if (keyCode == UP) {
-        currScroller.up();            
+        currScroller.up();
+        updateVertScrollbar();
       } else if (keyCode == DOWN) {
         currScroller.down();
+        updateVertScrollbar();
       }
     } else if (key == ENTER || key == RETURN) {
       currScroller.enter();      
@@ -183,17 +173,10 @@ public class RowBrowser extends MiraWidget {
     return scroller.getTotalCount();
   }
 
-  public int getVisItemsCount() {
-    RowScroller scroller = (RowScroller)children.get(current);
-    return scroller.getVisibleCount();
-  }
-
-
   public int getFirstItemIndex() {
     RowScroller scroller = (RowScroller)children.get(current);
     return scroller.getFirstIndex();
   }
-
 
   protected void initItems() {
     if (1 < tree.groups.size()) {
@@ -212,7 +195,7 @@ public class RowBrowser extends MiraWidget {
       varScroller = new RowScroller(intf,this,2 * width, 0, width, height, heightOpen, heightClose);
       varScroller.setActive(false);
       varScroller.setItems(tree.variables);      
-      addChild(varScroller);        
+      addChild(varScroller);
     } else if (1 < tree.tables.size()) {
       // Initializing only two scroll levels (table, variable), because there
       // is only one group
@@ -234,7 +217,7 @@ public class RowBrowser extends MiraWidget {
       varScroller.setItems(tree.variables);
       varScroller.setActive(true);
       addChild(varScroller);
-      intf.selectWidget(varScroller);       
+      intf.selectWidget(varScroller);
     }
     current = 0;
   }  
@@ -245,5 +228,111 @@ public class RowBrowser extends MiraWidget {
   
   protected void hideColumnLabels() {
     mira.browser.hideColumnLabels();
+  }
+
+  protected RowScroller prev() {
+    return prev(true);
+  }
+
+  protected RowScroller prev(boolean dragCol) {
+    if (dragCol && 0 < mira.browser.getFirstColumn()) {
+      mira.browser.dragColumns(-mira.plotWidth);
+      return (RowScroller)children.get(current);
+    }
+
+    if (0 < current) {
+      RowScroller scroller0 = (RowScroller)children.get(current);
+      RowScroller scroller1 = (RowScroller)children.get(current - 1);
+      scroller0.setActive(false);
+      scroller1.setActive(true, false);
+      intf.selectWidget(scroller1);
+      if (scroller1 == varScroller) {
+        showColumnLabels();
+        vbar.setX(-mira.browser.scrollSize);
+        vbar.setHeight(vbar.height() - mira.browser.scrollSize);
+      } else {
+        hideColumnLabels();
+        hbar.hide(false);
+        vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
+        vbar.setHeight(vbar.height() + mira.browser.scrollSize);
+      }
+      for (Widget wt: children) {
+        float x = wt.targetX();
+        wt.targetX(x + width);
+      }
+      current--;
+      vbar.hide(false);
+      animating = true;
+      return scroller1;
+    } else {
+      return (RowScroller)children.get(0);
+    }
+  }
+
+  protected RowScroller next(int i) {
+    if (current < children.size() - 1) {
+      RowScroller scroller0 = (RowScroller)children.get(current);
+      RowScroller scroller1 = (RowScroller)children.get(current + 1);
+      scroller0.setActive(false, false);
+      scroller1.setActive(true);
+      intf.selectWidget(scroller1);
+      if (scroller1 == varScroller) {
+        showColumnLabels();
+        vbar.setX(-mira.browser.scrollSize);
+        vbar.setHeight(vbar.height() - mira.browser.scrollSize);
+      } else {
+        hideColumnLabels();
+        hbar.hide(false);
+        vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
+        vbar.setHeight(vbar.height() + mira.browser.scrollSize);
+      }
+      int idx = scroller0.items.get(i).getFirstChild();
+      scroller1.jumpTo(idx, false);
+      for (Widget wt: children) {
+        float x = wt.targetX();
+        wt.targetX(x - width);
+      }
+      current++;
+      vbar.hide(false);
+      animating = true;
+      return scroller1;
+    } else {
+      return (RowScroller)children.get(children.size() - 1);
+    }
+  }
+
+  protected RowScroller next() {
+    return next(true);
+  }
+
+  protected RowScroller next(boolean dragCol) {
+    if (current < children.size() - 1) {
+      RowScroller scroller0 = (RowScroller)children.get(current);
+      RowScroller scroller1 = (RowScroller)children.get(current + 1);
+      scroller0.setActive(false, false);
+      scroller1.setActive(true);
+      intf.selectWidget(scroller1);
+      if (scroller1 == varScroller) {
+        showColumnLabels();
+        vbar.setX(-mira.browser.scrollSize);
+        vbar.setHeight(vbar.height() - mira.browser.scrollSize);
+      } else {
+        hideColumnLabels();
+        hbar.hide(false);
+        vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
+        vbar.setHeight(vbar.height() + mira.browser.scrollSize);
+      }
+      for (Widget wt: children) {
+        float x = wt.targetX();
+        wt.targetX(x - width);
+      }
+      current++;
+      vbar.hide(false);
+      animating = true;
+      return scroller1;
+    } else {
+      if (dragCol) mira.browser.dragColumns(mira.plotWidth);
+      return (RowScroller)children.get(children.size() - 1);
+    }
   }
 }

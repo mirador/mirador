@@ -1,69 +1,68 @@
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
+
 package mirador.app;
 
+import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import processing.core.PApplet;
 
 public class HorizontalScrollbar extends MiraWidget {
+  private int handlew = Display.scale(50);
+
   protected ColumnScroller col;
-  protected boolean insideDragBox;
-  protected SoftFloat dragBox0, dragBox1;
+  protected boolean insideHandle;
+  protected SoftFloat handlex;
   protected boolean dragging;
+
+  protected int hColor, bColor;
 
   public HorizontalScrollbar(Interface intf, ColumnScroller col, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
     this.col = col;
-
-    dragBox0 = new SoftFloat();
-    dragBox1 = new SoftFloat();
+    handlex = new SoftFloat();
   }
+
+
+  public void setup() {
+    hColor = getStyleColor("Scrollbar", "color");
+    bColor = getStyleColor("Scrollbar", "background");
+    initHandle(width);
+  }
+
 
   public void update() {
-    int tot = col.getTotItemsCount();
-    int vis = col.getVisItemsCount();
-    int first = col.getFirstItemIndex();
-    System.out.println(tot + " " + vis + "  " + first);
-    float x0 = PApplet.map(first, 0, tot, 0, width);
-    float len = PApplet.map(vis, 0, tot, 0, width);
-    dragBox0.setTarget(x0);
-    dragBox1.setTarget(x0 + len);
-
-    dragBox0.update();
-    dragBox1.update();
+    handlex.update();
   }
+
 
   public void draw() {
     noStroke();
-
-
-
-
-    fill(color(150, 100));
+    fill(bColor);
     rect(0, 0, width, height);
-    fill(color(255, 0, 0));
-    rect(dragBox0.get(), 0, dragBox1.get() - dragBox0.get(), height);
+    fill(hColor);
+    rect(handlex.get(), 0, handlew, height);
   }
 
+
   public void mousePressed() {
-    insideDragBox = false;
-    if (dragBox0.get() <= mouseX && mouseX <= dragBox1.get()) {
-      insideDragBox = true;
+    insideHandle = false;
+    if (handlex.get() <= mouseX && mouseX <= handlex.get() + handlew) {
+      insideHandle = true;
     }
   }
 
 
   public void mouseDragged() {
-    float dx = pmouseX - mouseX;
-    if (insideDragBox) {
-      int tot = col.getTotItemsCount();
-      int vis = col.getVisItemsCount();
-      float f = (float)tot / (float)vis;
-      mira.browser.dragColumns(-f * dx);
-    } else {
-
+    float dx = mouseX - pmouseX;
+    if (insideHandle) {
+      float x0 = PApplet.constrain(handlex.getTarget() + dx, 0, width - handlew);
+      int tot = col.getTotItemsCount() - 1;
+      int idx = PApplet.round(PApplet.map(x0, 0, width - handlew, 0, tot));
+      mira.browser.openColumn(idx);
+      handlex.setTarget(x0);
     }
     dragging = true;
-    System.out.println("dragging");
   }
 
 
@@ -71,19 +70,49 @@ public class HorizontalScrollbar extends MiraWidget {
     if (dragging) {
       mira.browser.snapColumns();
     } else {
-//      float f = mouse() / length();
-//      float totLength = lengthSum[open1];
-//      int i = getCloserIndex(f * totLength);
-//      jumpTo(i);
+      float x = handlex.get();
+      if (x <= mouseX && mouseX <= x + handlew) {
+        int idx = col.getFirstItemIndex();
+        if (x + 0.5 * handlew < mouseX && idx < col.getTotItemsCount() - 1) {
+          // one step to the right
+          scrollTo(idx++);
+          mira.browser.openColumn(idx);
+        } else if (0 < idx) {
+          // one step to the left
+          scrollTo(idx--);
+          mira.browser.openColumn(idx);
+        }
+
+      } else if (0 <= mouseX && mouseX <= width) {
+        float x1 = PApplet.constrain(mouseX, 0, width - handlew);
+        int tot = col.getTotItemsCount() - 1;
+        int idx = PApplet.round(PApplet.map(x1, 0, width - handlew, 0, tot));
+        mira.browser.openColumn(idx);
+        handlex.setTarget(x1);
+      }
     }
     dragging = false;
   }
 
 
+  public void scrollTo(int idx) {
+    int tot = col.getTotItemsCount() - 1;
+    float x1 = PApplet.map(idx, 0, tot, 0, width - handlew);
+    handlex.setTarget(x1);
+  }
+
+
   protected void handleResize(int newWidth, int newHeight) {
-    float w0 = bounds.w.get();
-    float w1 = newWidth - mira.optWidth - mira.varWidth;
-    float dw = w1 - w0;
+    float w1 = newWidth - mira.optWidth - mira.varWidth - mira.browser.scrollSize - padding;
     bounds.w.set(w1);
+    initHandle(w1);
+  }
+
+
+  private void initHandle(float w) {
+    int tot = col.getTotItemsCount() - 1;
+    int idx = col.getFirstItemIndex();
+    float x0 = PApplet.map(idx, 0, tot, 0, w - handlew);
+    handlex.setTarget(x0);
   }
 }

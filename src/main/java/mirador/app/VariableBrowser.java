@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
@@ -21,8 +21,9 @@ import processing.core.PApplet;
  */
 
 public class VariableBrowser extends MiraWidget {
-  int infoBarH = Display.scale(35);
-  
+  public int infoBarH = Display.scale(35);
+  public int scrollSize = Display.scale(13);
+
   final static public int NUM_FREE_PROCESSORS = 1;
   
   protected ThreadPoolExecutor taskPool1;
@@ -51,8 +52,9 @@ public class VariableBrowser extends MiraWidget {
     taskPool1 = (ThreadPoolExecutor)Executors.newFixedThreadPool(PApplet.max(1, (int)(0.7f * tot)));
     taskPool2 = (ThreadPoolExecutor)Executors.newFixedThreadPool(PApplet.max(1, (int)(0.3f * tot)));
        
-    rowBrowser = new RowBrowser(intf, 0, mira.labelHeightClose + 2, mira.varWidth, height - mira.labelHeightClose,
-                                  mira.plotHeight, mira.varHeight);
+    rowBrowser = new RowBrowser(intf, 0, mira.labelHeightClose + padding,
+                                mira.varWidth, height - mira.labelHeightClose,
+                                mira.plotHeight, mira.varHeight);
     rowBrowser.clipBounds(true, false, true, false);
     addChild(rowBrowser, TOP_LEFT_CORNER);
     
@@ -78,13 +80,16 @@ public class VariableBrowser extends MiraWidget {
     covBar.clipBounds(true, false);
     addChild(covBar, BOTTOM_LEFT_CORNER);
 
-
-    vscroll = new VerticalScrollbar(intf, rowBrowser,-50, mira.labelHeightClose + 2, 50, height - mira.labelHeightClose);
+    vscroll = new VerticalScrollbar(intf, rowBrowser, -scrollSize, mira.labelHeightClose + 2 * padding,
+                                    scrollSize,height - mira.labelHeightClose - scrollSize - 2 * padding);
     addChild(vscroll, TOP_RIGHT_CORNER);
 
-    hscroll = new HorizontalScrollbar(intf, colLabels,mira.varWidth, -50, width - mira.varWidth, 50);
+    hscroll = new HorizontalScrollbar(intf, colLabels, mira.varWidth + padding, -scrollSize,
+                                     width - mira.varWidth - scrollSize - padding, scrollSize);
     addChild(hscroll, BOTTOM_LEFT_CORNER);
-        
+
+    rowBrowser.setScrollbars(vscroll, hscroll);
+
     // Defining a keymap in the interface so the row scroller will capture the
     // arrow keys irrespective of which widget is currently selected, and likewise
     // with the search bar, which will capture any alphanumeric character. However
@@ -142,11 +147,19 @@ public class VariableBrowser extends MiraWidget {
       }
       if (!data.sorting()) idx = data.getColumn(var); 
     }
-    if (-1 < idx) colLabels.jumpTo(idx);
+    if (-1 < idx) {
+      colLabels.jumpTo(idx);
+      hscroll.scrollTo(idx);
+    }
     mira.profile.add(var);
+  }
+
+  public void openColumn(int idx) {
+    colLabels.jumpTo(idx);
   }
   
   public void openColumns(VariableContainer container) {
+    rowBrowser.showVariables();
     ArrayList<Variable> vars = data.getVariables(container);
     data.addColumns(vars);
     mira.profile.add(vars);

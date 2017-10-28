@@ -337,3 +337,7 @@ h3 {
 #InfoBar #ResetData p {
   color: rgba(0, 0, 0, 0.5);
 }
+#Scrollbar {
+  background: rgba(0, 0, 0, 0.1);
+  color: #6f6c66;
+}

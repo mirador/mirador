@@ -1,3 +1,5 @@
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
+
 package mirador.app;
 
 import miralib.data.DataTree;
@@ -51,7 +53,7 @@ public class RowScroller extends MiraWidget {
       savedIdx = -1;
       for (Widget child: children) {
         if (changeAlpha) child.hide();
-        if (savedIdx == -1 && !child.isMarkedForDeletion()) {
+        if (savedIdx == -1 && child.visible() && !child.isMarkedForDeletion()) {
           MiraWidget wt = (MiraWidget)child;
           savedIdx = wt.idx;
         }
@@ -65,15 +67,6 @@ public class RowScroller extends MiraWidget {
     return items.size();
   }
 
-  public int getVisibleCount() {
-    return (int)(width/heightClose);
-//    int count = 0;
-//    for (Widget child: children) {
-//      if (!child.visible()) continue;
-//      count += 1;
-//    }
-//    return count;
-  }
 
   public int getFirstIndex() {
     for (Widget child: children) {
@@ -117,6 +110,7 @@ public class RowScroller extends MiraWidget {
   public void dragRows(float dy) {
     if (active) {
       fit(dy);
+      row.updateVertScrollbar();
     }
   }
 
@@ -198,9 +192,13 @@ public class RowScroller extends MiraWidget {
     if (active) {
       if (children.size() == 0) {
         initScroll();
-        if (-1 < savedIdx) jumpTo(savedIdx, false);
       } else if (0 < children.size() && getMarkedForDeletionCount() == 0) {
         updateScroll();
+      }
+      if (-1 < savedIdx) {
+        jumpTo(savedIdx, false);
+        row.updateVertScrollbar(savedIdx);
+        savedIdx = -1;
       }
       if (needShow) {
         for (Widget child: children) child.show(true);
@@ -248,6 +246,7 @@ public class RowScroller extends MiraWidget {
       int dy = pmouseY - mouseY;
       if (dy != 0) {
         fit(dy);
+        row.updateVertScrollbar();
         dragx = false;
       } else if (dx != 0) {
         dragx = true;
@@ -267,6 +266,7 @@ public class RowScroller extends MiraWidget {
       } else {
         snap();
       }
+      row.updateVertScrollbar();
     }
   }
 
@@ -283,6 +283,7 @@ public class RowScroller extends MiraWidget {
         updatePositions(wt);
       } else {
         next(wt.idx);
+        row.updateVertScrollbar();
       }
     }
   }
@@ -290,15 +291,21 @@ public class RowScroller extends MiraWidget {
   public void keyPressed(MiraWidget  wt) {
     if (active) {
       if (key == CODED) {
+        boolean move = false;
         if (keyCode == LEFT) {
           prev();
+          move = true;
         } else if (keyCode == RIGHT) {
           next();
+          move = true;
         } else if (keyCode == UP) {
           up();
+          move = true;
         } else if (keyCode == DOWN) {
           down();
+          move = true;
         }
+        if (move) row.updateVertScrollbar();
       }
     }
   }

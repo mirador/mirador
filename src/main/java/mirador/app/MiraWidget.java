@@ -1,10 +1,11 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
 import mui.Interface;
 import mui.Widget;
 import miralib.data.DataSet;
+import mui.Display;
 
 /**
  * Mirador widget, which add some extra functionality specific to Mirador, 
@@ -19,7 +20,7 @@ public class MiraWidget extends Widget {
   final public static int REMOVE_COL_DELAY = 2000;
   final public static int REMOVE_ROW_DELAY = 2000;
   
-  final protected static float padding = 2;
+  final protected static float padding = Display.scale(2);
   
   protected MiraApp mira;
   protected DataSet data;

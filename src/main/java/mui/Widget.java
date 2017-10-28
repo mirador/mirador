@@ -399,13 +399,13 @@ public class Widget implements PConstants {
   
   // targeting check
   
-//  public boolean isPositioning() {
-//    return bounds.x.isTargeting() || bounds.y.isTargeting();
-//  }
-//  
-//  public boolean isResizing() {
-//    return bounds.w.isTargeting() || bounds.h.isTargeting();
-//  }
+  public boolean isPositioning() {
+    return bounds.x.isTargeting() || bounds.y.isTargeting();
+  }
+
+  public boolean isResizing() {
+    return bounds.w.isTargeting() || bounds.h.isTargeting();
+  }
   
   
   
@@ -696,7 +696,7 @@ public class Widget implements PConstants {
 //
 //  public float relativeY() {
 //    return bounds.y.get();
-//  }  
+//  }
  
   
   

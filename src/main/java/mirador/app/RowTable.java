@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.app;
 
@@ -64,7 +64,7 @@ public class RowTable extends RowWidget {
     fill(hColor);
     textFont(hFont);
     textLeading(hLead);
-    text(rowTable.getName(), textX, textY, width - textX*2, textH); 
+    text(rowTable.getName(), textX, textY, width - textX*3, textH);
     drawCheckBoxes();
   }  
 }
