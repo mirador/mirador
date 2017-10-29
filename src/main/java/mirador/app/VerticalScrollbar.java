@@ -8,13 +8,13 @@ import mui.SoftFloat;
 import processing.core.PApplet;
 
 public class VerticalScrollbar extends MiraWidget {
-  private int handleh = Display.scale(50);
+  private int minHandleHeight = Display.scale(50);
 
   protected RowBrowser row;
   protected boolean insideHandle;
   protected SoftFloat handley;
   protected boolean dragging;
-
+  protected float handleh;
   protected int hColor, bColor;
 
   public VerticalScrollbar(Interface intf, RowBrowser row, float x, float y, float w, float h) {
@@ -33,6 +33,7 @@ public class VerticalScrollbar extends MiraWidget {
 
   public void update() {
     handley.update();
+    initHeight();
   }
 
 
@@ -120,9 +121,17 @@ public class VerticalScrollbar extends MiraWidget {
 
 
   private void initHandle(float h) {
+    initHeight();
     int tot = row.getTotItemsCount() - 1;
     int idx = row.getFirstItemIndex();
     float y0 = PApplet.map(idx, 0, tot, 0, h - handleh);
     handley.setTarget(y0);
+  }
+
+
+  private void initHeight() {
+    RowScroller scroller = row.getScroller();
+    float h = (height * height) / scroller.getApproxTotalHeight();
+    handleh = PApplet.constrain(h, minHandleHeight, height/2);
   }
 }

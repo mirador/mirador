@@ -8,11 +8,12 @@ import mui.SoftFloat;
 import processing.core.PApplet;
 
 public class HorizontalScrollbar extends MiraWidget {
-  private int handlew = Display.scale(50);
+  private int minHandleWidth = Display.scale(50);
 
   protected ColumnScroller col;
   protected boolean insideHandle;
   protected SoftFloat handlex;
+  protected float handlew;
   protected boolean dragging;
 
   protected int hColor, bColor;
@@ -33,6 +34,7 @@ public class HorizontalScrollbar extends MiraWidget {
 
   public void update() {
     handlex.update();
+    initWidth();
   }
 
 
@@ -110,9 +112,16 @@ public class HorizontalScrollbar extends MiraWidget {
 
 
   private void initHandle(float w) {
+    initWidth();
     int tot = col.getTotItemsCount() - 1;
     int idx = col.getFirstItemIndex();
     float x0 = PApplet.map(idx, 0, tot, 0, w - handlew);
     handlex.setTarget(x0);
+  }
+
+
+  private void initWidth() {
+    float w = (width * width) / col.getTotalWidth();
+    handlew = PApplet.constrain(w, minHandleWidth, width/2);
   }
 }

@@ -87,7 +87,7 @@ abstract public class ColumnScroller extends MiraWidget {
     }      
   }
 
-  public float getWidth() {
+  public float getTotalWidth() {
     return getCount() * itemWidth;
   }
   

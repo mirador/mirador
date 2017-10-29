@@ -319,7 +319,7 @@ public class RowScroller extends MiraWidget {
       if (children.size() == 0) initScroll();
       MiraWidget first = (MiraWidget)children.get(0);
       float h0 = first.targetY();
-      float hdif = getHeight(first.idx, i);
+      float hdif = getRangeHeight(first.idx, i);
       fit(h0 + hdif, target);
     }
   }
@@ -360,11 +360,16 @@ public class RowScroller extends MiraWidget {
     }
   }
 
-  public float getHeight() {
-    return getHeight(0, items.size());
+  public float getApproxTotalHeight() {
+    float itemh = row.showingVariables() ? heightOpen : heightClose;
+    return itemh * items.size();
   }
 
-  public float getHeight(int i0, int i1) {
+  public float getTotalHeight() {
+    return getRangeHeight(0, items.size());
+  }
+
+  public float getRangeHeight(int i0, int i1) {
     boolean inverted = false;
     if (i1 < i0) {
       int tmp = i0;
@@ -442,7 +447,7 @@ public class RowScroller extends MiraWidget {
       float boffset = 0;
       MiraWidget first = (MiraWidget)children.get(0);
       MiraWidget last = (MiraWidget)children.get(children.size() - 1);
-      float h = PApplet.min(height, getHeight());
+      float h = PApplet.min(height, getTotalHeight());
 
       if (first.idx == 0 && 0 < first.targetY() - dy) {
         toffset = first.targetY() - dy;
@@ -471,7 +476,7 @@ public class RowScroller extends MiraWidget {
       float offset = 0;
       MiraWidget first = (MiraWidget)children.get(0);
       MiraWidget last = (MiraWidget)children.get(children.size() - 1);
-      float h = PApplet.min(height, getHeight());
+      float h = PApplet.min(height, getTotalHeight());
 
       if (PApplet.abs(first.targetY()) < 30) {
         offset = -first.targetY();

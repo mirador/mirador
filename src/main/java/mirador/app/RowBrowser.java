@@ -37,14 +37,14 @@ public class RowBrowser extends MiraWidget {
     if (animating && !currScroller.isPositioning()) {
       animating = false;
 
-      if (currScroller.getHeight() < height) {
+      if (currScroller.getTotalHeight() < height) {
         vbar.hide(false);
       } else {
         vbar.show(true);
       }
 
       if (currScroller == varScroller &&
-          mira.browser.width() - mira.varWidth < mira.browser.colLabels.getWidth()) {
+          mira.browser.width() - mira.varWidth < mira.browser.colLabels.getTotalWidth()) {
         hbar.show(true);
       }
 
@@ -56,7 +56,7 @@ public class RowBrowser extends MiraWidget {
     bounds.h.set(h1);
 
     RowScroller currScroller = (RowScroller)children.get(current);
-    if (h1 < currScroller.getHeight()) {
+    if (h1 < currScroller.getTotalHeight()) {
       vbar.show(true);
     } else {
       vbar.hide(false);
@@ -64,11 +64,14 @@ public class RowBrowser extends MiraWidget {
 
     if (currScroller == varScroller) {
       float w1 = newWidth - mira.varWidth;
-      if (w1 < mira.browser.colLabels.getWidth()) {
+      if (w1 < mira.browser.colLabels.getTotalWidth()) {
         hbar.show(true);
       } else {
         hbar.hide(false);
       }
+      vbar.setX(-mira.browser.scrollSize);
+    } else {
+      vbar.setX(-mira.browser.scrollSize - padding - newWidth + mira.varWidth + mira.optWidth);
     }
   }
   
@@ -138,7 +141,7 @@ public class RowBrowser extends MiraWidget {
       vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding);
     }
     RowScroller currScroller = (RowScroller)children.get(current);
-    if (currScroller.getHeight() < height) vbar.hide(false);
+    if (currScroller.getTotalHeight() < height) vbar.hide(false);
   }
 
   public void updateVertScrollbar() {
