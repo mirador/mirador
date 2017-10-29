@@ -39,6 +39,8 @@ public class VariableBrowser extends MiraWidget {
 
   protected VerticalScrollbar vscroll;
   protected HorizontalScrollbar hscroll;
+
+  protected boolean sort0;
   
   VariableBrowser(Interface intf, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
@@ -122,6 +124,10 @@ public class VariableBrowser extends MiraWidget {
       System.out.println("number of pending high-priority tasks: " + count1);
       System.out.println("number of pending low-priority tasks : " + count2);
     }
+
+    boolean sort = data.sorting();
+    if (!sort && sort0) updateAfterSort();
+    sort0 = sort;
   }
   
   public void openRow(Variable var) {
@@ -335,7 +341,14 @@ public class VariableBrowser extends MiraWidget {
   public void saveSelectedPair() {
     
   }
-  
+
+  protected void updateAfterSort() {
+    // Any required updates when sorting has concluded.
+    if (selCol != null) {
+      openColumn(selCol);
+    }
+  }
+
   protected boolean rowsReady() {
     boolean ready = true;
     for (Widget child: children) {

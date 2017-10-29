@@ -437,7 +437,7 @@ public class RowVariable extends RowWidget {
         if (data.sorted()) {
           if (sortMode != SORTED) {
             sortMode = SORTED;
-            labelMode = SORTED_TITLE;          
+            labelMode = SORTED_TITLE;
           }
         } else if (!rowVar.sortKey()) {
           if (sortMode == SORTED || sortMode == SORTING) {
