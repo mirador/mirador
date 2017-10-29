@@ -5,7 +5,7 @@
     "classpath": [
         "../target/mirador.jar"
     ],
-    "mainclass": "mirador.app.Mirador",
+    "mainclass": "mirador.app.MiraLauncher",
     "vmargs": [
        "-Dsun.java2d.dpiaware=true",
        "Xmx1G"
