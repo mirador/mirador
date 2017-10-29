@@ -60,7 +60,16 @@ public class DataSet {
   protected int nonthreadedCount;
   
   protected static double SELF_SCORE = -2 * Math.log10(Float.MIN_VALUE);
-  
+
+  private static final String INCREASING_MEMORY_WIKI_URL =
+    "https://github.com/mirador/mirador/wiki/Advanced-configuration";
+
+  private static final String OUT_OF_MEMORY_ERROR =
+    "There is not enough memory to load this dataset.<br><br>" +
+    "You can increase the memory available to Mirador " +
+    "by editing the config.json file inside the app's folder.<br>" +
+    "Check <a href=\"" + INCREASING_MEMORY_WIKI_URL + "\">Mirador's wiki</a> for more information.";
+
   public DataSet(Project project) throws Exception {
     this.project = project;
     
@@ -713,28 +722,33 @@ public class DataSet {
     String dataPath = project.hasSource() ? project.getSourcePath() : "";
     String dictPath = project.hasDictionary() ? project.getDictionaryPath() : "";
     String binPath = project.hasBinary() ? project.getBinaryPath() : "";
-    
-    if (useBinary && (new File(binPath)).exists()) {   
-      Log.message("  Reading binary file...");
-      data = loadTable(binPath);
-    } else {
-      Log.message("  Reading data file...");
 
-      if ((new File(dictPath)).exists()) {
-        // Fast (typed) loading
-        data = loadTable(dataPath, "header,dictionary=" + dictPath, project.missString);
+    try {
+      if (useBinary && (new File(binPath)).exists()) {
+        Log.message("  Reading binary file...");
+        data = loadTable(binPath);
       } else {
-        // Uses the codebook, or guess types from the values, which could be 
-        // potentially very slow for large tables
-        data = loadTableNoDict(dataPath, "header", project.missString);
+        Log.message("  Reading data file...");
+
+        if ((new File(dictPath)).exists()) {
+          // Fast (typed) loading
+          data = loadTable(dataPath, "header,dictionary=" + dictPath, project.missString);
+        } else {
+          // Uses the codebook, or guess types from the values, which could be
+          // potentially very slow for large tables
+          data = loadTableNoDict(dataPath, "header", project.missString);
+        }
+
+        if (useBinary) {
+          Log.message("  Saving data in binary format...");
+          saveTable(data, binPath, "bin");
+        }
       }
-      
-      if (useBinary) {
-        Log.message("  Saving data in binary format...");
-        saveTable(data, binPath, "bin");
-      }
+    } catch (java.lang.OutOfMemoryError ex) {
+      Log.error(OUT_OF_MEMORY_ERROR, ex);
+      System.exit(1);
     }
-    
+
     Variable.setMissingString(project.missString);
     DateVariable.setParsePattern(project.dateParsePattern);
     DateVariable.setPrintPattern(project.datePrintPattern);    

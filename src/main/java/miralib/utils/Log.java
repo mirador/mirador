@@ -1,14 +1,21 @@
-/* COPYRIGHT (C) 2014 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package miralib.utils;
 
-import java.awt.Frame;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.net.URI;
 
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+
+import mui.Display;
 
 /**
  * Message logging.
@@ -16,6 +23,10 @@ import javax.swing.JOptionPane;
  */
 
 public class Log {
+  final static private int FONT_SIZE = Display.scale(12);
+  final static private int TEXT_MARGIN = Display.scale(8);
+  final static private int TEXT_WIDTH = Display.scale(300);
+
   static protected Messages messages;
   static protected FileOutputStream out;
   static protected PrintStream ps;
@@ -62,12 +73,37 @@ public class Log {
 
   static public void error(String msg, Throwable e) {
     messages.push(msg);
-    JOptionPane.showMessageDialog(new Frame(), msg, "mirador",
-                                  JOptionPane.ERROR_MESSAGE);    
+    showMessageDialog(msg,"Mirador Error", JOptionPane.ERROR_MESSAGE);
     e.printStackTrace();    
     System.exit(0);
   } 
-  
+
+  static public void showMessageDialog(String msg, String title, int type) {
+    String htmlString = "<html> " +
+            "<head> <style type=\"text/css\">" +
+            "p { font: " + FONT_SIZE + "pt \"Lucida Grande\"; " +
+            "margin: " + TEXT_MARGIN + "px; " +
+            "width: " + TEXT_WIDTH + "px }" +
+            "</style> </head>" +
+            "<body> <p>" + msg + "</p> </body> </html>";
+    JEditorPane pane = new JEditorPane("text/html", htmlString);
+    pane.addHyperlinkListener(new HyperlinkListener() {
+      @Override
+      public void hyperlinkUpdate(HyperlinkEvent e) {
+        if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+          try {
+            Desktop.getDesktop().browse(new URI(e.getURL().toString()));
+          } catch (Exception ex) {
+          }
+        }
+      }
+    });
+    pane.setEditable(false);
+    JLabel label = new JLabel();
+    pane.setBackground(label.getBackground());
+    JOptionPane.showMessageDialog(null, pane, title, type);
+  }
+
   static protected class Messages {
 //  protected PApplet parent;
   
