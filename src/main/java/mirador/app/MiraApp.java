@@ -17,14 +17,11 @@ import mirador.handlers.PDFHandler;
 import mirador.handlers.ProfileHandler;
 import mirador.handlers.SelectionHandler;
 //import mirador.handlers.UploadHandler;
+import miralib.data.*;
 import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
 import mirador.views.View;
-import miralib.data.DataRanges;
-import miralib.data.DataSet;
-import miralib.data.Range;
-import miralib.data.Variable;
 import miralib.utils.Log;
 import miralib.utils.Preferences;
 import miralib.utils.Project;
@@ -80,8 +77,11 @@ public class MiraApp extends PApplet {
   protected LoadThread loadThread;
   protected boolean animating;
   protected float animTime;
-  protected SoftFloat animAlpha;  
-  
+  protected SoftFloat animAlpha;
+
+  protected int[] storedTimes = new int[10];
+  protected int storedCount = 0;
+
   public void settings() {
     size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
     pixelDensity(PIXEL_DENSITY);
@@ -241,6 +241,9 @@ public class MiraApp extends PApplet {
     }
     
     if (project != null) {
+      DataSlice1D.MAX_SLICE_SIZE = project.initSliceSize;
+      DataSlice2D.MAX_SLICE_SIZE = project.initSliceSize;
+
       loaded = false;
       animating = true;
       animTime = 0;
@@ -295,7 +298,32 @@ public class MiraApp extends PApplet {
     selectOutput("Enter the name of the PDF file to save the screen to", 
                  "outputSelected", file, new PDFHandler(this));    
   }
-      
+
+
+  public void addPlotTime(int time) {
+    if (storedCount < storedTimes.length) {
+      storedTimes[storedCount] = time;
+      storedCount++;
+    } else {
+      float sum = 0;
+      for (int i = 0; i < storedCount; i++) {
+        sum += storedTimes[i];
+      }
+      sum /= storedCount;
+      System.out.println("Average plotting time: " + sum);
+      if (project.maxPlotTime < sum) {
+        DataSlice2D.MAX_SLICE_SIZE /= 2;
+        DataSlice1D.MAX_SLICE_SIZE /= 2;
+        System.out.println("Reduced MAX_SLICE_SIZE from " + DataSlice2D.MAX_SLICE_SIZE * 2 + " to " + DataSlice2D.MAX_SLICE_SIZE);
+      } else if (sum < 0.5 * project.maxPlotTime) {
+        DataSlice2D.MAX_SLICE_SIZE *= 2;
+        DataSlice1D.MAX_SLICE_SIZE *= 2;
+      }
+      storedCount = 0;
+    }
+  }
+
+
   //////////////////////////////////////////////////////////////////////////////
   
   protected void drawLoadAnimation() {

@@ -22,7 +22,10 @@ public class Preferences {
   static final protected int defSortMethod = Project.PVALUE;
   static final protected int defSurrCount = 100;
   static final protected float defThreshold = 1E-3f;
-  
+
+  static final protected int defInitSliceSize = 1000000;
+  static final protected int defMaxPlotTime = 1000;
+
   static final protected String defDateParsePattern = "yyyy-MM-dd";
   static final protected String defDatePrintPattern = "d MMM, yyyy";
 
@@ -38,6 +41,8 @@ public class Preferences {
   public int sortMethod;
   public int surrCount; 
   public float threshold;
+  public int initSliceSize;
+  public int maxPlotTime;
   public String dateParsePattern;
   public String datePrintPattern;
   public boolean copyExamples;
@@ -76,7 +81,10 @@ public class Preferences {
                    Project.sortingToString(defSortMethod)));
       surrCount = settings.getInteger("correlation.surrogates", defSurrCount);
       threshold = settings.getFloat("correlation.threshold", defThreshold);
-      
+
+      initSliceSize = settings.getInteger("performance.pointcount", defInitSliceSize);
+      maxPlotTime = settings.getInteger("performance.plottime", defMaxPlotTime);
+
       dateParsePattern = settings.get("dates.parse", defDateParsePattern);
       datePrintPattern = settings.get("dates.print", defDatePrintPattern);
 
@@ -91,6 +99,8 @@ public class Preferences {
       sortMethod = defSortMethod;
       surrCount = defSurrCount;
       threshold = defThreshold;
+      initSliceSize = defInitSliceSize;
+      maxPlotTime = defMaxPlotTime;
       dateParsePattern = defDateParsePattern;
       datePrintPattern = defDatePrintPattern;
       copyExamples = defCopyExamples;
@@ -109,6 +119,8 @@ public class Preferences {
     settings.set("correlation.sorting", Project.sortingToString(sortMethod));    
     settings.setInteger("correlation.surrogates", surrCount);
     settings.setFloat("correlation.threshold", threshold);
+    settings.setInteger("performance.pointcount", initSliceSize);
+    settings.setInteger("performance.plottime", maxPlotTime);
     settings.set("dates.parse", dateParsePattern);
     settings.set("dates.print", datePrintPattern);
     settings.setBoolean("examples.copy", copyExamples);

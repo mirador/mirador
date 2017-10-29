@@ -220,6 +220,7 @@ public class RowPlots extends ColumnScroller {
           if (viewTask != null && !viewTask.isDone()) viewTask.cancel(true);        
           viewTask = mira.browser.submitTask(new Runnable() {
             public void run() {
+              int tstart = mira.millis();
               if (var == rowVar) {
                 DataSlice1D slice = data.getSlice(rowVar, mira.ranges);
                 missing = slice.missing;
@@ -230,6 +231,8 @@ public class RowPlots extends ColumnScroller {
                 view = View.create(slice, mira.getPlotType(), mira.project.binAlgorithm);
               }
               update = true;
+              int time = mira.millis() - tstart;
+              mira.addPlotTime(time);
             }
           }, true);
         }

@@ -61,6 +61,8 @@ public class Project {
   public int sortMethod;
   public int surrCount; 
   public float threshold;
+  public int initSliceSize;
+  public int maxPlotTime;
   
   public String dateParsePattern;
   public String datePrintPattern;  
@@ -178,6 +180,8 @@ public class Project {
       sortMethod = prefs.sortMethod;
       surrCount = prefs.surrCount;
       threshold = prefs.threshold;
+      initSliceSize = prefs.initSliceSize;
+      maxPlotTime = prefs.maxPlotTime;
       dateParsePattern = prefs.dateParsePattern;
       datePrintPattern = prefs.datePrintPattern;
     }
@@ -204,6 +208,8 @@ public class Project {
     this.sortMethod = that.sortMethod;
     this.surrCount = that.surrCount; 
     this.threshold = that.threshold;
+    this.initSliceSize = that.initSliceSize;
+    this.maxPlotTime = that.maxPlotTime;
   }  
   
   public boolean hasSource() {

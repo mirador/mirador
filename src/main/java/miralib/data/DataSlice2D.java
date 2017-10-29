@@ -16,7 +16,7 @@ import miralib.utils.Project;
  */
 
 public class DataSlice2D {
-  final static public int MAX_SLICE_SIZE = Integer.MAX_VALUE;
+  static public int MAX_SLICE_SIZE = 1000000;
   
   public Variable varx, vary;
   public DataRanges ranges;
@@ -163,6 +163,7 @@ public class DataSlice2D {
     double wsum = 0;  
     int rcount = data.getRowCount();
     float p = (float)MAX_SLICE_SIZE / (float)rcount;
+    System.out.println(MAX_SLICE_SIZE + " " + rcount + " " + p);
     for (int r = 0; r < rcount; r++) {
       if (p < 1 && p < Math.random()) continue;
       TableRow row = data.getRow(r);        

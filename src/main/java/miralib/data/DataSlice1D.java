@@ -14,7 +14,7 @@ import processing.data.TableRow;
  */
 
 public class DataSlice1D {
-  final static public int MAX_SLICE_SIZE = Integer.MAX_VALUE;
+  static public int MAX_SLICE_SIZE = 1000000;
   
   public Variable varx;
   public DataRanges ranges;
