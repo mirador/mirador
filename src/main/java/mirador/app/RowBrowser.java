@@ -107,8 +107,7 @@ public class RowBrowser extends MiraWidget {
     int idx = data.getVariableIndex(var);
     if (-1 < idx) {
       while (next(false) != varScroller);
-      varScroller.jumpTo(idx);
-      updateVertScrollbar(idx);
+      varScroller.setNextIndex(idx);
     }
   }
   
