@@ -55,7 +55,7 @@ public class MiraApp extends PApplet {
   int varHeight = Display.scale(85);
   int labelHeightClose = Display.scale(115);
   int labelHeightMax = Display.scale(300);
-  int covarHeightClose = Display.scale(50);
+  int covarHeightClose = Display.scale(58);
   int covarHeightMax = Display.scale(300);
   int plotWidth = Display.scale(200);
   int plotHeight = Display.scale(200);

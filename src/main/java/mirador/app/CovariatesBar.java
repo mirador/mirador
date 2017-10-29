@@ -75,6 +75,7 @@ public class CovariatesBar extends ColumnScroller {
   protected class Covariate extends Item {
     // TODO: Make into CCS size parameters
     int marginx = Display.scale(10);
+    int marginy = Display.scale(18);
     int posy = Display.scale(5);
     float selh = Display.scale(50);
     float crossw = Display.scale(10);
@@ -167,8 +168,7 @@ public class CovariatesBar extends ColumnScroller {
       } else {
         open = !open;
         if (open) {
-          float h1 = PApplet.min(covarHeightMax, itemHeight + posy + selector.getFullHeight() + 2*posy);
-          
+          float h1 = PApplet.min(covarHeightMax, itemHeight + posy + selector.getFullHeight() + marginy);
           y.setTarget(-(h1 - itemHeight));
           h.setTarget(h1);
           selector.targetY(y.getTarget() + itemHeight + posy);
