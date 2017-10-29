@@ -161,7 +161,9 @@ public class VariableBrowser extends MiraWidget {
   }
 
   public void openColumn(int idx) {
-    colLabels.jumpTo(idx);
+    if (rowBrowser.showingVariables()) {
+      colLabels.jumpTo(idx);
+    }
   }
   
   public void openColumns(VariableContainer container) {
@@ -272,7 +274,7 @@ public class VariableBrowser extends MiraWidget {
   }
   
   public void hideColumnLabels() {
-    colLabels.hide();
+    colLabels.hide(false);
   }
   
   public void resetSelectors() {

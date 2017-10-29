@@ -138,7 +138,7 @@ public class ColumnLabels extends ColumnScroller {
 
     void update() {
       super.update();
-      if (!ready && 500 < millis() - t0) {
+      if (!ready && 500 < millis() - t0 && visible()) {
         selector.show(true);
         ready = true;
       }
