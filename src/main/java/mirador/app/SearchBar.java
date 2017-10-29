@@ -101,7 +101,7 @@ public class SearchBar extends MiraWidget {
     searchRes.hover(mouseX, mouseY);
   }
   
-  public void keyPressed() {        
+  public void keyPressed() {
     if (key == ESC) {
       searchBox.clear();
       if (intf.isSelectedWidget(this)) intf.selectWidget(null);

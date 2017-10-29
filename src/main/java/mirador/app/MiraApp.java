@@ -146,8 +146,7 @@ public class MiraApp extends PApplet {
   }
   
   public void keyPressed() {
-    history.read();
-    if (loaded) intf.keyPressed();   
+    if (loaded) intf.keyPressed();
   }
     
   public void keyReleased() {
