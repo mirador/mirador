@@ -16,8 +16,6 @@ import miralib.utils.Project;
  */
 
 public class DataSlice2D {
-  static public int MAX_SLICE_SIZE = 1000000;
-  
   public Variable varx, vary;
   public DataRanges ranges;
   public ArrayList<Value2D> values;
@@ -34,12 +32,12 @@ public class DataSlice2D {
     this.ranges = new DataRanges(ranges);
   }
   
-  public DataSlice2D(DataSource data, Variable varx, Variable vary, DataRanges ranges) {
-    this(data, varx, vary, ranges, null);
+  public DataSlice2D(DataSource data, Variable varx, Variable vary, DataRanges ranges, int maxSize) {
+    this(data, varx, vary, ranges, null, maxSize);
   }
   
   public DataSlice2D(DataSource data, Variable varx, Variable vary, 
-                     DataRanges ranges, Variable varl) {
+                     DataRanges ranges, Variable varl, int maxSize) {
     this.varx = varx;
     this.vary = vary;
     this.values = new ArrayList<Value2D>();
@@ -48,7 +46,7 @@ public class DataSlice2D {
     // has been constructed.    
     this.ranges = new DataRanges(ranges);
     
-    init(data, varl);    
+    init(data, varl, maxSize);
   }  
   
   public DataSlice2D shuffle() {
@@ -61,6 +59,9 @@ public class DataSlice2D {
     Collections.shuffle(valuesx);
     Collections.shuffle(valuesy);
     DataSlice2D shuffled = new DataSlice2D(varx, vary, ranges);
+
+
+
     for (int n = 0; n < values.size(); n++) {
       shuffled.add(new Value2D(valuesx.get(n), valuesy.get(n))); 
     }    
@@ -157,13 +158,12 @@ public class DataSlice2D {
     return new ContingencyTable(this, prefs.binAlgorithm);
   }
   
-  protected void init(DataSource data, Variable varl) {
+  protected void init(DataSource data, Variable varl, int maxSize) {
     int ntot = 0;
     int nmis = 0;    
     double wsum = 0;  
     int rcount = data.getRowCount();
-    float p = (float)MAX_SLICE_SIZE / (float)rcount;
-    System.out.println(MAX_SLICE_SIZE + " " + rcount + " " + p);
+    float p = (float)maxSize / (float)rcount;
     for (int r = 0; r < rcount; r++) {
       if (p < 1 && p < Math.random()) continue;
       TableRow row = data.getRow(r);        

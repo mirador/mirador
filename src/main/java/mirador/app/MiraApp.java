@@ -9,6 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.net.URL;
+import java.util.List;
+import java.util.Iterator;
+import java.util.Collections;
 
 import javax.swing.JOptionPane;
 
@@ -79,8 +82,17 @@ public class MiraApp extends PApplet {
   protected float animTime;
   protected SoftFloat animAlpha;
 
-  protected int[] storedTimes = new int[10];
-  protected int storedCount = 0;
+  /////////////////////////////////////////////////////////////////////////////
+  protected int maxPlotSliceSizeCC;
+  protected int maxPlotSliceSizeNN;
+  protected int maxPlotSliceSizeCN;
+  protected int clockUpdateCC = 0;
+  protected int clockUpdateNN = 0;
+  protected int clockUpdateCN = 0;
+  protected int targetClockSize = 5;
+  protected List plotTimesCC = Collections.synchronizedList(new ArrayList<Integer>());
+  protected List plotTimesNN = Collections.synchronizedList(new ArrayList<Integer>());
+  protected List plotTimesCN = Collections.synchronizedList(new ArrayList<Integer>());
 
   public void settings() {
     size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
@@ -241,9 +253,6 @@ public class MiraApp extends PApplet {
     }
     
     if (project != null) {
-      DataSlice1D.MAX_SLICE_SIZE = project.initSliceSize;
-      DataSlice2D.MAX_SLICE_SIZE = project.initSliceSize;
-
       loaded = false;
       animating = true;
       animTime = 0;
@@ -251,6 +260,10 @@ public class MiraApp extends PApplet {
       animAlpha = new SoftFloat(255);
       loadThread = new LoadThread();
       loadThread.start();
+
+      maxPlotSliceSizeCC = project.initSliceSize;
+      maxPlotSliceSizeNN = project.initSliceSize;
+      maxPlotSliceSizeCN = project.initSliceSize;
     }    
   }
   
@@ -299,30 +312,102 @@ public class MiraApp extends PApplet {
                  "outputSelected", file, new PDFHandler(this));    
   }
 
+  //////////////////////////////////////////////////////////////////////////////
 
-  public void addPlotTime(int time) {
-    if (storedCount < storedTimes.length) {
-      storedTimes[storedCount] = time;
-      storedCount++;
+
+  public int getPlotSliceSize(Variable v1, Variable v2) {
+    if (v1.string() || v2.string()) return 0;
+    if (v1.categorical() && v2.categorical()) {
+      return maxPlotSliceSizeCC;
+    } else if (v1.numerical() && v2.numerical()) {
+      return maxPlotSliceSizeNN;
     } else {
-      float sum = 0;
-      for (int i = 0; i < storedCount; i++) {
-        sum += storedTimes[i];
-      }
-      sum /= storedCount;
-      System.out.println("Average plotting time: " + sum);
-      if (project.maxPlotTime < sum) {
-        DataSlice2D.MAX_SLICE_SIZE /= 2;
-        DataSlice1D.MAX_SLICE_SIZE /= 2;
-        System.out.println("Reduced MAX_SLICE_SIZE from " + DataSlice2D.MAX_SLICE_SIZE * 2 + " to " + DataSlice2D.MAX_SLICE_SIZE);
-      } else if (sum < 0.5 * project.maxPlotTime) {
-        DataSlice2D.MAX_SLICE_SIZE *= 2;
-        DataSlice1D.MAX_SLICE_SIZE *= 2;
-      }
-      storedCount = 0;
+      return maxPlotSliceSizeCN;
     }
   }
 
+  public void clockPlotTime(int time, Variable v1, Variable v2) {
+    if (v1.string() || v2.string()) return;
+    if (v1.categorical() && v2.categorical()) {
+      calcPlotTimeCC(time);
+    } else if (v1.numerical() && v2.numerical()) {
+      calcPlotTimeNN(time);
+    } else {
+      calcPlotTimeCN(time);
+    }
+  }
+
+  private void calcPlotTimeCC(int time) {
+    plotTimesCC.add(time);
+    if (targetClockSize < plotTimesCC.size()) {
+      plotTimesCC.remove(0);
+    }
+    clockUpdateCC++;
+    if (clockUpdateCC == targetClockSize) {
+      float meanTime = 0;
+      synchronized (plotTimesCC) {
+        Iterator i = plotTimesCC.iterator(); // Must be in synchronized block
+        while (i.hasNext()) {
+          int value = (Integer)i.next();
+          meanTime += value;
+        }
+      }
+      meanTime /= plotTimesCC.size();
+      if (meanTime < 0.5 * project.maxPlotTime || project.maxPlotTime < meanTime) {
+        float f = PApplet.min(PApplet.sqrt(project.maxPlotTime / meanTime), 2);
+        maxPlotSliceSizeCC = PApplet.max((int)(maxPlotSliceSizeCC * f), 1000);
+      }
+      clockUpdateCC = 0;
+    }
+  }
+
+  private void calcPlotTimeNN(int time) {
+    plotTimesNN.add(time);
+    if (targetClockSize < plotTimesNN.size()) {
+      plotTimesNN.remove(0);
+    }
+    clockUpdateNN++;
+    if (clockUpdateNN == targetClockSize) {
+      float meanTime = 0;
+      synchronized (plotTimesNN) {
+        Iterator i = plotTimesNN.iterator(); // Must be in synchronized block
+        while (i.hasNext()) {
+          int value = (Integer)i.next();
+          meanTime += value;
+        }
+      }
+      meanTime /= plotTimesNN.size();
+      if (meanTime < 0.5 * project.maxPlotTime || project.maxPlotTime < meanTime) {
+        float f = PApplet.min(PApplet.sqrt(project.maxPlotTime / meanTime), 2);
+        maxPlotSliceSizeNN = PApplet.max((int)(maxPlotSliceSizeNN * f), 1000);
+      }
+      clockUpdateNN = 0;
+    }
+  }
+
+  private void calcPlotTimeCN(int time) {
+    plotTimesCN.add(time);
+    if (targetClockSize < plotTimesCN.size()) {
+      plotTimesCN.remove(0);
+    }
+    clockUpdateCN++;
+    if (clockUpdateCN == targetClockSize) {
+      float meanTime = 0;
+      synchronized (plotTimesCN) {
+        Iterator i = plotTimesCN.iterator(); // Must be in synchronized block
+        while (i.hasNext()) {
+          int value = (Integer)i.next();
+          meanTime += value;
+        }
+      }
+      meanTime /= plotTimesCN.size();
+      if (meanTime < 0.5 * project.maxPlotTime || project.maxPlotTime < meanTime) {
+        float f = PApplet.min(PApplet.sqrt(project.maxPlotTime / meanTime), 2);
+        maxPlotSliceSizeCN = PApplet.max((int)(maxPlotSliceSizeCN * f), 1000);
+      }
+      clockUpdateCN = 0;
+    }
+  }
 
   //////////////////////////////////////////////////////////////////////////////
   
@@ -380,8 +465,8 @@ public class MiraApp extends PApplet {
     public void run() {
       loadingError = false;
       try {
-        dataset = new DataSet(project);      
-        initInterface();      
+        dataset = new DataSet(project);
+        initInterface();
         loaded = true;
         animAlpha.setTarget(0);
         surface.setTitle(project.dataTitle);

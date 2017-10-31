@@ -220,19 +220,19 @@ public class RowPlots extends ColumnScroller {
           if (viewTask != null && !viewTask.isDone()) viewTask.cancel(true);        
           viewTask = mira.browser.submitTask(new Runnable() {
             public void run() {
-              int tstart = mira.millis();
               if (var == rowVar) {
-                DataSlice1D slice = data.getSlice(rowVar, mira.ranges);
+                DataSlice1D slice = data.getSlice(rowVar, mira.ranges, Integer.MAX_VALUE);
                 missing = slice.missing;
                 view = View.create(slice, mira.project.binAlgorithm);
               } else {
-                DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges);
+                int tstart = mira.millis();
+                DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges, mira.getPlotSliceSize(var, rowVar));
                 missing = slice.missing;
                 view = View.create(slice, mira.getPlotType(), mira.project.binAlgorithm);
+                int time = mira.millis() - tstart;
+                mira.clockPlotTime(time, var, rowVar);
               }
               update = true;
-              int time = mira.millis() - tstart;
-              mira.addPlotTime(time);
             }
           }, true);
         }
@@ -240,13 +240,13 @@ public class RowPlots extends ColumnScroller {
           pdirty = false;
           if (indepTask != null && !indepTask.isDone()) indepTask.cancel(true);
           indepTask = mira.browser.submitTask(new Runnable() {
-            public void run() {                  
-              DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges);
+            public void run() {
+              DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges, Integer.MAX_VALUE);
               float score = 0;
               if (slice.missing < mira.project.missingThreshold()) {
                 score = Similarity.calculate(slice, mira.project.pvalue(), mira.project);
-              }                  
-              depend = 0 < score;              
+              }
+              depend = 0 < score;
             }
           }, false);            
         }          

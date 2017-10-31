@@ -61,6 +61,8 @@ public class DataSet {
   
   protected static double SELF_SCORE = -2 * Math.log10(Float.MIN_VALUE);
 
+  protected int maxSortSliceSize = Integer.MAX_VALUE;
+
   private static final String INCREASING_MEMORY_WIKI_URL =
     "https://github.com/mirador/mirador/wiki/Advanced-configuration";
 
@@ -469,13 +471,17 @@ public class DataSet {
     return missing;
   }
   
-  public DataSlice1D getSlice(Variable varx, DataRanges ranges) {
-    return new DataSlice1D(data, varx, ranges, keyVar);   
+  public DataSlice1D getSlice(Variable varx, DataRanges ranges, int maxSize) {
+    return new DataSlice1D(data, varx, ranges, keyVar, maxSize);
   }
   
-  public DataSlice2D getSlice(Variable varx, Variable vary, DataRanges ranges) {
-    return new DataSlice2D(data, varx, vary, ranges, keyVar);
-  }  
+  public DataSlice2D getSlice(Variable varx, Variable vary, DataRanges ranges, int maxSize) {
+    return new DataSlice2D(data, varx, vary, ranges, keyVar, maxSize);
+  }
+
+  public void setSortMaxSliceSize(int maxSize) {
+    maxSortSliceSize = maxSize;
+  }
   
   public void sort(Variable var, DataRanges ranges, float pvalue, float misst) {
     if (!var.include) {
@@ -492,16 +498,16 @@ public class DataSet {
     sortPValue = pvalue;
     sortMissingThreshold = misst;
 
-    launchScorePool(true);
-    sortTask = new SortTask();
+    launchScorePool(true, maxSortSliceSize);
+    sortTask = new SortTask(maxSortSliceSize);
     sortTask.start();
   }
 
   public void resort() {
     if (sortVar != null) {
       cancelCurrentSort();
-      launchScorePool(true);
-      sortTask = new SortTask();
+      launchScorePool(true, maxSortSliceSize);
+      sortTask = new SortTask(maxSortSliceSize);
       sortTask.start();
     }
   }
@@ -526,8 +532,8 @@ public class DataSet {
       sortPValue = pvalue;
       sortMissingThreshold = misst;
       cancelCurrentSort();
-      launchScorePool(true);
-      sortTask = new SortTask();
+      launchScorePool(true, maxSortSliceSize);
+      sortTask = new SortTask(maxSortSliceSize);
       sortTask.start();
     }
   }
@@ -545,8 +551,8 @@ public class DataSet {
 
     float frac = sortProgress();    
     cancelCurrentSort();    
-    launchScorePool(false);    
-    sortTask = new SortTask(frac < 0.9 ? SortTask.QUICKSORT : SortTask.INSERTION);
+    launchScorePool(false, maxSortSliceSize);
+    sortTask = new SortTask(frac < 0.9 ? SortTask.QUICKSORT : SortTask.INSERTION, maxSortSliceSize);
     sortTask.start();
   }
   
@@ -554,7 +560,7 @@ public class DataSet {
     if (sortVar != null) { 
       sortVar.sortKey = false;
       sortVar = null;
-      sortTask = new SortTask(true);
+      sortTask = new SortTask(true, maxSortSliceSize);
       sortTask.start();      
     }    
   }
@@ -591,7 +597,7 @@ public class DataSet {
     cancelSort = false;
   }
   
-  protected void launchScorePool(boolean clear) {
+  protected void launchScorePool(boolean clear, final int maxSliceSize) {
     // Calculating all the (missing) scores with a thread pool.
     threadedSort = true;
     if (clear) Collections.fill(scores, new Float(-1f));
@@ -603,7 +609,7 @@ public class DataSet {
       scorePool.execute(new Runnable() {
         public void run() {
           Variable vx = columns.get(col);
-          DataSlice2D slice = getSlice(vx, sortVar, sortRanges);
+          DataSlice2D slice = getSlice(vx, sortVar, sortRanges, maxSliceSize);
           float score = 0f;
           if (slice.missing < sortMissingThreshold) {
             if (project.sortMethod == Project.SIMILARITY) {
@@ -1123,23 +1129,25 @@ public class DataSet {
     final static int QUICKSORT = 0;
     final static int INSERTION = 1;
     int algo;
+    int size;
     boolean order;
     
-    SortTask() {
-      this(QUICKSORT);
+    SortTask(int size) {
+      this(QUICKSORT, size);
     }
     
-    SortTask(boolean order) {
-      this(QUICKSORT, order);
+    SortTask(boolean order, int size) {
+      this(QUICKSORT, order, size);
     }    
     
-    SortTask(int algo) {
-      this(algo, false);
+    SortTask(int algo, int size) {
+      this(algo, false, size);
     }
     
-    SortTask(int algo, boolean order) {
+    SortTask(int algo, boolean order, int size) {
       this.algo = algo;
       this.order = order;
+      this. size = size;
     }
     
     public void run() {
@@ -1214,7 +1222,7 @@ public class DataSet {
         float score = scores.get(col);
         if (0 <= score) return score;  
         Variable vx = columns.get(col);
-        DataSlice2D slice = getSlice(vx, sortVar, sortRanges);        
+        DataSlice2D slice = getSlice(vx, sortVar, sortRanges, size);
         if (slice.missing < sortMissingThreshold) {
           if (project.sortMethod == Project.SIMILARITY) {
             score = Similarity.calculate(slice, sortPValue, project);

@@ -14,8 +14,6 @@ import processing.data.TableRow;
  */
 
 public class DataSlice1D {
-  static public int MAX_SLICE_SIZE = 1000000;
-  
   public Variable varx;
   public DataRanges ranges;
   public ArrayList<Value1D> values;
@@ -31,12 +29,11 @@ public class DataSlice1D {
     this.ranges = new DataRanges(ranges);
   }
   
-  public DataSlice1D(DataSource data, Variable varx, DataRanges ranges) {
-    this(data, varx, ranges, null);
+  public DataSlice1D(DataSource data, Variable varx, DataRanges ranges, int maxSize) {
+    this(data, varx, ranges, null, maxSize);
   }
   
-  public DataSlice1D(DataSource data, Variable varx, DataRanges ranges, 
-                     Variable varl) {
+  public DataSlice1D(DataSource data, Variable varx, DataRanges ranges, Variable varl, int maxSize) {
     this.varx = varx;
     this.values = new ArrayList<Value1D>();
     
@@ -44,7 +41,7 @@ public class DataSlice1D {
     // has been constructed    
     this.ranges = new DataRanges(ranges);
     
-    init(data, varl);
+    init(data, varl, maxSize);
   } 
   
   public void dispose() {
@@ -90,12 +87,12 @@ public class DataSlice1D {
     return new double[] {mean, std};
   }
   
-  protected void init(DataSource data, Variable varl) {
+  protected void init(DataSource data, Variable varl, int maxSize) {
     int ntot = 0;
     int nmis = 0;
     double wsum = 0;
     int rcount = data.getRowCount();
-    float p = (float)MAX_SLICE_SIZE / (float)rcount;
+    float p = (float)maxSize / (float)rcount;
     for (int r = 0; r < rcount; r++) {
       if (p < 1 && p < Math.random()) continue;
       TableRow row = data.getRow(r);       

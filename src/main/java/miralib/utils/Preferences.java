@@ -24,7 +24,7 @@ public class Preferences {
   static final protected float defThreshold = 1E-3f;
 
   static final protected int defInitSliceSize = 1000000;
-  static final protected int defMaxPlotTime = 1000;
+  static final protected int defMaxPlotTime = 500;
 
   static final protected String defDateParsePattern = "yyyy-MM-dd";
   static final protected String defDatePrintPattern = "d MMM, yyyy";
@@ -82,7 +82,7 @@ public class Preferences {
       surrCount = settings.getInteger("correlation.surrogates", defSurrCount);
       threshold = settings.getFloat("correlation.threshold", defThreshold);
 
-      initSliceSize = settings.getInteger("performance.pointcount", defInitSliceSize);
+      initSliceSize = settings.getInteger("performance.samplesize", defInitSliceSize);
       maxPlotTime = settings.getInteger("performance.plottime", defMaxPlotTime);
 
       dateParsePattern = settings.get("dates.parse", defDateParsePattern);
@@ -119,7 +119,7 @@ public class Preferences {
     settings.set("correlation.sorting", Project.sortingToString(sortMethod));    
     settings.setInteger("correlation.surrogates", surrCount);
     settings.setFloat("correlation.threshold", threshold);
-    settings.setInteger("performance.pointcount", initSliceSize);
+    settings.setInteger("performance.samplesize", initSliceSize);
     settings.setInteger("performance.plottime", maxPlotTime);
     settings.set("dates.parse", dateParsePattern);
     settings.set("dates.print", datePrintPattern);

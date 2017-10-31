@@ -63,7 +63,7 @@ public class Project {
   public float threshold;
   public int initSliceSize;
   public int maxPlotTime;
-  
+
   public String dateParsePattern;
   public String datePrintPattern;  
   
@@ -123,7 +123,10 @@ public class Project {
                    Project.sortingToString(prefs.sortMethod)));      
       surrCount = settings.getInteger("correlation.surrogates", prefs.surrCount);
       threshold = settings.getFloat("correlation.threshold", prefs.threshold);
-      
+
+      initSliceSize = settings.getInteger("performance.samplesize", prefs.initSliceSize);
+      maxPlotTime = settings.getInteger("performance.plottime", prefs.maxPlotTime);
+
       dateParsePattern = settings.get("dates.parse", prefs.dateParsePattern);
       datePrintPattern = settings.get("dates.print", prefs.datePrintPattern);
     } else {
@@ -210,7 +213,7 @@ public class Project {
     this.threshold = that.threshold;
     this.initSliceSize = that.initSliceSize;
     this.maxPlotTime = that.maxPlotTime;
-  }  
+  }
   
   public boolean hasSource() {
     return !dataFile.equals("");
@@ -283,7 +286,10 @@ public class Project {
         settings.set("correlation.algorithm", DependencyTest.algorithmToString(depTest));
         settings.set("correlation.sorting", sortingToString(sortMethod));
         settings.setInteger("correlation.surrogates", surrCount);
-        settings.setFloat("correlation.threshold", threshold);   
+        settings.setFloat("correlation.threshold", threshold);
+
+        settings.setInteger("performance.samplesize", initSliceSize);
+        settings.setInteger("performance.plottime", maxPlotTime);
         
         settings.set("dates.parse", dateParsePattern);
         settings.set("dates.print", datePrintPattern);
