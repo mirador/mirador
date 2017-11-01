@@ -110,12 +110,12 @@ public class OptionsPanel extends MiraWidget {
     addChild(pdfBtn, TOP_LEFT_CORNER); 
          
     plotOpt = new Options(marginX, plotOptY, optWidth, optHeight, "PlotOptions");
-    plotOpt.title("Plot Type");
+    plotOpt.title("Plot type");
     plotOpt.add("Scatter", "Histogram", "Eikosogram");
     plotOpt.select(mira.getPlotType());
     
     statOpt = new Options(marginX, statOptY, optWidth, optHeight, "StatsOptions");
-    statOpt.title("P-value", corColor);
+    statOpt.title("Error rate", corColor);
     statOpt.add("99.9%", "99.5%", "99%", "95%", "90%", "Don't use");
     statOpt.select(mira.getPValue());    
     

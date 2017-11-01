@@ -7,7 +7,10 @@ import miralib.utils.Project;
 import org.apache.commons.math3.distribution.GammaDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
-public class PValue {  
+public class PValue {
+  public static double MIN_VALUE = 10E-9;
+  protected static double SELF_SCORE = -2 * Math.log10(Float.MIN_VALUE);
+
   static public float[] calculate(DataSlice2D slice, Project prefs) {
     Variable varx = slice.varx;
     Variable vary = slice.vary;
@@ -45,7 +48,20 @@ public class PValue {
     }
     
     return new float[] {ixy, pval};
-  }  
+  }
+
+  static public float getScore(DataSlice2D slice, float pval) {
+    float res = 0;
+    if (0 < pval) {
+      res = -(float)Math.log10(pval);
+    } else if (slice.varx == slice.vary) {
+      res = (float)SELF_SCORE;
+    } else {
+      res = 0;
+    }
+    if (Float.isNaN(res)) res = 0;
+    return res;
+  }
   
   static protected double surrogateGauss(DataSlice2D slice, float ixy,
                                          int binAlgo, int scount) {

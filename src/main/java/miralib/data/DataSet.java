@@ -58,8 +58,6 @@ public class DataSet {
   protected boolean threadedSort;
   protected boolean cancelSort;
   protected int nonthreadedCount;
-  
-  protected static double SELF_SCORE = -2 * Math.log10(Float.MIN_VALUE);
 
   protected int maxSortSliceSize = Integer.MAX_VALUE;
 
@@ -572,7 +570,7 @@ public class DataSet {
       sortVar = null;
     }
   }
-  
+
   protected void cancelCurrentSort() {
     cancelSort = true;
     
@@ -616,7 +614,7 @@ public class DataSet {
               score = Similarity.calculate(slice, sortPValue, project);
             } else if (project.sortMethod == Project.PVALUE) { 
               float[] res = PValue.calculate(slice, project);
-              score = getScore(slice, res[1]);
+              score = PValue.getScore(slice, res[1]);
             }
           }
           scores.set(col, score);
@@ -624,19 +622,6 @@ public class DataSet {
       });      
     }
     scorePool.shutdown();
-  }
-    
-  static protected float getScore(DataSlice2D slice, float pval) {
-    float res = 0;
-    if (0 < pval) { 
-      res = -(float)Math.log10(pval);
-    } else if (slice.varx == slice.vary) {
-      res = (float)SELF_SCORE;              
-    } else {
-      res = 0;
-    }
-    if (Float.isNaN(res)) res = 0;
-    return res;
   }
   
   public boolean sorting() {
@@ -1228,7 +1213,7 @@ public class DataSet {
             score = Similarity.calculate(slice, sortPValue, project);
           } else if (project.sortMethod == Project.PVALUE) { 
             float[] res = PValue.calculate(slice, project);
-            score = DataSet.getScore(slice, res[1]);
+            score = PValue.getScore(slice, res[1]);
           }
         } else {
           score = 0f;  

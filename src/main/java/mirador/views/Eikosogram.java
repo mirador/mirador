@@ -164,7 +164,7 @@ public class Eikosogram extends View {
     }    
   }
   
-  public Selection getEikosogramSelection(double valx, double valy, boolean shift) {   
+  public Selection getEikosogramSelection(double valx, double valy, boolean shift) {
     float x0 = 0;
     for (int bx = 0; bx < binCountX; bx++) {
       float dx = marginalDensity[bx];

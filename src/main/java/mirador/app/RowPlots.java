@@ -5,6 +5,10 @@ package mirador.app;
 import java.nio.file.Paths;
 import java.util.concurrent.FutureTask;
 
+import miralib.data.DataSet;
+import miralib.math.Numbers;
+import miralib.shannon.PValue;
+import miralib.utils.Project;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -163,6 +167,8 @@ public class RowPlots extends ColumnScroller {
     float missing;
     SoftFloat blendf;
     int corColor, misColor;
+    float score;
+    int millis0;
     
     @SuppressWarnings("rawtypes")
     FutureTask viewTask, indepTask;
@@ -176,6 +182,8 @@ public class RowPlots extends ColumnScroller {
       dirty = true;
       pdirty = true;
       update = false;
+      score = -1;
+      millis0 = mira.millis();
       depend = false;
       blendf = new SoftFloat();
       
@@ -236,17 +244,28 @@ public class RowPlots extends ColumnScroller {
             }
           }, true);
         }
-        if (pdirty) {          
+        if (pdirty) {
           pdirty = false;
           if (indepTask != null && !indepTask.isDone()) indepTask.cancel(true);
           indepTask = mira.browser.submitTask(new Runnable() {
             public void run() {
+              score = -1;
+              millis0 = mira.millis();
               DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges, Integer.MAX_VALUE);
-              float score = 0;
-              if (slice.missing < mira.project.missingThreshold()) {
-                score = Similarity.calculate(slice, mira.project.pvalue(), mira.project);
+              if (mira.project.sortMethod == Project.SIMILARITY) {
+                if (slice.missing < mira.project.missingThreshold()) {
+                  score = Similarity.calculate(slice, mira.project.pvalue(), mira.project);
+                }
+                depend = 0 < score;
+              } else if (mira.project.sortMethod == Project.PVALUE) {
+                float[] res = PValue.calculate(slice, mira.project);
+                float pvalue = res[1];
+                score = PValue.getScore(slice, pvalue);
+                depend = pvalue <= mira.project.pvalue();
+              } else {
+                score = 0;
+                depend = false;
               }
-              depend = 0 < score;
             }
           }, false);            
         }          
@@ -292,21 +311,60 @@ public class RowPlots extends ColumnScroller {
         }          
         tint(color(255), bfa);
         image(canvas, x0, y0, w0, h0);
-        
+
+        float a = 1.7f * (mira.millis() - millis0) / 1000.0f;
+        float corrAlpha = (1 - PApplet.cos(a)) * 0.5f;
+        boolean selCorrTri = false;
+
+        float mx = mouseX - x0;
+        float my = mouseY - y0;
         if (view != null && (viewTask == null || viewTask.isDone()) && hovered &&
-            x0 <= mouseX && mouseX <= x0 + w0 &&
-            y0 <= mouseY && mouseY <= y0 + h0) {
-          double valx = PApplet.constrain((mouseX - x0) / w0, 0, 1);
-          double valy = PApplet.constrain((mouseY - y0) / h0, 0, 1);
-          view.drawSelection(valx, valy, keyPressed(SHIFT), x0, y0, w0, h0, 
-                             RowPlots.this, pFont, pColor);          
+            0 <= mx && mx <= w0 && 0 <= my && my <= h0) {
+
+          if (0 < mx && mx < triSize && 0 < my && my <= mx) {
+            selCorrTri = true;
+            textFont(pFont);
+            String value;
+            if (score < 0) {
+              fill(color(90, 255 * corrAlpha));
+              value = " = calculating...";
+            } else {
+              fill(pColor);
+              double p = Math.pow(10, -score);
+              if (p < PValue.MIN_VALUE) {
+                value = "* < 1E-9";
+              } else {
+                if (p > 0.01) {
+                  value = " = " + Numbers.nfc(p, 2);
+                } else {
+                  value = " = " + Numbers.dfc(p);
+                }
+                if (p <= mira.project.pvalue()) value = "*" + value;
+              }
+            }
+            text("P" + value, x0 + triSize, y0 + triSize);
+          } else {
+            double valx = PApplet.constrain(mx / w0, 0, 1);
+            double valy = PApplet.constrain(my / h0, 0, 1);
+            view.drawSelection(valx, valy, keyPressed(SHIFT), x0, y0, w0, h0,RowPlots.this, pFont, pColor);
+          }
         }
         
-        if (depend && mira.project.pvalue() < 1) {
-          // TODO: show some kind of animation while calculating the significance...
-          noStroke();
-          fill(corColor);
-          triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
+        if (mira.project.pvalue() < 1) {
+          if (score < 0) {
+            // Animated fill during calculation.
+            fill(color(160, 200 * corrAlpha));
+            noStroke();
+            triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
+          } else if (depend) {
+            fill(corColor);
+            noStroke();
+            triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
+          } else if (selCorrTri) {
+            fill(corColor);
+            fill(color(160, 150));
+            triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
+          }
         }
         
         if (mira.project.missingThreshold() <= missing) {
@@ -343,14 +401,22 @@ public class RowPlots extends ColumnScroller {
         double valy = PApplet.constrain((mouseY - y0) / h0, 0, 1);
         view.drawSelection(valx, valy, keyPressed(SHIFT), pg, pFont, pColor);
       }
-      
-      if (depend && mira.project.pvalue() < 1) {
-        // TODO: show some kind of animation while calculating the significance...
-        pg.noStroke();
-        pg.fill(corColor);
-        pg.triangle(0, 0, triSize, 0, 0, triSize);
+
+      if (mira.project.pvalue() < 1) {
+        if (score < 0) {
+          // Animated fill during calculation.
+          float a = 1.7f * (mira.millis() - millis0) / 1000.0f;
+          float alpha = 200 * ((1 - PApplet.cos(a)) * 0.5f);
+          pg.fill(color(160, alpha));
+          pg.noStroke();
+          pg.triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
+        } else if (depend) {
+          pg.fill(corColor);
+          pg.noStroke();
+          pg.triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
+        }
       }
-      
+
       if (mira.project.missingThreshold() <= missing) {
         pg.noStroke();
         pg.fill(misColor);

@@ -146,7 +146,7 @@ public class Similarity {
     } else if (prefs.depTest == DependencyTest.SURROGATE_GENERAL) {      
       indep = surrogateGeneral(slice, ixy, prefs.binAlgorithm, pvalue);
     } else if (prefs.depTest == DependencyTest.GAMMA_TEST) {
-        indep = gammaTest(ixy, binx, biny, count, pvalue);
+      indep = gammaTest(ixy, binx, biny, count, pvalue);
     }
     
     if (indep) {
@@ -162,7 +162,7 @@ public class Similarity {
       }      
       return w;
     }
-  }  
+  }
   
   static protected boolean surrogateGauss(DataSlice2D slice, float ixy,
                                           int binAlgo, int scount, double cvalue) {
