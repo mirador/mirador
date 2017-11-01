@@ -71,7 +71,7 @@ public class OptionsPanel extends MiraWidget {
     
     loadBtn = new MenuButton(intf, marginX, loadBtnY, btnWidth, btnHeight, "Load Data") {
       public void handle() {
-        if (keyPressed(SHIFT)) {
+        if (keyPressed(ALT)) {
           mira.reloadDataset();
         } else {
           mira.loadDataset();  
@@ -330,7 +330,7 @@ public class OptionsPanel extends MiraWidget {
       
       fill(pColor);
       textFont(pFont);
-      if (shiftLabel != null && hovered && keyPressed(SHIFT)) {
+      if (shiftLabel != null && hovered && keyPressed(ALT)) {
         text(shiftLabel, 5, height - center);
       } else {
         text(label, btnOffsetX, height - center);

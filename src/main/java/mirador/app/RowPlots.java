@@ -346,7 +346,7 @@ public class RowPlots extends ColumnScroller {
           } else {
             double valx = PApplet.constrain(mx / w0, 0, 1);
             double valy = PApplet.constrain(my / h0, 0, 1);
-            view.drawSelection(valx, valy, keyPressed(SHIFT), x0, y0, w0, h0,RowPlots.this, pFont, pColor);
+            view.drawSelection(valx, valy, keyPressed(ALT), x0, y0, w0, h0,RowPlots.this, pFont, pColor);
           }
         }
 
@@ -401,7 +401,7 @@ public class RowPlots extends ColumnScroller {
           y0 <= mouseY && mouseY <= y0 + h0) {
         double valx = PApplet.constrain((mouseX - x0) / w0, 0, 1);
         double valy = PApplet.constrain((mouseY - y0) / h0, 0, 1);
-        view.drawSelection(valx, valy, keyPressed(SHIFT), pg, pFont, pColor);
+        view.drawSelection(valx, valy, keyPressed(ALT), pg, pFont, pColor);
       }
 
       if (mira.project.pvalue() < 1) {

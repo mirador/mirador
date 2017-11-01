@@ -228,7 +228,7 @@ public class ColumnLabels extends ColumnScroller {
       if (!inside(mouseX, mouseY)) return;
         
       if (insideDismiss(mouseX, mouseY)) {
-        if (keyPressed(SHIFT)) {
+        if (keyPressed(ALT)) {
           mira.browser.closeColumnsBut(var);
         } else {
           mira.browser.closeColumn(var);

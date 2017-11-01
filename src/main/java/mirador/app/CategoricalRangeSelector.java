@@ -180,7 +180,7 @@ public class CategoricalRangeSelector extends RangeSelector {
       }   
       if (selBox != null) {        
         boolean sel = !selBox.selected;
-        boolean all = keyPressed(SHIFT);
+        boolean all = keyPressed(ALT);
         intf.invoke(CategoricalRangeSelector.class, "selectValue", selVar, selBox.value, sel, all);
         requestedRangeUpdate = true;        
       }

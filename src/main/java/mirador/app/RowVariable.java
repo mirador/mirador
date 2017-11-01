@@ -259,7 +259,7 @@ public class RowVariable extends RowWidget {
   } 
   
   public void mouseReleased() {
-    boolean shift = keyPressed(SHIFT);
+    boolean shift = keyPressed(ALT);
     if (labelMode == SORT_ACTION) {
       labelMode = SORTING_STATUS;
       sortMode = SORTING;

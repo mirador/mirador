@@ -41,7 +41,9 @@ public class VariableBrowser extends MiraWidget {
   protected HorizontalScrollbar hscroll;
 
   protected boolean sort0;
-  
+
+  protected boolean showPlotEdges = false;
+
   VariableBrowser(Interface intf, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
     rowAxis = colAxis = null;
@@ -102,7 +104,7 @@ public class VariableBrowser extends MiraWidget {
     intf.addKeymap(searchBar, Interface.ALL_CHARACTERS);
     intf.addKeymap(searchBar, BACKSPACE, DELETE, TAB, ESC);
   }  
-  
+
   @SuppressWarnings("unchecked")
   public FutureTask<Object> submitTask(Runnable task, boolean highp) {
     if (highp) {
