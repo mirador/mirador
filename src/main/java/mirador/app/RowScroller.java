@@ -133,10 +133,13 @@ public class RowScroller extends MiraWidget {
   }
 
   public void dragColumns(float dx) {
-    for (Widget child: children) {
-      if (child instanceof RowVariable) {
-        ((RowVariable)child).drag(dx);
+    if (active) {
+      for (Widget child : children) {
+        if (child instanceof RowVariable) {
+          ((RowVariable) child).drag(dx);
+        }
       }
+      row.updateHorScrollbar();
     }
   }
 
@@ -297,8 +300,10 @@ public class RowScroller extends MiraWidget {
       if (key == CODED) {
         if (keyCode == LEFT) {
           prev();
+          row.updateHorScrollbar();
         } else if (keyCode == RIGHT) {
           next();
+          row.updateHorScrollbar();
         } else if (keyCode == UP) {
           up();
           row.updateVertScrollbar();

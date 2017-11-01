@@ -97,6 +97,11 @@ public class HorizontalScrollbar extends MiraWidget {
   }
 
 
+  public void scrollToFirst() {
+    int idx = col.getFirstItemIndex();
+    scrollTo(idx);
+  }
+
   public void scrollTo(int idx) {
     int tot = col.getTotItemsCount() - 1;
     float x1 = PApplet.map(idx, 0, tot, 0, width - handlew);

@@ -151,6 +151,10 @@ public class RowBrowser extends MiraWidget {
     vbar.scrollTo(idx);
   }
 
+  public void updateHorScrollbar() {
+    hbar.scrollToFirst();
+  }
+
   public void keyPressed() {
     RowScroller currScroller = (RowScroller)children.get(current);
     if (key == CODED) {
