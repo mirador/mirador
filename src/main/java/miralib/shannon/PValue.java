@@ -8,6 +8,7 @@ import org.apache.commons.math3.distribution.GammaDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class PValue {
+  public static double MAX_SCORE = 9;
   public static double MIN_VALUE = 10E-9;
   protected static double SELF_SCORE = -2 * Math.log10(Float.MIN_VALUE);
 

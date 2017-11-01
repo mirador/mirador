@@ -17,6 +17,7 @@ import miralib.data.Variable;
 import miralib.math.Numbers;
 import miralib.utils.Log;
 import miralib.utils.Project;
+import miralib.shannon.PValue;
 
 /**
  * Widget containing the profile view in Mirador.
@@ -334,7 +335,18 @@ public class Profile extends MiraWidget {
       if (!ptLabel.equals(ptAlias)) ptLabel += ": " + ptAlias;      
       if (mira.project.sortMethod == Project.PVALUE) {
         double p = Math.pow(10, -score);
-        ptLabel += " P = " + Numbers.dfc(p); 
+        String value;
+        if (p < PValue.MIN_VALUE) {
+          value = "* < 1E-9";
+        } else {
+          if (p > 0.01) {
+            value = " = " + Numbers.nfc(p, 2);
+          } else {
+            value = " = " + Numbers.dfc(p);
+          }
+          if (p <= mira.project.pvalue()) value = "*" + value;
+        }
+        ptLabel += " P" + value;
       }
       
       textFont(ptFont);
@@ -404,6 +416,10 @@ public class Profile extends MiraWidget {
     for (int i = 0; i < data.getColumnCount(); i++) {
       Variable var = data.getColumn(i);        
       float score = data.getScore(i);
+      if (mira.project.sortMethod == Project.PVALUE) {
+        double p = Math.pow(10, -score);
+        if (p < PValue.MIN_VALUE) score = (float)PValue.MAX_SCORE;
+      }
       if (var == data.sortKey() || score <= 0) {
         if (points.containsKey(var)) points.remove(var);
         continue;
@@ -421,6 +437,10 @@ public class Profile extends MiraWidget {
     for (int i = 0; i < data.getColumnCount(); i++) {
       Variable var = data.getColumn(i);
       float score = data.getScore(i);
+      if (mira.project.sortMethod == Project.PVALUE) {
+        double p = Math.pow(10, -score);
+        if (p < PValue.MIN_VALUE) score = (float)PValue.MAX_SCORE;
+      }
       if (var == data.sortKey() || score <= 0) continue;
       SoftPoint pt = points.get(var); 
       if (pt == null) {
