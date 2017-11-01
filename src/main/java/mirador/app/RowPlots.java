@@ -321,7 +321,7 @@ public class RowPlots extends ColumnScroller {
         if (view != null && (viewTask == null || viewTask.isDone()) && hovered &&
             0 <= mx && mx <= w0 && 0 <= my && my <= h0) {
 
-          if (0 < mx && mx < triSize && 0 < my && my <= mx) {
+          if (view.canDraw() && 0 < mx && mx < triSize && 0 < my && my <= mx) {
             selCorrTri = true;
             textFont(pFont);
             String value;
@@ -349,29 +349,31 @@ public class RowPlots extends ColumnScroller {
             view.drawSelection(valx, valy, keyPressed(SHIFT), x0, y0, w0, h0,RowPlots.this, pFont, pColor);
           }
         }
-        
-        if (mira.project.pvalue() < 1) {
-          if (score < 0) {
-            // Animated fill during calculation.
-            fill(color(160, 200 * corrAlpha));
-            noStroke();
-            triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
-          } else if (depend) {
-            fill(corColor);
-            noStroke();
-            triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
-          } else if (selCorrTri) {
-            fill(corColor);
-            fill(color(160, 150));
-            triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
+
+        if (view != null && view.canDraw()) {
+          if (mira.project.pvalue() < 1) {
+            if (score < 0) {
+              // Animated fill during calculation.
+              fill(color(160, 200 * corrAlpha));
+              noStroke();
+              triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
+            } else if (depend) {
+              fill(corColor);
+              noStroke();
+              triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
+            } else if (selCorrTri) {
+              fill(corColor);
+              fill(color(160, 150));
+              triangle(x0, y0, x0 + triSize, y0, x0, y0 + triSize);
+            }
           }
-        }
-        
-        if (mira.project.missingThreshold() <= missing) {
-          float x1 = x0 + w0;
-          noStroke();
-          fill(misColor);
-          triangle(x1 - triSize, y0, x1, y0, x1, y0 + triSize);
+
+          if (mira.project.missingThreshold() <= missing) {
+            float x1 = x0 + w0;
+            noStroke();
+            fill(misColor);
+            triangle(x1 - triSize, y0, x1, y0, x1, y0 + triSize);
+          }
         }
       } else {
         noStroke();

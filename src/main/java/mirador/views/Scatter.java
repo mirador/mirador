@@ -25,49 +25,61 @@ public class Scatter extends View {
   public void draw(PGraphics pg, boolean pdf) {
     pg.beginDraw();
     pg.background(WHITE);
-    pg.noStroke();
-    float rad = 0;      
-    int a;
-    int count = PApplet.min(500, points.size());
-    rad = PApplet.map(count, 0, 500, 0.05f, 0.01f);
-    a = (int)PApplet.map(count, 0, 500, 70, 10);
+    if (canDraw()) {
+      pg.noStroke();
+      float rad = 0;
+      int a;
+      int count = PApplet.min(500, points.size());
+      rad = PApplet.map(count, 0, 500, 0.05f, 0.01f);
+      a = (int) PApplet.map(count, 0, 500, 70, 10);
 
-    pg.fill(pg.red(BLUE), pg.green(BLUE), pg.blue(BLUE), a);
-    for (Value2D pt: points) {
-      float px = pg.width * (float)pt.x;      
-      float py = pg.height * (float)(1 - pt.y);
-      float pw = pg.width * rad;
-      float ph = pg.height * rad;        
-      if (50000 < points.size()) pg.rect(px - pw/2, py - ph/2, pw, ph);
-      else pg.ellipse(px, py, pw, ph);
-    }          
+      pg.fill(pg.red(BLUE), pg.green(BLUE), pg.blue(BLUE), a);
+      for (Value2D pt : points) {
+        float px = pg.width * (float) pt.x;
+        float py = pg.height * (float) (1 - pt.y);
+        float pw = pg.width * rad;
+        float ph = pg.height * rad;
+        if (50000 < points.size()) pg.rect(px - pw / 2, py - ph / 2, pw, ph);
+        else pg.ellipse(px, py, pw, ph);
+      }
+    } else {
+      drawCross(pg);
+    }
     if (pdf) pg.dispose();
     pg.endDraw();
   }
   
   public Selection getSelection(double valx, double valy, boolean shift) {
-    if (points.size() < 500) {
-      int count = PApplet.min(500, points.size());
-      float rad = PApplet.map(count, 0, 500, 0.05f, 0.01f);
-      
-      for (Value2D pt: points) {
-        float px = (float)pt.x;        
-        float py = 1 - (float)(pt.y);        
-        if (PApplet.dist((float)valx, (float)valy, px, py) < rad) {
-          Selection sel = new Selection(px, py, rad, rad);
-          sel.isEllipse = true;
-          sel.setLabel(pt.label);
-          return sel;            
+    if (canDraw()) {
+      if (points.size() < 500) {
+        int count = PApplet.min(500, points.size());
+        float rad = PApplet.map(count, 0, 500, 0.05f, 0.01f);
+
+        for (Value2D pt : points) {
+          float px = (float) pt.x;
+          float py = 1 - (float) (pt.y);
+          if (PApplet.dist((float) valx, (float) valy, px, py) < rad) {
+            Selection sel = new Selection(px, py, rad, rad);
+            sel.isEllipse = true;
+            sel.setLabel(pt.label);
+            return sel;
+          }
         }
+
+        return null;
+      } else {
+        // TODO: needs some kind of tree representation of the data to search
+        // efficiently when there are many data points.
+        return null;
       }
-      
-      return null;      
     } else {
-      // TODO: needs some kind of tree representation of the data to search 
-      // efficiently when there are many data points.      
-      return null;      
-    }    
-  }  
+      return getUnavailableSelection();
+    }
+  }
+
+  public boolean canDraw() {
+    return 1 < varx.range().getCount() && 1 < vary.range().getCount();
+  }
   
   protected void initPoints(DataSlice2D slice) {
     float dx = (float)(1.0d / varx.getCount(ranges));

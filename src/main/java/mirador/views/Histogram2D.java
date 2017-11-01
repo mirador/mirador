@@ -32,7 +32,7 @@ public class Histogram2D extends View {
   public void draw(PGraphics pg, boolean pdf) {
     pg.beginDraw();
     pg.background(WHITE);
-    if (1 < binCountX && 1 < binCountY) { 
+    if (canDraw()) {
       float binw = (float)pg.width / binCountX;
       float binh = (float)pg.height / binCountY;    
       pg.noStroke();
@@ -43,13 +43,15 @@ public class Histogram2D extends View {
           pg.rect(binw * bx, pg.height - binh * by, binw, -binh);        
         }
       }
+    } else {
+      drawCross(pg);
     }
     if (pdf) pg.dispose();
     pg.endDraw();
   }
   
   public Selection getSelection(double valx, double valy, boolean shift) {
-    if (1 < binCountX && 1 < binCountY) {
+    if (canDraw()) {
       float binw = 1.0f / binCountX;
       float binh = 1.0f / binCountY;
       for (int bx = 0; bx < binCountX; bx++) {
@@ -72,10 +74,16 @@ public class Histogram2D extends View {
           }
         }
       }
+    } else {
+      return getUnavailableSelection();
     }
     return null;
   }
-  
+
+  public boolean canDraw() {
+    return 1 < binCountX && 1 < binCountY;
+  }
+
   protected void calcDensity(DataSlice2D slice, int algo) {
     // Calculating number of bins ----------------------------------------------
     int[] res = BinOptimizer.calculate(slice, algo);

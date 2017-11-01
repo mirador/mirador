@@ -81,6 +81,25 @@ abstract public class View {
     Selection sel = getSelection(valx, valy, shift);
     if (sel != null) sel.draw(pg, font, color);
   }
+
+  abstract public boolean canDraw();
+
+  protected void drawCross(PGraphics pg) {
+    float x0 = 0.4f * pg.width;
+    float y0 = 0.4f * pg.height;
+    float x1 = 0.6f * pg.width;
+    float y1 = 0.6f * pg.height;
+    pg.stroke(160, 30);
+    pg.strokeWeight(pg.width * 0.05f);
+    pg.line(x0, y0, x1, y1);
+    pg.line(x1, y0, x0, y1);
+  }
+
+  protected Selection getUnavailableSelection() {
+    Selection sel = new Selection(0, 0, 1, 1);
+    sel.setLabel("Not enough values to plot");
+    return sel;
+  }
   
   protected int mixColors(int col0, int col1, float f) {
     int a = (int)PApplet.map(f, 0, 1, col0 >> 24 & 0xFF, col1 >> 24 & 0xFF);

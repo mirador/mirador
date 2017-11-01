@@ -94,26 +94,33 @@ public class Eikosogram extends View {
   public void draw(PGraphics pg, boolean pdf) {
     pg.beginDraw();
     pg.background(WHITE);
-    if (1 < binCountX && 1 < binCountY) {  
+    if (canDraw()) {
       if (vary.categorical()) {
         drawEikosogram(pg);
       } else {
         drawBoxplot(pg);
       }
+    } else {
+      drawCross(pg);
     }
     if (pdf) pg.dispose();
     pg.endDraw();
   }
   
   public Selection getSelection(double valx, double valy, boolean shift) {
-    if (1 < binCountX && 1 < binCountY) {
+    if (canDraw()) {
       if (vary.categorical()) {
         return getEikosogramSelection(valx, valy, shift);
       } else {
         return getBoxplotSelection(valx, valy, shift);
       }
+    } else {
+      return getUnavailableSelection();
     }
-    return null;
+  }
+
+  public boolean canDraw() {
+    return 1 < binCountX && 1 < binCountY;
   }
   
   protected void drawEikosogram(PGraphics pg) {

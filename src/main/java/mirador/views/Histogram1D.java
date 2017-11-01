@@ -25,7 +25,7 @@ public class Histogram1D extends View {
   public void draw(PGraphics pg, boolean pdf) {
     pg.beginDraw();
     pg.background(WHITE);
-    if (1 < binCount) { 
+    if (canDraw()) {
       float binw = (float)pg.width / binCount;    
       pg.noStroke();
       for (int bx = 0; bx < binCount; bx++) {
@@ -35,6 +35,8 @@ public class Histogram1D extends View {
         pg.fill(GREY);
         pg.rect(binw * bx, pg.height * (1 - h), binw, pg.height * h);        
       }
+    } else {
+      drawCross(pg);
     }
     if (pdf) pg.dispose();
     pg.endDraw();
@@ -45,7 +47,7 @@ public class Histogram1D extends View {
   }
   
   public Selection getSelection(double valx, double valy, boolean shift) {
-    if (1 < binCount) { 
+    if (canDraw()) {
       float binw = 1.0f / binCount;          
       for (int bx = 0; bx < binCount; bx++) {        
         float p = density[bx];
@@ -63,9 +65,15 @@ public class Histogram1D extends View {
           return sel;
         }        
       }
-    }    
+    } else {
+      return getUnavailableSelection();
+    }
     return null;
-  } 
+  }
+
+  public boolean canDraw() {
+    return 1 < binCount;
+  }
 
   protected void calcDensity(DataSlice1D slice, int algo) {
     // Calculating number of bins ----------------------------------------------
