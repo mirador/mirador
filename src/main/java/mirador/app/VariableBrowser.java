@@ -13,6 +13,7 @@ import mui.Interface;
 import mui.Widget;
 import miralib.data.Variable;
 import miralib.data.VariableContainer;
+import mirador.handlers.ScrollbarHandler;
 import processing.core.PApplet;
 
 /**
@@ -84,11 +85,11 @@ public class VariableBrowser extends MiraWidget {
     covBar.clipBounds(true, false);
     addChild(covBar, BOTTOM_LEFT_CORNER);
 
-    vscroll = new VerticalScrollbar(intf, rowBrowser, -scrollSize, mira.labelHeightClose + 2 * padding,
+    vscroll = new VerticalScrollbar(intf, createVHandler(), -scrollSize, mira.labelHeightClose + 2 * padding,
                                     scrollSize,height - mira.labelHeightClose - scrollSize - 2 * padding);
     addChild(vscroll, TOP_RIGHT_CORNER);
 
-    hscroll = new HorizontalScrollbar(intf, colLabels, mira.varWidth + padding, -scrollSize,
+    hscroll = new HorizontalScrollbar(intf, createHHandler(), mira.varWidth + padding, -scrollSize,
                                      width - mira.varWidth - scrollSize - padding, scrollSize);
     addChild(hscroll, BOTTOM_LEFT_CORNER);
 
@@ -378,5 +379,123 @@ public class VariableBrowser extends MiraWidget {
       }
     }      
     return ready;
+  }
+
+  protected ScrollbarHandler createHHandler() {
+    ScrollbarHandler handler = new ScrollbarHandler() {
+      public float drag(float newp, float maxd) {
+        float x1 = PApplet.constrain(newp, 0, maxd);
+        int tot = colLabels.getTotItemsCount() - 1;
+        int idx = PApplet.round(PApplet.map(x1, 0, maxd, 0, tot));
+        mira.browser.openColumn(idx);
+        return x1;
+      }
+      public void stopDrag() {
+        mira.browser.snapColumns();
+      }
+      public float press(float pos, float maxd) {
+        float x1 = PApplet.constrain(pos, 0, maxd);
+        int tot = colLabels.getTotItemsCount() - 1;
+        int idx = PApplet.round(PApplet.map(x1, 0, maxd, 0, tot));
+        mira.browser.openColumn(idx);
+        return x1;
+      }
+      public int pressSlider(float pos, float size) {
+        int idx = colLabels.getFirstItemIndex();
+        if (pos + 0.5 * size < pos && idx < colLabels.getTotItemsCount() - 1) {
+          // one step to the right
+          idx++;
+          mira.browser.openColumn(idx);
+        } else if (0 < idx) {
+          // one step to the left
+          idx--;
+          mira.browser.openColumn(idx);
+        }
+        return idx;
+      }
+      public int currentItem() {
+        return colLabels.getFirstItemIndex();
+      }
+      public float itemPosition(int idx, float maxd) {
+        int tot = colLabels.getTotItemsCount() - 1;
+        float x1 = PApplet.map(idx, 0, tot, 0, maxd);
+        return x1;
+      }
+      public float resize(float news) {
+        float w1 = news - mira.optWidth - mira.varWidth - mira.browser.scrollSize - padding;
+        return w1;
+      }
+      public float totalSize() {
+        return colLabels.getTotalWidth();
+      }
+      public float initPosition(float maxd) {
+        int tot = colLabels.getTotItemsCount() - 1;
+        int idx = colLabels.getFirstItemIndex();
+        float x0 = PApplet.map(idx, 0, tot, 0, maxd);
+        return x0;
+      }
+    };
+    return handler;
+  }
+
+  protected ScrollbarHandler createVHandler() {
+    ScrollbarHandler handler = new ScrollbarHandler() {
+      public float drag(float newp, float maxd) {
+        float y1 = PApplet.constrain(newp, 0, maxd);
+        int tot = rowBrowser.getTotItemsCount() - 1;
+        int n = PApplet.round(PApplet.map(y1, 0, maxd, 0, tot));
+        RowScroller scroller = rowBrowser.getScroller();
+        scroller.jumpTo(n);
+        return y1;
+      }
+      public void stopDrag() {
+        RowScroller scroller = rowBrowser.getScroller();
+        scroller.snap();
+      }
+      public float press(float pos, float maxd) {
+        float y1 = PApplet.constrain(pos, 0, maxd);
+        int tot = rowBrowser.getTotItemsCount() - 1;
+        int n = PApplet.round(PApplet.map(y1, 0, maxd, 0, tot - 1));
+        RowScroller scroller = rowBrowser.getScroller();
+        scroller.jumpTo(n);
+        return y1;
+      }
+      public int pressSlider(float pos, float size) {
+        RowScroller scroller = rowBrowser.getScroller();
+        int idx = scroller.getFirstIndex();
+        if (pos + 0.5 * size < pos && idx < rowBrowser.getTotItemsCount() - 1) {
+          // one step down
+          scroller.down();
+        } else if (0 < idx) {
+          // one step up
+          scroller.up();
+        }
+        return idx;
+      }
+      public int currentItem() {
+        return rowBrowser.getFirstItemIndex();
+      }
+      public float itemPosition(int idx, float maxd) {
+        int tot = rowBrowser.getTotItemsCount() - 1;
+        float y1 = PApplet.map(idx, 0, tot, 0, maxd);
+        return y1;
+      }
+      public float resize(float news) {
+        float s = rowBrowser.showingVariables() ? mira.browser.scrollSize : 0;
+        float h1 = news - mira.labelHeightClose - 2 * padding - s;
+        return h1;
+      }
+      public float totalSize() {
+        RowScroller scroller = rowBrowser.getScroller();
+        return scroller.getApproxTotalHeight();
+      }
+      public float initPosition(float maxd) {
+        int tot = rowBrowser.getTotItemsCount() - 1;
+        int idx = rowBrowser.getFirstItemIndex();
+        float y0 = PApplet.map(idx, 0, tot, 0, maxd);
+        return y0;
+      }
+    };
+    return handler;
   }
 }

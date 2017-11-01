@@ -272,7 +272,7 @@ public class Profile extends MiraWidget {
 //    float selx0 = PApplet.map(selRangeLeft, 0, 1, x0, x1);
     float selx1 = PApplet.map(selRangeRight, 0, 1, x0, x1);
     
-//    selLeftHandle = new SelectionHandle(selx0, y1 + 20, handlew, handleh, SelectionHandle.LEFT);
+//    selLeftHandle = new SelectionHandle(selx0, y1 + 20, sliderw, sliderh, SelectionHandle.LEFT);
     selRightHandle = new SelectionHandle(selx1, y1 + handleY, handlew, handleh, SelectionHandle.RIGHT);
   }
    

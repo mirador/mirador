@@ -5,23 +5,25 @@ package mirador.app;
 import mui.Display;
 import mui.Interface;
 import mui.SoftFloat;
+import mirador.handlers.ScrollbarHandler;
 import processing.core.PApplet;
 
 public class HorizontalScrollbar extends MiraWidget {
-  private int minHandleWidth = Display.scale(50);
+  private int minSliderWidth = Display.scale(50);
 
-  protected ColumnScroller col;
-  protected boolean insideHandle;
-  protected SoftFloat handlex;
-  protected float handlew;
+  protected ScrollbarHandler handler;
+  protected boolean insideSlider;
+  protected SoftFloat sliderx;
+  protected float sliderw;
   protected boolean dragging;
 
   protected int hColor, bColor;
 
-  public HorizontalScrollbar(Interface intf, ColumnScroller col, float x, float y, float w, float h) {
+
+  public HorizontalScrollbar(Interface intf, ScrollbarHandler handler, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
-    this.col = col;
-    handlex = new SoftFloat();
+    this.handler = handler;
+    sliderx = new SoftFloat();
   }
 
 
@@ -33,7 +35,7 @@ public class HorizontalScrollbar extends MiraWidget {
 
 
   public void update() {
-    handlex.update();
+    sliderx.update();
     initWidth();
   }
 
@@ -43,26 +45,23 @@ public class HorizontalScrollbar extends MiraWidget {
     fill(bColor);
     rect(0, 0, width, height);
     fill(hColor);
-    rect(handlex.get(), 0, handlew, height);
+    rect(sliderx.get(), 0, sliderw, height);
   }
 
 
   public void mousePressed() {
-    insideHandle = false;
-    if (handlex.get() <= mouseX && mouseX <= handlex.get() + handlew) {
-      insideHandle = true;
+    insideSlider = false;
+    if (sliderx.get() <= mouseX && mouseX <= sliderx.get() + sliderw) {
+      insideSlider = true;
     }
   }
 
 
   public void mouseDragged() {
     float dx = mouseX - pmouseX;
-    if (insideHandle) {
-      float x0 = PApplet.constrain(handlex.getTarget() + dx, 0, width - handlew);
-      int tot = col.getTotItemsCount() - 1;
-      int idx = PApplet.round(PApplet.map(x0, 0, width - handlew, 0, tot));
-      mira.browser.openColumn(idx);
-      handlex.setTarget(x0);
+    if (insideSlider) {
+      float x1 = handler.drag(sliderx.getTarget() + dx, width - sliderw);
+      sliderx.setTarget(x1);
     }
     dragging = true;
   }
@@ -70,27 +69,15 @@ public class HorizontalScrollbar extends MiraWidget {
 
   public void mouseReleased() {
     if (dragging) {
-      mira.browser.snapColumns();
+      handler.stopDrag();
     } else {
-      float x = handlex.get();
-      if (x <= mouseX && mouseX <= x + handlew) {
-        int idx = col.getFirstItemIndex();
-        if (x + 0.5 * handlew < mouseX && idx < col.getTotItemsCount() - 1) {
-          // one step to the right
-          scrollTo(idx++);
-          mira.browser.openColumn(idx);
-        } else if (0 < idx) {
-          // one step to the left
-          scrollTo(idx--);
-          mira.browser.openColumn(idx);
-        }
-
+      float x = sliderx.get();
+      if (x <= mouseX && mouseX <= x + sliderw) {
+        int idx = handler.pressSlider(mouseX, sliderw);
+        scrollTo(idx);
       } else if (0 <= mouseX && mouseX <= width) {
-        float x1 = PApplet.constrain(mouseX, 0, width - handlew);
-        int tot = col.getTotItemsCount() - 1;
-        int idx = PApplet.round(PApplet.map(x1, 0, width - handlew, 0, tot));
-        mira.browser.openColumn(idx);
-        handlex.setTarget(x1);
+        float x1 = handler.press(mouseX, width - sliderw);
+        sliderx.setTarget(x1);
       }
     }
     dragging = false;
@@ -98,35 +85,34 @@ public class HorizontalScrollbar extends MiraWidget {
 
 
   public void scrollToFirst() {
-    int idx = col.getFirstItemIndex();
+    idx = handler.currentItem();
     scrollTo(idx);
+
   }
 
   public void scrollTo(int idx) {
-    int tot = col.getTotItemsCount() - 1;
-    float x1 = PApplet.map(idx, 0, tot, 0, width - handlew);
-    handlex.setTarget(x1);
+    float x1 = handler.itemPosition(idx, width - sliderw);
+    sliderx.setTarget(x1);
+
   }
 
 
   protected void handleResize(int newWidth, int newHeight) {
-    float w1 = newWidth - mira.optWidth - mira.varWidth - mira.browser.scrollSize - padding;
+    float w1 = handler.resize(newWidth);
     bounds.w.set(w1);
     initHandle(w1);
   }
 
 
-  private void initHandle(float w) {
-    initWidth();
-    int tot = col.getTotItemsCount() - 1;
-    int idx = col.getFirstItemIndex();
-    float x0 = PApplet.map(idx, 0, tot, 0, w - handlew);
-    handlex.setTarget(x0);
+  private void initWidth() {
+    float w = (width * width) / handler.totalSize();
+    sliderw = PApplet.constrain(w, minSliderWidth, width/2);
   }
 
 
-  private void initWidth() {
-    float w = (width * width) / col.getTotalWidth();
-    handlew = PApplet.constrain(w, minHandleWidth, width/2);
+  private void initHandle(float w) {
+    initWidth();
+    float x0 = handler.initPosition(w - sliderw);
+    sliderx.setTarget(x0);
   }
 }

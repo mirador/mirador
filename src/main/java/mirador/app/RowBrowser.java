@@ -2,6 +2,7 @@
 
 package mirador.app;
 
+import mui.Display;
 import mui.Interface;
 import mui.Widget;
 import miralib.data.DataTree;
@@ -14,6 +15,8 @@ import miralib.data.Variable;
  */
 
 public class RowBrowser extends MiraWidget {
+  private int minHandleWidth = Display.scale(50);
+
   protected DataTree tree;
   protected int current;
   protected float heightOpen;
@@ -22,7 +25,7 @@ public class RowBrowser extends MiraWidget {
   protected VerticalScrollbar vbar;
   protected HorizontalScrollbar hbar;
   protected boolean animating = false;
-  
+
   public RowBrowser(Interface intf, float x, float y, float w, float h,
                     float openh, float closeh) {
     super(intf, x, y, w, h);
@@ -153,6 +156,24 @@ public class RowBrowser extends MiraWidget {
 
   public void updateHorScrollbar() {
     hbar.scrollToFirst();
+  }
+
+  public void mousePressed() {
+    if (height - 50 < mouseY) {
+      System.out.println("mousePressed in RowBrowser " + (pmouseX - mouseX));
+    }
+  }
+
+  public void mouseDragged() {
+    if (height - 50 < mouseY) {
+      System.out.println("mouseDragged in RowBrowser " + (pmouseX - mouseX));
+    }
+  }
+
+  public void mouseReleased() {
+    if (height - 50 < mouseY) {
+      System.out.println("mouseReleased " + (pmouseX - mouseX));
+    }
   }
 
   public void keyPressed() {
