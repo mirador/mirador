@@ -93,7 +93,7 @@ public class Project {
         break;
       }
     }
-    
+
     if (cfgFile != null) {
       // We have a Mirador project folder, so we read settings from its  
       // configuration file
@@ -165,7 +165,7 @@ public class Project {
         }
       }
       
-      if (dictFile.equals("") && codeFile.equals("") && !dataFile.equals(inFile.getName())) {
+      if (dictFile.equals("") && codeFile.equals("") && !inFile.isDirectory() && !dataFile.equals(inFile.getName())) {
         // The input folder contains several csv files, but none of them it is         
         // neither a dictionary nor a codebook, so let's just use the original
         // file the user selected
