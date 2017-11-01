@@ -166,7 +166,7 @@ public class RowBrowser extends MiraWidget {
         updateVertScrollbar();
       }
     } else if (key == ENTER || key == RETURN) {
-      currScroller.enter();      
+      mira.browser.switchPlotEdges();
     }
   }
 

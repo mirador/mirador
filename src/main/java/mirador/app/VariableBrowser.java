@@ -42,7 +42,7 @@ public class VariableBrowser extends MiraWidget {
 
   protected boolean sort0;
 
-  protected boolean showPlotEdges = false;
+  protected boolean drawPlotEdges = false;
 
   VariableBrowser(Interface intf, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
@@ -325,7 +325,16 @@ public class VariableBrowser extends MiraWidget {
     selRow = row;
     mira.history.setSelectedPair(col, row);
   }
-  
+
+
+  public boolean drawPlotEdges() {
+    return drawPlotEdges;
+  }
+
+  public void switchPlotEdges() {
+    drawPlotEdges = !drawPlotEdges;
+  }
+
 //  public void setSelectedRow(Variable var) {
 //    selRow = var;
 //  }

@@ -5,7 +5,6 @@ package mirador.app;
 import java.nio.file.Paths;
 import java.util.concurrent.FutureTask;
 
-import miralib.data.DataSet;
 import miralib.math.Numbers;
 import miralib.shannon.PValue;
 import miralib.utils.Project;
@@ -374,6 +373,13 @@ public class RowPlots extends ColumnScroller {
             fill(misColor);
             triangle(x1 - triSize, y0, x1, y0, x1, y0 + triSize);
           }
+        }
+
+        if (mira.browser.drawPlotEdges()) {
+          noFill();
+          strokeWeight(1);
+          stroke(color(180));
+          rect(x0, y0, w0, h0);
         }
       } else {
         noStroke();
