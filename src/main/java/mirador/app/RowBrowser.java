@@ -142,7 +142,8 @@ public class RowBrowser extends MiraWidget {
     if (!varScroller.isActive()) {
       hbar.hide(false);
       vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
-      vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding);
+      float gh = gbar == null ? 0 : mira.browser.scrollSize;
+      vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding - gh);
     }
     RowScroller currScroller = (RowScroller)children.get(current);
     if (currScroller.getTotalHeight() < height) vbar.hide(false);
@@ -267,7 +268,8 @@ public class RowBrowser extends MiraWidget {
         hideColumnLabels();
         hbar.hide(false);
         vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
-        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding);
+        float gh = gbar == null ? 0 : mira.browser.scrollSize;
+        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding - gh);
       }
       for (Widget wt: children) {
         float x = wt.targetX();
@@ -297,7 +299,8 @@ public class RowBrowser extends MiraWidget {
         hideColumnLabels();
         hbar.hide(false);
         vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
-        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding);
+        float gh = gbar == null ? 0 : mira.browser.scrollSize;
+        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding - gh);
       }
       int idx = scroller0.items.get(i).getFirstChild();
       scroller1.setNextIndex(idx);
@@ -332,7 +335,8 @@ public class RowBrowser extends MiraWidget {
         hideColumnLabels();
         hbar.hide(false);
         vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
-        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding);
+        float gh = gbar == null ? 0 : mira.browser.scrollSize;
+        vbar.setHeight(mira.browser.height() - mira.labelHeightClose - 2 * padding - gh);
       }
       int i = scroller0.getFirstIndex();
       int idx = scroller0.items.get(i).getFirstChild();

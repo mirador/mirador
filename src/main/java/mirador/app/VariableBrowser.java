@@ -502,8 +502,9 @@ public class VariableBrowser extends MiraWidget {
         return y1;
       }
       public float resize(float news) {
-        float s = rowBrowser.showingVariables() ? mira.browser.scrollSize : 0;
-        float h1 = news - mira.labelHeightClose - 2 * padding - s;
+        float sh = rowBrowser.showingVariables() ? mira.browser.scrollSize : 0;
+        float gh = gscroll == null ? 0 : mira.browser.scrollSize;
+        float h1 = news - mira.labelHeightClose - 2 * padding - sh - gh;
         return h1;
       }
       public float totalSize() {
@@ -561,7 +562,7 @@ public class VariableBrowser extends MiraWidget {
         return x1;
       }
       public float resize(float news) {
-        return mira.varWidth;
+        return mira.varWidth - padding;
       }
       public float totalSize() {
         return children.size();
