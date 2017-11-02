@@ -37,6 +37,7 @@ public class VariableBrowser extends MiraWidget {
   
   protected Variable rowAxis, colAxis;
   protected Variable selRow, selCol;
+  protected Variable transRow, transCol;
 
   protected VerticalScrollbar vscroll;
   protected HorizontalScrollbar hscroll;
@@ -139,6 +140,13 @@ public class VariableBrowser extends MiraWidget {
     boolean sort = data.sorting();
     if (!sort && sort0) updateAfterSort();
     sort0 = sort;
+
+    if (transCol != null && transRow != null) {
+      openColumn(transCol);
+      openRow(transRow);
+      transCol = null;
+      transRow = null;
+    }
   }
   
   public void openRow(Variable var) {
@@ -327,6 +335,11 @@ public class VariableBrowser extends MiraWidget {
       return rowBrowser.getColLabel(colAxis, rowAxis);
     }
     return "";
+  }
+
+  public void requestTranspose(Variable row, Variable col) {
+    transRow = col;
+    transCol = row;
   }
 
   public void setSelectedPair(Variable col, Variable row) {
@@ -545,7 +558,6 @@ public class VariableBrowser extends MiraWidget {
       public float itemPosition(int idx, float maxd) {
         int tot = rowBrowser.getChildrenCount() - 1;
         float x1 = PApplet.map(idx, 0, tot, 0, maxd);
-        System.out.println("position of " + idx + " " + x1);
         return x1;
       }
       public float resize(float news) {

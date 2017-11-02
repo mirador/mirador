@@ -505,10 +505,17 @@ public class RowPlots extends ColumnScroller {
       float h0 = h.get() - 2 * padding;
       if (x0 <= mouseX && mouseX <= x0 + w0 &&
           y0 <= mouseY && mouseY <= y0 + h0) {
-        if (!selected()) {
-          mira.browser.setSelectedPair(var, rowVar);
+        if (keyPressed(ALT)) {
+          mira.browser.requestTranspose(rowVar, var);
+          if (selected()) {
+            mira.browser.setSelectedPair(rowVar, var);
+          }
         } else {
-          mira.browser.setSelectedPair(null, null);
+          if (!selected()) {
+            mira.browser.setSelectedPair(var, rowVar);
+          } else {
+            mira.browser.setSelectedPair(null, null);
+          }
         }
       }
     }
