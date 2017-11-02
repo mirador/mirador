@@ -271,7 +271,7 @@ public class RowVariable extends RowWidget {
     } else if (sortMode == UNSORTED && !chkPressed) {
       if (shift) {
         mira.browser.closeRowsBut(this);
-      } else {
+      } else if (parent != null && parent instanceof MiraWidget) {
         ((MiraWidget)parent).mouseReleased(this);  
       }      
     }
@@ -345,7 +345,9 @@ public class RowVariable extends RowWidget {
   }
   
   public void keyPressed() {
-    ((MiraWidget)parent).keyPressed(this);
+    if (parent != null && parent instanceof MiraWidget) {
+      ((MiraWidget)parent).keyPressed(this);
+    }
   }
   
   public void enterPressed() {
@@ -353,7 +355,9 @@ public class RowVariable extends RowWidget {
   }
   
   public void dragRows(float dy) {
-    ((MiraWidget)parent).dragRows(dy);
+    if (parent != null && parent instanceof MiraWidget) {
+      ((MiraWidget)parent).dragRows(dy);
+    }
   }
   
   public void drag(float dx) {

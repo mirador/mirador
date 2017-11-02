@@ -55,7 +55,7 @@ public class RowPlots extends ColumnScroller {
   public void mouseDragged() {    
     if (pmouseX - mouseX != 0) {
       mira.browser.dragColumns(pmouseX - mouseX);  
-    } else if (pmouseY - mouseY != 0) {
+    } else if (pmouseY - mouseY != 0 && parent != null && parent instanceof RowVariable) {
       ((RowVariable)parent).dragRows(pmouseY - mouseY);
     }
     dragging = true;

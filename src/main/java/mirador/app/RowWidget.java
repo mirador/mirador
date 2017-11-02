@@ -35,13 +35,15 @@ public class RowWidget extends MiraWidget {
   }
   
   public void mouseReleased() {
-    if (!chkPressed) {
+    if (!chkPressed && parent != null && parent instanceof MiraWidget) {
       ((MiraWidget)parent).mouseReleased(this);
     }
   }    
 
   public void keyPressed() {
-    ((MiraWidget)parent).keyPressed(this);
+    if (parent != null && parent instanceof MiraWidget) {
+      ((MiraWidget)parent).keyPressed(this);
+    }
   }  
   
   public void hoverIn() {
