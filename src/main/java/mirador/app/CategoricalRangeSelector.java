@@ -42,7 +42,7 @@ public class CategoricalRangeSelector extends RangeSelector {
 
   public void setup() {
     float tw = getStyleSize("CatRangeSelector.Box", "width");
-    float scalex = PApplet.max(0.78f, width / tw);
+    float scalex = PApplet.constrain(width / tw, 0.78f, 1.0f);
     
     bbrColor = getStyleColor("CatRangeSelector.Box", "border-color");
     bbrWeight = getStyleSize("CatRangeSelector.Box", "border-width");

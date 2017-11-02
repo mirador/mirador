@@ -49,8 +49,8 @@ public class NumericalRangeSelector extends RangeSelector {
     float sh = getStyleSize("NumRangeSelector.Selector", "height");
     float tw = rw;
     float th = rh + sh;
-    float scalex = width / tw;
-    float scaley = height / th;
+    float scalex = PApplet.constrain(width / tw, 0.9f, 1.2f);
+    float scaley = PApplet.constrain(height / th, 0.8f, 1.0f);
     float scalexy = PApplet.sqrt(scalex * scaley);
     
     pFont = getStyleFont("NumRangeSelector.Box.p", "font-family", "font-size", scalexy);
