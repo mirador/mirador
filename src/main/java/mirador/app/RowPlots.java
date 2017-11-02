@@ -52,7 +52,7 @@ public class RowPlots extends ColumnScroller {
     if (rowVar.open()) super.show(now);
   } 
   
-  public void mouseDragged() {    
+  public void mouseDragged() {
     if (pmouseX - mouseX != 0) {
       mira.browser.dragColumns(pmouseX - mouseX);  
     } else if (pmouseY - mouseY != 0 && parent != null && parent instanceof RowVariable) {
@@ -317,10 +317,10 @@ public class RowPlots extends ColumnScroller {
 
         float mx = mouseX - x0;
         float my = mouseY - y0;
-        if (view != null && (viewTask == null || viewTask.isDone()) && hovered &&
+        if (view != null && view.canDraw() && (viewTask == null || viewTask.isDone()) && hovered &&
             0 <= mx && mx <= w0 && 0 <= my && my <= h0) {
 
-          if (view.canDraw() && 0 < mx && mx < triSize && 0 < my && my <= mx) {
+          if (0 < mx && mx < triSize && 0 < my && my <= mx) {
             selCorrTri = true;
             textFont(pFont);
             String value;
@@ -342,6 +342,12 @@ public class RowPlots extends ColumnScroller {
               }
             }
             text("P" + value, x0 + triSize, y0 + triSize);
+          } else if (mira.project.missingThreshold() <= missing &&
+                     w0 - triSize < mx && mx < w0 && 0 < my && my <= mx - w0 + triSize) {
+            textFont(pFont);
+            fill(pColor);
+            String label = (int)(missing * 100) + "% missing";
+            text(label, x0 + w0 - triSize - textWidth(label), y0 + triSize);
           } else {
             double valx = PApplet.constrain(mx / w0, 0, 1);
             double valy = PApplet.constrain(my / h0, 0, 1);
