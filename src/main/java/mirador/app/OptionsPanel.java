@@ -102,9 +102,9 @@ public class OptionsPanel extends MiraWidget {
 //    };
 //    addChild(pdfBtn, TOP_LEFT_CORNER);
     
-    pdfBtn = new MenuButton(intf, marginX, pdfBtnY, btnWidth, btnHeight, "Save PDF") {
+    pdfBtn = new MenuButton(intf, marginX, pdfBtnY, btnWidth, btnHeight, "Save PNG") {
       public void handle() {
-        mira.savePDF();
+        mira.saveSelectedPlot();
       }
     };
     addChild(pdfBtn, TOP_LEFT_CORNER); 

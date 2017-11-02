@@ -90,7 +90,7 @@ public class RowPlots extends ColumnScroller {
     mira.browser.setColAxis(getHoveredColumn());
   }
   
-  public void enterPressed() {
+  public void saveSelectedPlot() {
     for (Item item: visItems.values()) {
       Plot plot = (Plot)item;
       if (plot.selected()) plot.save();
@@ -446,23 +446,12 @@ public class RowPlots extends ColumnScroller {
     
     void save() {
       if (showContents && canvas != null) {
-        String imgName = var.getName() + "-" + rowVar.getName() + ".pdf";
+        PGraphics pg = intf.createCanvas((int)w, h.getCeil(), MiraApp.RENDERER, MiraApp.SMOOTH_LEVEL);
+        draw(pg);
+        String imgName = var.getName() + "-" + rowVar.getName() + ".png";
         String filename = Paths.get(mira.project.dataFolder, imgName).toString();
-        PGraphics pdf = intf.createCanvas((int)w, h.getCeil(), PDF, filename);
-        
-        if (showContents) {
-          view.draw(pdf, true);
-        }        
-      }      
-      
-//      if (showContents && canvas != null) {
-//        PGraphics pg = intf.createCanvas((int)w, h.getCeil(), MiraApp.RENDERER, MiraApp.SMOOTH_LEVEL);
-//        draw(pg);
-//        
-//        String imgName = var.getName() + "-" + rowVar.getName() + ".png";
-//        String filename = Paths.get(mira.project.dataFolder, imgName).toString();
-//        pg.save(filename);
-//      }      
+        pg.save(filename);
+      }
     }
     
     void dataChanged() {

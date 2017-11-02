@@ -311,10 +311,14 @@ public class MiraApp extends PApplet {
 //    }
 //  }
   
-  public void savePDF() {
-    File file = new File(project.dataFolder, "capture.pdf");
-    selectOutput("Enter the name of the PDF file to save the screen to", 
-                 "outputSelected", file, new PDFHandler(this));    
+//  public void savePDF() {
+//    File file = new File(project.dataFolder, "capture.pdf");
+//    selectOutput("Enter the name of the PDF file to save the screen to",
+//                 "outputSelected", file, new PDFHandler(this));
+//  }
+
+  public void saveSelectedPlot() {
+    browser.saveSelectedPlot();
   }
 
   //////////////////////////////////////////////////////////////////////////////

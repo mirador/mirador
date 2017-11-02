@@ -165,6 +165,10 @@ public class RowBrowser extends MiraWidget {
     if (gbar != null) gbar.scrollToFirst();
   }
 
+  public void saveSelectedPlot() {
+    varScroller.saveSelectedPlot();
+  }
+
   public void keyPressed() {
     RowScroller currScroller = (RowScroller)children.get(current);
     if (key == CODED) {

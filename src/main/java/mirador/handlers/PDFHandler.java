@@ -8,7 +8,7 @@ import mirador.app.MiraApp;
 import processing.core.PApplet;
 
 /**
- * Handler for PDF export. 
+ * Handler for PDF export.
  * 
  */
 
@@ -22,7 +22,7 @@ public class PDFHandler {
   public void outputSelected(File selection) {
     if (selection == null) return;
     
-    String pdfFilename = selection.getAbsolutePath();    
+    String pdfFilename = selection.getAbsolutePath();
     String ext = PApplet.checkExtension(pdfFilename);
     if (ext == null || !ext.equals("pdf")) {
       pdfFilename += ".pdf";

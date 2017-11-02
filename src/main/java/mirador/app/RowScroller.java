@@ -92,10 +92,10 @@ public class RowScroller extends MiraWidget {
     fit(+heightClose);
   }
 
-  public void enter() {
+  public void saveSelectedPlot() {
     for (Widget child: children) {
       if (child instanceof RowVariable) {
-        ((RowVariable)child).enterPressed();
+        ((RowVariable)child).saveSelectedPlot();
       }
     }
   }

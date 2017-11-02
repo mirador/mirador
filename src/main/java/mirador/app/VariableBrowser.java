@@ -357,6 +357,10 @@ public class VariableBrowser extends MiraWidget {
     drawPlotEdges = !drawPlotEdges;
   }
 
+  public void saveSelectedPlot() {
+    rowBrowser.saveSelectedPlot();
+  }
+
 //  public void setSelectedRow(Variable var) {
 //    selRow = var;
 //  }

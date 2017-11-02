@@ -350,8 +350,8 @@ public class RowVariable extends RowWidget {
     }
   }
   
-  public void enterPressed() {
-    plots.enterPressed();
+  public void saveSelectedPlot() {
+    plots.saveSelectedPlot();
   }
   
   public void dragRows(float dy) {
