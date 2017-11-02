@@ -133,7 +133,7 @@ public class Eikosogram extends View {
         float pxy = logY ? logDensity[bx][by] : density[bx][by];
         float dy = pg.width * pg.height * pxy / dx;    
         float f = PApplet.map(by, 0, binCountY - 1, 1, 0);
-        pg.fill(mixColors(WHITE, BLUE, f));
+        pg.fill(mixColors(WHITE, COLOR, f));
         pg.rect(x0, y0, dx, -dy);
         y0 -= dy;
       }
@@ -152,10 +152,10 @@ public class Eikosogram extends View {
       float dy = pg.height * (perc75[bx] - perc25[bx]);
       
       // Q1 - Q3 box
-      pg.fill(mixColors(WHITE, BLUE, 1));
+      pg.fill(mixColors(WHITE, COLOR, 1));
       pg.rect(x0, y0, dx, dy);
              
-      pg.fill(mixColors(WHITE, BLUE, 0.5f));
+      pg.fill(mixColors(WHITE, COLOR, 0.5f));
       
       // Q0 - Q1 box
       y0 = pg.height * (1 - perc25[bx]);
@@ -184,7 +184,7 @@ public class Eikosogram extends View {
         if (x0 <= valx && valx <= x1 && y1 <= valy && valy <= y0) {
           Selection sel = new Selection(x0, y1, dx, dy);
           float f = PApplet.map(by, 0, binCountY - 1, 1, 0);
-          sel.setColor(mixColors(WHITE, BLUE, f));
+          sel.setColor(mixColors(WHITE, COLOR, f));
           if (shift) {            
             float count = (density[bx][by] / dx) * sampleCounts[bx];
             sel.setLabel(PApplet.round(count) + "/" + sampleCounts[bx]);           
@@ -243,7 +243,7 @@ public class Eikosogram extends View {
     float y1 = y0 + dy;
     if (x0 <= valx && valx <= x1 && y0 <= valy && valy <= y1) {
       BoxplotSelection sel = new BoxplotSelection(x0, y0, x1 - x0, dy);
-      sel.setColor(mixColors(WHITE, BLUE, 0.5f));
+      sel.setColor(mixColors(WHITE, COLOR, 0.5f));
       if (shift) {
         sel.setLabel(PApplet.round(p * counts) + "/" + counts);
       } else {

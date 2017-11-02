@@ -33,7 +33,7 @@ public class Scatter extends View {
       rad = PApplet.map(count, 0, 500, 0.05f, 0.01f);
       a = (int) PApplet.map(count, 0, 500, 70, 10);
 
-      pg.fill(pg.red(BLUE), pg.green(BLUE), pg.blue(BLUE), a);
+      pg.fill(pg.red(COLOR), pg.green(COLOR), pg.blue(COLOR), a);
       for (Value2D pt : points) {
         float px = pg.width * (float) pt.x;
         float py = pg.height * (float) (1 - pt.y);

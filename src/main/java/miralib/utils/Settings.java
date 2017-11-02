@@ -132,21 +132,21 @@ public class Settings {
     set(key, String.valueOf(value));
   }
   
-  public Color getColor(String attribute, Color dflt) {
-    Color parsed = null;
+  public int getColor(String attribute, int dflt) {
+    int parsed = -1;
     String s = get(attribute, null);
     if ((s != null) && (s.indexOf("#") == 0)) {
       try {
-        int v = Integer.parseInt(s.substring(1), 16);
-        parsed = new Color(v);
+        parsed = Integer.parseInt(s.substring(1), 16);
       } catch (Exception e) {
+        e.printStackTrace();
       }
     }
-    return parsed == null ? dflt : parsed;
+    return 0xFF << 24 | (parsed == -1 ? dflt & 0xFFFFFF : parsed);
   }
 
-  public void setColor(String attr, Color what) {
-    set(attr, "#" + hex(what.getRGB() & 0xffffff, 6));
+  public void setColor(String attr, int what) {
+    set(attr, "#" + hex(what & 0xFFFFFF, 6));
   }
 
   public Font getFont(String attr, String dflt) {

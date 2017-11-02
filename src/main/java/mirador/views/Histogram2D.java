@@ -39,7 +39,7 @@ public class Histogram2D extends View {
       for (int bx = 0; bx < binCountX; bx++) {
         for (int by = 0; by < binCountY; by++) {
           float p = PApplet.map(density[bx][by], 0, maxProb, 0, 1);
-          pg.fill(mixColors(WHITE, BLUE, p));
+          pg.fill(mixColors(WHITE, COLOR, p));
           pg.rect(binw * bx, pg.height - binh * by, binw, -binh);        
         }
       }
@@ -64,7 +64,7 @@ public class Histogram2D extends View {
             Selection sel = new Selection(x0, y0, binw, binh);
             float p = density[bx][by];
             float np = PApplet.map(p, 0, maxProb, 0, 1);
-            sel.setColor(mixColors(WHITE, BLUE, np));
+            sel.setColor(mixColors(WHITE, COLOR, np));
             if (shift) {
               sel.setLabel(PApplet.round(sampleSize * p) + "/" + sampleSize);
             } else {

@@ -2,6 +2,7 @@
 
 package miralib.utils;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -32,6 +33,7 @@ public class Preferences {
   static final protected boolean defCopyExamples = true;
   static final public int defPlotWidth = 200;
   static final public int defPlotHeight = 200;
+  static final public int defPlotColor = 0xFF278DD2;
 
   public String projectFolder;
   
@@ -50,6 +52,7 @@ public class Preferences {
   public boolean copyExamples;
   public int plotWidth;
   public int plotHeight;
+  public int plotColor;
   
   protected Settings settings;
   
@@ -96,6 +99,7 @@ public class Preferences {
 
       plotWidth = settings.getInteger("plot.width", defPlotWidth);
       plotHeight = settings.getInteger("plot.height", defPlotHeight);
+      plotColor = settings.getColor("plot.color", defPlotColor);
     } else {
       projectFolder = defFolder;
       pValue = defPValue;             
@@ -113,7 +117,7 @@ public class Preferences {
       copyExamples = defCopyExamples;
       plotWidth = defPlotWidth;
       plotHeight = defPlotHeight;
-      
+      plotColor = defPlotColor;
       save();
     }
   }
@@ -135,6 +139,7 @@ public class Preferences {
     settings.setBoolean("examples.copy", copyExamples);
     settings.setInteger("plot.width", plotWidth);
     settings.setInteger("plot.height", plotHeight);
+    settings.setColor("plot.color", plotColor);
     settings.save();    
   }
 }

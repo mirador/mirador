@@ -97,6 +97,7 @@ public class MiraApp extends PApplet {
   public void settings() {
     plotWidth = Display.scale(prefs.plotWidth);
     plotHeight = Display.scale(prefs.plotHeight);
+    View.COLOR = prefs.plotColor;
     int pw = Display.scale(Preferences.defPlotWidth);
     int ph = Display.scale(Preferences.defPlotHeight);
     size(optWidth + varWidth + 4 * pw, labelHeightClose + 3 * ph, RENDERER);

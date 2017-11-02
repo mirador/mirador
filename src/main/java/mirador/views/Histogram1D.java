@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.views;
 
@@ -16,9 +16,14 @@ public class Histogram1D extends View {
   protected int binCount;
   protected float maxProb;
   protected int sampleSize;
+  protected int hColor;
   
   public Histogram1D(DataSlice1D slice, int algo) {
     super(slice.varx, slice.varx, slice.ranges);
+    int r = COLOR >> 16 & 0xFF;
+    int g = COLOR >> 8 & 0xFF;
+    int b = COLOR & 0xFF;
+    hColor = (70 << 24) | (r << 16) | (g << 8) | b;
     calcDensity(slice, algo);
   }
 
@@ -32,8 +37,8 @@ public class Histogram1D extends View {
         float p = density[bx];
         float h = PApplet.map(p, 0, maxProb, 0, 0.5f);
 //        float p = density[bx];
-        pg.fill(GREY);
-        pg.rect(binw * bx, pg.height * (1 - h), binw, pg.height * h);        
+        pg.fill(hColor);
+        pg.rect(binw * bx, pg.height * (1 - h), binw, pg.height * h);
       }
     } else {
       drawCross(pg);
