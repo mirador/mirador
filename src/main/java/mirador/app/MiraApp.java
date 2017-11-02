@@ -57,8 +57,8 @@ public class MiraApp extends PApplet {
   int labelHeightMax = Display.scale(300);
   int covarHeightClose = Display.scale(58);
   int covarHeightMax = Display.scale(300);
-  int plotWidth = Display.scale(200);
-  int plotHeight = Display.scale(200);
+  int plotWidth = Display.scale(Preferences.defPlotWidth);
+  int plotHeight = Display.scale(Preferences.defPlotHeight);
   /////////////////////////////////////////////////////////////////////////////
 
   public Project project;
@@ -95,7 +95,11 @@ public class MiraApp extends PApplet {
   protected List plotTimesCN = Collections.synchronizedList(new ArrayList<Integer>());
 
   public void settings() {
-    size(optWidth + varWidth + 4 * plotWidth, labelHeightClose + 3 * plotHeight, RENDERER);
+    plotWidth = Display.scale(prefs.plotWidth);
+    plotHeight = Display.scale(prefs.plotHeight);
+    int pw = Display.scale(Preferences.defPlotWidth);
+    int ph = Display.scale(Preferences.defPlotHeight);
+    size(optWidth + varWidth + 4 * pw, labelHeightClose + 3 * ph, RENDERER);
     pixelDensity(PIXEL_DENSITY);
     smooth(SMOOTH_LEVEL);
   
@@ -111,7 +115,7 @@ public class MiraApp extends PApplet {
   
   public void setup() {
     Log.init(false);
-    loadPreferences();
+//    loadPreferences();
 
     intf = new Interface(this, "style.css");
     intf.setBackground(color(247));

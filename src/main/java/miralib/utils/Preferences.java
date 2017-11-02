@@ -30,7 +30,9 @@ public class Preferences {
   static final protected String defDatePrintPattern = "d MMM, yyyy";
 
   static final protected boolean defCopyExamples = true;
-  
+  static final public int defPlotWidth = 200;
+  static final public int defPlotHeight = 200;
+
   public String projectFolder;
   
   public int pValue;
@@ -46,6 +48,8 @@ public class Preferences {
   public String dateParsePattern;
   public String datePrintPattern;
   public boolean copyExamples;
+  public int plotWidth;
+  public int plotHeight;
   
   protected Settings settings;
   
@@ -89,6 +93,9 @@ public class Preferences {
       datePrintPattern = settings.get("dates.print", defDatePrintPattern);
 
       copyExamples = settings.getBoolean("examples.copy", defCopyExamples);
+
+      plotWidth = settings.getInteger("plot.width", defPlotWidth);
+      plotHeight = settings.getInteger("plot.height", defPlotHeight);
     } else {
       projectFolder = defFolder;
       pValue = defPValue;             
@@ -104,6 +111,8 @@ public class Preferences {
       dateParsePattern = defDateParsePattern;
       datePrintPattern = defDatePrintPattern;
       copyExamples = defCopyExamples;
+      plotWidth = defPlotWidth;
+      plotHeight = defPlotHeight;
       
       save();
     }
@@ -124,6 +133,8 @@ public class Preferences {
     settings.set("dates.parse", dateParsePattern);
     settings.set("dates.print", datePrintPattern);
     settings.setBoolean("examples.copy", copyExamples);
+    settings.setInteger("plot.width", plotWidth);
+    settings.setInteger("plot.height", plotHeight);
     settings.save();    
   }
 }
