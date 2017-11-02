@@ -93,7 +93,6 @@ public class HorizontalScrollbar extends MiraWidget {
   public void scrollTo(int idx) {
     float x1 = handler.itemPosition(idx, width - sliderw);
     sliderx.setTarget(x1);
-
   }
 
 

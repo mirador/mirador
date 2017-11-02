@@ -326,8 +326,8 @@ public class Interface implements PConstants {
   public Widget getSelectedWidget() {
     return selected;
   }
-  
-  public void selectWidget(Widget wt) {    
+
+  public void selectWidget(Widget wt) {
     for (int i = 0; i < drawnWidgets.size(); i++) {
       drawnWidgets.get(i).focused = false;
     }
@@ -335,9 +335,9 @@ public class Interface implements PConstants {
     selected = wt;
     if (selected != null) {
       selected.focused = true;
-    }    
+    }
   }
-  
+
   public void mousePressed() {
     if (!enabled) return;
     
@@ -363,7 +363,7 @@ public class Interface implements PConstants {
         break;
       }
     }
-    
+
     if (selected != null) {
       Widget handler = selected;
       handler.updateMouse(app.mouseX, app.mouseY, app.pmouseX, app.pmouseY);

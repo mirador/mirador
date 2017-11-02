@@ -40,6 +40,7 @@ public class VariableBrowser extends MiraWidget {
 
   protected VerticalScrollbar vscroll;
   protected HorizontalScrollbar hscroll;
+  protected HorizontalScrollbar gscroll;
 
   protected boolean sort0;
 
@@ -93,7 +94,14 @@ public class VariableBrowser extends MiraWidget {
                                      width - mira.varWidth - scrollSize - padding, scrollSize);
     addChild(hscroll, BOTTOM_LEFT_CORNER);
 
-    rowBrowser.setScrollbars(vscroll, hscroll);
+    if (1 < rowBrowser.getChildrenCount()) {
+      gscroll = new HorizontalScrollbar(intf, createGHandler(), 0, -scrollSize, mira.varWidth - padding, scrollSize);
+      addChild(gscroll, BOTTOM_LEFT_CORNER);
+    } else {
+      gscroll = null;
+    }
+
+    rowBrowser.setScrollbars(vscroll, hscroll, gscroll);
 
     // Defining a keymap in the interface so the row scroller will capture the
     // arrow keys irrespective of which widget is currently selected, and likewise
@@ -494,6 +502,70 @@ public class VariableBrowser extends MiraWidget {
         int idx = rowBrowser.getFirstItemIndex();
         float y0 = PApplet.map(idx, 0, tot, 0, maxd);
         return y0;
+      }
+    };
+    return handler;
+  }
+
+  protected ScrollbarHandler createGHandler() {
+    ScrollbarHandler handler = new ScrollbarHandler() {
+      public float drag(float newp, float maxd) {
+        float x1 = PApplet.constrain(newp, 0, maxd);
+        int tot = rowBrowser.getChildrenCount() - 1;
+        int idx = PApplet.round(PApplet.map(x1, 0, maxd, 0, tot));
+        goTo(idx);
+        return x1;
+      }
+      public void stopDrag() {
+//        mira.browser.snapColumns();
+      }
+      public float press(float pos, float maxd) {
+        float x1 = PApplet.constrain(pos, 0, maxd);
+        int tot = rowBrowser.getChildrenCount() - 1;
+        int idx = PApplet.round(PApplet.map(x1, 0, maxd, 0, tot));
+        goTo(idx);
+        return x1;
+      }
+      public int pressSlider(float pos, float size) {
+        int idx = rowBrowser.current;
+        if (pos + 0.5 * size < pos && idx < children.size() - 1) {
+          // one step to the right
+          idx++;
+          rowBrowser.next();
+        } else if (0 < idx) {
+          // one step to the left
+          idx--;
+          rowBrowser.prev();
+        }
+        return idx;
+      }
+      public int currentItem() {
+        return rowBrowser.current;
+      }
+      public float itemPosition(int idx, float maxd) {
+        int tot = rowBrowser.getChildrenCount() - 1;
+        float x1 = PApplet.map(idx, 0, tot, 0, maxd);
+        System.out.println("position of " + idx + " " + x1);
+        return x1;
+      }
+      public float resize(float news) {
+        return mira.varWidth;
+      }
+      public float totalSize() {
+        return children.size();
+      }
+      public float initPosition(float maxd) {
+        int tot = rowBrowser.getChildrenCount() - 1;
+        int idx = rowBrowser.current;
+        float x0 = PApplet.map(idx, 0, tot, 0, maxd);
+        return x0;
+      }
+      private void goTo(int idx) {
+        int dif = idx - rowBrowser.current;
+        for (int i = 0; i < PApplet.abs(dif); i++) {
+          if (dif < 0) rowBrowser.prev(false);
+          else rowBrowser.next(false);
+        }
       }
     };
     return handler;

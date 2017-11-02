@@ -2,11 +2,13 @@
 
 package mirador.app;
 
+import mirador.handlers.ScrollbarHandler;
 import mui.Display;
 import mui.Interface;
 import mui.Widget;
 import miralib.data.DataTree;
 import miralib.data.Variable;
+import processing.core.PApplet;
 
 /**
  * Vertical scroller for group, tables, and variables. It updates dynamically 
@@ -15,15 +17,13 @@ import miralib.data.Variable;
  */
 
 public class RowBrowser extends MiraWidget {
-  private int minHandleWidth = Display.scale(50);
-
   protected DataTree tree;
   protected int current;
   protected float heightOpen;
   protected float heightClose;
   protected RowScroller groupScroller, tableScroller, varScroller;
   protected VerticalScrollbar vbar;
-  protected HorizontalScrollbar hbar;
+  protected HorizontalScrollbar hbar, gbar;
   protected boolean animating = false;
 
   public RowBrowser(Interface intf, float x, float y, float w, float h,
@@ -111,6 +111,7 @@ public class RowBrowser extends MiraWidget {
     if (-1 < idx) {
       while (next(false) != varScroller);
       varScroller.setNextIndex(idx);
+      updateGroupScrollbar();
     }
   }
   
@@ -134,9 +135,10 @@ public class RowBrowser extends MiraWidget {
     return (RowScroller)children.get(current);
   }
 
-  public void setScrollbars(VerticalScrollbar vbar, HorizontalScrollbar hbar) {
+  public void setScrollbars(VerticalScrollbar vbar, HorizontalScrollbar hbar, HorizontalScrollbar gbar) {
     this.vbar = vbar;
     this.hbar = hbar;
+    this.gbar = gbar;
     if (!varScroller.isActive()) {
       hbar.hide(false);
       vbar.setX(-mira.browser.scrollSize - padding - mira.browser.width() + mira.varWidth);
@@ -158,22 +160,8 @@ public class RowBrowser extends MiraWidget {
     hbar.scrollToFirst();
   }
 
-  public void mousePressed() {
-    if (height - 50 < mouseY) {
-      System.out.println("mousePressed in RowBrowser " + (pmouseX - mouseX));
-    }
-  }
-
-  public void mouseDragged() {
-    if (height - 50 < mouseY) {
-      System.out.println("mouseDragged in RowBrowser " + (pmouseX - mouseX));
-    }
-  }
-
-  public void mouseReleased() {
-    if (height - 50 < mouseY) {
-      System.out.println("mouseReleased " + (pmouseX - mouseX));
-    }
+  public void updateGroupScrollbar() {
+    if (gbar != null) gbar.scrollToFirst();
   }
 
   public void keyPressed() {
@@ -181,8 +169,10 @@ public class RowBrowser extends MiraWidget {
     if (key == CODED) {
       if (keyCode == LEFT) {
         prev(mouseX > right());
+        updateGroupScrollbar();
       } else if (keyCode == RIGHT) {
         next();
+        updateGroupScrollbar();
       } else if (keyCode == UP) {
         currScroller.up();
         updateVertScrollbar();
@@ -212,7 +202,6 @@ public class RowBrowser extends MiraWidget {
       groupScroller.setItems(tree.groups);
       groupScroller.setActive(true);
       addChild(groupScroller);
-      intf.selectWidget(groupScroller);
 
       tableScroller = new RowScroller(intf,this, width, 0, width, height, heightOpen, heightClose);
       tableScroller.setActive(false);
@@ -230,8 +219,7 @@ public class RowBrowser extends MiraWidget {
       tableScroller.setItems(tree.tables);
       tableScroller.setActive(true);
       addChild(tableScroller);
-      intf.selectWidget(tableScroller);
-      
+
       varScroller = new RowScroller(intf,this, width, 0, width, height, heightOpen, heightClose);
       varScroller.setActive(false);
       varScroller.setItems(tree.variables);      
@@ -244,7 +232,6 @@ public class RowBrowser extends MiraWidget {
       varScroller.setItems(tree.variables);
       varScroller.setActive(true);
       addChild(varScroller);
-      intf.selectWidget(varScroller);
     }
     current = 0;
   }  
@@ -272,7 +259,6 @@ public class RowBrowser extends MiraWidget {
       RowScroller scroller1 = (RowScroller)children.get(current - 1);
       scroller0.setActive(false);
       scroller1.setActive(true, false);
-      intf.selectWidget(scroller1);
       if (scroller1 == varScroller) {
         showColumnLabels();
         vbar.setX(-mira.browser.scrollSize);
@@ -303,7 +289,6 @@ public class RowBrowser extends MiraWidget {
       RowScroller scroller1 = (RowScroller)children.get(current + 1);
       scroller0.setActive(false, false);
       scroller1.setActive(true);
-      intf.selectWidget(scroller1);
       if (scroller1 == varScroller) {
         showColumnLabels();
         vbar.setX(-mira.browser.scrollSize);
@@ -339,7 +324,6 @@ public class RowBrowser extends MiraWidget {
       RowScroller scroller1 = (RowScroller)children.get(current + 1);
       scroller0.setActive(false, false);
       scroller1.setActive(true);
-      intf.selectWidget(scroller1);
       if (scroller1 == varScroller) {
         showColumnLabels();
         vbar.setX(-mira.browser.scrollSize);

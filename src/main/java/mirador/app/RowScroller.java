@@ -271,10 +271,11 @@ public class RowScroller extends MiraWidget {
         } else if (dx < 20) {
           row.prev(false);
         }
+        row.updateGroupScrollbar();
       } else {
         snap();
+        row.updateVertScrollbar();
       }
-      row.updateVertScrollbar();
     }
   }
 
@@ -300,10 +301,10 @@ public class RowScroller extends MiraWidget {
       if (key == CODED) {
         if (keyCode == LEFT) {
           prev();
-          row.updateHorScrollbar();
+          row.updateGroupScrollbar();
         } else if (keyCode == RIGHT) {
           next();
-          row.updateHorScrollbar();
+          row.updateGroupScrollbar();
         } else if (keyCode == UP) {
           up();
           row.updateVertScrollbar();
