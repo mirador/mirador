@@ -243,7 +243,7 @@ public class OptionsPanel extends MiraWidget {
       
       if (x0 <= mx && mx <= x1 && y0 <= my && my <= y1) {
         int sel = (int)((my - y0) / sHeight);
-        if (sel != selected) {
+        if (sel != selected && sel < list.size()) {
           selected = sel;
           selY.setTarget(selected * sHeight);
           return true; 
