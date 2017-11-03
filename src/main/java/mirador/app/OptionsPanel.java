@@ -69,7 +69,7 @@ public class OptionsPanel extends MiraWidget {
     corColor = getStyleColor("RowPlots.Pvalue", "background-color");
     misColor = getStyleColor("RowPlots.MissingData", "background-color");
     
-    loadBtn = new MenuButton(intf, marginX, loadBtnY, btnWidth, btnHeight, "Load Data") {
+    loadBtn = new MenuButton(intf, marginX, loadBtnY, btnWidth, btnHeight, "Load data") {
       public void handle() {
         if (keyPressed(ALT)) {
           mira.reloadDataset();
@@ -81,7 +81,7 @@ public class OptionsPanel extends MiraWidget {
     loadBtn.setShiftLabel("Reload");
     addChild(loadBtn, TOP_LEFT_CORNER);
     
-    exportBtn = new MenuButton(intf, marginX, exportBtnY, btnWidth, btnHeight, "Export selection") {
+    exportBtn = new MenuButton(intf, marginX, exportBtnY, btnWidth, btnHeight, "Export data") {
       public void handle() {
         mira.exportSelection();
       }
@@ -102,7 +102,7 @@ public class OptionsPanel extends MiraWidget {
 //    };
 //    addChild(pdfBtn, TOP_LEFT_CORNER);
     
-    pdfBtn = new MenuButton(intf, marginX, pdfBtnY, btnWidth, btnHeight, "Save PNG") {
+    pdfBtn = new MenuButton(intf, marginX, pdfBtnY, btnWidth, btnHeight, "Save plot") {
       public void handle() {
         mira.saveSelectedPlot();
       }

@@ -268,15 +268,16 @@ public class Project {
     if (cfgFile != null) {
       try {      
         Settings settings = new Settings(cfgFile);
-        settings.set("project.title", dataTitle);
-        settings.set("project.url", dataURL);
-        settings.set("data.source", dataFile);
-        settings.set("data.dictionary", dictFile);
-        settings.set("data.groups", grpsFile);
-        settings.set("data.codebook", codeFile);      
-        settings.set("data.binary", binFile);
-        settings.set("data.key", keyVar);
-                
+
+        settings.set("project.title", dataTitle != null ? dataTitle : "");
+        settings.set("project.url", dataURL != null ? dataURL : "");
+        settings.set("data.source", dataFile != null ? dataFile : "");
+        settings.set("data.dictionary", dictFile != null ? dictFile : "");
+        settings.set("data.groups", grpsFile != null ? grpsFile : "");
+        settings.set("data.codebook", codeFile != null ? codeFile : "");
+        settings.set("data.binary", binFile != null ? binFile : "");
+        settings.set("data.key", keyVar != null ? keyVar : "");
+
         settings.set("missing.string", missString);            
         settings.set("missing.threshold", missingToString(missThreshold));        
         
@@ -291,9 +292,9 @@ public class Project {
         settings.setInteger("performance.samplesize", initSliceSize);
         settings.setInteger("performance.plottime", maxPlotTime);
         
-        settings.set("dates.parse", dateParsePattern);
-        settings.set("dates.print", datePrintPattern);
-        
+        settings.set("dates.parse", dateParsePattern != null ? dateParsePattern : "");
+        settings.set("dates.print", datePrintPattern != null ? datePrintPattern : "");
+
         settings.save();
       } catch (IOException e) {
         // TODO Auto-generated catch block

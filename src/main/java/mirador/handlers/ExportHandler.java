@@ -1,4 +1,4 @@
-/* COPYRIGHT (C) 2014-16 Fathom Information Design. All Rights Reserved. */
+/* COPYRIGHT (C) 2014-17 Fathom Information Design. All Rights Reserved. */
 
 package mirador.handlers;
 
@@ -9,24 +9,22 @@ import java.util.ArrayList;
 
 import mirador.app.MiraApp;
 import miralib.data.Variable;
+import miralib.utils.Project;
 import processing.core.PApplet;
 import processing.data.Table;
 
 /**
- * Handler for selected pair export. 
+ * Handler for exporting entire dataset as mirador project.
  * 
  */
 
-public class SelectionHandler {
+public class ExportHandler {
   protected MiraApp app;
   protected ArrayList<Variable> variables;
   
-  public SelectionHandler(MiraApp app, Variable varx, Variable vary, Variable vark) {
+  public ExportHandler(MiraApp app) {
     this.app = app;
-    variables = new ArrayList<Variable>();
-    if (vark != null) variables.add(vark);
-    variables.add(varx);
-    if (varx != vary) variables.add(vary);
+    variables = app.dataset.getVariables();
   }
   
   public void outputSelected(File selection) {
@@ -35,11 +33,12 @@ public class SelectionHandler {
     String filename = selection.getAbsolutePath();    
     String ext = PApplet.checkExtension(filename);
     if (ext == null || (!ext.equals("csv") && !ext.equals("tsv"))) {
-      filename += ".tsv";
+      filename += ".csv";
     }
     Path dataPath = Paths.get(filename);
     String filePath = dataPath.getParent().toAbsolutePath().toString(); 
-    File dictFile = new File(filePath, "selected-dictionary.tsv");
+    File dictFile = new File(filePath, "dictionary.csv");
+    File miraFile = new File(filePath, "config.mira");
 
     Table[] tabdict = app.dataset.getTable(variables, app.ranges);
     Table data = tabdict[0];
@@ -51,5 +50,13 @@ public class SelectionHandler {
     if (dict != null) {      
       app.saveTable(dict, dictFile.getAbsolutePath());          
     }
+
+    Project prj = new Project(app.project);
+    prj.dataFile = "data.csv";
+    prj.dictFile = "dictionary.csv";
+    prj.grpsFile = "";
+    prj.binFile = "data.bin";
+    prj.codeFile = "";
+    prj.save(miraFile.getAbsolutePath());
   }
 }

@@ -16,9 +16,8 @@ import java.util.Collections;
 import javax.swing.JOptionPane;
 
 import mirador.handlers.LoadHandler;
-import mirador.handlers.PDFHandler;
 import mirador.handlers.ProfileHandler;
-import mirador.handlers.SelectionHandler;
+import mirador.handlers.ExportHandler;
 //import mirador.handlers.UploadHandler;
 import miralib.data.*;
 import mui.Display;
@@ -290,16 +289,9 @@ public class MiraApp extends PApplet {
   }
   
   public void exportSelection() {
-    if (browser.getSelectedRow() != null && browser.getSelectedCol() != null) {
-      File file = new File(project.dataFolder, "selected-data.tsv");
-      
-      Variable keyVar = dataset.getKeyVariable();
-      
-      selectOutput("Select a csv or tsv file to save the selection to:", 
-                   "outputSelected", file, new SelectionHandler(this, browser.getSelectedCol(), 
-                                                                      browser.getSelectedRow(), 
-                                                                      keyVar));      
-    }
+    File file = new File(project.dataFolder, "data.csv");
+    selectOutput("Select a csv or tsv file to export the data to:",
+                 "outputSelected", file, new ExportHandler(this));
   }
   
 //  public void uploadSession() {
