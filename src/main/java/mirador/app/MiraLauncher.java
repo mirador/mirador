@@ -3,6 +3,8 @@
 package mirador.app;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.FilenameFilter;
 
@@ -10,6 +12,7 @@ import javax.swing.*;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.net.URL;
@@ -19,7 +22,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.HyperlinkEvent;
+import javax.swing.SwingConstants;
 import java.awt.image.BufferedImage;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 import mui.Display;
 import processing.core.PApplet;
@@ -37,16 +43,14 @@ public class MiraLauncher extends JFrame {
   final static int TEXT_WIDTH = Display.scale(280);
   final static int TEXT_HEIGHT = Display.scale(80);
   final static int BUTTON_HEIGHT = Display.scale(30);
+  final static int FILE_TABLE_WIDTH = Display.scale(250);
+  final static int MAX_BUTTON_WIDTH = Display.scale(100);
   final static private int BOX_BORDER = Display.scale(13);
   final static private int INSET = Display.scale(1);
   final static private int GAP = Display.scale(26);
   final static private int FONT_SIZE = Display.scale(12);
   final static private int TEXT_MARGIN = Display.scale(3);
   final static private int LOGO_SIZE = Display.scalepot(128);
-
-  private JButton loadButton;
-  private JButton quitButton;
-  private JLabel status;
 
   // The Swing chooser is much better on Linux
   static final boolean useNativeSelect = PApplet.platform != PConstants.LINUX;
@@ -109,20 +113,26 @@ public class MiraLauncher extends JFrame {
   }
   
   static protected void selectCallback(final File selectedFile) {
-    if (selectedFile == null) {
+    if (selectedFile == null || !selectedFile.exists()) {
+      JOptionPane.showMessageDialog(new Frame(), "The file somehow disapeared, Mirador will exit now", "Error!",
+              JOptionPane.ERROR_MESSAGE);
       System.exit(0);
     }
+    loadFile(selectedFile);
+  }
+
+  static protected void loadFile(final File selectedFile) {
     new Thread(new Runnable() {
       public void run() {
-        MiraApp.inputFile = selectedFile.getAbsolutePath();        
-        PApplet.main(MiraApp.class.getName());  
+        MiraApp.inputFile = selectedFile.getAbsolutePath();
+        PApplet.main(MiraApp.class.getName());
       }
     }).start();
   }
 
 
   public MiraLauncher() {
-    super("Welcome to Mirador!");
+    super("Please wait while Mirador initializes...");
     setLookAndFeel();
     createLayout();
   }
@@ -141,7 +151,6 @@ public class MiraLauncher extends JFrame {
   }
 
   private void createLayout() {
-
     Container outer = getContentPane();
     outer.removeAll();
     outer.setBackground(new Color(247, 247, 247));
@@ -150,11 +159,11 @@ public class MiraLauncher extends JFrame {
     ImageIcon image = new ImageIcon(iconUrl);
     JLabel imageLabel = new JLabel(image);
 
-    Box vbox = Box.createVerticalBox();
-    vbox.setBorder(new EmptyBorder(BOX_BORDER, BOX_BORDER, BOX_BORDER, BOX_BORDER));
-    outer.add(vbox);
+    Box everything = Box.createVerticalBox();
+    everything.setBorder(new EmptyBorder(BOX_BORDER, BOX_BORDER, BOX_BORDER, BOX_BORDER));
+    outer.add(everything);
 
-    Box hbox = Box.createHorizontalBox();
+    Box welcome = Box.createHorizontalBox();
 
     String labelText =
             "<html> " +
@@ -182,10 +191,7 @@ public class MiraLauncher extends JFrame {
       }
     });
     pane.setEditable(false);
-//    pane.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_HEIGHT));
-    JLabel label = new JLabel();
     pane.setBackground(new Color(247, 247, 247));
-
 
     JLabel textarea = new JLabel(labelText);
     textarea.addMouseListener(new MouseAdapter() {
@@ -198,13 +204,107 @@ public class MiraLauncher extends JFrame {
     });
     textarea.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_HEIGHT));
 
-    hbox.add(imageLabel);
-//    hbox.add(textarea);
-    hbox.add(pane);
+    welcome.add(imageLabel);
+    welcome.add(pane);
 
-    vbox.add(hbox);
-    vbox.add(Box.createVerticalStrut(GAP));
+    everything.add(welcome);
+    everything.add(Box.createVerticalStrut(GAP));
 
+    Box recentFiles = Box.createHorizontalBox();
+
+    final String[] columnNames = {"Recently open datasets"};
+    final Object[][] data = MiraApp.prefs.getProjectHistory();
+    DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    };
+
+    final JTable table = new JTable(model) {
+      DefaultTableCellRenderer renderer = new LeftEllipsisRenderer();
+      @Override
+      public TableCellRenderer getCellRenderer (int arg0, int arg1) {
+        return renderer;
+      }
+    };
+
+    table.setFillsViewportHeight(true);
+    table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+    table.setRowHeight(Display.scale(table.getRowHeight()));
+    Dimension dim = new Dimension(Display.scale(FILE_TABLE_WIDTH),
+            table.getRowHeight() * 10);
+    table.setPreferredScrollableViewportSize(dim);
+
+    recentFiles.add(new JScrollPane(table));
+
+//    Dimension bdim = new Dimension(TEXT_WIDTH/2, BUTTON_HEIGHT);
+
+    Box buttons = Box.createVerticalBox();
+    buttons.setMaximumSize(new Dimension(Display.scale(MAX_BUTTON_WIDTH), table.getRowHeight() * 10));
+
+    JPanel loadSelPanel = new JPanel(new BorderLayout());
+    final JButton loadSelButton = new JButton("Load selected dataset");
+//    loadSelButton.setSize(bdim);
+    loadSelButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+      int row = table.getSelectedRow();
+      int col = table.getSelectedColumn();
+      if (-1 < row && -1 < col) {
+        String value = (String)table.getValueAt(row, col);
+        File file = new File(value);
+        if (file.exists()) {
+          loadFile(file);
+          setVisible(false);
+        } else {
+          JOptionPane.showMessageDialog(MiraLauncher.this, "Data file is missing", "Problem!",
+            JOptionPane.WARNING_MESSAGE);
+        }
+      }
+      }
+    });
+    loadSelButton.setEnabled(false);
+    loadSelButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+    loadSelPanel.add(loadSelButton);
+    buttons.add(loadSelPanel);
+
+    JPanel loadNewPanel = new JPanel(new BorderLayout());
+    final JButton loadNewButton = new JButton("Load new dataset");
+//    loadNewButton.setSize(bdim);
+    loadNewButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        selectPrompt("Select data file to load:", new File(MiraApp.prefs.projectFolder),
+                     MiraLauncher.this, FileDialog.LOAD);
+        setVisible(false);
+      }
+    });
+    loadNewButton.setEnabled(false);
+    loadNewButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+    loadNewPanel.add(loadNewButton);
+    buttons.add(loadNewPanel);
+
+
+    JPanel quitPanel = new JPanel(new BorderLayout());
+    final JButton quitButton = new JButton("Quit");
+//    quitButton.setSize(bdim);
+    quitButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        setVisible(false);
+        System.exit(0);
+      }
+    });
+    quitButton.setEnabled(false);
+    quitButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+    quitPanel.add(quitButton);
+    buttons.add(Box.createVerticalStrut(GAP));
+    buttons.add(quitPanel);
+
+    recentFiles.add(Box.createHorizontalStrut(GAP));
+    recentFiles.add(buttons);
+    everything.add(recentFiles);
+
+    /*
     JPanel controlPanel = new JPanel();
     controlPanel.setBackground(new Color(247, 247, 247));
     GridBagLayout gridBagLayout = new GridBagLayout();
@@ -213,10 +313,10 @@ public class MiraLauncher extends JFrame {
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.insets = new Insets(INSET, INSET, INSET, INSET);
 
-    status = new JLabel();
+
     Dimension dim = new Dimension(TEXT_WIDTH/2, BUTTON_HEIGHT);
     status.setPreferredSize(dim);
-    status.setText("Starting up...");
+
     gbc.gridx = 0;
     gbc.gridy = 0;
     gbc.gridheight = 2;
@@ -232,20 +332,22 @@ public class MiraLauncher extends JFrame {
     gbc.fill = GridBagConstraints.VERTICAL;
     controlPanel.add(empty, gbc);
 
-    loadButton = new JButton("Load data");
-    loadButton.setPreferredSize(dim);
-    loadButton.addActionListener(new ActionListener() {
+
+
+    loadSelButton = new JButton("Load data");
+    loadSelButton.setPreferredSize(dim);
+    loadSelButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         selectPrompt("Select data for analysis:", new File(MiraApp.prefs.projectFolder),MiraLauncher.this, FileDialog.LOAD);
         setVisible(false);
       }
     });
-    loadButton.setEnabled(false);
+    loadSelButton.setEnabled(false);
     gbc.gridx = 1;
     gbc.gridy = 0;
 //    gbc.weightx = 1;
     gbc.fill = GridBagConstraints.HORIZONTAL;
-    controlPanel.add(loadButton, gbc);
+    controlPanel.add(loadSelButton, gbc);
 
     quitButton = new JButton("Quit");
     quitButton.setPreferredSize(dim);
@@ -263,6 +365,8 @@ public class MiraLauncher extends JFrame {
     controlPanel.add(quitButton, gbc);
 
     vbox.add(controlPanel);
+    */
+
     pack();
 
     setLocationRelativeTo(null);
@@ -274,9 +378,10 @@ public class MiraLauncher extends JFrame {
       @Override
       public void run() {
         MiraApp.copyExamples();
-        loadButton.setEnabled(true);
+        if (0 < data.length) loadSelButton.setEnabled(true);
+        loadNewButton.setEnabled(true);
         quitButton.setEnabled(true);
-        status.setText("");
+        setTitle("Welcome to Mirador!");
       }
     };
     update.start();
@@ -285,5 +390,35 @@ public class MiraLauncher extends JFrame {
   static public void main(String[] args) {
     MiraApp.loadPreferences();
     MiraLauncher mirador = new MiraLauncher();
+  }
+
+  // Create a cell renderer that adds left ellipsis
+  // From http://www.javapractices.com/topic/TopicAction.do?Id=168
+  final class LeftEllipsisRenderer extends DefaultTableCellRenderer {
+    AffineTransform affinetransform = new AffineTransform();
+    FontRenderContext frc = new FontRenderContext(affinetransform, true, true);
+
+    LeftEllipsisRenderer() {
+      setHorizontalAlignment(SwingConstants.LEFT);
+    }
+    @Override
+    public void setValue(Object aValue) {
+      Object result = aValue;
+      if ((aValue != null) && (aValue instanceof String)) {
+        String stringValue = (String)aValue;
+        if (!stringValue.equals("")) {
+          int w = (int)getFont().getStringBounds(stringValue, frc).getWidth();
+          if (FILE_TABLE_WIDTH < w) {
+            String s = stringValue;
+            while (FILE_TABLE_WIDTH < w) {
+              stringValue = stringValue.substring(5);
+              w = (int)getFont().getStringBounds(stringValue, frc).getWidth();
+            }
+            result = "..." + stringValue;
+          }
+        }
+      }
+      super.setValue(result);
+    }
   }
 }

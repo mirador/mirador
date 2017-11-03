@@ -5,9 +5,11 @@ package miralib.utils;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import miralib.shannon.BinOptimizer;
 import miralib.shannon.DependencyTest;
+import processing.core.PApplet;
 
 /**
  * Mirador preferences, that are used when no project file is provided.
@@ -35,6 +37,7 @@ public class Preferences {
   static final public int defPlotHeight = 200;
   static final public int defPlotColor = 0xFF278DD2;
 
+  public String[] projectHistory = new String[15];
   public String projectFolder;
   
   public int pValue;
@@ -71,7 +74,16 @@ public class Preferences {
 
     File file = new File(path, "preferences.cfg");
     settings = new Settings(file);
-    if (file.exists()) {      
+
+    for (int i = 0; i < projectHistory.length; i++) projectHistory[i] = "";
+
+    if (file.exists()) {
+      String[] history = settings.get("data.history", "").split("::");
+      for (int i = 0; i < PApplet.min(history.length, projectHistory.length); i++) {
+        projectHistory[i] = history[i];
+      }
+      removeMissingHistoryFiles();
+
       projectFolder = settings.get("data.folder", defFolder);
       missingString = settings.get("missing.string", defMissingString);
       missingThreshold = Project.stringToMissing(settings.get("missing.threshold", 
@@ -123,6 +135,9 @@ public class Preferences {
   }
   
   public void save() {
+    removeMissingHistoryFiles();
+    settings.set("data.history", PApplet.join(projectHistory, "::"));
+
     settings.set("data.folder", projectFolder);
     settings.set("missing.string", missingString);
     settings.set("missing.threshold", Project.missingToString(missingThreshold));    
@@ -141,5 +156,59 @@ public class Preferences {
     settings.setInteger("plot.height", plotHeight);
     settings.setColor("plot.color", plotColor);
     settings.save();    
+  }
+
+  public void setProjectFolder(String path, String name) {
+    projectFolder = path;
+
+    String fn = Paths.get(path, name).toString();
+
+    // Searching this file in the history.
+    int known = -1;
+    for (int i = 0; i < projectHistory.length; i++) {
+      if (projectHistory[i].equals(fn)) {
+        known = i;
+      }
+    }
+
+    if (known == 0) {
+      // Don't need to add it as it is already in the first position in the list, meaning it was the last open file
+      return;
+    }
+
+    // If was open at some moment in the past, so it should now be first, and removed from it previous position to
+    // avoid duplication. Otherwise, first time opening the file, so adding to the top of the list.
+    int start = 0 < known ? known :  projectHistory.length - 1;
+
+    for (int i = start; i > 0; i--) {
+      projectHistory[i] = projectHistory[i - 1];
+    }
+    projectHistory[0] = fn;
+  }
+
+  public Object[][] getProjectHistory() {
+    int count = 0;
+    for (int i = projectHistory.length - 1; i >= 0; i--) {
+      if (!projectHistory[i].equals("")) {
+        count = i + 1;
+        break;
+      }
+    }
+
+    Object[][] res = new Object[count][1];
+    for (int i = 0; i < count; i++) {
+      res[i][0] = projectHistory[i];
+    }
+    return res;
+  }
+
+  private void removeMissingHistoryFiles() {
+    for (int i = 0; i < projectHistory.length; i++) {
+      if (!new File(projectHistory[i]).exists()) {
+        for (int j = i; j < projectHistory.length - 1; j++) {
+          projectHistory[j] = projectHistory[j + 1];
+        }
+      }
+    }
   }
 }

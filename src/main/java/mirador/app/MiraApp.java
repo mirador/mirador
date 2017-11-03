@@ -246,7 +246,7 @@ public class MiraApp extends PApplet {
       project = new Project(filename, prefs);
       Path p = Paths.get(filename);
       Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();      
-      prefs.projectFolder = filePath.toString();
+      prefs.setProjectFolder(filePath.toString(), project.dataFile);
       prefs.save();
       if (history != null) history.dispose();
       history = new History(this, project, plotType);      
