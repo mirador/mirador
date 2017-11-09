@@ -34,15 +34,15 @@ public class CategoricalRange extends Range {
       String val0 = values.get(0);
       if (var.valueAlias(val0)) {
         // If passing aliases, will convert them to valid values to set 
-        // categorical range. 
+        // categorical range.
+        ArrayList<String> values0 = var.getValues();
         HashMap<String, String> aliases = ((CategoricalVariable)var).aliases;
-        catset.clear();
-        for (String cat: aliases.keySet()) {
+        for (String cat: values0) {
           String alias = aliases.get(cat);
           if (values.contains(alias)) {
             catset.add(cat);
-          }          
-        }        
+          }
+        }
       } else {
         catset.clear();
         catset.addAll(values);        

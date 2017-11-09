@@ -194,7 +194,7 @@ public class ColumnLabels extends ColumnScroller {
         fill(pColor);
         textFont(hFont);
         textLeading(hLead);
-        label = mira.browser.getColLabel(); 
+        label = mira.browser.getColLabel();
         float vw = textWidth(label);
         if (vw <= w1) {
           float x1 = mouseX - vw/2;
