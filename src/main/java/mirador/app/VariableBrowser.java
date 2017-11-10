@@ -64,18 +64,7 @@ public class VariableBrowser extends MiraWidget {
                                 mira.plotHeight, mira.varHeight);
     rowBrowser.clipBounds(true, false, true, false);
     addChild(rowBrowser, TOP_LEFT_CORNER);
-    
-    colLabels = new ColumnLabels(intf, mira.varWidth, 0, width - mira.varWidth, mira.labelHeightClose,
-                                 mira.plotWidth, mira.labelHeightClose, mira.labelHeightMax);
-    colLabels.clipBounds(true, false);
-    addChild(colLabels, TOP_LEFT_CORNER);
-    colLabels.hide(false);
-    if (data.getGroupCount() == 1 && data.getTableCount() == 1) {
-      // No metadata, so the variables are already shown and the labels should
-      // be visible as well.
-      showColumnLabels();
-    }
-    
+
     infoBar = new InformationBar(intf, 0, 0, mira.varWidth, infoBarH);    
     addChild(infoBar, TOP_LEFT_CORNER);
     
@@ -103,6 +92,17 @@ public class VariableBrowser extends MiraWidget {
     }
 
     rowBrowser.setScrollbars(vscroll, hscroll, gscroll);
+
+    colLabels = new ColumnLabels(intf, mira.varWidth, 0, width - mira.varWidth, mira.labelHeightClose,
+            mira.plotWidth, mira.labelHeightClose, mira.labelHeightMax);
+    colLabels.clipBounds(true, false);
+    addChild(colLabels, TOP_LEFT_CORNER);
+    colLabels.hide(false);
+    if (data.getGroupCount() == 1 && data.getTableCount() == 1) {
+      // No metadata, so the variables are already shown and the labels should
+      // be visible as well.
+      showColumnLabels();
+    }
 
     // Defining a keymap in the interface so the row scroller will capture the
     // arrow keys irrespective of which widget is currently selected, and likewise
