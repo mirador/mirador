@@ -23,6 +23,7 @@ public class ColumnLabels extends ColumnScroller {
   protected float hLead;
   protected PFont pFont;
   protected int pColor;
+  protected Variable requestedVar;
   
   public ColumnLabels(Interface intf, float x, float y, float w, float h, 
                       float iw, float ih, float ihmax) {
@@ -65,7 +66,25 @@ public class ColumnLabels extends ColumnScroller {
         item.mouseReleased();
       }    
     }         
-  }  
+  }
+
+  public void update() {
+    super.update();
+    if (requestedVar != null) {
+      mira.browser.openColumn(requestedVar);
+      requestedVar = null;
+    }
+
+
+    //    int idx = data.getColumn(jumpVar);
+//    if (-1 < idx) {
+//      colLabels.jumpTo(idx);
+//      hscroll.scrollTo(idx);
+//    }
+
+
+
+  }
   
   public void jumpTo(int idx) {
     mira.browser.dragColumns(jumpToImpl(idx));
@@ -118,6 +137,8 @@ public class ColumnLabels extends ColumnScroller {
         selector = new NumericalRangeSelector(intf, marginx + x.get(), posy, w - marginx*2, numh, var);        
       } else if (var.categorical()) {
         selector = new CategoricalRangeSelector(intf, marginx + x.get(), posy, w - marginx*2, h - posy, var);
+      } else {
+        System.out.println("fuck tu " + var.getName() + " " + var.type());
       }
       selector.setBackgroundColor(bColor);
       selector.setOffset(visX0);
@@ -211,11 +232,24 @@ public class ColumnLabels extends ColumnScroller {
     void drawDismiss() {
       float x0 = x.get() - visX0.get() + w - padding - crossw - marginx;
       float y0 = y.get() + dismissy;
-      
-      stroke(hColor, 100);
-      strokeWeight(1);
-      line(x0, y0, x0 + crossw, y0 + crossw);
-      line(x0, y0 + crossw, x0 + crossw, y0);
+
+      if (keyPressed(ALT) && insideDismiss(mouseX ,mouseY)) {
+        if (mira.browser.data.getColumnCount() == 1) {
+          noFill();
+          stroke(hColor, 100);
+          strokeWeight(2);
+          ellipse(x0 + 0.5f * crossw, 0.5f * y0 + crossw, crossw, crossw);
+        } else {
+          fill(hColor, 100);
+          noStroke();
+          ellipse(x0 + 0.5f * crossw, 0.5f * y0 + crossw, crossw, crossw);
+        }
+      } else {
+        stroke(hColor, 100);
+        strokeWeight(1);
+        line(x0, y0, x0 + crossw, y0 + crossw);
+        line(x0, y0 + crossw, x0 + crossw, y0);
+      }
     }
 
     boolean insideDismiss(float mx, float my) {
@@ -229,7 +263,12 @@ public class ColumnLabels extends ColumnScroller {
         
       if (insideDismiss(mouseX, mouseY)) {
         if (keyPressed(ALT)) {
-          mira.browser.closeColumnsBut(var);
+          if (mira.browser.data.getColumnCount() == 1) {
+            mira.browser.openAllColumns();
+            requestedVar = var;
+          } else {
+            mira.browser.closeColumnsBut(var);
+          }
         } else {
           mira.browser.closeColumn(var);
           markedForRemoval = true;          

@@ -190,8 +190,15 @@ public class VariableBrowser extends MiraWidget {
     ArrayList<Variable> vars = data.getVariables(container);
     data.addColumns(vars);
     mira.profile.add(vars);
-  }    
-  
+  }
+
+  public void openAllColumns() {
+    rowBrowser.showVariables();
+    ArrayList<Variable> all = data.getTree().getVariables();
+    data.addColumns(all);
+    mira.profile.add(all);
+  }
+
   public void closeColumn(Variable var) {
     data.removeColumn(var); // Important: removing column from data must happen before updating the UI    
     colLabels.close(var);
@@ -222,7 +229,7 @@ public class VariableBrowser extends MiraWidget {
     } 
     mira.profile.remove(vars);
   }
-  
+
   public void openCovariate(Variable var) {
     int idx = -1;
     if (var.covariate()) {

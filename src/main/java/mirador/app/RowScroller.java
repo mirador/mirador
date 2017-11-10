@@ -222,22 +222,52 @@ public class RowScroller extends MiraWidget {
       var = ((RowVariable)wt).rowVar;
     }
 
+    // If all items are closed, invert action and open them.
+    boolean allClosed = true;
+    for (int i = 0; i < items.size(); i++) {
+      DataTree.Item itm = items.get(i);
+      if (itm == var) continue;
+      if (itm.open()) {
+        allClosed = false;
+        break;
+      }
+    }
+
     for (int i = 0; i < children.size(); i++) {
       MiraWidget wti = (MiraWidget)children.get(i);
       if (wti == wt) continue;
       if (canOpen(wti.idx)) {
-        if (isOpen(wti.idx)) {
+        if (allClosed) {
+          open(wti.idx);
+          wti.targetHeight(heightOpen);
+        } else if (isOpen(wti.idx)) {
           close(wti.idx);
           wti.targetHeight(heightClose);
         }
         updatePositions(wti);
       }
     }
+
+    if (canOpen(wt.idx)) {
+      if (!isOpen(wt.idx)) {
+        open(wt.idx);
+        wt.targetHeight(heightOpen);
+      }
+      updatePositions(wt);
+    }
     jumpTo(wt.idx);
 
     for (int i = 0; i < items.size(); i++) {
       DataTree.Item itm = items.get(i);
-      if (itm != var) itm.setClose();
+      if (itm == var) {
+        itm.setOpen();
+        continue;
+      }
+      if (allClosed) {
+        itm.setOpen();
+      } else if (itm != var) {
+        itm.setClose();
+      }
     }
   }
 

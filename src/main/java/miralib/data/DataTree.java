@@ -111,7 +111,15 @@ public class DataTree {
   
   public Variable getVariable(String name) {
     return (Variable)varmap.get(name);
-  }  
+  }
+
+  public ArrayList<Variable> getVariables() {
+    ArrayList<Variable> all = new ArrayList<Variable>();
+    for (Item it: variables) {
+      all.add((Variable)it);
+    }
+    return all;
+  }
   
   public ArrayList<Variable> getGroupVariables(VariableContainer group) {
     ArrayList<Variable> sel = new ArrayList<Variable>();
