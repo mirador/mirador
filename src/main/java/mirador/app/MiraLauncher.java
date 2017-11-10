@@ -236,17 +236,34 @@ public class MiraLauncher extends JFrame {
     Dimension dim = new Dimension(Display.scale(FILE_TABLE_WIDTH),
             table.getRowHeight() * 10);
     table.setPreferredScrollableViewportSize(dim);
+    table.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent mouseEvent) {
+        JTable table =(JTable) mouseEvent.getSource();
+        Point point = mouseEvent.getPoint();
+        int row = table.rowAtPoint(point);
+        int col = table.columnAtPoint(point);
+        if (mouseEvent.getClickCount() == 2 && row != -1 && col != -1) {
+          // Open selected file when double clicking on the table
+          String value = (String)table.getValueAt(row, col);
+          File file = new File(value);
+          if (file.exists()) {
+            loadFile(file);
+            setVisible(false);
+          } else {
+            JOptionPane.showMessageDialog(MiraLauncher.this, "Data file is missing", "Problem!",
+                    JOptionPane.WARNING_MESSAGE);
+          }
+        }
+      }
+    });
 
     recentFiles.add(new JScrollPane(table));
-
-//    Dimension bdim = new Dimension(TEXT_WIDTH/2, BUTTON_HEIGHT);
 
     Box buttons = Box.createVerticalBox();
     buttons.setMaximumSize(new Dimension(Display.scale(MAX_BUTTON_WIDTH), table.getRowHeight() * 10));
 
     JPanel loadSelPanel = new JPanel(new BorderLayout());
     final JButton loadSelButton = new JButton("Load selected dataset");
-//    loadSelButton.setSize(bdim);
     loadSelButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
       int row = table.getSelectedRow();
@@ -271,7 +288,6 @@ public class MiraLauncher extends JFrame {
 
     JPanel loadNewPanel = new JPanel(new BorderLayout());
     final JButton loadNewButton = new JButton("Load new dataset");
-//    loadNewButton.setSize(bdim);
     loadNewButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         selectPrompt("Select data file to load:", new File(MiraApp.prefs.projectFolder),
@@ -287,7 +303,6 @@ public class MiraLauncher extends JFrame {
 
     JPanel quitPanel = new JPanel(new BorderLayout());
     final JButton quitButton = new JButton("Quit");
-//    quitButton.setSize(bdim);
     quitButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         setVisible(false);
@@ -303,69 +318,6 @@ public class MiraLauncher extends JFrame {
     recentFiles.add(Box.createHorizontalStrut(GAP));
     recentFiles.add(buttons);
     everything.add(recentFiles);
-
-    /*
-    JPanel controlPanel = new JPanel();
-    controlPanel.setBackground(new Color(247, 247, 247));
-    GridBagLayout gridBagLayout = new GridBagLayout();
-    controlPanel.setLayout(gridBagLayout);
-
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.insets = new Insets(INSET, INSET, INSET, INSET);
-
-
-    Dimension dim = new Dimension(TEXT_WIDTH/2, BUTTON_HEIGHT);
-    status.setPreferredSize(dim);
-
-    gbc.gridx = 0;
-    gbc.gridy = 0;
-    gbc.gridheight = 2;
-    gbc.fill = GridBagConstraints.VERTICAL;
-    controlPanel.add(status, gbc);
-
-    JLabel empty = new JLabel();
-    empty.setText("");
-    status.setPreferredSize(dim);
-    gbc.gridx = 0;
-    gbc.gridy = 1;
-    gbc.gridheight = 1;
-    gbc.fill = GridBagConstraints.VERTICAL;
-    controlPanel.add(empty, gbc);
-
-
-
-    loadSelButton = new JButton("Load data");
-    loadSelButton.setPreferredSize(dim);
-    loadSelButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        selectPrompt("Select data for analysis:", new File(MiraApp.prefs.projectFolder),MiraLauncher.this, FileDialog.LOAD);
-        setVisible(false);
-      }
-    });
-    loadSelButton.setEnabled(false);
-    gbc.gridx = 1;
-    gbc.gridy = 0;
-//    gbc.weightx = 1;
-    gbc.fill = GridBagConstraints.HORIZONTAL;
-    controlPanel.add(loadSelButton, gbc);
-
-    quitButton = new JButton("Quit");
-    quitButton.setPreferredSize(dim);
-    quitButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        setVisible(false);
-        System.exit(0);
-      }
-    });
-    quitButton.setEnabled(false);
-    gbc.gridx = 1;
-    gbc.gridy = 1;
-//    gbc.weightx = 1;
-    gbc.fill = GridBagConstraints.HORIZONTAL;
-    controlPanel.add(quitButton, gbc);
-
-    vbox.add(controlPanel);
-    */
 
     pack();
 
