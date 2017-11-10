@@ -43,7 +43,7 @@ public class ColumnLabels extends ColumnScroller {
   protected boolean ready() {
     return calledSetup;
   }
-  
+
   protected void handleResize(int newWidth, int newHeight) {
     float w0 = bounds.w.get();
     float w1 = newWidth - mira.optWidth - mira.varWidth;    

@@ -120,7 +120,7 @@ abstract public class ColumnScroller extends MiraWidget {
   
   public void drag(float dx) {
     if (getCount() == 0) return;
-    
+
     visX0.incTarget(dx);
     visX1.incTarget(dx);
     

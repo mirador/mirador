@@ -13,7 +13,7 @@ import miralib.math.Numbers;
 public class SoftFloat {
   private float ATTRACTION = 0.1f;
   private float DAMPING = 0.5f;
-  private float THRESHOLD = Numbers.FLOAT_EPS;
+  private float THRESHOLD = 0.01f; //Numbers.FLOAT_EPS;
 
   private float value;
   public float velocity;
@@ -117,7 +117,7 @@ public class SoftFloat {
       velocity = (velocity + acceleration) * DAMPING;
       value += velocity;
       acceleration = 0;
-      if (Math.abs(velocity) > 0.0001 && Math.abs(target - value) >= THRESHOLD) {
+      if (Math.abs(target - value) >= THRESHOLD) {
         return true;
       }
 
