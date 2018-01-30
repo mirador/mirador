@@ -176,13 +176,13 @@
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>pdf</artifactId>
-            <version>3.3.5</version>
+            <version>3.3.6</version>
         </dependency>
         
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>core</artifactId>
-            <version>3.3.5</version>
+            <version>3.3.6</version>
         </dependency>
         
     </dependencies>
