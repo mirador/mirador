@@ -1,6 +1,6 @@
 {
     "platform": "mac",
-    "jdk": "/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk",
+    "jdk": "/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk",
     "executable": "Mirador",
     "icon": "macos/app.icns", 
     "bundleidentifier": "info.fathom.mirador", 
