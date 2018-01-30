@@ -156,6 +156,10 @@ public class MiraLauncher extends JFrame {
     outer.setBackground(new Color(247, 247, 247));
 
     URL iconUrl = getClass().getResource("/data/icons/icon-" + LOGO_SIZE + ".png");
+    if (iconUrl == null) {
+      iconUrl = getClass().getResource("/data/icons/icon-128.png");
+      System.out.println("Defaulting to 128x128 icon");
+    }
     ImageIcon image = new ImageIcon(iconUrl);
     JLabel imageLabel = new JLabel(image);
 

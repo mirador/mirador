@@ -49,7 +49,7 @@ public class Display {
     } catch (Throwable e) {
       // DPI detection failed, fall back with default
       System.out.println("DPI detection failed, fallback to 96 dpi");
-      return -1;
+      return 96;
     }
   }  
   
