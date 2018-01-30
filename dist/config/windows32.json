@@ -1,6 +1,6 @@
 {
     "platform": "windows32",
-    "jdk": "C:/Program Files (x86)/Java/jdk1.8.0_144",
+    "jdk": "C:/Program Files (x86)/Java/jdk1.8.0_162",
     "executable": "mirador",
     "classpath": [
         "../target/mirador.jar"
