@@ -139,7 +139,10 @@ public class MiraApp extends PApplet {
       drawLoadAnimation();
     }
     if (loadingError) {
-      JOptionPane.showMessageDialog(new Frame(), errorMessage, "Loading error!", 
+      JOptionPane.showMessageDialog(new Frame(),
+              "The following error ocurred while loading the dataset:\n\n" +
+                      errorMessage + "\n\nFix this error and try opening again, or pick another dataset.\n" +
+                      "Mirador will now quit.", "Data loading error!",
           JOptionPane.ERROR_MESSAGE);     
       exit();      
     }
