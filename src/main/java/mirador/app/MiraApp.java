@@ -271,6 +271,10 @@ public class MiraApp extends PApplet {
       maxPlotSliceSizeCC = project.initSliceSize;
       maxPlotSliceSizeNN = project.initSliceSize;
       maxPlotSliceSizeCN = project.initSliceSize;
+
+      if (options != null) {
+        options.projectUpdate();
+      }
     }    
   }
   

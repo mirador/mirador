@@ -124,7 +124,12 @@ public class OptionsPanel extends MiraWidget {
     mdatOpt.add("<10%", "<20%", "<60%", "<80%", "Don't use");
     mdatOpt.select(mira.getMissingThreshold());    
   }
-  
+
+  public void projectUpdate() {
+    if (statOpt != null) statOpt.select(mira.getPValue());
+    if (mdatOpt != null) mdatOpt.select(mira.getMissingThreshold());
+  }
+
   public void update() {
     plotOpt.update();
     statOpt.update();
