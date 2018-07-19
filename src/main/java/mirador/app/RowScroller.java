@@ -442,7 +442,7 @@ public class RowScroller extends MiraWidget {
     while (h <= maxh) {
       n++;
       int i = last.idx + n;
-      if (i == items.size()) break;
+      if (items.size() <= i) break;
       h += items.get(i).open() ? heightOpen : heightClose;
     }
     return n;
@@ -453,7 +453,7 @@ public class RowScroller extends MiraWidget {
     float h = 0;
     while (h <= height) {
       n++;
-      if (n == items.size()) break;
+      if (items.size() <= n) break;
       h += items.get(n).open() ? heightOpen : heightClose;
     }
     return n;
