@@ -6,7 +6,7 @@
 
     <groupId>info.fathom</groupId>
     <artifactId>mirador</artifactId>
-    <version>1.5</version>
+    <version>1.5.1</version>
     
     <name>mirador</name>
     <url>https://fathom.info/mirador</url>    
