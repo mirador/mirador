@@ -36,7 +36,8 @@ public class ExportHandler {
       filename += ".csv";
     }
     Path dataPath = Paths.get(filename);
-    String filePath = dataPath.getParent().toAbsolutePath().toString(); 
+    String filePath = dataPath.getParent().toAbsolutePath().toString();
+    File dataFile = new File(filename);
     File dictFile = new File(filePath, "dictionary.csv");
     File miraFile = new File(filePath, "config.mira");
 
@@ -52,10 +53,10 @@ public class ExportHandler {
     }
 
     Project prj = new Project(app.project);
-    prj.dataFile = "data.csv";
+    prj.dataFile = dataFile.getName();
     prj.dictFile = "dictionary.csv";
     prj.grpsFile = "";
-    prj.binFile = "data.bin";
+    prj.binFile = "";
     prj.codeFile = "";
     prj.save(miraFile.getAbsolutePath());
   }
