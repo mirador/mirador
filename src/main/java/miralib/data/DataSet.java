@@ -512,16 +512,16 @@ public class DataSet {
 
   public void resort(DataRanges ranges) {
     if (sortVar != null) {
-      // TODO: there might be a little delay specially when resorting after 
-      // a drag operation and threads might be synchronizing on the access to the
-      // data ranges.
       sortRanges = new DataRanges(ranges);
-      cancelCurrentSort();            
+      cancelCurrentSort();
       threadedSort = false;
       nonthreadedCount = 0;
-      Collections.fill(scores, new Float(-1f));
-      sortTask = new SortTask(SortTask.INSERTION);
-      sortTask.start();            
+
+      // Using insertion sort because is better on almost sorted arrays, assuming that's the case
+      // when resorting after a range change.
+      clearScores();
+      sortTask = new SortTask(SortTask.INSERTION, maxSortSliceSize);
+      sortTask.start();
     }
   } 
   
@@ -598,7 +598,7 @@ public class DataSet {
   protected void launchScorePool(boolean clear, final int maxSliceSize) {
     // Calculating all the (missing) scores with a thread pool.
     threadedSort = true;
-    if (clear) Collections.fill(scores, new Float(-1f));
+    if (clear) clearScores();
     int proc = Runtime.getRuntime().availableProcessors();
     scorePool = (ThreadPoolExecutor)Executors.newFixedThreadPool(Math.min(1, proc - 1));
     for (int i = 0; i < columns.size(); i++) {
@@ -622,6 +622,10 @@ public class DataSet {
       });      
     }
     scorePool.shutdown();
+  }
+
+  protected void clearScores() {
+    Collections.fill(scores, new Float(-1f));
   }
   
   public boolean sorting() {
@@ -1132,10 +1136,11 @@ public class DataSet {
     SortTask(int algo, boolean order, int size) {
       this.algo = algo;
       this.order = order;
-      this. size = size;
+      this.size = size;
     }
     
     public void run() {
+      long t0 = System.currentTimeMillis();
       // The sort task will wait for the score pool to execute all of its 
       // threads.
       while (!scorePool.isTerminated()) {
@@ -1146,6 +1151,13 @@ public class DataSet {
       } else if (algo == INSERTION) {
         insertion();
       }
+      long t1 = System.currentTimeMillis();
+      if (algo == QUICKSORT) {
+        Log.message("QUICKSORT complete in " + (t1 - t0) + " milliseconds");
+      } else {
+        Log.message("INSERTION sort complete in " + (t1 - t0) + " milliseconds");
+      }
+
     }
     
     protected void insertion() {

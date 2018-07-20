@@ -79,11 +79,9 @@ public class Profile extends MiraWidget {
   protected int ptInColor;
   protected int ptBrColor;
   protected int selBarColor;
-  protected int selHdlColor;
-  
+
   protected float selRangeLeft;
   protected float selRangeRight;
-//  protected SelectionHandle selLeftHandle;
   protected SelectionHandle selRightHandle;
   
   protected float fdr;
@@ -173,12 +171,16 @@ public class Profile extends MiraWidget {
   
   public void update() {
     boolean sort = data.sorting();
-    if (sort || sort0 || (data.sorted() && dirty)) updatePoints();
+
+    if (sort || sort0 || (data.sorted() && dirty)) {
+      updatePoints();
+    }
+
     if (requestedUpdateSelection || sort) {
       updatePointSelection();
     }
     sort0 = sort;
-    
+
     for (SoftPoint pt: points.values()) {
       pt.update();
     }
@@ -221,12 +223,10 @@ public class Profile extends MiraWidget {
   }
 
   public void mousePressed() {
-//    selLeftHandle.mousePressed();
     selRightHandle.mousePressed();
   }
 
   public void mouseDragged() {
-//    selLeftHandle.mouseDragged();
     selRightHandle.mouseDragged();
   } 
   
@@ -239,8 +239,7 @@ public class Profile extends MiraWidget {
         hide(true);
         mira.browser.openColumn(hoverVar);
       }
-//      selLeftHandle.mouseReleased();
-      selRightHandle.mouseReleased();      
+      selRightHandle.mouseReleased();
     }
   }
   
@@ -248,12 +247,8 @@ public class Profile extends MiraWidget {
     hoverVar = null;
     for (Variable var: points.keySet()) {
       SoftPoint pt = points.get(var);
-      if (pt == null) {
-        // TODO: this shouldn't happen, but it did...
-        Log.message("null profile point, maybe thread sync issue?");
-        continue; 
-      }
-      
+      if (pt == null) continue;
+
       if (PApplet.dist(pt.x(), pt.y(), mouseX, mouseY) < 15) {
         hoverVar = var;
         hoverAlpha.setTarget(100);
@@ -269,10 +264,7 @@ public class Profile extends MiraWidget {
     float y0 = topm - 10;
     float y1 = y0 + height - bottomm - topm;
     
-//    float selx0 = PApplet.map(selRangeLeft, 0, 1, x0, x1);
     float selx1 = PApplet.map(selRangeRight, 0, 1, x0, x1);
-    
-//    selLeftHandle = new SelectionHandle(selx0, y1 + 20, sliderw, sliderh, SelectionHandle.LEFT);
     selRightHandle = new SelectionHandle(selx1, y1 + handleY, handlew, handleh, SelectionHandle.RIGHT);
   }
    
@@ -286,7 +278,6 @@ public class Profile extends MiraWidget {
     fill(selBarColor);
     rect(x0, y1, x1 - x0, selW);
 
-//    float selx0 = selLeftHandle.x0;  //PApplet.map(selRangeLeft, 0, 1, x0, x1);
     float selx0 = PApplet.map(selRangeLeft, 0, 1, x0, x1);
     float selx1 = selRightHandle.x0; //PApplet.map(selRangeRight, 0, 1, x0, x1);
     fill(selBarColor);
@@ -295,7 +286,6 @@ public class Profile extends MiraWidget {
     fill(color(0), 190);
     rect(selx0, y1, selx1 - selx0, selW);
     
-//    selLeftHandle.draw();
     selRightHandle.draw();
     
     if (mira.project.sortMethod == Project.PVALUE) {
@@ -310,12 +300,8 @@ public class Profile extends MiraWidget {
   protected void drawPoints() {
     for (Variable var: points.keySet()) {
       SoftPoint pt = points.get(var);
-      if (pt == null) {
-        // TODO: this shouldn't happen, but it did...
-        Log.message("null profile point, maybe thread sync issue?");
-        continue; 
-      }
-      
+      if (pt == null) continue;
+
       int alpha = hoverVar != null && var != hoverVar ? hoverAlpha.getCeil() : 255;
       if (pt.selected) {
         stroke(ptBrColor, alpha);
@@ -412,7 +398,7 @@ public class Profile extends MiraWidget {
     int count = 0;
     float maxs = 0;
     float mins = Float.MAX_VALUE;
-    
+
     for (int i = 0; i < data.getColumnCount(); i++) {
       Variable var = data.getColumn(i);        
       float score = data.getScore(i);
@@ -420,8 +406,11 @@ public class Profile extends MiraWidget {
         double p = Math.pow(10, -score);
         if (p < PValue.MIN_VALUE) score = (float)PValue.MAX_SCORE;
       }
-      if (var == data.sortKey() || score <= 0) {
-        if (points.containsKey(var)) points.remove(var);
+
+      if (var == data.sortKey() || score <= 0 && !data.sorting()) {
+        if (points.containsKey(var)) {
+          points.remove(var);
+        }
         continue;
       }
       if (!points.containsKey(var)) {
@@ -441,13 +430,8 @@ public class Profile extends MiraWidget {
         double p = Math.pow(10, -score);
         if (p < PValue.MIN_VALUE) score = (float)PValue.MAX_SCORE;
       }
-      if (var == data.sortKey() || score <= 0) continue;
-      SoftPoint pt = points.get(var); 
-      if (pt == null) {
-        // TODO: this shouldn't happen, but it did...
-        Log.message("null profile point, maybe thread sync issue?");
-        continue; 
-      }
+      SoftPoint pt = points.get(var);
+      if (var == data.sortKey() || score <= 0 || pt == null) continue;
 
       float x = (float)Math.log1p((float)(n)/(float)(count - 1)* (Math.E-1));
       float y = (float)Math.log1p((score - mins)/(maxs - mins) * (Math.E-1));
@@ -468,11 +452,7 @@ public class Profile extends MiraWidget {
     float xmax = -1000;
     for (Variable var: points.keySet()) {
       SoftPoint pt = points.get(var);
-      if (pt == null) {
-        // TODO: this shouldn't happen, but it did...
-        Log.message("null profile point, maybe thread sync issue?");
-        continue; 
-      }
+      if (pt == null) continue;
       float x = pt.x.get();
       pt.selected = selRangeLeft <= x && x <= selRangeRight;
       if (pt.selected && xmax < x) {
@@ -502,7 +482,6 @@ public class Profile extends MiraWidget {
     
     float y0 = topm - 10;
     float y1 = y0 + newHeight - bottomm - topm;    
-//    selLeftHandle.setY(y1 + 20);
     selRightHandle.setY(y1 + handleY);
     // TODO: re-adjust selected range according to new width...
   }
@@ -643,14 +622,7 @@ public class Profile extends MiraWidget {
         float right = left + width - leftm - rightm;
         
         dragging = true;
-        float dragx = 0;
-//        if (side == LEFT) {
-//          dragx = PApplet.constrain(mouseX + dx0, left, selRightHandle.x0);  
-//        } else if (side == RIGHT) {
-//          dragx = PApplet.constrain(mouseX + dx0, selLeftHandle.x0, right);
-//        }
-        
-        dragx = PApplet.constrain(mouseX + dx0, left, right);        
+        float dragx = PApplet.constrain(mouseX + dx0, left, right);
         
         float value = PApplet.constrain(PApplet.map(dragx, left + dragLimitX, right - dragLimitX, 0, 1), 0, 1);
         if (side == LEFT) {

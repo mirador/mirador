@@ -117,12 +117,12 @@ public class OptionsPanel extends MiraWidget {
     statOpt = new Options(marginX, statOptY, optWidth, optHeight, "StatsOptions");
     statOpt.title("Error rate", corColor);
     statOpt.add("99.9%", "99.5%", "99%", "95%", "90%", "Don't use");
-    statOpt.select(mira.getPValue());    
-    
+    statOpt.select(mira.getPValue());
+
     mdatOpt = new Options(marginX, mdatOptY, optWidth, optHeight, "SessionOptions");
     mdatOpt.title("Missing\ndata", misColor);
     mdatOpt.add("<10%", "<20%", "<60%", "<80%", "Don't use");
-    mdatOpt.select(mira.getMissingThreshold());    
+    mdatOpt.select(mira.getMissingThreshold());
   }
 
   public void projectUpdate() {

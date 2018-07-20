@@ -222,7 +222,7 @@ public class MiraApp extends PApplet {
     Range range = selector.getRange();
     int result = ranges.update(var, range);
     if (resort) dataset.resort(ranges);
-    if (result != DataRanges.NO_CHANGE) {      
+    if (result != DataRanges.NO_CHANGE) {
       browser.dataChanged();
       if (result == DataRanges.ADDED_RANGE) {
         history.addRange(var, range);
@@ -241,7 +241,7 @@ public class MiraApp extends PApplet {
       dataset.resort(ranges);
       browser.dataChanged();
       history.clearRanges();
-    }    
+    }
   }
   
   public void loadProject(String filename) {
