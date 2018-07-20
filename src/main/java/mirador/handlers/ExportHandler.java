@@ -2,16 +2,20 @@
 
 package mirador.handlers;
 
+import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import mirador.app.MiraApp;
+import mirador.app.MiraLauncher;
 import miralib.data.Variable;
 import miralib.utils.Project;
 import processing.core.PApplet;
 import processing.data.Table;
+
+import javax.swing.*;
 
 /**
  * Handler for exporting entire dataset as mirador project.
@@ -59,5 +63,8 @@ public class ExportHandler {
     prj.binFile = "";
     prj.codeFile = "";
     prj.save(miraFile.getAbsolutePath());
+
+    JOptionPane.showMessageDialog(new Frame(), "Mirador finished exporting the data.", "Data export",
+            JOptionPane.INFORMATION_MESSAGE);
   }
 }

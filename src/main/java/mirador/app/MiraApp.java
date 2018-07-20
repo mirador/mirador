@@ -254,8 +254,11 @@ public class MiraApp extends PApplet {
       if (history != null) history.dispose();
       history = new History(this, project, plotType);      
     } catch (Exception ex) {
-      JOptionPane.showMessageDialog(new Frame(), ex.getMessage(), "Loading error!", 
-                                    JOptionPane.ERROR_MESSAGE);     
+      JOptionPane.showMessageDialog(new Frame(),
+              "The following error ocurred while loading the dataset:\n\n" +
+                      ex.getMessage() + "\n\nFix this error and try opening again, or pick another dataset.\n" +
+                      "Mirador will now quit.", "Data loading error!",
+              JOptionPane.ERROR_MESSAGE);
       exit();
     }
     
