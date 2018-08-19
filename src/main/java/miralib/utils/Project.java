@@ -141,6 +141,7 @@ public class Project {
       
       for (File f: prjFiles) {
         String name = f.getName();
+        if (name.indexOf("$") == 0) continue;
         String ext = Fileu.checkExtension(name);
         if (ext == null) continue;
         if (ext.equals("bin")) {
