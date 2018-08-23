@@ -110,10 +110,10 @@ public class Project {
 
       missString = settings.get("missing.string", prefs.missingString);      
       missThreshold = Project.stringToMissing(settings.get("missing.threshold", 
-                         Project.missingToString(prefs.missingThreshold)));
+                      Project.missingToString(prefs.missingThreshold)));
      
       binAlgorithm = BinOptimizer.stringToAlgorithm(settings.get("binning.algorithm", 
-                BinOptimizer.algorithmToString(prefs.binAlgorithm)));
+                     BinOptimizer.algorithmToString(prefs.binAlgorithm)));
       
       pValue = Project.stringToPValue(settings.get("correlation.pvalue", 
                Project.pvalueToString(prefs.pValue))); 

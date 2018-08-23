@@ -4,10 +4,16 @@ package mirador.app;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import com.illposed.osc.OSCMessage;
+import com.illposed.osc.OSCPort;
+import com.illposed.osc.OSCPortOut;
 import miralib.utils.Log;
 import processing.core.PApplet;
 import mirador.views.View;
@@ -46,9 +52,12 @@ public class History {
 
   protected boolean enabled = true;
 
+
+  OSCPortOut sender;
+
   static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd.HHmm");
   
-  public History(MiraApp app, Project prj, int ptype) {
+  public History(MiraApp app, Project prj, String filename, int ptype) {
     this.app = app;
     this.prj = prj;
 
@@ -75,25 +84,35 @@ public class History {
     selPair = null;
     sortVar = null;
     openProfile = false;
-    
+
+    oscInit();
+    setProject(filename);
     setPValue(prj.pvalue());
     setMissingThreshold(prj.missingThreshold());
     setPlotType(ptype);
   }
-  
+
+  public void setProject(String filename) {
+    oscSend("LOAD", app.millis(), filename);
+  }
+
   public void addPair(Variable varx, Variable vary) {
     if (!enabled) return;
     VariablePair pair = new VariablePair(varx, vary);
     if (pairs.add(pair)) {
-      write("+PAIR\t" + app.millis() + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());      
-    }    
+      int m = app.millis();
+      write("+PAIR\t" + m + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+      oscSend("+PAIR", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
+    }
   }
   
   public void removePair(Variable varx, Variable vary) {
     if (!enabled) return;
     VariablePair pair = new VariablePair(varx, vary);
     if (pairs.remove(pair)) {
-      write("-PAIR\t" + app.millis() + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+      int m = app.millis();
+      write("-PAIR\t" + m + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+      oscSend("-PAIR", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
     }
   }
   
@@ -101,7 +120,10 @@ public class History {
     if (!enabled) return;
     VariableRange vrange = new VariableRange(var, range);
     if (ranges.add(vrange)) {
-      write("+RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
+      String frange = var.formatRange(range, false);
+      int m = app.millis();
+      write("+RANGE\t" + m + " " + var.getName() + ":" + var.getAlias() +"\t" + frange);
+      oscSend("+RANGE", m, var.getName(), var.getAlias(), frange);
     }
   }
   
@@ -117,7 +139,10 @@ public class History {
     if (vrange != null) {
       Range range = vrange.range;
       ranges.remove(vrange);
-      write("-RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
+      String frange = var.formatRange(range, false);
+      int m = app.millis();
+      write("-RANGE\t" + m + " " + var.getName() + ":" + var.getAlias() +"\t" + frange);
+      oscSend("-RANGE", m, var.getName(), var.getAlias(), frange);
     }
   }
   
@@ -134,7 +159,10 @@ public class History {
       ranges.remove(vrange);
       vrange = new VariableRange(var, range);
       if (ranges.add(vrange)) {
-        write("~RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
+        String frange = var.formatRange(range, false);
+        int m = app.millis();
+        write("~RANGE\t" + m + " " + var.getName() + ":" + var.getAlias() +"\t" + frange);
+        oscSend("~RANGE", m, var.getName(), var.getAlias(), frange);
       }      
     }
   }
@@ -147,7 +175,10 @@ public class History {
         VariableRange vrange = (VariableRange)obj;
         Variable var = vrange.var;
         Range range = vrange.range;
-        write("-RANGE\t" + app.millis() + " " + var.getName() + ":" + var.getAlias() +"\t" + var.formatRange(range, false));
+        String frange = var.formatRange(range, false);
+        int m = app.millis();
+        write("-RANGE\t" + m + " " + var.getName() + ":" + var.getAlias() +"\t" + frange);
+        oscSend("-RANGE", m, var.getName(), var.getAlias(), frange);
       }
     }
   }
@@ -156,7 +187,9 @@ public class History {
     if (!enabled) return;
     if (Numbers.different(this.pvalue, pvalue)) {
       this.pvalue = pvalue;
-      write("PVALUE\t" + app.millis() + "\t" + pvalue);
+      int m = app.millis();
+      write("PVALUE\t" + m + "\t" + pvalue);
+      oscSend("PVALUE", m, pvalue);
     }
   }
   
@@ -164,15 +197,20 @@ public class History {
     if (!enabled) return;
     if (Numbers.different(this.misst, misst)) {
       this.misst = misst;
-      write("MISSING\t" + app.millis() + "\t" + misst);
-    }    
+      int m = app.millis();
+      write("MISSING\t" + m + "\t" + misst);
+      oscSend("MISSING", m, misst);
+    }
   }
-  
+
   public void setPlotType(int plotType) {
     if (!enabled) return;
     if (this.plotType != plotType) {
       this.plotType = plotType;
-      write("PLOT\t" + app.millis() + "\t" + View.typeToString(plotType));
+      String stype = View.typeToString(plotType);
+      int m = app.millis();
+      write("PLOT\t" + m + "\t" + stype);
+      oscSend("PLOT", m, stype);
     }
   }
   
@@ -182,11 +220,15 @@ public class History {
       VariablePair pair = new VariablePair(varx, vary);
       if (!pair.equals(selPair)) {
         selPair = pair;
-        write("SELECT\t" + app.millis() + "\t" + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+        int m = app.millis();
+        write("SELECT\t" + m + "\t" + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+        oscSend("SELECT", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
       }      
     } else if (selPair != null) {
       selPair = null;
-      write("SELECT\t" + app.millis() + "\tNONE");
+      int m = app.millis();
+      write("SELECT\t" + m + "\tNONE");
+      oscSend("SELECT", m, "NONE");
     }
   }
   
@@ -194,7 +236,9 @@ public class History {
     if (!enabled) return;
     if (sortVar != var) {
       sortVar = var;
-      write("SORT\t" + app.millis() + "\t" + var.getName() + ":" + var.getAlias());
+      int m = app.millis();
+      write("SORT\t" + m + "\t" + var.getName() + ":" + var.getAlias());
+      oscSend("SORT", m, var.getName(), var.getAlias());
     }
   }
   
@@ -202,7 +246,9 @@ public class History {
     if (!enabled) return;
     if (sortVar != null) {
       sortVar = null;
-      write("SORT\t" + app.millis() + "\tNONE");
+      int m = app.millis();
+      write("SORT\t" + m + "\tNONE");
+      oscSend("SORT", m, "NONE");
     }
   }
   
@@ -210,7 +256,9 @@ public class History {
     if (!enabled) return;
     if (!openProfile) {
       openProfile = true;
-      write("+PROFILE\t" + app.millis());
+      int m = app.millis();
+      write("+PROFILE\t" + m);
+      oscSend("+PROFILE", m, "");
     }
   }
   
@@ -218,7 +266,9 @@ public class History {
     if (!enabled) return;
     if (openProfile) {
       openProfile = false;
-      write("-PROFILE\t" + app.millis());
+      int m = app.millis();
+      write("-PROFILE\t" + m);
+      oscSend("-PROFILE", m, "");
     }    
   }  
   
@@ -248,7 +298,64 @@ public class History {
     }
     return concat;
   }
-  
+
+  protected void oscInit() {
+    try {
+      sender = new OSCPortOut(InetAddress.getLocalHost(),12000);
+    } catch (Exception ex) {
+      // this is just a demo program, so this is acceptable behavior
+      ex.printStackTrace();
+    }
+  }
+
+  protected void oscSend(String command, int timestamp, float...data) {
+    if (sender != null) {
+      List<Object> args = new ArrayList<Object>(6);
+      args.add(timestamp);
+      for (int i = 0; i < data.length; i++) {
+        args.add(data[i]);
+      }
+      OSCMessage msg = new OSCMessage("/" + command, args);
+      try {
+        sender.send(msg);
+      } catch (Exception ex) {
+        Log.error("Error sending OSC message", ex);
+      }
+    }
+  }
+
+  protected void oscSend(String command, int timestamp, int...data) {
+    if (sender != null) {
+      List<Object> args = new ArrayList<Object>(6);
+      args.add(timestamp);
+      for (int i = 0; i < data.length; i++) {
+        args.add(data[i]);
+      }
+      OSCMessage msg = new OSCMessage("/" + command, args);
+      try {
+        sender.send(msg);
+      } catch (Exception ex) {
+        Log.error("Error sending OSC message", ex);
+      }
+    }
+  }
+
+  protected void oscSend(String command, int timestamp, String...data) {
+    if (sender != null) {
+      List<Object> args = new ArrayList<Object>(6);
+      args.add(timestamp);
+      for (int i = 0; i < data.length; i++) {
+        args.add(data[i]);
+      }
+      OSCMessage msg = new OSCMessage("/" + command, args);
+      try {
+        sender.send(msg);
+      } catch (Exception ex) {
+        Log.error("Error sending OSC message", ex);
+      }
+    }
+  }
+
   protected void write(String line) {
     writer.println(line);
     changed = true;

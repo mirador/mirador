@@ -42,7 +42,7 @@ public class MiraApp extends PApplet {
   static public int PIXEL_DENSITY = 1;
   static public int SMOOTH_LEVEL = 4;
   static public final String APP_NAME = "mirador";
-  static public final String APP_VERSION = "1.5.1";
+  static public final String APP_VERSION = "1.5.2";
   
   static public String inputFile = "default.mira";
   static public File miraFolder;
@@ -252,7 +252,7 @@ public class MiraApp extends PApplet {
       prefs.setProjectFolder(filePath.toString(), project.dataFile);
       prefs.save();
       if (history != null) history.dispose();
-      history = new History(this, project, plotType);      
+      history = new History(this, project, filename, plotType);
     } catch (Exception ex) {
       JOptionPane.showMessageDialog(new Frame(),
               "The following error ocurred while loading the dataset:\n\n" +
@@ -491,7 +491,7 @@ public class MiraApp extends PApplet {
   //////////////////////////////////////////////////////////////////////////////  
   
   static public void loadPreferences() {
-    miraFolder = defaultFolder();
+    miraFolder = Preferences.defaultFolder();
     try {
       prefs = new Preferences(miraFolder.toString());
     } catch (IOException e) {
@@ -521,52 +521,6 @@ public class MiraApp extends PApplet {
   }
 
 
-  static public File defaultFolder() {
-    File homeFolder = new File(System.getProperty("user.home"));
-    File cfgFolder = new File(homeFolder, ".mirador");
-    File cfgFile = new File(cfgFolder, "config.txt");
-    File miraFolder = homeFolder;
-    boolean save = true;
-    if (!cfgFolder.exists() || !cfgFile.exists()) {
-      if (!cfgFolder.exists()) {
-        boolean success = cfgFolder.mkdirs();
-        if (!success) {
-          System.err.println("Cannot create .mirador inside the home folder");
-          save = false;
-        }
-      }
-      // Set default locations
-      miraFolder = new File(homeFolder, "Documents");
-      if (miraFolder.exists()) {
-        miraFolder = new File(miraFolder, "Mirador");
-      } else {
-        miraFolder = new File(homeFolder, "Mirador");
-      }
-    } else {
-      String[] lines = PApplet.loadStrings(cfgFile);
-      if (0 < lines.length) {
-        miraFolder = new File(lines[0]);
-        if (miraFolder.exists()) {
-          save = false;
-        } else {
-          // Folder in config does not exist, try default locations
-          miraFolder = new File(homeFolder, "Documents");
-          if (miraFolder.exists()) {
-            miraFolder = new File(miraFolder, "Mirador");
-          } else {
-            miraFolder = new File(homeFolder, "Mirador");
-          }
-        }
-      }
-    }
-
-    if (save) {
-      PApplet.saveStrings(cfgFile, new String[] {miraFolder.getAbsolutePath()});
-    }
-
-    return miraFolder;
-  }
-  
   public static void main(String args[]) {
     if (0 < args.length) inputFile = args[0];
     if (!(new File(inputFile)).isAbsolute()) {

@@ -202,6 +202,53 @@ public class Preferences {
     return res;
   }
 
+
+  static public File defaultFolder() {
+    File homeFolder = new File(System.getProperty("user.home"));
+    File cfgFolder = new File(homeFolder, ".mirador");
+    File cfgFile = new File(cfgFolder, "config.txt");
+    File miraFolder = homeFolder;
+    boolean save = true;
+    if (!cfgFolder.exists() || !cfgFile.exists()) {
+      if (!cfgFolder.exists()) {
+        boolean success = cfgFolder.mkdirs();
+        if (!success) {
+          System.err.println("Cannot create .mirador inside the home folder");
+          save = false;
+        }
+      }
+      // Set default locations
+      miraFolder = new File(homeFolder, "Documents");
+      if (miraFolder.exists()) {
+        miraFolder = new File(miraFolder, "Mirador");
+      } else {
+        miraFolder = new File(homeFolder, "Mirador");
+      }
+    } else {
+      String[] lines = PApplet.loadStrings(cfgFile);
+      if (0 < lines.length) {
+        miraFolder = new File(lines[0]);
+        if (miraFolder.exists()) {
+          save = false;
+        } else {
+          // Folder in config does not exist, try default locations
+          miraFolder = new File(homeFolder, "Documents");
+          if (miraFolder.exists()) {
+            miraFolder = new File(miraFolder, "Mirador");
+          } else {
+            miraFolder = new File(homeFolder, "Mirador");
+          }
+        }
+      }
+    }
+
+    if (save) {
+      PApplet.saveStrings(cfgFile, new String[] {miraFolder.getAbsolutePath()});
+    }
+
+    return miraFolder;
+  }
+
   private void removeMissingHistoryFiles() {
     for (int i = 0; i < projectHistory.length; i++) {
       if (!new File(projectHistory[i]).exists()) {

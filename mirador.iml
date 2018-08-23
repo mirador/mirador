@@ -47,5 +47,6 @@
     <orderEntry type="library" name="Maven: org.processing:pdf:3.3.7" level="project" />
     <orderEntry type="library" name="Maven: com.itextpdf:itextpdf:5.5.6" level="project" />
     <orderEntry type="library" name="Maven: org.processing:core:3.3.7" level="project" />
+    <orderEntry type="library" name="Maven: com.illposed.osc:javaosc-core:0.4" level="project" />
   </component>
 </module>

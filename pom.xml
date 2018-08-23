@@ -6,7 +6,7 @@
 
     <groupId>info.fathom</groupId>
     <artifactId>mirador</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.2</version>
     
     <name>mirador</name>
     <url>https://fathom.info/mirador</url>    
@@ -184,7 +184,13 @@
             <artifactId>core</artifactId>
             <version>3.3.7</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>com.illposed.osc</groupId>
+            <artifactId>javaosc-core</artifactId>
+            <version>0.4</version>
+        </dependency>
+
     </dependencies>
 
 </project>
