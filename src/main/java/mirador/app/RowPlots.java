@@ -233,11 +233,11 @@ public class RowPlots extends ColumnScroller {
                 view = View.create(slice, mira.project.binAlgorithm);
               } else {
                 int tstart = mira.millis();
-                DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges, mira.getPlotSliceSize(var, rowVar));
+                DataSlice2D slice = data.getSlice(var, rowVar, mira.ranges, mira.timer.getPlotSliceSize(var, rowVar));
                 missing = slice.missing;
                 view = View.create(slice, mira.getPlotType(), mira.project.binAlgorithm);
                 int time = mira.millis() - tstart;
-                mira.clockPlotTime(time, var, rowVar);
+                mira.timer.clockPlotTime(time, var, rowVar);
               }
               update = true;
             }
