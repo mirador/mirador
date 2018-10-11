@@ -19,6 +19,7 @@ import mirador.handlers.LoadHandler;
 import mirador.handlers.ProfileHandler;
 import mirador.handlers.ExportHandler;
 //import mirador.handlers.UploadHandler;
+import mirador.handlers.TaskHandler;
 import miralib.data.*;
 import miralib.utils.*;
 import mui.Display;
@@ -69,6 +70,7 @@ public class MiraApp extends PApplet {
   public OptionsPanel options;  
   public VariableBrowser browser;
   public Profile profile;
+  public TaskHandler tasks;
     
   protected int plotType;
   
@@ -106,6 +108,7 @@ public class MiraApp extends PApplet {
     Log.init(false);
 //    loadPreferences();
 
+    tasks = new TaskHandler();
     intf = new Interface(this, "style.css");
     intf.setBackground(color(247));
     initPanel();
@@ -118,7 +121,10 @@ public class MiraApp extends PApplet {
     loadProject(inputFile);
   }
   
-  public void draw() {        
+  public void draw() {
+    if (Interface.SHOW_DEBUG_INFO && frameCount % 180 == 0) {
+      tasks.printDebug();
+    }
     if (loaded) {
       history.update();
       intf.update();

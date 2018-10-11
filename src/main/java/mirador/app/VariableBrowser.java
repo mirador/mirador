@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import mirador.handlers.TaskHandler;
 import mui.Display;
 import mui.Interface;
 import mui.Widget;
@@ -25,10 +26,6 @@ public class VariableBrowser extends MiraWidget {
   public int infoBarH = Display.scale(35);
   public int scrollSize = Display.scale(13);
 
-  final static public int NUM_FREE_PROCESSORS = 1;
-  
-  protected ThreadPoolExecutor taskPool1;
-  protected ThreadPoolExecutor taskPool2;
   protected RowBrowser rowBrowser;
   protected ColumnLabels colLabels;
   protected InformationBar infoBar;
@@ -47,6 +44,9 @@ public class VariableBrowser extends MiraWidget {
 
   protected boolean drawPlotEdges = false;
 
+  protected TaskHandler taskHandler;
+
+
   VariableBrowser(Interface intf, float x, float y, float w, float h) {
     super(intf, x, y, w, h);
     rowAxis = colAxis = null;
@@ -54,10 +54,7 @@ public class VariableBrowser extends MiraWidget {
   }
   
   public void setup() {
-    int proc = Runtime.getRuntime().availableProcessors();
-    int tot = proc - NUM_FREE_PROCESSORS;
-    taskPool1 = (ThreadPoolExecutor)Executors.newFixedThreadPool(PApplet.max(1, (int)(0.7f * tot)));
-    taskPool2 = (ThreadPoolExecutor)Executors.newFixedThreadPool(PApplet.max(1, (int)(0.3f * tot)));
+    taskHandler = new TaskHandler();
        
     rowBrowser = new RowBrowser(intf, 0, mira.labelHeightClose + padding,
                                 mira.varWidth, height - mira.labelHeightClose,
@@ -115,28 +112,12 @@ public class VariableBrowser extends MiraWidget {
     intf.addKeymap(searchBar, BACKSPACE, DELETE, TAB, ESC);
   }  
 
-  @SuppressWarnings("unchecked")
-  public FutureTask<Object> submitTask(Runnable task, boolean highp) {
-    if (highp) {
-      return (FutureTask<Object>)taskPool1.submit(task);
-    } else {
-      return (FutureTask<Object>)taskPool2.submit(task);
-    }
-  }
-  
   protected void handleResize(int newWidth, int newHeight) {
     bounds.w.set(newWidth - mira.optWidth);
     bounds.h.set(newHeight);
   }
   
   public void update() {
-    if (Interface.SHOW_DEBUG_INFO && mira.frameCount % 180 == 0) {
-      long count1 = taskPool1.getTaskCount() - taskPool1.getCompletedTaskCount();
-      long count2 = taskPool2.getTaskCount() - taskPool2.getCompletedTaskCount();
-      System.out.println("number of pending high-priority tasks: " + count1);
-      System.out.println("number of pending low-priority tasks : " + count2);
-    }
-
     boolean sort = data.sorting();
     if (!sort && sort0) updateAfterSort();
     sort0 = sort;

@@ -225,7 +225,7 @@ public class RowPlots extends ColumnScroller {
           dirty = false;
           update = false;
           if (viewTask != null && !viewTask.isDone()) viewTask.cancel(true);        
-          viewTask = mira.browser.submitTask(new Runnable() {
+          viewTask = mira.tasks.submit(new Runnable() {
             public void run() {
               if (var == rowVar) {
                 DataSlice1D slice = data.getSlice(rowVar, mira.ranges, Integer.MAX_VALUE);
@@ -246,7 +246,7 @@ public class RowPlots extends ColumnScroller {
         if (pdirty) {
           pdirty = false;
           if (indepTask != null && !indepTask.isDone()) indepTask.cancel(true);
-          indepTask = mira.browser.submitTask(new Runnable() {
+          indepTask = mira.tasks.submit(new Runnable() {
             public void run() {
               score = -1;
               millis0 = mira.millis();
