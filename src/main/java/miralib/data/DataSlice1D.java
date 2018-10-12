@@ -58,7 +58,12 @@ public class DataSlice1D {
     Value1D value = new Value1D(x, w);
     values.add(value);
     return value;
-  } 
+  }
+
+  public boolean empty() {
+    // A slice is considered empty is the variable fewer than 2 data points in its current range.
+    return varx.range().getCount() <= 1;
+  }
   
   public void setMissing(float missing) {
     this.missing = missing;

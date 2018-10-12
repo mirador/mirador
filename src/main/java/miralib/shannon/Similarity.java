@@ -3,7 +3,6 @@
 package miralib.shannon;
 
 import miralib.data.DataSlice2D;
-import miralib.data.Variable;
 import miralib.math.Numbers;
 import miralib.utils.Project;
 
@@ -15,7 +14,7 @@ import miralib.utils.Project;
 public class Similarity extends Statistics {
   static public float calculate(DataSlice2D slice, float pvalue, Project prefs) {
     if (slice.self()) return 1;
-    if (!slice.comparable()) return 0;
+    if (slice.notComparable()) return 0;
 
     int[] res = BinOptimizer.calculate(slice, prefs.binAlgorithm);
     int binx = res[0];
@@ -30,7 +29,7 @@ public class Similarity extends Statistics {
   // This method requires the binning already calculated on the slice itself
   static public float calculate(DataSlice2D slice, float ixy, float pvalue, Project prefs) {
     if (slice.self()) return 1;
-    if (!slice.comparable()) return 0;
+    if (slice.notComparable()) return 0;
 
     boolean indep = independenceTest(slice, ixy, slice.binx, slice.biny, pvalue, prefs);
     if (indep) return 0;
@@ -58,7 +57,7 @@ public class Similarity extends Statistics {
     //prefs.pvalue() = pvalue;
     //int binAlgo = prefs.binAlgo;
     if (slice.self()) return 1;
-    if (!slice.comparable()) return 0;
+    if (slice.notComparable()) return 0;
 
     int[] res = BinOptimizer.calculate(slice, prefs.binAlgorithm);
     int binx = res[0];

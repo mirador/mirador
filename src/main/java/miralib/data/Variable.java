@@ -377,7 +377,7 @@ abstract public class Variable implements DataTree.Item {
     } else if (!varx.weighted() || !vary.weighted()) {
       return varx.weighted() ? varx.getWeight(row) : vary.getWeight(row);        
     } else if (varx.subsample() && vary.subsample()) {
-      return 0d; // subsamples are not comparable
+      return 0d; // subsamples are not notComparable
     } else if (!varx.subsample() && !vary.subsample()) {
       return Math.min(varx.getWeight(row), vary.getWeight(row));
     } else if (varx.subsample()) {

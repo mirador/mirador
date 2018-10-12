@@ -85,13 +85,34 @@ public class DataSlice2D {
     return value;
   }  
 
+  public boolean empty() {
+    return empty(varx, vary);
+  }
+
+  static public boolean empty(Variable varx, Variable vary) {
+    // A slice is considered empty is any of the two variables have only one data point in its current range.
+    return varx.range().getCount() <= 1 || vary.range().getCount() <= 1;
+  }
+
   public boolean self() {
     return varx == vary;
   }
 
   public boolean comparable() {
-    // Weight variables are not comparable, or subsample variables between each other
-    return !varx.weight() && !vary.weight() && (!varx.subsample() || !vary.subsample());
+    return !notComparable(varx, vary);
+  }
+
+  public boolean notComparable() {
+    return notComparable(varx, vary);
+  }
+
+  static public boolean comparable(Variable varx, Variable vary) {
+    return !notComparable(varx, vary);
+  }
+
+  static public boolean notComparable(Variable varx, Variable vary) {
+    // An empty slice is not comparable, weight variables are not comparable, or subsample variables between each other
+    return empty(varx, vary) || varx.weight() || vary.weight() || (varx.subsample() && vary.subsample());
   }
 
   public void setMissing(float missing) {
