@@ -5,7 +5,7 @@ package mirador.app;
 import java.util.ArrayList;
 import java.util.Set;
 
-import mirador.handlers.Tasker;
+import miralib.utils.Tasker;
 import mui.Display;
 import mui.Interface;
 import mui.Widget;

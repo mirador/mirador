@@ -16,7 +16,7 @@ import mirador.handlers.LoadHandler;
 import mirador.handlers.ProfileHandler;
 import mirador.handlers.ExportHandler;
 //import mirador.handlers.UploadHandler;
-import mirador.handlers.Tasker;
+import miralib.utils.Tasker;
 import miralib.data.*;
 import miralib.utils.*;
 import mui.Display;
