@@ -84,7 +84,16 @@ public class DataSlice2D {
     values.add(value);
     return value;
   }  
-  
+
+  public boolean self() {
+    return varx == vary;
+  }
+
+  public boolean comparable() {
+    // Weight variables are not comparable, or subsample variables between each other
+    return !varx.weight() && !vary.weight() && (!varx.subsample() || !vary.subsample());
+  }
+
   public void setMissing(float missing) {
     this.missing = missing;
   }

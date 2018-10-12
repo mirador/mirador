@@ -7,7 +7,7 @@ import miralib.utils.Project;
 import org.apache.commons.math3.distribution.GammaDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
-public class PValue {
+public class PValue extends Statistics {
   public static double MAX_SCORE = 9;
   public static double MIN_VALUE = 10E-9;
   protected static double SELF_SCORE = -2 * Math.log10(Float.MIN_VALUE);
@@ -37,11 +37,11 @@ public class PValue {
     } else if (prefs.depTest == DependencyTest.NO_TEST) {
       pval = 0;
     } else if (prefs.depTest == DependencyTest.SURROGATE_GAUSS) {
-      pval = (float)surrogateGauss(slice, ixy, prefs.binAlgorithm, prefs.surrCount);            
+      pval = (float) surrogateGaussP(slice, ixy, prefs.binAlgorithm, prefs.surrCount);
     } else if (prefs.depTest == DependencyTest.SURROGATE_GENERAL) {      
-      pval = (float)surrogateGeneral(slice, ixy, prefs.binAlgorithm);
+      pval = (float) surrogateGeneralP(slice, ixy, prefs.binAlgorithm);
     } else if (prefs.depTest == DependencyTest.GAMMA_TEST) {
-      pval = (float)gammaTest(ixy, binx, biny, slice.values.size());
+      pval = (float) gammaTestP(ixy, binx, biny, slice.values.size());
     }
     if (pval < Float.MIN_VALUE) {
       pval = Float.MIN_VALUE;
@@ -69,11 +69,11 @@ public class PValue {
     } else if (prefs.depTest == DependencyTest.NO_TEST) {
       pval = 0;
     } else if (prefs.depTest == DependencyTest.SURROGATE_GAUSS) {
-      pval = (float)surrogateGauss(slice, ixy, prefs.binAlgorithm, prefs.surrCount);
+      pval = (float) surrogateGaussP(slice, ixy, prefs.binAlgorithm, prefs.surrCount);
     } else if (prefs.depTest == DependencyTest.SURROGATE_GENERAL) {
-      pval = (float)surrogateGeneral(slice, ixy, prefs.binAlgorithm);
+      pval = (float) surrogateGeneralP(slice, ixy, prefs.binAlgorithm);
     } else if (prefs.depTest == DependencyTest.GAMMA_TEST) {
-      pval = (float)gammaTest(ixy, slice.binx, slice.biny, slice.values.size());
+      pval = (float) gammaTestP(ixy, slice.binx, slice.biny, slice.values.size());
     }
     if (pval < Float.MIN_VALUE) {
       pval = Float.MIN_VALUE;
@@ -95,32 +95,11 @@ public class PValue {
     return res;
   }
   
-  static protected double surrogateGauss(DataSlice2D slice, float ixy,
-                                         int binAlgo, int scount) {
-    int sbinx = 0;
-    int sbiny = 0;         
-    float meani = 0;
-    float meaniSq = 0;
-    float stdi = 0; 
-    for (int i = 0; i < scount; i++) {
-      DataSlice2D surrogate = slice.shuffle();          
-      if (i == 0) {
-        int[] sres = BinOptimizer.calculate(surrogate, binAlgo);
-        sbinx = sres[0];
-        sbiny = sres[1];
-      }
-      float smi = MutualInformation.calculate(surrogate, sbinx, sbiny);      
-      meani += smi;
-      meaniSq += smi * smi;
-    }
-    meani /= scount;
-    meaniSq /= scount;
-    stdi = (float)Math.sqrt(Math.max(0, meaniSq - meani * meani));      
-    float zs = Math.abs((ixy - meani) / stdi);
-    
+  static protected double surrogateGaussP(DataSlice2D slice, float ixy,
+                                          int binAlgo, int scount) {
+    float zs = getSurrogateGaussDistribution(slice, ixy, binAlgo, scount);
     try { 
-      // Not so sure about getting the P-value from the statistic zs in this
-      // way...
+      // Not so sure about getting the P-value from the statistic zs in this way...
       NormalDistribution normDist = new NormalDistribution();
       return 1 - normDist.cumulativeProbability(zs);
     } catch (Exception ex) {
@@ -128,13 +107,13 @@ public class PValue {
     }       
   }
   
-  static protected double surrogateGeneral(DataSlice2D slice, float ixy, 
-                                           int binAlgo) {
+  static protected double surrogateGeneralP(DataSlice2D slice, float ixy,
+                                            int binAlgo) {
     // We don't have the distribution under the null hypothesis assumption
     return 0;
   }
   
-  static protected double gammaTest(float ixy, int binx, int biny, int count) {
+  static protected double gammaTestP(float ixy, int binx, int biny, int count) {
     double shapePar = (binx - 1) * (biny - 1) / 2d;
     double scalePar = 1d / count;
     try {

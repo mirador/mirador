@@ -85,9 +85,8 @@ public class MutualInformation {
     
     if (information < 0 || Double.isNaN(information)) return 0;
     
-    // Finite size correction: "The Mutual Information: Detecting and evaluating
-    // dependencies between variables", pp S234.
-    // nonzeroBins instead of binCountX * binCountY?
+    // Finite size correction: "The Mutual Information: Detecting and evaluating dependencies between variables", pp S234.
+    // Should use nonzeroBins instead of binCountX * binCountY?
     double correction = (nonzero - binx - biny + 1) / (2 * total);
     return (float)Math.max(0, information - correction);        
   }  
