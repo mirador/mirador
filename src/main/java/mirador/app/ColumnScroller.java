@@ -246,15 +246,15 @@ abstract public class ColumnScroller extends MiraWidget {
     for (Item item: visItems.values()) {
       item.update();      
     }
-    Set<Variable> keys = new HashSet<Variable>();
+    Set<Variable> remKeys = new HashSet<Variable>();
     for (Variable var: visItems.keySet()) {
       if (visItems.get(var).markedForRemoval) {
-        keys.add(var);
+        remKeys.add(var);
       }
     }
     
     boolean removed = false;
-    for (Variable var: keys) {
+    for (Variable var: remKeys) {
       Item item = visItems.get(var);
       if (item.markedForRemoval) {
         item.dispose();

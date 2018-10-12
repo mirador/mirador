@@ -168,6 +168,8 @@ public class RowPlots extends ColumnScroller {
     int corColor, misColor;
     float score;
     int millis0;
+
+    boolean addedToHistory;
     
     @SuppressWarnings("rawtypes")
     FutureTask viewTask, indepTask;
@@ -185,8 +187,8 @@ public class RowPlots extends ColumnScroller {
       millis0 = mira.millis();
       depend = false;
       blendf = new SoftFloat();
-      
-      mira.history.addPair(var, rowVar);
+
+      addedToHistory = false;
     }
     
     boolean selected() {
@@ -211,7 +213,7 @@ public class RowPlots extends ColumnScroller {
       if (canvas != null) {
         mira.g.removeCache(canvas);
         canvas.dispose();
-        canvas = null;       
+        canvas = null;
       }
       
       mira.history.removePair(var, rowVar);
@@ -220,7 +222,14 @@ public class RowPlots extends ColumnScroller {
     void update() {
       super.update();
       
-      if (showContents) {          
+      if (showContents) {
+        if (!addedToHistory) {
+          // Adding to history only after its contents become visible, this avoids sending a stream of short-lived
+          // pairs when scrolling.
+          mira.history.addPair(var, rowVar);
+          addedToHistory = true;
+        }
+
         if (dirty) {          
           dirty = false;
           update = false;
