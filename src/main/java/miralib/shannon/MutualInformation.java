@@ -13,19 +13,21 @@ import miralib.utils.Project;
 
 
 public class MutualInformation {
+  // This method puts the bin sizes in x and y in the slice object, so it can be reused by other calculations, like
+  // Similarity.calculate() or PValue.calculate()
   static public float calculate(DataSlice2D slice, Project prefs) {
-    int[] nbins = BinOptimizer.calculate(slice, prefs.binAlgorithm);
-    return calculate(slice, nbins[0], nbins[1]);    
+    slice.calculateBins(prefs.binAlgorithm);
+    return calculate(slice, slice.binx, slice.biny);
   }
   
-  static public float calculate(DataSlice2D slice, int nbinx, int nbiny) {
-    if (nbinx < 2 || nbiny < 2) return 0;
+  static public float calculate(DataSlice2D slice, int binx, int biny) {
+    if (binx < 2 || biny < 2) return 0;
     
-    float sbinx = 1.0f / nbinx;
-    float sbiny = 1.0f / nbiny;
-    double[] countsx = new double[nbinx];
-    double[] countsy = new double[nbiny];    
-    double[][] counts = new double[nbinx][nbiny];
+    float sbinx = 1.0f / binx;
+    float sbiny = 1.0f / biny;
+    double[] countsx = new double[binx];
+    double[] countsy = new double[biny];
+    double[][] counts = new double[binx][biny];
     
     boolean singlebx = true;
     boolean singleby = true;
@@ -33,11 +35,11 @@ public class MutualInformation {
     int lastby = -1;   
     double total = 0;
     for (Value2D value: slice.values) {
-      int bx = (int)Math.min(value.x / sbinx, nbinx - 1);  
-      int by = (int)Math.min(value.y / sbiny, nbiny - 1);
+      int bx = (int)Math.min(value.x / sbinx, binx - 1);
+      int by = (int)Math.min(value.y / sbiny, biny - 1);
       
       if (bx < 0 || by < 0) {
-        System.err.println("Error: a bin index is negative: " + bx + " " + nbinx + "| " + by + " " + nbiny);
+        System.err.println("Error: a bin index is negative: " + bx + " " + binx + "| " + by + " " + biny);
         continue;
       }
       
@@ -65,8 +67,8 @@ public class MutualInformation {
     
     double information = 0;
     int nonzero = 0; 
-    for (int bx = 0; bx < nbinx; bx++) {
-      for (int by = 0; by < nbiny; by++) {         
+    for (int bx = 0; bx < binx; bx++) {
+      for (int by = 0; by < biny; by++) {
         double pxy = counts[bx][by] / total;
         double px = countsx[bx] / total;
         double py = countsy[by] / total;
@@ -86,7 +88,7 @@ public class MutualInformation {
     // Finite size correction: "The Mutual Information: Detecting and evaluating
     // dependencies between variables", pp S234.
     // nonzeroBins instead of binCountX * binCountY?
-    double correction = (nonzero - nbinx - nbiny + 1) / (2 * total);
+    double correction = (nonzero - binx - biny + 1) / (2 * total);
     return (float)Math.max(0, information - correction);        
   }  
 }

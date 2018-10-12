@@ -5,6 +5,7 @@ package miralib.data;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import miralib.shannon.BinOptimizer;
 import processing.data.TableRow;
 import miralib.math.Numbers;
 import miralib.utils.Project;
@@ -20,6 +21,7 @@ public class DataSlice2D {
   public DataRanges ranges;
   public ArrayList<Value2D> values;
   public long countx, county;
+  public int binx, biny;
   public float missing;
   
   public DataSlice2D(Variable varx, Variable vary, DataRanges ranges) {
@@ -59,8 +61,6 @@ public class DataSlice2D {
     Collections.shuffle(valuesx);
     Collections.shuffle(valuesy);
     DataSlice2D shuffled = new DataSlice2D(varx, vary, ranges);
-
-
 
     for (int n = 0; n < values.size(); n++) {
       shuffled.add(new Value2D(valuesx.get(n), valuesy.get(n))); 
@@ -129,7 +129,7 @@ public class DataSlice2D {
     std = Math.sqrt(Math.max(0, meanSq - mean * mean));
     return new double[] {mean, std};
   }    
-  
+
   public DataSlice1D getSliceX() {
     DataSlice1D slice = new DataSlice1D(varx, ranges);
     for (Value2D val: values) {
@@ -150,14 +150,24 @@ public class DataSlice2D {
     return slice;
   }
 
-  public ContingencyTable getContingencyTable(int nbinx, int nbiny) {
-    return new ContingencyTable(this, nbinx, nbiny);
-  }  
-  
-  public ContingencyTable getContingencyTable(Project prefs) {
-    return new ContingencyTable(this, prefs.binAlgorithm);
+  public ContingencyTable getContingencyTable(int binx, int biny) {
+    return new ContingencyTable(this, binx, biny);
   }
-  
+
+  public ContingencyTable getContingencyTable() {
+    return new ContingencyTable(this, binx, biny);
+  }
+
+  public ContingencyTable getContingencyTable(int binAlgorithm) {
+    return new ContingencyTable(this, binAlgorithm);
+  }
+
+  public void calculateBins(int binAlgorithm) {
+    int[] res = BinOptimizer.calculate(this, binAlgorithm);
+    binx = res[0];
+    biny = res[1];
+  }
+
   protected void init(DataSource data, Variable varl, int maxSize) {
     int ntot = 0;
     int nmis = 0;    

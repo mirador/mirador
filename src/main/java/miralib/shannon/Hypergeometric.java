@@ -16,7 +16,7 @@ import java.util.List;
  * Example use:
  * <p>
  * <code>	int[][] a = { { 5, 0 }, { 1, 4 } };</code><br>
- * <code>	System.out.println(hdMM.getHypergeometricDistribution(a, 5, 6));</code>
+ * <code>	System.out.println(Hypergeometric.getDistribution(a, 5, 6));</code>
  * <p>
  * Copyright (C) 2011 by Margus Martsepp
  * 
@@ -44,7 +44,7 @@ import java.util.List;
  * @author Margus Martsepp
  */
 
-public class hdMM {
+public class Hypergeometric {
 	private static final int maxSize = 100; //increased max size since symmetric matrix
 	private static ArrayList<BigInteger> f = new ArrayList<BigInteger>();
 	static {
@@ -100,8 +100,8 @@ public class hdMM {
 	 * 
 	 * @return Hypergeometric distribution.
 	 */
-	public static BigDecimal getHypergeometricDistribution(//
-			int a[][], int scale, RoundingMode roundingMode// //modified type int -> RoundingMode
+	public static BigDecimal getDistribution(//
+																					 int a[][], int scale, RoundingMode roundingMode// //modified type int -> RoundingMode
 	) throws OutOfMemoryError, NullPointerException {
 		ArrayList<Integer> R = new ArrayList<Integer>();
 		ArrayList<Integer> C = new ArrayList<Integer>();

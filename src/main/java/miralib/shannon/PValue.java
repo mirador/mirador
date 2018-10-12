@@ -19,20 +19,19 @@ public class PValue {
     if (varx.weight() || vary.weight() || (varx.subsample() && vary.subsample())) {
       // weight variables are not comparable, or subsample variables between 
       // each other
-      return new float[] {0, 0};
+      return new float[] {0, 1};
     } 
-        
-    int count = slice.values.size();
+
     int[] res = BinOptimizer.calculate(slice, prefs.binAlgorithm);
     int binx = res[0];
     int biny = res[1];
     if (binx < 2 || biny < 2) return new float[] {0, 1};
     
     float ixy = MutualInformation.calculate(slice, binx, biny);
+
+    if (varx == vary) return new float[] {ixy, 0};
+
     float pval = 0;
-    
-    if (varx == vary) return new float[] {ixy, pval};
-            
     if (Float.isNaN(ixy) || Float.isInfinite(ixy)) {
       pval = 0;
     } else if (prefs.depTest == DependencyTest.NO_TEST) {
@@ -42,13 +41,45 @@ public class PValue {
     } else if (prefs.depTest == DependencyTest.SURROGATE_GENERAL) {      
       pval = (float)surrogateGeneral(slice, ixy, prefs.binAlgorithm);
     } else if (prefs.depTest == DependencyTest.GAMMA_TEST) {
-      pval = (float)gammaTest(ixy, binx, biny, count);
+      pval = (float)gammaTest(ixy, binx, biny, slice.values.size());
     }
     if (pval < Float.MIN_VALUE) {
       pval = Float.MIN_VALUE;
     }
     
     return new float[] {ixy, pval};
+  }
+
+  // This method requires the binning already calculated on the slice itself
+  static public float calculate(DataSlice2D slice, float ixy, Project prefs) {
+    Variable varx = slice.varx;
+    Variable vary = slice.vary;
+
+    if (varx.weight() || vary.weight() || (varx.subsample() && vary.subsample())) {
+      // weight variables are not comparable, or subsample variables between
+      // each other
+      return 1;
+    }
+
+    if (varx == vary) return 0;
+
+    float pval = 0;
+    if (Float.isNaN(ixy) || Float.isInfinite(ixy)) {
+      pval = 0;
+    } else if (prefs.depTest == DependencyTest.NO_TEST) {
+      pval = 0;
+    } else if (prefs.depTest == DependencyTest.SURROGATE_GAUSS) {
+      pval = (float)surrogateGauss(slice, ixy, prefs.binAlgorithm, prefs.surrCount);
+    } else if (prefs.depTest == DependencyTest.SURROGATE_GENERAL) {
+      pval = (float)surrogateGeneral(slice, ixy, prefs.binAlgorithm);
+    } else if (prefs.depTest == DependencyTest.GAMMA_TEST) {
+      pval = (float)gammaTest(ixy, slice.binx, slice.biny, slice.values.size());
+    }
+    if (pval < Float.MIN_VALUE) {
+      pval = Float.MIN_VALUE;
+    }
+
+    return pval;
   }
 
   static public float getScore(DataSlice2D slice, float pval) {

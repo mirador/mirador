@@ -5,6 +5,7 @@ package miralib.data;
 import java.util.ArrayList;
 
 import miralib.math.Numbers;
+import miralib.shannon.BinOptimizer;
 import processing.data.TableRow;
 
 /**
@@ -18,6 +19,7 @@ public class DataSlice1D {
   public DataRanges ranges;
   public ArrayList<Value1D> values;
   public long countx;
+  public int binx;
   public float missing;
   
   public DataSlice1D(Variable varx, DataRanges ranges) {
@@ -86,7 +88,11 @@ public class DataSlice1D {
     std = Math.sqrt(Math.max(0, meanSq - mean * mean));
     return new double[] {mean, std};
   }
-  
+
+  public void calculateBins(int method) {
+    binx = BinOptimizer.calculate(this, method);
+  }
+
   protected void init(DataSource data, Variable varl, int maxSize) {
     int ntot = 0;
     int nmis = 0;
