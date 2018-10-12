@@ -4,11 +4,8 @@ package mirador.app;
 
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.ThreadPoolExecutor;
 
-import mirador.handlers.TaskHandler;
+import mirador.handlers.Tasker;
 import mui.Display;
 import mui.Interface;
 import mui.Widget;
@@ -44,7 +41,7 @@ public class VariableBrowser extends MiraWidget {
 
   protected boolean drawPlotEdges = false;
 
-  protected TaskHandler taskHandler;
+  protected Tasker taskHandler;
 
 
   VariableBrowser(Interface intf, float x, float y, float w, float h) {
@@ -54,7 +51,7 @@ public class VariableBrowser extends MiraWidget {
   }
   
   public void setup() {
-    taskHandler = new TaskHandler();
+    taskHandler = new Tasker();
        
     rowBrowser = new RowBrowser(intf, 0, mira.labelHeightClose + padding,
                                 mira.varWidth, height - mira.labelHeightClose,

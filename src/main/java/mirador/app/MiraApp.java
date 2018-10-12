@@ -9,9 +9,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.net.URL;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Collections;
 
 import javax.swing.JOptionPane;
 
@@ -19,7 +16,7 @@ import mirador.handlers.LoadHandler;
 import mirador.handlers.ProfileHandler;
 import mirador.handlers.ExportHandler;
 //import mirador.handlers.UploadHandler;
-import mirador.handlers.TaskHandler;
+import mirador.handlers.Tasker;
 import miralib.data.*;
 import miralib.utils.*;
 import mui.Display;
@@ -70,7 +67,7 @@ public class MiraApp extends PApplet {
   public OptionsPanel options;  
   public VariableBrowser browser;
   public Profile profile;
-  public TaskHandler tasks;
+  public Tasker tasker;
     
   protected int plotType;
   
@@ -108,7 +105,7 @@ public class MiraApp extends PApplet {
     Log.init(false);
 //    loadPreferences();
 
-    tasks = new TaskHandler();
+    tasker = new Tasker();
     intf = new Interface(this, "style.css");
     intf.setBackground(color(247));
     initPanel();
@@ -123,7 +120,7 @@ public class MiraApp extends PApplet {
   
   public void draw() {
     if (Interface.SHOW_DEBUG_INFO && frameCount % 180 == 0) {
-      tasks.printDebug();
+      tasker.printDebug();
     }
     if (loaded) {
       history.update();
