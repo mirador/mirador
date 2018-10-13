@@ -259,7 +259,6 @@ public class RowVariable extends RowWidget {
   } 
   
   public void mouseReleased() {
-    boolean shift = keyPressed(ALT);
     if (labelMode == SORT_ACTION) {
       labelMode = SORTING_STATUS;
       sortMode = SORTING;
@@ -269,6 +268,7 @@ public class RowVariable extends RowWidget {
       mira.profile.clear();
       mira.history.sort(rowVar);
     } else if (sortMode == UNSORTED && !chkPressed) {
+      boolean shift = keyPressed(ALT);
       if (shift) {
         mira.browser.closeRowsBut(this);
       } else if (parent != null && parent instanceof MiraWidget) {
@@ -481,7 +481,12 @@ public class RowVariable extends RowWidget {
         data.unsort();
         mira.profile.clear();
         mira.history.unsort();
-      }          
+      } else {
+        boolean shift = keyPressed(ALT);
+        if (shift) {
+          mira.browser.closeRowsBut((MiraWidget)parent);
+        }
+      }
     }
     
     public void hoverOut() {
