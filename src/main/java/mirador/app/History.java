@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.illposed.osc.OSCMessage;
-import com.illposed.osc.OSCPort;
 import com.illposed.osc.OSCPortOut;
 import miralib.utils.Log;
 import processing.core.PApplet;
@@ -86,14 +85,17 @@ public class History {
     openProfile = false;
 
     oscInit();
-    setProject(filename);
+    loadProject(filename);
     setPValue(prj.pvalue());
     setMissingThreshold(prj.missingThreshold());
     setPlotType(ptype);
   }
 
-  public void setProject(String filename) {
-    oscSend("LOAD", app.millis(), filename);
+  public void loadProject(String filename) {
+    if (!enabled) return;
+    int m = app.millis();
+    write("LOAD\t" + m + "\t" + filename);
+    oscSend("LOAD", m, filename);
   }
 
   public void addPair(Variable varx, Variable vary) {
