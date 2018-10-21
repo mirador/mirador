@@ -191,7 +191,7 @@ public class History {
       this.pvalue = pvalue;
       int m = app.millis();
       write("PVALUE\t" + m + "\t" + pvalue);
-      oscSend("PVALUE", m, pvalue);
+      oscSend("PVALUE", m, String.valueOf(pvalue));
     }
   }
   
@@ -201,7 +201,7 @@ public class History {
       this.misst = misst;
       int m = app.millis();
       write("MISSING\t" + m + "\t" + misst);
-      oscSend("MISSING", m, misst);
+      oscSend("MISSING", m, String.valueOf(misst));
     }
   }
 
