@@ -103,7 +103,7 @@ public class History {
     VariablePair pair = new VariablePair(varx, vary);
     if (pairs.add(pair)) {
       int m = app.millis();
-      write("+PAIR\t" + m + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+      write("+PAIR\t" + m + "\t" + varx.getName() + "\t" + varx.getAlias() + "\t" + vary.getName() + "\t" + vary.getAlias());
       oscSend("+PAIR", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
     }
   }
@@ -113,7 +113,7 @@ public class History {
     VariablePair pair = new VariablePair(varx, vary);
     if (pairs.remove(pair)) {
       int m = app.millis();
-      write("-PAIR\t" + m + " " + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+      write("-PAIR\t" + m + "\t" + varx.getName() + "\t" + varx.getAlias() + "\t" + vary.getName() + "\t" + vary.getAlias());
       oscSend("-PAIR", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
     }
   }
@@ -124,7 +124,7 @@ public class History {
     if (ranges.add(vrange)) {
       String frange = var.formatRange(range, false);
       int m = app.millis();
-      write("+RANGE\t" + m + " " + var.getName() + ":" + var.getAlias() +"\t" + frange);
+      write("+RANGE\t" + m + "\t" + var.getName() + "\t" + var.getAlias() + "\t" + frange);
       oscSend("+RANGE", m, var.getName(), var.getAlias(), frange);
     }
   }
@@ -143,7 +143,7 @@ public class History {
       ranges.remove(vrange);
       String frange = var.formatRange(range, false);
       int m = app.millis();
-      write("-RANGE\t" + m + " " + var.getName() + ":" + var.getAlias() +"\t" + frange);
+      write("-RANGE\t" + m + "\t" + var.getName() + "\t" + var.getAlias() + "\t" + frange);
       oscSend("-RANGE", m, var.getName(), var.getAlias(), frange);
     }
   }
@@ -163,7 +163,7 @@ public class History {
       if (ranges.add(vrange)) {
         String frange = var.formatRange(range, false);
         int m = app.millis();
-        write("~RANGE\t" + m + " " + var.getName() + ":" + var.getAlias() +"\t" + frange);
+        write("~RANGE\t" + m + "\t" + var.getName() + "\t" + var.getAlias() + "\t" + frange);
         oscSend("~RANGE", m, var.getName(), var.getAlias(), frange);
       }      
     }
@@ -179,7 +179,7 @@ public class History {
         Range range = vrange.range;
         String frange = var.formatRange(range, false);
         int m = app.millis();
-        write("-RANGE\t" + m + " " + var.getName() + ":" + var.getAlias() +"\t" + frange);
+        write("-RANGE\t" + m + "\t" + var.getName() + "\t" + var.getAlias() + "\t" + frange);
         oscSend("-RANGE", m, var.getName(), var.getAlias(), frange);
       }
     }
@@ -223,7 +223,7 @@ public class History {
       if (!pair.equals(selPair)) {
         selPair = pair;
         int m = app.millis();
-        write("SELECT\t" + m + "\t" + varx.getName() + ":" + varx.getAlias() +"\t" + vary.getName() + ":" + vary.getAlias());
+        write("SELECT\t" + m + "\t" + varx.getName() + "\t" + varx.getAlias() + "\t" + vary.getName() + "\t" + vary.getAlias());
         oscSend("SELECT", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
       }      
     } else if (selPair != null) {
@@ -239,7 +239,7 @@ public class History {
     if (sortVar != var) {
       sortVar = var;
       int m = app.millis();
-      write("SORT\t" + m + "\t" + var.getName() + ":" + var.getAlias());
+      write("SORT\t" + m + "\t" + var.getName() + "\t" + var.getAlias());
       oscSend("SORT", m, var.getName(), var.getAlias());
     }
   }
