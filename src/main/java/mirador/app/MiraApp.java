@@ -58,7 +58,7 @@ public class MiraApp extends PApplet {
   public Project project;
   public DataSet dataset;
   public DataRanges ranges;
-  public History history;
+  public Session session;
 //  public UploadHandler uploader;
 
   public Timer timer;
@@ -123,7 +123,7 @@ public class MiraApp extends PApplet {
       tasker.printDebug();
     }
     if (loaded) {
-      history.update();
+      session.update();
       intf.update();
       intf.draw();
     }
@@ -178,7 +178,7 @@ public class MiraApp extends PApplet {
     if (plotType != type) {
       plotType = type; 
       browser.dataChanged();
-      history.setPlotType(type);
+      session.setPlotType(type);
     }      
   }  
   
@@ -192,7 +192,7 @@ public class MiraApp extends PApplet {
       project.save();
       browser.pvalueChanged();
       dataset.resort(project.pvalue(), project.missingThreshold());
-      history.setPValue(project.pvalue());
+      session.setPValue(project.pvalue());
     }    
   }
   
@@ -205,7 +205,7 @@ public class MiraApp extends PApplet {
       project.missThreshold = threshold;
       project.save();
       dataset.resort(project.pvalue(), project.missingThreshold());
-      history.setMissingThreshold(project.missingThreshold());
+      session.setMissingThreshold(project.missingThreshold());
     }
   }
   
@@ -217,11 +217,11 @@ public class MiraApp extends PApplet {
     if (result != DataRanges.NO_CHANGE) {
       browser.dataChanged();
       if (result == DataRanges.ADDED_RANGE) {
-        history.addRange(var, range);
+        session.addRange(var, range);
       } else if (result == DataRanges.MODIFIED_RANGE) {
-        history.replaceRange(var, range);
+        session.replaceRange(var, range);
       } else if (result == DataRanges.REMOVED_RANGE) {
-        history.removeRange(var);
+        session.removeRange(var);
       }      
     }
   }
@@ -232,7 +232,7 @@ public class MiraApp extends PApplet {
       ranges.clear();
       dataset.resort(ranges);
       browser.dataChanged();
-      history.clearRanges();
+      session.clearRanges();
     }
   }
   
@@ -244,8 +244,8 @@ public class MiraApp extends PApplet {
       Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();      
       prefs.setProjectFolder(filePath.toString(), project.dataFile);
       prefs.save();
-      if (history != null) history.dispose();
-      history = new History(this, project, filename, plotType);
+      if (session != null) session.dispose();
+      session = new Session(this, project, filename, plotType);
     } catch (Exception ex) {
       JOptionPane.showMessageDialog(new Frame(),
               "The following error ocurred while loading the dataset:\n\n" +

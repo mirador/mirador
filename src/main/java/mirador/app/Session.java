@@ -22,13 +22,13 @@ import miralib.math.Numbers;
 import miralib.utils.Project;
 
 /**
- * Stores the visualization history: set of visible plots, current ranges,  
+ * Stores a session of data exploration: set of visible plots, current ranges,
  * sorting variable, p-value, missing threshold, plot type, and selected 
- * variables.
+ * variables, and any other operations done through Mirador's interface.
  *
  */
 
-public class History {
+public class Session {
   static protected int FLUSH_INTERVAL = 10000; // in millis
   
   protected MiraApp app;
@@ -52,25 +52,31 @@ public class History {
   protected boolean enabled = true;
 
 
-  OSCPortOut sender;
+  protected OSCPortOut sender;
 
   static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd.HHmm");
   
-  public History(MiraApp app, Project prj, String filename, int ptype) {
+  public Session(MiraApp app, Project prj, String filename, int ptype) {
     this.app = app;
     this.prj = prj;
 
-    File folder = new File(prj.dataFolder, "history");
+    if (!prj.saveSessions) {
+      enabled = false;
+      return;
+    }
+
+    File folder = new File(prj.dataFolder, "sessions");
     if (!folder.exists()) {
       boolean success = folder.mkdirs();
       if (!success) {
-        Log.warning("Cannot create history folder inside the data folder. History recording will be disabled.");
+        Log.warning("Cannot create session folder inside the data folder. Session recording will be disabled.");
         enabled = false;
+        return;
       }
     }
 
     String stamp = getDateStamp();
-    file = new File(folder, "history-" + stamp);
+    file = new File(folder, "session-" + stamp);
     writer = PApplet.createWriter(file);
     
     pairs = new HashSet<VariablePair>();
@@ -84,7 +90,7 @@ public class History {
     sortVar = null;
     openProfile = false;
 
-    oscInit();
+    if (prj.oscOutput) oscInit();
     loadProject(filename);
     setPValue(prj.pvalue());
     setMissingThreshold(prj.missingThreshold());
@@ -95,7 +101,7 @@ public class History {
     if (!enabled) return;
     int m = app.millis();
     write("LOAD\t" + m + "\t" + filename);
-    oscSend("LOAD", m, filename);
+    if (prj.oscOutput) oscSend("LOAD", m, filename);
   }
 
   public void addPair(Variable varx, Variable vary) {
@@ -104,7 +110,7 @@ public class History {
     if (pairs.add(pair)) {
       int m = app.millis();
       write("+PAIR\t" + m + "\t" + varx.getName() + "\t" + varx.getAlias() + "\t" + vary.getName() + "\t" + vary.getAlias());
-      oscSend("+PAIR", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
+      if (prj.oscOutput) oscSend("+PAIR", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
     }
   }
   
@@ -114,7 +120,7 @@ public class History {
     if (pairs.remove(pair)) {
       int m = app.millis();
       write("-PAIR\t" + m + "\t" + varx.getName() + "\t" + varx.getAlias() + "\t" + vary.getName() + "\t" + vary.getAlias());
-      oscSend("-PAIR", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
+      if (prj.oscOutput) oscSend("-PAIR", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
     }
   }
   
@@ -125,7 +131,7 @@ public class History {
       String frange = var.formatRange(range, false);
       int m = app.millis();
       write("+RANGE\t" + m + "\t" + var.getName() + "\t" + var.getAlias() + "\t" + frange);
-      oscSend("+RANGE", m, var.getName(), var.getAlias(), frange);
+      if (prj.oscOutput) oscSend("+RANGE", m, var.getName(), var.getAlias(), frange);
     }
   }
   
@@ -144,7 +150,7 @@ public class History {
       String frange = var.formatRange(range, false);
       int m = app.millis();
       write("-RANGE\t" + m + "\t" + var.getName() + "\t" + var.getAlias() + "\t" + frange);
-      oscSend("-RANGE", m, var.getName(), var.getAlias(), frange);
+      if (prj.oscOutput) oscSend("-RANGE", m, var.getName(), var.getAlias(), frange);
     }
   }
   
@@ -164,7 +170,7 @@ public class History {
         String frange = var.formatRange(range, false);
         int m = app.millis();
         write("~RANGE\t" + m + "\t" + var.getName() + "\t" + var.getAlias() + "\t" + frange);
-        oscSend("~RANGE", m, var.getName(), var.getAlias(), frange);
+        if (prj.oscOutput) oscSend("~RANGE", m, var.getName(), var.getAlias(), frange);
       }      
     }
   }
@@ -180,7 +186,7 @@ public class History {
         String frange = var.formatRange(range, false);
         int m = app.millis();
         write("-RANGE\t" + m + "\t" + var.getName() + "\t" + var.getAlias() + "\t" + frange);
-        oscSend("-RANGE", m, var.getName(), var.getAlias(), frange);
+        if (prj.oscOutput) oscSend("-RANGE", m, var.getName(), var.getAlias(), frange);
       }
     }
   }
@@ -191,7 +197,7 @@ public class History {
       this.pvalue = pvalue;
       int m = app.millis();
       write("PVALUE\t" + m + "\t" + pvalue);
-      oscSend("PVALUE", m, String.valueOf(pvalue));
+      if (prj.oscOutput) oscSend("PVALUE", m, String.valueOf(pvalue));
     }
   }
   
@@ -201,7 +207,7 @@ public class History {
       this.misst = misst;
       int m = app.millis();
       write("MISSING\t" + m + "\t" + misst);
-      oscSend("MISSING", m, String.valueOf(misst));
+      if (prj.oscOutput) oscSend("MISSING", m, String.valueOf(misst));
     }
   }
 
@@ -212,7 +218,7 @@ public class History {
       String stype = View.typeToString(plotType);
       int m = app.millis();
       write("PLOT\t" + m + "\t" + stype);
-      oscSend("PLOT", m, stype);
+      if (prj.oscOutput) oscSend("PLOT", m, stype);
     }
   }
   
@@ -224,13 +230,13 @@ public class History {
         selPair = pair;
         int m = app.millis();
         write("SELECT\t" + m + "\t" + varx.getName() + "\t" + varx.getAlias() + "\t" + vary.getName() + "\t" + vary.getAlias());
-        oscSend("SELECT", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
+        if (prj.oscOutput) oscSend("SELECT", m, varx.getName(), varx.getAlias(), vary.getName(), vary.getAlias());
       }      
     } else if (selPair != null) {
       selPair = null;
       int m = app.millis();
       write("SELECT\t" + m + "\tNONE");
-      oscSend("SELECT", m, "NONE");
+      if (prj.oscOutput) oscSend("SELECT", m, "NONE");
     }
   }
   
@@ -240,7 +246,7 @@ public class History {
       sortVar = var;
       int m = app.millis();
       write("SORT\t" + m + "\t" + var.getName() + "\t" + var.getAlias());
-      oscSend("SORT", m, var.getName(), var.getAlias());
+      if (prj.oscOutput) oscSend("SORT", m, var.getName(), var.getAlias());
     }
   }
   
@@ -250,7 +256,7 @@ public class History {
       sortVar = null;
       int m = app.millis();
       write("SORT\t" + m + "\tNONE");
-      oscSend("SORT", m, "NONE");
+      if (prj.oscOutput) oscSend("SORT", m, "NONE");
     }
   }
   
@@ -260,7 +266,7 @@ public class History {
       openProfile = true;
       int m = app.millis();
       write("+PROFILE\t" + m);
-      oscSend("+PROFILE", m, "");
+      if (prj.oscOutput) oscSend("+PROFILE", m, "");
     }
   }
   
@@ -270,7 +276,7 @@ public class History {
       openProfile = false;
       int m = app.millis();
       write("-PROFILE\t" + m);
-      oscSend("-PROFILE", m, "");
+      if (prj.oscOutput) oscSend("-PROFILE", m, "");
     }    
   }  
   
@@ -303,7 +309,7 @@ public class History {
 
   protected void oscInit() {
     try {
-      sender = new OSCPortOut(InetAddress.getLocalHost(),12000);
+      sender = new OSCPortOut(InetAddress.getByName(prj.hostName), prj.portNumber);
     } catch (Exception ex) {
       // this is just a demo program, so this is acceptable behavior
       ex.printStackTrace();

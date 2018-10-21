@@ -15,7 +15,6 @@ import mui.SoftFloat;
 import mui.Widget;
 import miralib.data.Variable;
 import miralib.math.Numbers;
-import miralib.utils.Log;
 import miralib.utils.Project;
 import miralib.shannon.PValue;
 
@@ -136,7 +135,7 @@ public class Profile extends MiraWidget {
   public void open() {
     requestedUpdateSelection = true;
     show(true);
-    mira.history.openProfile();
+    mira.session.openProfile();
   }
   
   public void clear() {
@@ -233,7 +232,7 @@ public class Profile extends MiraWidget {
   public void mouseReleased() {
     if (insideDismiss(mouseX, mouseY)) {
       hide(true);
-      mira.history.closeProfile();
+      mira.session.closeProfile();
     } else {
       if (hoverVar != null) {
         hide(true);

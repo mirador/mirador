@@ -330,7 +330,7 @@ public class VariableBrowser extends MiraWidget {
   public void setSelectedPair(Variable col, Variable row) {
     selCol = col;
     selRow = row;
-    mira.history.setSelectedPair(col, row);
+    mira.session.setSelectedPair(col, row);
   }
 
 

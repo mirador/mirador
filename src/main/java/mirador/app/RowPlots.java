@@ -216,7 +216,7 @@ public class RowPlots extends ColumnScroller {
         canvas = null;
       }
       
-      mira.history.removePair(var, rowVar);
+      mira.session.removePair(var, rowVar);
     }
 
     void update() {
@@ -224,9 +224,9 @@ public class RowPlots extends ColumnScroller {
       
       if (showContents) {
         if (!addedToHistory) {
-          // Adding to history only after its contents become visible, this avoids sending a stream of short-lived
+          // Adding to session only after its contents become visible, this avoids sending a stream of short-lived
           // pairs when scrolling.
-          mira.history.addPair(var, rowVar);
+          mira.session.addPair(var, rowVar);
           addedToHistory = true;
         }
 

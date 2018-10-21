@@ -65,7 +65,12 @@ public class Project {
   public int maxPlotTime;
 
   public String dateParsePattern;
-  public String datePrintPattern;  
+  public String datePrintPattern;
+
+  public boolean saveSessions;
+  public boolean oscOutput;
+  public String hostName;
+  public int portNumber;
   
   public File cfgFile;
   
@@ -100,6 +105,11 @@ public class Project {
       Settings settings = new Settings(cfgFile);
       dataTitle = settings.get("project.title", "unnamed dataset");
       dataURL = settings.get("project.url", "");
+
+      saveSessions = settings.getBoolean("sessions.save", prefs.saveSessions);
+      oscOutput = settings.getBoolean("sessions.oscout", prefs.oscOutput);
+      hostName = settings.get("sessions.hostname", prefs.hostName);
+      portNumber = settings.getInteger("sessions.port", prefs.portNumber);
             
       dataFile = settings.get("data.source", "");
       dictFile = settings.get("data.dictionary", "");
@@ -176,6 +186,10 @@ public class Project {
       dataTitle = dataFile; 
       dataURL = "";
       // Using the defaults for the parameters
+      saveSessions = prefs.saveSessions;
+      oscOutput = prefs.oscOutput;
+      hostName = prefs.hostName;
+      portNumber = prefs.portNumber;
       pValue = prefs.pValue;
       missString = prefs.missingString;
       missThreshold = prefs.missingThreshold;
@@ -194,6 +208,11 @@ public class Project {
   public Project(Project that) {
     this.dataTitle = that.dataTitle;
     this.dataURL = that.dataURL;
+
+    this.saveSessions = that.saveSessions;
+    this.oscOutput = that.oscOutput;
+    this.hostName = that.hostName;
+    this.portNumber = that.portNumber;
     
     this.dataFolder = that.dataFolder;
     this.dataFile = that.dataFile;
@@ -272,6 +291,12 @@ public class Project {
 
         settings.set("project.title", dataTitle != null ? dataTitle : "");
         settings.set("project.url", dataURL != null ? dataURL : "");
+
+        settings.set("sessions.save", Boolean.toString(saveSessions));
+        settings.set("sessions.oscout", Boolean.toString(oscOutput));
+        settings.set("sessions.hostname", hostName);
+        settings.setInteger("sessions.port", portNumber);
+
         settings.set("data.source", dataFile != null ? dataFile : "");
         settings.set("data.dictionary", dictFile != null ? dictFile : "");
         settings.set("data.groups", grpsFile != null ? grpsFile : "");

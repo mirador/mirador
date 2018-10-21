@@ -2,7 +2,6 @@
 
 package miralib.utils;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -33,6 +32,12 @@ public class Preferences {
   static final protected String defDatePrintPattern = "d MMM, yyyy";
 
   static final protected boolean defCopyExamples = true;
+
+  static final protected boolean defSaveSessions = false;
+  static final protected boolean defOscOutput = false;
+  static final protected String defHostName = "127.0.0.1";
+  static final protected int defPortNumber = 12000;
+
   static final public int defPlotWidth = 200;
   static final public int defPlotHeight = 200;
   static final public int defPlotColor = 0xFF278DD2;
@@ -53,10 +58,14 @@ public class Preferences {
   public String dateParsePattern;
   public String datePrintPattern;
   public boolean copyExamples;
+  public boolean saveSessions;
+  public boolean oscOutput;
+  public String hostName;
+  public int portNumber;
   public int plotWidth;
   public int plotHeight;
   public int plotColor;
-  
+
   protected Settings settings;
   
   public Preferences() throws IOException {
@@ -78,7 +87,7 @@ public class Preferences {
     for (int i = 0; i < projectHistory.length; i++) projectHistory[i] = "";
 
     if (file.exists()) {
-      String[] history = settings.get("data.history", "").split("::");
+      String[] history = settings.get("data.session", "").split("::");
       for (int i = 0; i < PApplet.min(history.length, projectHistory.length); i++) {
         projectHistory[i] = history[i];
       }
@@ -109,6 +118,11 @@ public class Preferences {
 
       copyExamples = settings.getBoolean("examples.copy", defCopyExamples);
 
+      saveSessions = settings.getBoolean("sessions.save", defSaveSessions);
+      oscOutput = settings.getBoolean("sessions.oscout", defOscOutput);
+      hostName = settings.get("sessions.hostname", defHostName);
+      portNumber = settings.getInteger("sessions.port", defPortNumber);
+
       plotWidth = settings.getInteger("plot.width", defPlotWidth);
       plotHeight = settings.getInteger("plot.height", defPlotHeight);
       plotColor = settings.getColor("plot.color", defPlotColor);
@@ -127,6 +141,10 @@ public class Preferences {
       dateParsePattern = defDateParsePattern;
       datePrintPattern = defDatePrintPattern;
       copyExamples = defCopyExamples;
+      saveSessions = defSaveSessions;
+      oscOutput = defOscOutput;
+      hostName = defHostName;
+      portNumber = defPortNumber;
       plotWidth = defPlotWidth;
       plotHeight = defPlotHeight;
       plotColor = defPlotColor;
@@ -136,7 +154,7 @@ public class Preferences {
   
   public void save() {
     removeMissingHistoryFiles();
-    settings.set("data.history", PApplet.join(projectHistory, "::"));
+    settings.set("data.session", PApplet.join(projectHistory, "::"));
 
     settings.set("data.folder", projectFolder);
     settings.set("missing.string", missingString);
@@ -152,6 +170,10 @@ public class Preferences {
     settings.set("dates.parse", dateParsePattern);
     settings.set("dates.print", datePrintPattern);
     settings.setBoolean("examples.copy", copyExamples);
+    settings.setBoolean("sessions.save", saveSessions);
+    settings.setBoolean("sessions.oscout", oscOutput);
+    settings.set("sessions.hostname", hostName);
+    settings.setInteger("sessions.port", portNumber);
     settings.setInteger("plot.width", plotWidth);
     settings.setInteger("plot.height", plotHeight);
     settings.setColor("plot.color", plotColor);
@@ -163,7 +185,7 @@ public class Preferences {
 
     String fn = Paths.get(path, name).toString();
 
-    // Searching this file in the history.
+    // Searching this file in the session.
     int known = -1;
     for (int i = 0; i < projectHistory.length; i++) {
       if (projectHistory[i].equals(fn)) {
