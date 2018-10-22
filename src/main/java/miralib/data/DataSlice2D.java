@@ -200,12 +200,12 @@ public class DataSlice2D {
 
   protected void init(DataSource data, Variable varl, int maxSize) {
     int ntot = 0;
-    int nmis = 0;    
-    double wsum = 0;  
+    int nmis = 0;
+    double wsum = 0;
     int rcount = data.getRowCount();
     float p = (float)maxSize / (float)rcount;
     for (int r = 0; r < rcount; r++) {
-      if (p < 1 && p < Math.random()) continue;
+      if (p < 1 && p < Numbers.random()) continue;
       TableRow row = data.getRow(r);        
       if (!DataSet.insideRanges(row, ranges)) continue;
       ntot++;

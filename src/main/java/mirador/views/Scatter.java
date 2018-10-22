@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import miralib.data.DataSlice2D;
 import miralib.data.Value2D;
+import miralib.math.Numbers;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -90,11 +91,11 @@ public class Scatter extends View {
       Value2D pt = new Value2D(val);
       pt.label = val.label;
       if (varx.categorical()) {
-        pt.x += (1 - 2 * Math.random()) * 0.25f * dx;      
+        pt.x += (1 - 2 * Numbers.random()) * 0.25f * dx;
         pt.x = PApplet.map((float)pt.x, 0, 1, dx/2, 1 - dx/2);
       }
       if (vary.categorical()) {
-        pt.y += (float)(1 - 2 * Math.random()) * 0.25f * dy;
+        pt.y += (float)(1 - 2 * Numbers.random()) * 0.25f * dy;
         pt.y = PApplet.map((float)pt.y, 0, 1, dy/2, 1 - dy/2);
       }      
       points.add(pt);

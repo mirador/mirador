@@ -16,6 +16,7 @@ import mirador.handlers.LoadHandler;
 import mirador.handlers.ProfileHandler;
 import mirador.handlers.ExportHandler;
 //import mirador.handlers.UploadHandler;
+import miralib.math.Numbers;
 import miralib.utils.Tasker;
 import miralib.data.*;
 import miralib.utils.*;
@@ -239,6 +240,9 @@ public class MiraApp extends PApplet {
   public void loadProject(String filename) {
     try {
       project = new Project(filename, prefs);
+      if (0 < project.randomSeed) {
+        Numbers.setRandomSeed(project.randomSeed);
+      }
       timer = new Timer(project);
       Path p = Paths.get(filename);
       Path filePath = p.toAbsolutePath().getParent().toAbsolutePath();      

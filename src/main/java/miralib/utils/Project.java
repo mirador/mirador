@@ -71,7 +71,9 @@ public class Project {
   public boolean oscOutput;
   public String hostName;
   public int portNumber;
-  
+
+  public int randomSeed;
+
   public File cfgFile;
   
   public Project(String filename, Preferences prefs) throws IOException {
@@ -105,6 +107,8 @@ public class Project {
       Settings settings = new Settings(cfgFile);
       dataTitle = settings.get("project.title", "unnamed dataset");
       dataURL = settings.get("project.url", "");
+
+      randomSeed = settings.getInteger("random.seed", -1);
 
       saveSessions = settings.getBoolean("sessions.save", prefs.saveSessions);
       oscOutput = settings.getBoolean("sessions.oscout", prefs.oscOutput);
@@ -185,6 +189,7 @@ public class Project {
       
       dataTitle = dataFile; 
       dataURL = "";
+      randomSeed = -1;
       // Using the defaults for the parameters
       saveSessions = prefs.saveSessions;
       oscOutput = prefs.oscOutput;
@@ -208,6 +213,7 @@ public class Project {
   public Project(Project that) {
     this.dataTitle = that.dataTitle;
     this.dataURL = that.dataURL;
+    this.randomSeed = that.randomSeed;
 
     this.saveSessions = that.saveSessions;
     this.oscOutput = that.oscOutput;
@@ -291,6 +297,8 @@ public class Project {
 
         settings.set("project.title", dataTitle != null ? dataTitle : "");
         settings.set("project.url", dataURL != null ? dataURL : "");
+
+        if (0 < randomSeed) settings.setInteger("random.seed", randomSeed);
 
         settings.set("sessions.save", Boolean.toString(saveSessions));
         settings.set("sessions.oscout", Boolean.toString(oscOutput));

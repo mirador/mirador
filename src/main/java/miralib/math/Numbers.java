@@ -4,6 +4,7 @@ package miralib.math;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Random;
 
 /**
  * Basic utilities to deal with numeric values.
@@ -20,7 +21,9 @@ public class Numbers {
   protected static NumberFormat nff = null;
   protected static NumberFormat nfd = null;  
   protected static DecimalFormat dff = null;
-  
+
+  protected static Random generator = new Random();
+
   // Calculation of the Machine Epsilon for float precision. From:
   // http://en.wikipedia.org/wiki/Machine_epsilon#Approximation_using_Java
   static {
@@ -205,6 +208,13 @@ public class Numbers {
   static public String dfc(double num) {
     if (dff == null) dff = new DecimalFormat("0.0E0");
     return dff.format(num);
-  }  
-}
+  }
 
+  static public void setRandomSeed(long seed) {
+    generator = new Random(seed);
+  }
+
+  static public double random() {
+    return generator.nextDouble();
+  }
+}
